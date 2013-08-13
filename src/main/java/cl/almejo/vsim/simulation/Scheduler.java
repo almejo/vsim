@@ -32,24 +32,24 @@ public class Scheduler {
 	
 	private long _time = 0;
 	
-	public void run(int ticks) {
-		schedule(new StopEvent(this), ticks);
+	public void run(long simulationTime) {
+		schedule(new StopEvent(this), simulationTime);
 		try {
 			while (true) {
 				SimulationEvent event = (SimulationEvent) _heap.remove();
 				_time = event.getTime();
-				System.out.println();
-				System.out.println("Time: " + _time);
-				System.out.println("Heap: " + _heap);
+//				System.out.println();
+//				System.out.println("Time: " + _time);
+//				System.out.println("Heap: " + _heap);
 				event.happen();
-				System.out.println("happens: " + _heap);
+//				System.out.println("happens: " + _heap);
 			}
 		} catch (EmptyHeapException e) {
 			e.printStackTrace();
 		} catch (StopSimulationException e) {
-			System.out.println("Simulacion detenida");
+			//System.out.println("Simulacion detenida");
 		}
-		System.out.println("listo");
+		//System.out.println("listo");
 	}
 
 	public void stop() throws StopSimulationException {
@@ -57,7 +57,7 @@ public class Scheduler {
 	}
 
 	public void schedule(HeapElement element, long delay) {
-		System.out.println("Scheduled " + element  + " to " + delay);
+		//System.out.println("Scheduled " + element  + " to " + delay);
 		element.setValue(_time + delay);
 		_heap.insert(element);
 	}

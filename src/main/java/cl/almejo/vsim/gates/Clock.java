@@ -24,7 +24,5 @@ public class Clock extends Gate {
 		_pins[0] = clockPin;
 		clockPin.hasChanged();
 	}
-
-
 	
 }

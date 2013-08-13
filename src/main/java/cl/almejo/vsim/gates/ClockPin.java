@@ -43,7 +43,6 @@ public class ClockPin extends Pin {
 	public ClockPin(Clock clock, Scheduler scheduler) {
 		super(clock, scheduler);
 		ClockParams params = (ClockParams) clock.getParams();
-
 		_clockEvent = new ClockEvent(clock, scheduler);
 		_clockEvent.schedule(params.getTimeUp());
 	}
