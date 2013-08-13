@@ -16,6 +16,8 @@ package cl.almejo.vsim.simulation;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cl.almejo.vsim.circuit.Circuit;
+import cl.almejo.vsim.circuit.IconGate;
 import cl.almejo.vsim.gates.Clock;
 import cl.almejo.vsim.gates.ClockParams;
 
@@ -48,6 +50,10 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+		Circuit circuit = new Circuit();
+
+		IconGate iconClock = new IconGate(new Clock(circuit.getScheduler(), new ClockParams(1000, 3000)));
+		circuit.add(iconClock);
 		new Main();
 	}
 }
