@@ -22,6 +22,7 @@ public class ClockParams extends GateParameters {
 	private byte _state = Constants.OFF;
 	
 	public ClockParams(long timeDown, long timeUp) {
+		super(0);
 		_timeDown = timeDown;
 		_timeUp = timeUp;
 	}
