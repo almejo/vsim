@@ -2,7 +2,7 @@
  *
  * vsim
  *
- * Created on Aug 1, 2013
+ * Created on Aug 14, 2013
  * 
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
@@ -13,15 +13,10 @@
  
 package cl.almejo.vsim.gates;
 
-abstract public class GateParameters {
+public class NotParams extends GateParameters {
 
-	protected int _delay;
+	public NotParams(int delay) {
+		super(delay);
+	}
 
-	public GateParameters(int delay) {
-		_delay = delay;
-	}
-	
-	public int getDelay() {
-		return _delay;
-	}
 }

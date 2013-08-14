@@ -24,9 +24,9 @@ public class Pin extends Link {
 	PinEvent _pinEvent;
 	public Gate _gate;
 
-	public Pin(Gate gate, Scheduler scheduler) {
+	public Pin(Gate gate, Scheduler scheduler, int pinId) {
 		_gate = gate;
-		_pinEvent = new PinEvent(this, scheduler);
+		_pinEvent = new PinEvent(this, scheduler, pinId);
 	}
 
 	public void connect(Link pin) {
@@ -58,8 +58,9 @@ public class Pin extends Link {
 
 		pin = this;
 		do {
+			byte oldValue = pin.getInValue();
 			pin.setInValue(lineVal);
-			if (lineVal != pin.getInValue() && pin.getOutValue() == Constants.THREE_STATE
+			if (lineVal != oldValue && pin.getOutValue() == Constants.THREE_STATE
 				&& pin.getProgrammedValue() == Constants.THREE_STATE) {
 				pin.hasChanged();
 			}
