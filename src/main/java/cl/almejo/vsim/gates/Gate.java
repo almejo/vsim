@@ -13,14 +13,17 @@
  
 package cl.almejo.vsim.gates;
 
+import cl.almejo.vsim.circuit.Circuit;
+
 
 public class Gate {
 
 	protected Pin[] _pins;
-	
+	protected Circuit _circuit;
 	protected GateParameters _parameters;
-	
-	public Gate(GateParameters params) {
+
+	public Gate(Circuit circuit, GateParameters params) {
+		_circuit = circuit;
 		_parameters = params;
 	}
 

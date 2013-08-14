@@ -16,17 +16,22 @@ package cl.almejo.vsim.simulation;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cl.almejo.vsim.circuit.Circuit;
+import cl.almejo.vsim.circuit.IconGate;
+import cl.almejo.vsim.gates.And;
 import cl.almejo.vsim.gates.Clock;
 import cl.almejo.vsim.gates.ClockParams;
+import cl.almejo.vsim.gates.Not;
+import cl.almejo.vsim.gates.NotParams;
 
 public class Main {
 
 	class Simulator extends TimerTask {
 
-		private Scheduler _scheduler;
+		private Circuit _circuit;
 		private long _lastSimulationTime;
-		Simulator(Scheduler scheduler) {
-			_scheduler = scheduler;
+		Simulator(Circuit circuit) {
+			_circuit = circuit;
 			_lastSimulationTime = System.currentTimeMillis();
 		}
 		@Override
@@ -34,17 +39,33 @@ public class Main {
 			long currentTime = System.currentTimeMillis();
 			long simulationTime = currentTime - _lastSimulationTime;
 			_lastSimulationTime = currentTime;
-			_scheduler.run(simulationTime);
+			_circuit.getScheduler().run((int) simulationTime);
 		}
 
 	}
 
 	public Main() {
-		Scheduler scheduler = new Scheduler();
+		Circuit circuit = new Circuit();
 
-		new Clock(scheduler, new ClockParams(1000, 5000));
+		IconGate iconClock = new IconGate(new Clock(circuit, new ClockParams(10000, 10000)));
+		circuit.add(iconClock);
+
+		IconGate iconClock2 = new IconGate(new Clock(circuit, new ClockParams(3000, 3000)));
+		circuit.add(iconClock);
+
+		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1000)));
+		circuit.add(iconClock);
+
+		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(10)));
+		circuit.add(iconClock);
+
+		iconClock.getGate().getPin(0).connect(iconAnd.getGate().getPin(0));
+		iconClock2.getGate().getPin(0).connect(iconAnd.getGate().getPin(1));
+		
+		iconAnd.getGate().getPin(2).connect(iconNot.getGate().getPin(0));
+		
 		Timer timer = new Timer();
-		timer.schedule(new Simulator(scheduler), 1000, 100);
+		timer.schedule(new Simulator(circuit), 1000, 100);
 	}
 
 	public static void main(String[] args) {
