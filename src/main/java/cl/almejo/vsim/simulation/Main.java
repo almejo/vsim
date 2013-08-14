@@ -19,6 +19,7 @@ import java.util.TimerTask;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.IconGate;
 import cl.almejo.vsim.gates.And;
+import cl.almejo.vsim.gates.AndParams;
 import cl.almejo.vsim.gates.Clock;
 import cl.almejo.vsim.gates.ClockParams;
 import cl.almejo.vsim.gates.Not;

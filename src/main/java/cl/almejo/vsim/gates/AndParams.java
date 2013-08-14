@@ -11,9 +11,8 @@
  *
  */
  
-package cl.almejo.vsim.simulation;
+package cl.almejo.vsim.gates;
 
-import cl.almejo.vsim.gates.GateParameters;
 
 public class AndParams extends GateParameters{
 
