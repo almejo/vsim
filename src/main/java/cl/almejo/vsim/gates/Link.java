@@ -13,6 +13,7 @@
 
 package cl.almejo.vsim.gates;
 
+
 public class Link {
 	protected Link _next = this;
 
@@ -33,9 +34,29 @@ public class Link {
 			this._next = link;
 		}
 	}
-	
+
 	protected Link getNext() {
 		return _next;
 	}
 
+	public void delete() {
+		Link previous = findPrevious();
+		if (previous != null) {
+			previous._next = _next;
+			_next = this;
+		}
+	}
+
+	private Link findPrevious() {
+		Link previous = this;
+		Link next;
+		do {
+			next = previous.getNext();
+			if (next == this) {
+				return previous;
+			}
+			previous = next;
+		} while (previous != next);
+		return null;
+	}
 }

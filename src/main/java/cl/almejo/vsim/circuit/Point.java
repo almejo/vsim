@@ -21,4 +21,14 @@ public class Point {
 	public int getY() {
 		return _y;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		Point p = (Point) obj;
+		return p._x == _x && p._y == _y;
+	}
+
 }
