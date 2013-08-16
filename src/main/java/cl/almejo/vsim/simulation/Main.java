@@ -18,6 +18,7 @@ import java.util.TimerTask;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.IconGate;
+import cl.almejo.vsim.circuit.Protoboard;
 import cl.almejo.vsim.gates.And;
 import cl.almejo.vsim.gates.AndParams;
 import cl.almejo.vsim.gates.Clock;
@@ -60,10 +61,16 @@ public class Main {
 		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(10)));
 		circuit.add(iconClock);
 
-		iconClock.getGate().getPin(0).connect(iconAnd.getGate().getPin(0));
-		iconClock2.getGate().getPin(0).connect(iconAnd.getGate().getPin(1));
+//		iconClock.getGate().getPin(0).connect(iconAnd.getGate().getPin(0));
+//		iconClock2.getGate().getPin(0).connect(iconAnd.getGate().getPin(1));
+//		
+//		iconAnd.getGate().getPin(2).connect(iconNot.getGate().getPin(0));
 		
-		iconAnd.getGate().getPin(2).connect(iconNot.getGate().getPin(0));
+		Protoboard protoboard = new Protoboard();
+		
+		protoboard.addPin(0, iconClock.getGate(), 5, 0);
+		protoboard.addPin(0, iconAnd.getGate(), 5, 0);
+		
 		
 		Timer timer = new Timer();
 		timer.schedule(new Simulator(circuit), 1000, 100);

@@ -6,34 +6,34 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Matrix<T extends Point> {
+public class Matrix{
 
-	private Hashtable<Integer, List<T>> _verticalTable = new Hashtable<Integer, List<T>>();
-	private Hashtable<Integer, List<T>> _horizontalTable = new Hashtable<Integer, List<T>>();
+	private Hashtable<Integer, List<Point>> _verticalTable = new Hashtable<Integer, List<Point>>();
+	private Hashtable<Integer, List<Point>> _horizontalTable = new Hashtable<Integer, List<Point>>();
 
-	private final Comparator<T> COMPARATORX = new Comparator<T>() {
+	private final Comparator<Point> COMPARAPointORX = new Comparator<Point>() {
 
-		public int compare(T o1, T o2) {
+		public int compare(Point o1, Point o2) {
 			return o1.getX() < o2.getX() ? -1 : (o1.getX() == o2.getX() ? 0 : 1);
 		}
 	};
 
-	private final Comparator<T> COMPARATORY = new Comparator<T>() {
+	private final Comparator<Point> COMPARAPointORY = new Comparator<Point>() {
 
-		public int compare(T o1, T o2) {
+		public int compare(Point o1, Point o2) {
 			return o1.getY() < o2.getY() ? -1 : (o1.getY() == o2.getY() ? 0 : 1);
 		}
 	};
 
-	public void add(T point) {
-		insertIntoTable(point, _horizontalTable, COMPARATORY, point.getX());
-		insertIntoTable(point, _verticalTable, COMPARATORX, point.getY());
+	public void add(Point point) {
+		insertIntoPointable(point, _horizontalTable, COMPARAPointORY, point.getX());
+		insertIntoPointable(point, _verticalTable, COMPARAPointORX, point.getY());
 	}
 
-	private void insertIntoTable(T point, Hashtable<Integer, List<T>> table, Comparator<T> comparator, int coord) {
-		List<T> points = table.get(coord);
+	private void insertIntoPointable(Point point, Hashtable<Integer, List<Point>> table, Comparator<Point> comparator, int coord) {
+		List<Point> points = table.get(coord);
 		if (points == null) {
-			points = new LinkedList<T>();
+			points = new LinkedList<Point>();
 			table.put(coord, points);
 		}
 
@@ -43,60 +43,60 @@ public class Matrix<T extends Point> {
 		}
 	}
 
-	public FindResult<T> findHorizontal(int x, int y) {
+	public FindResult findHorizontal(int x, int y) {
 		if (!_verticalTable.containsKey(y)) {
-			return new FindResult<T>(null, null, null);
+			return new FindResult(null, null, null);
 		}
 
-		T previous = null;
-		T hit = null;
-		T next = null;
-		List<T> points = _verticalTable.get(y);
+		Point previous = null;
+		Point hit = null;
+		Point next = null;
+		List<Point> points = _verticalTable.get(y);
 		int i = 0;
-		for (T point : points) {
+		for (Point point : points) {
 			if (point.getX() == x) {
 				hit = point;
 				if (i < points.size() - 1) {
 					next = points.get(i + 1);
 				}
-				return new FindResult<T>(hit, previous, next);
+				return new FindResult(hit, previous, next);
 			}
 			previous = point;
 			i++;
 		}
-		return new FindResult<T>(null, null, null);
+		return new FindResult(null, null, null);
 	}
 	
-	public FindResult<T> findVertical(int x, int y) {
+	public FindResult findVertical(int x, int y) {
 		if (!_horizontalTable.containsKey(x)) {
-			return new FindResult<T>(null, null, null);
+			return new FindResult(null, null, null);
 		}
 
-		T previous = null;
-		T hit = null;
-		T next = null;
-		List<T> points = _horizontalTable.get(y);
+		Point previous = null;
+		Point hit = null;
+		Point next = null;
+		List<Point> points = _horizontalTable.get(x);
 		int i = 0;
-		for (T point : points) {
+		for (Point point : points) {
 			if (point.getY() == y) {
 				hit = point;
 				if (i < points.size() - 1) {
 					next = points.get(i + 1);
 				}
-				return new FindResult<T>(hit, previous, next);
+				return new FindResult(hit, previous, next);
 			}
 			previous = point;
 			i++;
 		}
-		return new FindResult<T>(null, null, null);
+		return new FindResult(null, null, null);
 	}
 
 	@Override
 	public String toString() {
-		return drawTable(_horizontalTable, "horizontal") + "\n\n" + drawTable(_verticalTable, "vertical");
+		return drawPointable(_horizontalTable, "horizontal") + "\n\n" + drawPointable(_verticalTable, "vertical");
 	}
 
-	private String drawTable(Hashtable<Integer, List<T>> table, String title) {
+	private String drawPointable(Hashtable<Integer, List<Point>> table, String title) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(title + "\n");
 		for (Integer key : table.keySet()) {
@@ -111,7 +111,7 @@ public class Matrix<T extends Point> {
 	}
 
 	public static void main(String[] args) {
-		Matrix<Point> matrix = new Matrix<Point>();
+		Matrix matrix = new Matrix();
 		matrix.add(new Point(-80, 30));
 		matrix.add(new Point(-80, 10));
 		matrix.add(new Point(-80, 30));

@@ -34,6 +34,13 @@ public class Pin extends Link {
 		updateValues();
 	}
 
+	public void disconnect() {
+		Pin nextPin = (Pin) getNext();
+		delete();
+		nextPin.updateValues();
+		updateValues();
+	}
+
 	public void updateValues() {
 		byte value = Constants.THREE_STATE;
 		byte lineValue = Constants.THREE_STATE;
