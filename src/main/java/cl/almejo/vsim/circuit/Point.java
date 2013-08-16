@@ -3,7 +3,6 @@ package cl.almejo.vsim.circuit;
 public class Point {
 	int _x;
 	int _y;
-	private int _conectionMask;
 
 	public Point(int x, int y) {
 		_x = x;
@@ -32,11 +31,4 @@ public class Point {
 		return p._x == _x && p._y == _y;
 	}
 
-	public boolean isConnected(byte direction) {
-		return (_conectionMask & direction) != 0;
-	}
-
-	public void connect(byte direction) {
-		_conectionMask = (byte) _conectionMask | direction;
-	}
 }

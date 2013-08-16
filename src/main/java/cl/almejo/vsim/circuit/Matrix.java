@@ -11,14 +11,14 @@ public class Matrix{
 	private Hashtable<Integer, List<Point>> _verticalTable = new Hashtable<Integer, List<Point>>();
 	private Hashtable<Integer, List<Point>> _horizontalTable = new Hashtable<Integer, List<Point>>();
 
-	private final Comparator<Point> COMPARAPointORX = new Comparator<Point>() {
+	private final Comparator<Point> COMPARATORX = new Comparator<Point>() {
 
 		public int compare(Point o1, Point o2) {
 			return o1.getX() < o2.getX() ? -1 : (o1.getX() == o2.getX() ? 0 : 1);
 		}
 	};
 
-	private final Comparator<Point> COMPARAPointORY = new Comparator<Point>() {
+	private final Comparator<Point> COMPARATORY = new Comparator<Point>() {
 
 		public int compare(Point o1, Point o2) {
 			return o1.getY() < o2.getY() ? -1 : (o1.getY() == o2.getY() ? 0 : 1);
@@ -26,8 +26,8 @@ public class Matrix{
 	};
 
 	public void add(Point point) {
-		insertIntoPointable(point, _horizontalTable, COMPARAPointORY, point.getX());
-		insertIntoPointable(point, _verticalTable, COMPARAPointORX, point.getY());
+		insertIntoPointable(point, _horizontalTable, COMPARATORY, point.getX());
+		insertIntoPointable(point, _verticalTable, COMPARATORX, point.getY());
 	}
 
 	private void insertIntoPointable(Point point, Hashtable<Integer, List<Point>> table, Comparator<Point> comparator, int coord) {
@@ -91,6 +91,29 @@ public class Matrix{
 		return new FindResult(null, null, null);
 	}
 
+	List<? extends Point> getBetween(Point a, Point b) {
+		
+		List<Point> list;
+		Comparator<Point> comparator;
+		if (a.getX() == b.getX()) {
+			list = _horizontalTable.get(a.getX());
+			comparator = COMPARATORY;
+		} else {
+			list = _verticalTable.get(a.getY());
+			comparator = COMPARATORX;
+		}
+		
+		List<Point> points = new LinkedList<Point>();
+		int ndx = Collections.binarySearch(list, a, comparator);
+		ndx++;
+		Point point = list.get(ndx++);
+		while (point != null && point != b) {
+			points.add(point);
+			point = list.get(ndx++);
+		}
+		return points;
+	}
+	
 	@Override
 	public String toString() {
 		return drawPointable(_horizontalTable, "horizontal") + "\n\n" + drawPointable(_verticalTable, "vertical");
@@ -108,6 +131,18 @@ public class Matrix{
 			builder.append("\n");
 		}
 		return builder.toString();
+	}
+
+	public void remove(Point point) {
+		if (_horizontalTable.containsKey(point.getX())) {
+			int index = Collections.binarySearch(_horizontalTable.get(point.getX()), point, COMPARATORY);
+			_horizontalTable.remove(index);
+		}
+		
+		if (_verticalTable.containsKey(point.getY())) {
+			int index = Collections.binarySearch(_verticalTable.get(point.getY()), point, COMPARATORX);
+			_verticalTable.remove(index);
+		}
 	}
 
 	public static void main(String[] args) {
@@ -138,4 +173,5 @@ public class Matrix{
 		System.out.println(matrix.findHorizontal(0, 10));
 		System.out.println(matrix.findHorizontal(-80, 10));
 	}
+	
 }

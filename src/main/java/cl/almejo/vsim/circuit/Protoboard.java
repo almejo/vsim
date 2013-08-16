@@ -32,13 +32,13 @@ public class Protoboard {
 		reconnect(contact);
 	}
 
-	private void reconnect(Contact contact) {
+	private List<Contact> reconnect(Contact contact) {
 		List<Contact> contacts = new LinkedList<Contact>();
 		getAllContactsAttached(contact, contacts);
-		reconnect(contacts);
+		return reconnect(contacts);
 	}
 
-	private void reconnect(List<Contact> contacts) {
+	private List<Contact> reconnect(List<Contact> contacts) {
 		List<Pin> pins = reconnectContactPins(contacts);
 
 		Pin first = null;
@@ -48,6 +48,7 @@ public class Protoboard {
 		}
 
 		setGuidePin(first, contacts);
+		return contacts;
 	}
 
 	private void setGuidePin(Pin pin, List<Contact> contacts) {
@@ -76,13 +77,13 @@ public class Protoboard {
 		return pins;
 	}
 
-	private void getAllContactsAttached(Contact contact, List<Contact> contacts) {
+	private List<Contact> getAllContactsAttached(Contact contact, List<Contact> contacts) {
 		if (contact == null) {
-			return;
+			return contacts;
 		}
 
 		if (contacts.contains(contact)) {
-			return;
+			return contacts;
 		}
 
 		contacts.add(contact);
@@ -103,6 +104,8 @@ public class Protoboard {
 		if (contact.isConnected(Constants.SOUTH)) {
 			getAllContactsAttached((Contact) resultV.getPrevious(), contacts);
 		}
+
+		return contacts;
 	}
 
 	private Contact poke(int x, int y) {
@@ -124,18 +127,110 @@ public class Protoboard {
 
 		FindResult resultV = _matrix.findVertical(contact.getX(), contact.getY());
 
-		if (resultH.getPrevious() != null && resultH.getPrevious().isConnected(Constants.EAST)) {
-			resultH.getHit().connect(Constants.WEST);
+		if (resultH.getPrevious() != null && ((Contact) resultH.getPrevious()).isConnected(Constants.EAST)) {
+			((Contact) resultH.getHit()).connect(Constants.WEST);
 		}
-		if (resultH.getNext() != null && resultH.getNext().isConnected(Constants.WEST)) {
-			resultH.getHit().connect(Constants.EAST);
+
+		if (resultH.getNext() != null && ((Contact) resultH.getNext()).isConnected(Constants.WEST)) {
+			((Contact) resultH.getHit()).connect(Constants.EAST);
 		}
-		if (resultV.getPrevious() != null && resultV.getPrevious().isConnected(Constants.NORTH)) {
-			resultH.getHit().connect(Constants.SOUTH);
+
+		if (resultV.getPrevious() != null && ((Contact) resultV.getPrevious()).isConnected(Constants.NORTH)) {
+			((Contact) resultH.getHit()).connect(Constants.SOUTH);
 		}
-		if (resultV.getNext() != null && resultV.getNext().isConnected(Constants.SOUTH)) {
-			resultH.getHit().connect(Constants.NORTH);
+
+		if (resultV.getNext() != null && ((Contact) resultV.getNext()).isConnected(Constants.SOUTH)) {
+			((Contact) resultH.getHit()).connect(Constants.NORTH);
 		}
 	}
 
+	public void connect(int x1, int y1, int x2, int y2) {
+		if (x1 == x2 && y1 == y2) {
+			return;
+		}
+
+		if (x1 != x2 && y1 != y2) {
+			return;
+		}
+
+		if (x1 == x2) {
+			connectVertical(poke(x1, y1), poke(x2, y2));
+		} else {
+			connectHorizontal(poke(x1, y1), poke(x2, y2));
+		}
+	}
+
+	private void connectHorizontal(Contact contact1, Contact contact2) {
+		Contact contactA, contactB;
+
+		if (contact1 == null || contact2 == null)
+			return;
+
+		if (contact1._x < contact2._x) {
+			contactA = contact1;
+			contactB = contact2;
+		} else {
+			contactA = contact2;
+			contactB = contact1;
+		}
+
+		contactA.connect(Constants.EAST);
+		contactB.connect(Constants.WEST);
+
+		List<Contact> contacts = reconnectInnerContactsVerticaly(contactA, contactB);
+
+		contacts.add(contactA);
+		contacts.add(contactB);
+		testForDelete(contacts);
+	}
+
+	private void connectVertical(Contact contact1, Contact contact2) {
+		Contact contactA, contactB;
+
+		if (contact1 == null || contact2 == null)
+			return;
+
+		if (contact1._y < contact2._y) {
+			contactA = contact1;
+			contactB = contact2;
+		} else {
+			contactA = contact2;
+			contactB = contact1;
+		}
+
+		contactA.connect(Constants.NORTH);
+		contactB.connect(Constants.SOUTH);
+
+		List<Contact> contacts = reconnectInnerContactsVerticaly(contactA, contactB);
+
+		contacts.add(contactA);
+		contacts.add(contactB);
+		testForDelete(contacts);
+	}
+
+	private void testForDelete(List<Contact> contacts) {
+		for (Contact contact : contacts) {
+			testForDelete(contact);
+		}
+	}
+
+	private void testForDelete(Contact contact) {
+		if (contact.hasPins()) {
+			return;
+		}
+
+		if (contact.isMiddlePoint() || !contact.isConnected()) {
+			_matrix.remove(contact);
+		}
+	}
+
+	private List<Contact> reconnectInnerContactsVerticaly(Contact contactA, Contact contactB) {
+		List<Contact> contacts = ((List<Contact>) _matrix.getBetween(contactA, contactB));
+
+		for (Contact contact : contacts) {
+			contact.connect(Constants.NORTH);
+			contact.connect(Constants.SOUTH);
+		}
+		return reconnect(getAllContactsAttached(contactA, new LinkedList<Contact>()));
+	}
 }
