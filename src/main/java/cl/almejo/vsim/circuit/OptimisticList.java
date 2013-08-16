@@ -141,4 +141,20 @@ public class OptimisticList<T> {
 
 		return size;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		if (_element!=null) {
+			builder.append(_element);
+			if (_list!= null){
+				for (T element : _list) {
+					builder.append(", " + element.toString());
+				}
+			}
+		}
+		builder.append("]");
+		return builder.toString();
+	}
 }

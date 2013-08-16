@@ -13,8 +13,12 @@
 
 package cl.almejo.vsim.circuit;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Gate;
@@ -23,19 +27,25 @@ import cl.almejo.vsim.gates.Pin;
 public class Protoboard {
 	private Matrix _matrix = new Matrix();
 
+	private static Hashtable<Byte, Color> STATECOLORS = new Hashtable<>();
+
+	static {
+		STATECOLORS.put(Constants.THREE_STATE, new Color(0, 200, 0));
+		STATECOLORS.put(Constants.ON, new Color(200, 0, 0));
+		STATECOLORS.put(Constants.OFF, new Color(0, 0, 0));
+	}
+
 	public Protoboard() {
 	}
 
 	public void addPin(int pinId, Gate gate, int x, int y) {
-		Contact contact = (Contact) poke(x, y);
+		Contact contact = poke(x, y);
 		contact.addPin(pinId, gate);
 		reconnect(contact);
 	}
 
 	private List<Contact> reconnect(Contact contact) {
-		List<Contact> contacts = new LinkedList<Contact>();
-		getAllContactsAttached(contact, contacts);
-		return reconnect(contacts);
+		return reconnect(getAllContactsAttached(contact, new LinkedList<Contact>()));
 	}
 
 	private List<Contact> reconnect(List<Contact> contacts) {
@@ -44,7 +54,7 @@ public class Protoboard {
 		Pin first = null;
 
 		if (pins.size() > 0) {
-			first = (Pin) pins.get(0);
+			first = pins.get(0);
 		}
 
 		setGuidePin(first, contacts);
@@ -232,5 +242,45 @@ public class Protoboard {
 			contact.connect(Constants.SOUTH);
 		}
 		return reconnect(getAllContactsAttached(contactA, new LinkedList<Contact>()));
+	}
+
+	public void paint(Graphics g) {
+		Color color = g.getColor();
+		Set<Integer> coords = _matrix.getXCoords();
+
+		Contact previous = null;
+		for (Integer x : coords) {
+			List<Contact> verticalContacts = (List<Contact>) _matrix.getVerticalContacts(x);
+			for (Contact contact : verticalContacts) {
+				g.setColor(getContactColor(contact));
+				g.fillRect(contact.getX() - 3, contact.getY() - 3, 6, 6);
+				if (previous != null && contact.isConnected(Constants.SOUTH)) {
+					g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
+				}
+				previous = contact;
+			}
+		}
+
+		previous = null;
+		coords = _matrix.getYCoords();
+		for (Integer y : coords) {
+			List<Contact> verticalContacts = (List<Contact>) _matrix.getHorizontalContacts(y);
+			for (Contact contact : verticalContacts) {
+				g.setColor(getContactColor(contact));
+				if (previous != null && contact.isConnected(Constants.WEST)) {
+					g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
+				}
+				previous = contact;
+			}
+		}
+
+		g.setColor(color);
+	}
+
+	private Color getContactColor(Contact contact) {
+		if (contact.getGuidePin() != null) {
+			return STATECOLORS.get(contact.getGuidePin().getInValue());
+		}
+		return STATECOLORS.get(Constants.THREE_STATE);
 	}
 }

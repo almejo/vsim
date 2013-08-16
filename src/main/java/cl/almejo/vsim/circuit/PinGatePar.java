@@ -31,4 +31,9 @@ public class PinGatePar {
 	public Gate getGate() {
 		return _gate;
 	}
+	
+	@Override
+	public String toString() {
+		return "(" + _pinId + ", " + _gate + ")";
+	}
 }

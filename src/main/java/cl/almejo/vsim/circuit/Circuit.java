@@ -1,5 +1,6 @@
 package cl.almejo.vsim.circuit;
 
+import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,6 +12,8 @@ public class Circuit {
 
 	List<IconGate> _icons = new LinkedList<IconGate>();
 
+	private Protoboard _protoboard;
+
 	public Circuit() {
 		_scheduler = new Scheduler();
 	}
@@ -21,5 +24,14 @@ public class Circuit {
 
 	public Scheduler getScheduler() {
 		return _scheduler;
+	}
+
+	public void setProtoboard(Protoboard protoboard) {
+		_protoboard = protoboard;
+		
+	}
+
+	public void paint(Graphics g) {
+		_protoboard.paint(g);
 	}
 }

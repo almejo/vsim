@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class Matrix{
 
@@ -173,5 +174,20 @@ public class Matrix{
 		System.out.println(matrix.findHorizontal(0, 10));
 		System.out.println(matrix.findHorizontal(-80, 10));
 	}
-	
+
+	public  Set<Integer> getXCoords() {
+		return _horizontalTable.keySet();
+	}
+
+	public Set<Integer> getYCoords() {
+		return _verticalTable.keySet();
+	}
+
+	public List<? extends Point> getVerticalContacts(Integer x) {
+		return _horizontalTable.get(x);
+	}
+
+	public List<? extends Point> getHorizontalContacts(Integer y) {
+		return _verticalTable.get(y);
+	}
 }
