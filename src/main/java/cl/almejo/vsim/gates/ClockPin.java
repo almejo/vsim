@@ -34,7 +34,7 @@ public class ClockPin extends Pin {
 
 			_clock.getPin(0).hasChanged();
 
-			params.setState((byte) (state == Constants.OFF ? Constants.ON : Constants.OFF));
+			params.setState((state == Constants.OFF ? Constants.ON : Constants.OFF));
 		}
 	}
 
