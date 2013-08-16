@@ -14,7 +14,7 @@
 package cl.almejo.vsim.circuit;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -244,7 +244,7 @@ public class Protoboard {
 		return reconnect(getAllContactsAttached(contactA, new LinkedList<Contact>()));
 	}
 
-	public void paint(Graphics g) {
+	public void paint(Graphics2D g) {
 		Color color = g.getColor();
 		Set<Integer> coords = _matrix.getXCoords();
 

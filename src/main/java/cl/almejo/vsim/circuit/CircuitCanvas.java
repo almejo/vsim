@@ -14,6 +14,7 @@
 package cl.almejo.vsim.circuit;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
@@ -30,7 +31,7 @@ public class CircuitCanvas extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		_circuit.paint(g);
+		_circuit.paint((Graphics2D)g);
 		repaint();
 	}
 

@@ -1,6 +1,6 @@
 package cl.almejo.vsim.circuit;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class Circuit {
 		
 	}
 
-	public void paint(Graphics g) {
+	public void paint(Graphics2D g) {
 		_protoboard.paint(g);
 	}
 }
