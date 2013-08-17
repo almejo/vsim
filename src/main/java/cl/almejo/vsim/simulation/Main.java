@@ -17,15 +17,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.circuit.IconGate;
 import cl.almejo.vsim.circuit.Protoboard;
 import cl.almejo.vsim.circuit.SimWindow;
-import cl.almejo.vsim.gates.And;
-import cl.almejo.vsim.gates.AndParams;
 import cl.almejo.vsim.gates.Clock;
+import cl.almejo.vsim.gates.ClockDescriptor;
 import cl.almejo.vsim.gates.ClockParams;
-import cl.almejo.vsim.gates.Not;
-import cl.almejo.vsim.gates.NotParams;
+import cl.almejo.vsim.gates.IconGate;
 
 public class Main {
 
@@ -51,41 +48,40 @@ public class Main {
 	public Main() {
 		Circuit circuit = new Circuit();
 
-		IconGate iconClock = new IconGate(new Clock(circuit, new ClockParams(10000, 10000)));
-		circuit.add(iconClock);
-
-		IconGate iconClock2 = new IconGate(new Clock(circuit, new ClockParams(3000, 3000)));
-		circuit.add(iconClock);
-
-		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1)));
-		circuit.add(iconClock);
-
-		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(10)));
-		circuit.add(iconClock);
+//		IconGate iconClock2 = new IconGate(new Clock(circuit, new ClockParams(3000, 3000)));
+//		circuit.add(iconClock);
+//
+//		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1)));
+//		circuit.add(iconClock);
+//
+//		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(10)));
+//		circuit.add(iconClock);
 
 //		iconClock.getGate().getPin(0).connect(iconAnd.getGate().getPin(0));
 //		iconClock2.getGate().getPin(0).connect(iconAnd.getGate().getPin(1));
 //		
 //		iconAnd.getGate().getPin(2).connect(iconNot.getGate().getPin(0));
 		
-		Protoboard protoboard = new Protoboard();
-		circuit.setProtoboard(protoboard);
+		IconGate iconClock = new IconGate(new Clock(circuit, new ClockParams(1000, 1000), new ClockDescriptor()));
+		circuit.add(iconClock, 10, 0);
 		
-		protoboard.addPin(0, iconClock.getGate(), 0, 100);
-		protoboard.addPin(0, iconClock2.getGate(), 0, 0);
 		
-		protoboard.addPin(0, iconAnd.getGate(), 100, 100);
-		protoboard.addPin(1, iconAnd.getGate(), 100, 0);
-		protoboard.addPin(2, iconAnd.getGate(), 200, 100);
-		
-		protoboard.addPin(0, iconNot.getGate(), 300, 100);
-		
-		protoboard.connect(0, 100, 100, 100);
-		protoboard.connect(0, 0, 100, 0);
-		
-		protoboard.connect(200, 100, 300, 100);
-		
-		protoboard.connect(200, 500, 500, 500);
+//		
+//		protoboard.addPin(0, iconClock.getGate(), 0, 100);
+//		protoboard.addPin(0, iconClock2.getGate(), 0, 0);
+//		
+//		protoboard.addPin(0, iconAnd.getGate(), 100, 100);
+//		protoboard.addPin(1, iconAnd.getGate(), 100, 0);
+//		protoboard.addPin(2, iconAnd.getGate(), 200, 100);
+//		
+//		protoboard.addPin(0, iconNot.getGate(), 300, 100);
+//		
+//		protoboard.connect(0, 100, 100, 100);
+//		protoboard.connect(0, 0, 100, 0);
+//		
+//		protoboard.connect(200, 100, 300, 100);
+//		
+//		protoboard.connect(200, 500, 500, 500);
 		//protoboard.connect(0, 0, 100, 0);
 		
 		

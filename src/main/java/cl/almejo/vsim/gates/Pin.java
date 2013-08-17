@@ -51,9 +51,8 @@ public class Pin extends Link {
 					if (lineValue != Constants.THREE_STATE && lineValue != pin.getOutValue()) {
 						System.err.println("Corto-circuito!");
 						break;
-					} else {
-						lineValue = pin.getOutValue();
 					}
+					lineValue = pin.getOutValue();
 				} else {
 					value = pin.getOutValue();
 				}

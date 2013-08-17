@@ -15,7 +15,6 @@ package cl.almejo.vsim.circuit;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -27,14 +26,6 @@ import cl.almejo.vsim.gates.Pin;
 public class Protoboard {
 	private Matrix _matrix = new Matrix();
 
-	private static Hashtable<Byte, Color> STATECOLORS = new Hashtable<>();
-
-	static {
-		STATECOLORS.put(Constants.THREE_STATE, new Color(0, 200, 0));
-		STATECOLORS.put(Constants.ON, new Color(200, 0, 0));
-		STATECOLORS.put(Constants.OFF, new Color(0, 0, 0));
-	}
-
 	public Protoboard() {
 	}
 
@@ -42,6 +33,15 @@ public class Protoboard {
 		Contact contact = poke(x, y);
 		contact.addPin(pinId, gate);
 		reconnect(contact);
+	}
+
+	public void removePin(byte pinId, Gate gate, int x, int y) {
+		Contact contact = poke(x, y);
+
+		contact.removePin(pinId, gate);
+
+		reconnect(contact);
+		testForDelete(contact);
 	}
 
 	private List<Contact> reconnect(Contact contact) {
@@ -279,8 +279,9 @@ public class Protoboard {
 
 	private Color getContactColor(Contact contact) {
 		if (contact.getGuidePin() != null) {
-			return STATECOLORS.get(contact.getGuidePin().getInValue());
+			return Constants.STATECOLORS.get(contact.getGuidePin().getInValue());
 		}
-		return STATECOLORS.get(Constants.THREE_STATE);
+		return Constants.STATECOLORS.get(Constants.THREE_STATE);
 	}
+
 }

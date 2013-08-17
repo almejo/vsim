@@ -39,6 +39,10 @@ public class Contact extends Point {
 		}
 	}
 
+	public void removePin(byte pinId, Gate gate) {
+		_pins.remove(new PinGatePar(pinId, gate));
+	}
+	
 	public List<Pin> getPins() {
 
 		List<Pin> pins = new LinkedList<Pin>();
@@ -82,4 +86,6 @@ public class Contact extends Point {
 	public boolean isConnected() {
 		return _conectionMask != 0;
 	}
+
+
 }
