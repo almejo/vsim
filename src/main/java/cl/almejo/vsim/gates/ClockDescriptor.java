@@ -24,7 +24,7 @@ public class ClockDescriptor extends GateDescriptor {
 	
 	public ClockDescriptor() {
 		_pinPosition = new Point[1];
-		_pinPosition[0] = new Point(Circuit.gridTrunc(10), Circuit.gridTrunc(10));
+		_pinPosition[0] = new Point(Circuit.gridTrunc(16), Circuit.gridTrunc(16));
 		_type = GateTypes.NORMAL;
 		_pinCount = 1;
 	}

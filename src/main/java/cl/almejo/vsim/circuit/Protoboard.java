@@ -253,7 +253,7 @@ public class Protoboard {
 			List<Contact> verticalContacts = (List<Contact>) _matrix.getVerticalContacts(x);
 			for (Contact contact : verticalContacts) {
 				g.setColor(getContactColor(contact));
-				g.fillRect(contact.getX() - 3, contact.getY() - 3, 6, 6);
+				g.fillOval(contact.getX() - 3, contact.getY() - 3, 6, 6);
 				if (previous != null && contact.isConnected(Constants.SOUTH)) {
 					g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
 				}

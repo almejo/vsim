@@ -63,7 +63,7 @@ public class Main {
 //		iconAnd.getGate().getPin(2).connect(iconNot.getGate().getPin(0));
 		
 		IconGate iconClock = new IconGate(new Clock(circuit, new ClockParams(1000, 1000), new ClockDescriptor()));
-		circuit.add(iconClock, 10, 0);
+		circuit.add(iconClock, 100, 80);
 		
 		
 //		
@@ -76,7 +76,7 @@ public class Main {
 //		
 //		protoboard.addPin(0, iconNot.getGate(), 300, 100);
 //		
-//		protoboard.connect(0, 100, 100, 100);
+		circuit.connect(112, 96, 300, 96);
 //		protoboard.connect(0, 0, 100, 0);
 //		
 //		protoboard.connect(200, 100, 300, 100);

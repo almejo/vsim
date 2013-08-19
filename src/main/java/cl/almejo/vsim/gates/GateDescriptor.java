@@ -16,7 +16,6 @@ package cl.almejo.vsim.gates;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 
-import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
 
 public abstract class GateDescriptor {
@@ -28,7 +27,7 @@ public abstract class GateDescriptor {
 	protected GateTypes _type;
 
 	public void paint(Graphics2D graphics, IconGate iconGate) {
-		drawGate(graphics, iconGate, -Circuit.gridTrunc((int) iconGate.getX()), -Circuit.gridTrunc((int) iconGate.getY()));
+		drawGate(graphics, iconGate, 0, 0);// Circuit.gridTrunc((int) iconGate.getX()), Circuit.gridTrunc((int) iconGate.getY()));
 	}
 
 	public abstract void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y);
@@ -38,5 +37,4 @@ public abstract class GateDescriptor {
 	public Point getPinPosition(byte pinId) {
 		return _pinPosition[pinId];
 	}
-
 }

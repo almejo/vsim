@@ -1,5 +1,6 @@
 package cl.almejo.vsim.circuit;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -32,8 +33,11 @@ public class Circuit {
 	}
 
 	public void paint(Graphics2D graphics) {
-		_protoboard.paint(graphics);
+		graphics.setColor(Color.GREEN);
+		graphics.drawRect(0, 0, 100, 100);
+		
 		drawGates(graphics);
+		_protoboard.paint(graphics);
 	}
 
 	public void add(IconGate icon, int x, int y) {
@@ -66,7 +70,7 @@ public class Circuit {
 
 	public void activate(IconGate icon) {
 		for (byte pinId = 0; pinId < icon.getPinsCount(); pinId++) {
-			addPin(pinId, icon.getPinPos(pinId), icon.getGate());
+			addPin(pinId, icon.getTransformedPinPos(pinId), icon.getGate());
 		}
 	}
 
@@ -82,5 +86,9 @@ public class Circuit {
 
 	private void removePin(byte pinId, Point p, Gate gate) {
 		_protoboard.removePin(pinId, gate, gridTrunc(p._x), gridTrunc(p._y));
+	}
+
+	public void connect(int xi, int yi, int xf, int yf) {
+		_protoboard.connect(xi, yi, xf, yf);
 	}
 }

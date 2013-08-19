@@ -53,12 +53,16 @@ public class IconGate extends Rectangle {
 	public void moveTo(int xf, int yf) {
 		setLocation(xf, yf);
 		setTranslation(xf, yf);
+		
 	}
 
 	private void setTranslation(int x, int y) {
+		System.out.println(_translateTransformation);
 		_translateTransformation.setToIdentity();
 		_translateTransformation.translate(x, y);
+		System.out.println(x + " - " + y);
 		recalculateTransform();
+		System.out.println(_translateTransformation);
 	}
 
 	private void recalculateTransform() {
@@ -77,5 +81,15 @@ public class IconGate extends Rectangle {
 
 	public Pin getPin(int i) {
 		return _gate.getPin(i);
+	}
+	
+	public Point getTransformed(Point point) {
+		java.awt.geom.Point2D.Double point2d = new java.awt.geom.Point2D.Double(point.getX(), point.getY());
+		_transform.transform(point2d, point2d);
+		return new Point((int) point2d.getX(), (int) point2d.getY());
+	}
+	
+	public Point getTransformedPinPos(byte pinId) {
+		return getTransformed(getPinPos(pinId));
 	}
 }
