@@ -24,10 +24,38 @@ import cl.almejo.vsim.gates.ClockDescriptor;
 import cl.almejo.vsim.gates.ClockParams;
 import cl.almejo.vsim.gates.IconGate;
 
+class P {
+	int getX() {
+		return 0;
+	}
+}
+
+class C extends P {
+	int getX() {
+		return 5;
+	}
+}
+
+class M<T extends P> {
+	T _t;
+	M() {
+		
+	}
+	M(T t) {
+		_t= t;
+	}
+	
+	int getX() {
+		return _t.getX();
+	}
+}
 public class Main {
 
 	class Simulator extends TimerTask {
 
+		M<C> m = new M<C>();
+				
+		
 		private Circuit _circuit;
 		private long _lastSimulationTime;
 		Simulator(Circuit circuit) {
