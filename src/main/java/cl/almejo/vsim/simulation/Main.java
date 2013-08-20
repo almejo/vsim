@@ -25,6 +25,9 @@ import cl.almejo.vsim.gates.Clock;
 import cl.almejo.vsim.gates.ClockDescriptor;
 import cl.almejo.vsim.gates.ClockParams;
 import cl.almejo.vsim.gates.IconGate;
+import cl.almejo.vsim.gates.Not;
+import cl.almejo.vsim.gates.NotDescriptor;
+import cl.almejo.vsim.gates.NotParams;
 
 class P {
 	int getX() {
@@ -80,8 +83,6 @@ public class Main {
 
 
 //
-//		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1)));
-//		circuit.add(iconClock);
 //
 //		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(10)));
 //		circuit.add(iconClock);
@@ -101,6 +102,10 @@ public class Main {
 		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(1), new AndDescriptor()));
 		circuit.add(iconAnd, 300, 96);
 		
+		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1), new NotDescriptor()));
+		circuit.add(iconNot, 400, 96);
+
+		
 //		
 //		protoboard.addPin(0, iconClock.getGate(), 0, 100);
 //		protoboard.addPin(0, iconClock2.getGate(), 0, 0);
@@ -113,6 +118,7 @@ public class Main {
 //		
 		circuit.connect(112, 96, 300, 96);
 		circuit.connect(112, 128, 300, 128);
+		circuit.connect(140, 128, 150, 128);
 	//	circuit.connect(300, 96, 300, 150);
 		circuit.printMatrix();
 //		protoboard.connect(0, 0, 100, 0);
