@@ -1,6 +1,5 @@
 package cl.almejo.vsim.circuit;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -33,9 +32,6 @@ public class Circuit {
 	}
 
 	public void paint(Graphics2D graphics) {
-		graphics.setColor(Color.GREEN);
-		graphics.drawRect(0, 0, 100, 100);
-		
 		drawGates(graphics);
 		_protoboard.paint(graphics);
 	}
@@ -45,13 +41,13 @@ public class Circuit {
 
 		Dimension size = icon.getSize();
 
-		int _xi = Circuit.gridTrunc(x);//((int) (x - size.getWidth() / 2)));
-		int _yi = Circuit.gridTrunc(y);//((int) (y - size.getHeight() / 2)));
+		int _xi = Circuit.gridTrunc(x);// ((int) (x - size.getWidth() / 2)));
+		int _yi = Circuit.gridTrunc(y);// ((int) (y - size.getHeight() / 2)));
 
 		icon.setBounds(_xi, _yi, (int) size.getWidth(), (int) size.getHeight());
 
 		icon.moveTo(Circuit.gridTrunc(x), Circuit.gridTrunc(y));
-		
+
 		activate(icon);
 
 		_extent.union(icon);
@@ -89,6 +85,10 @@ public class Circuit {
 	}
 
 	public void connect(int xi, int yi, int xf, int yf) {
-		_protoboard.connect(xi, yi, xf, yf);
+		_protoboard.connect(gridTrunc(xi), gridTrunc(yi), gridTrunc(xf), gridTrunc(yf));
+	}
+
+	public void printMatrix() {
+		_protoboard.printMatrix();
 	}
 }

@@ -92,7 +92,7 @@ public class Matrix <T extends Point>{
 		return new FindResult(null, null, null);
 	}
 
-	List<? extends Point> getBetween(T a, T b) {
+	List<T> getBetween(T a, T b) {
 		
 		List<T> list;
 		Comparator<T> comparator;
@@ -187,11 +187,11 @@ public class Matrix <T extends Point>{
 		return _verticalTable.keySet();
 	}
 
-	public List<? extends Point> getVerticalContacts(Integer x) {
+	public List<T> getVerticalContacts(Integer x) {
 		return _horizontalTable.get(x);
 	}
 
-	public List<? extends Point> getHorizontalContacts(Integer y) {
+	public List<T> getHorizontalContacts(Integer y) {
 		return _verticalTable.get(y);
 	}
 }

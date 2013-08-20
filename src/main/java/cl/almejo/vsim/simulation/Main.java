@@ -17,8 +17,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.circuit.Protoboard;
 import cl.almejo.vsim.circuit.SimWindow;
+import cl.almejo.vsim.gates.And;
+import cl.almejo.vsim.gates.AndDescriptor;
+import cl.almejo.vsim.gates.AndParams;
 import cl.almejo.vsim.gates.Clock;
 import cl.almejo.vsim.gates.ClockDescriptor;
 import cl.almejo.vsim.gates.ClockParams;
@@ -76,8 +78,7 @@ public class Main {
 	public Main() {
 		Circuit circuit = new Circuit();
 
-//		IconGate iconClock2 = new IconGate(new Clock(circuit, new ClockParams(3000, 3000)));
-//		circuit.add(iconClock);
+
 //
 //		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1)));
 //		circuit.add(iconClock);
@@ -90,9 +91,15 @@ public class Main {
 //		
 //		iconAnd.getGate().getPin(2).connect(iconNot.getGate().getPin(0));
 		
-		IconGate iconClock = new IconGate(new Clock(circuit, new ClockParams(1000, 1000), new ClockDescriptor()));
+		ClockDescriptor descriptor = new ClockDescriptor();
+		IconGate iconClock = new IconGate(new Clock(circuit, new ClockParams(1000, 1000), descriptor));
 		circuit.add(iconClock, 100, 80);
 		
+		IconGate iconClock2 = new IconGate(new Clock(circuit, new ClockParams(3000, 3000), descriptor));
+		circuit.add(iconClock2, 100, 118 );
+		
+		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(1), new AndDescriptor()));
+		circuit.add(iconAnd, 300, 96);
 		
 //		
 //		protoboard.addPin(0, iconClock.getGate(), 0, 100);
@@ -105,6 +112,9 @@ public class Main {
 //		protoboard.addPin(0, iconNot.getGate(), 300, 100);
 //		
 		circuit.connect(112, 96, 300, 96);
+		circuit.connect(112, 128, 300, 128);
+	//	circuit.connect(300, 96, 300, 150);
+		circuit.printMatrix();
 //		protoboard.connect(0, 0, 100, 0);
 //		
 //		protoboard.connect(200, 100, 300, 100);
