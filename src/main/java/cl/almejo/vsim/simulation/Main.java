@@ -44,12 +44,12 @@ class C extends P {
 class M<T extends P> {
 	T _t;
 	M() {
-		
+
 	}
 	M(T t) {
-		_t= t;
+		_t = t;
 	}
-	
+
 	int getX() {
 		return _t.getX();
 	}
@@ -59,8 +59,7 @@ public class Main {
 	class Simulator extends TimerTask {
 
 		M<C> m = new M<C>();
-				
-		
+
 		private Circuit _circuit;
 		private long _lastSimulationTime;
 		Simulator(Circuit circuit) {
@@ -81,57 +80,28 @@ public class Main {
 	public Main() {
 		Circuit circuit = new Circuit();
 
-
-//
-//
-//		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(10)));
-//		circuit.add(iconClock);
-
-//		iconClock.getGate().getPin(0).connect(iconAnd.getGate().getPin(0));
-//		iconClock2.getGate().getPin(0).connect(iconAnd.getGate().getPin(1));
-//		
-//		iconAnd.getGate().getPin(2).connect(iconNot.getGate().getPin(0));
-		
 		ClockDescriptor descriptor = new ClockDescriptor();
 		IconGate iconClock = new IconGate(new Clock(circuit, new ClockParams(1000, 1000), descriptor));
 		circuit.add(iconClock, 100, 80);
-		
+
 		IconGate iconClock2 = new IconGate(new Clock(circuit, new ClockParams(3000, 3000), descriptor));
-		circuit.add(iconClock2, 100, 118 );
-		
+		circuit.add(iconClock2, 100, 118);
+
 		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(1), new AndDescriptor()));
 		circuit.add(iconAnd, 300, 96);
-		
+
 		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1), new NotDescriptor()));
 		circuit.add(iconNot, 400, 96);
 
-		
-//		
-//		protoboard.addPin(0, iconClock.getGate(), 0, 100);
-//		protoboard.addPin(0, iconClock2.getGate(), 0, 0);
-//		
-//		protoboard.addPin(0, iconAnd.getGate(), 100, 100);
-//		protoboard.addPin(1, iconAnd.getGate(), 100, 0);
-//		protoboard.addPin(2, iconAnd.getGate(), 200, 100);
-//		
-//		protoboard.addPin(0, iconNot.getGate(), 300, 100);
-//		
 		circuit.connect(112, 96, 300, 96);
 		circuit.connect(112, 128, 300, 128);
-		circuit.connect(140, 128, 150, 128);
-	//	circuit.connect(300, 96, 300, 150);
+		circuit.connect(332, 112, 400, 112);
+		System.out.println("----------------------");
 		circuit.printMatrix();
-//		protoboard.connect(0, 0, 100, 0);
-//		
-//		protoboard.connect(200, 100, 300, 100);
-//		
-//		protoboard.connect(200, 500, 500, 500);
-		//protoboard.connect(0, 0, 100, 0);
-		
-		
+
 		Timer timer = new Timer();
 		timer.schedule(new Simulator(circuit), 1000, 100);
-		
+
 		new SimWindow(circuit);
 	}
 

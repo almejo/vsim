@@ -15,7 +15,7 @@ package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.simulation.Scheduler;
 
-public class Pin extends Link {
+public abstract class Pin extends Link {
 	protected byte _inValue = Constants.THREE_STATE;
 	protected byte _outValue = Constants.THREE_STATE;
 
@@ -75,9 +75,7 @@ public class Pin extends Link {
 		} while (pin != this);
 	}
 
-	public void hasChanged() {
-
-	}
+	public abstract void hasChanged();
 
 	public void setInValue(byte value) {
 		_inValue = value;

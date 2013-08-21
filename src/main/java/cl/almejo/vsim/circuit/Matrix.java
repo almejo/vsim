@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class Matrix <T extends Point>{
+public class Matrix<T extends Point> {
 
 	private Hashtable<Integer, List<T>> _verticalTable = new Hashtable<Integer, List<T>>();
 	private Hashtable<Integer, List<T>> _horizontalTable = new Hashtable<Integer, List<T>>();
@@ -67,7 +67,7 @@ public class Matrix <T extends Point>{
 		}
 		return new FindResult(null, null, null);
 	}
-	
+
 	public FindResult findVertical(int x, int y) {
 		if (!_horizontalTable.containsKey(x)) {
 			return new FindResult(null, null, null);
@@ -93,7 +93,7 @@ public class Matrix <T extends Point>{
 	}
 
 	List<T> getBetween(T a, T b) {
-		
+
 		List<T> list;
 		Comparator<T> comparator;
 		if (a.getX() == b.getX()) {
@@ -103,7 +103,7 @@ public class Matrix <T extends Point>{
 			list = _verticalTable.get(a.getY());
 			comparator = COMPARATORX;
 		}
-		
+
 		List<T> points = new LinkedList<T>();
 		int ndx = Collections.binarySearch(list, a, comparator);
 		ndx++;
@@ -114,7 +114,7 @@ public class Matrix <T extends Point>{
 		}
 		return points;
 	}
-	
+
 	@Override
 	public String toString() {
 		return drawPointable(_horizontalTable, "horizontal") + "\n\n" + drawPointable(_verticalTable, "vertical");
@@ -137,12 +137,16 @@ public class Matrix <T extends Point>{
 	public void remove(T point) {
 		if (_horizontalTable.containsKey(point.getX())) {
 			int index = Collections.binarySearch(_horizontalTable.get(point.getX()), point, COMPARATORY);
-			_horizontalTable.remove(index);
+			if (index >= 0) {
+				_horizontalTable.get(point.getX()).remove(index);
+			}
 		}
-		
+
 		if (_verticalTable.containsKey(point.getY())) {
 			int index = Collections.binarySearch(_verticalTable.get(point.getY()), point, COMPARATORX);
-			_verticalTable.remove(index);
+			if (index >= 0) {
+				_verticalTable.get(point.getY()).remove(index);
+			}
 		}
 	}
 
@@ -171,7 +175,7 @@ public class Matrix <T extends Point>{
 		Matrix<Contact> matrix2 = new Matrix<Contact>();
 		matrix2.add(new Contact(10, 10));
 		System.out.println(matrix2);
-		
+
 		System.out.println(matrix);
 		System.out.println(matrix.findHorizontal(10, 10));
 		System.out.println(matrix.findHorizontal(24, 10));
@@ -179,7 +183,7 @@ public class Matrix <T extends Point>{
 		System.out.println(matrix.findHorizontal(-80, 10));
 	}
 
-	public  Set<Integer> getXCoords() {
+	public Set<Integer> getXCoords() {
 		return _horizontalTable.keySet();
 	}
 

@@ -49,8 +49,6 @@ public class ClockPin extends Pin {
 
 	@Override
 	public void hasChanged() {
-		super.hasChanged();
 		program(((ClockParams) _gate.getParams()).getState(), 0);
 	}
-
 }

@@ -187,7 +187,7 @@ public class Protoboard {
 		contactA.connect(Constants.EAST);
 		contactB.connect(Constants.WEST);
 
-		List<Contact> contacts = reconnectInnerContactsVerticaly(contactA, contactB);
+		List<Contact> contacts = reconnectInnerContactsHorizontaly(contactA, contactB);
 
 		contacts.add(contactA);
 		contacts.add(contactB);
@@ -240,6 +240,16 @@ public class Protoboard {
 		for (Contact contact : contacts) {
 			contact.connect(Constants.NORTH);
 			contact.connect(Constants.SOUTH);
+		}
+		return reconnect(getAllContactsAttached(contactA, new LinkedList<Contact>()));
+	}
+	
+	private List<Contact> reconnectInnerContactsHorizontaly(Contact contactA, Contact contactB) {
+		List<Contact> contacts = _matrix.getBetween(contactA, contactB);
+
+		for (Contact contact : contacts) {
+			contact.connect(Constants.EAST);
+			contact.connect(Constants.WEST);
 		}
 		return reconnect(getAllContactsAttached(contactA, new LinkedList<Contact>()));
 	}

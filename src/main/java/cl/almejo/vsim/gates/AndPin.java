@@ -22,8 +22,7 @@ public class AndPin extends Pin {
 
 	@Override
 	public void hasChanged() {
-		super.hasChanged();
-		byte newValue = (byte) (((And)_gate).getPin(0).getInValue() & ((And)_gate).getPin(1).getInValue());
-		((And)_gate).getPin(2).program(newValue, _gate.getParams().getDelay());
+		byte newValue = (byte) (_gate.getPin(0).getInValue() & _gate.getPin(1).getInValue());
+		_gate.getPin(2).program(newValue, _gate.getParams().getDelay());
 	}
 }
