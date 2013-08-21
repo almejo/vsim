@@ -17,19 +17,48 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.circuit.IconGate;
-import cl.almejo.vsim.circuit.Protoboard;
 import cl.almejo.vsim.circuit.SimWindow;
 import cl.almejo.vsim.gates.And;
+import cl.almejo.vsim.gates.AndDescriptor;
 import cl.almejo.vsim.gates.AndParams;
 import cl.almejo.vsim.gates.Clock;
+import cl.almejo.vsim.gates.ClockDescriptor;
 import cl.almejo.vsim.gates.ClockParams;
+import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gates.Not;
+import cl.almejo.vsim.gates.NotDescriptor;
 import cl.almejo.vsim.gates.NotParams;
 
+class P {
+	int getX() {
+		return 0;
+	}
+}
+
+class C extends P {
+	int getX() {
+		return 5;
+	}
+}
+
+class M<T extends P> {
+	T _t;
+	M() {
+
+	}
+	M(T t) {
+		_t = t;
+	}
+
+	int getX() {
+		return _t.getX();
+	}
+}
 public class Main {
 
 	class Simulator extends TimerTask {
+
+		M<C> m = new M<C>();
 
 		private Circuit _circuit;
 		private long _lastSimulationTime;
@@ -51,47 +80,28 @@ public class Main {
 	public Main() {
 		Circuit circuit = new Circuit();
 
-		IconGate iconClock = new IconGate(new Clock(circuit, new ClockParams(10000, 10000)));
-		circuit.add(iconClock);
+		ClockDescriptor descriptor = new ClockDescriptor();
+		IconGate iconClock = new IconGate(new Clock(circuit, new ClockParams(1000, 1000), descriptor));
+		circuit.add(iconClock, 100, 80);
 
-		IconGate iconClock2 = new IconGate(new Clock(circuit, new ClockParams(3000, 3000)));
-		circuit.add(iconClock);
+		IconGate iconClock2 = new IconGate(new Clock(circuit, new ClockParams(3000, 3000), descriptor));
+		circuit.add(iconClock2, 100, 118);
 
-		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1)));
-		circuit.add(iconClock);
+		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(1), new AndDescriptor()));
+		circuit.add(iconAnd, 300, 96);
 
-		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(10)));
-		circuit.add(iconClock);
+		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1), new NotDescriptor()));
+		circuit.add(iconNot, 400, 96);
 
-//		iconClock.getGate().getPin(0).connect(iconAnd.getGate().getPin(0));
-//		iconClock2.getGate().getPin(0).connect(iconAnd.getGate().getPin(1));
-//		
-//		iconAnd.getGate().getPin(2).connect(iconNot.getGate().getPin(0));
-		
-		Protoboard protoboard = new Protoboard();
-		circuit.setProtoboard(protoboard);
-		
-		protoboard.addPin(0, iconClock.getGate(), 0, 100);
-		protoboard.addPin(0, iconClock2.getGate(), 0, 0);
-		
-		protoboard.addPin(0, iconAnd.getGate(), 100, 100);
-		protoboard.addPin(1, iconAnd.getGate(), 100, 0);
-		protoboard.addPin(2, iconAnd.getGate(), 200, 100);
-		
-		protoboard.addPin(0, iconNot.getGate(), 300, 100);
-		
-		protoboard.connect(0, 100, 100, 100);
-		protoboard.connect(0, 0, 100, 0);
-		
-		protoboard.connect(200, 100, 300, 100);
-		
-		protoboard.connect(200, 500, 500, 500);
-		//protoboard.connect(0, 0, 100, 0);
-		
-		
+		circuit.connect(112, 96, 300, 96);
+		circuit.connect(112, 128, 300, 128);
+		circuit.connect(332, 112, 400, 112);
+		System.out.println("----------------------");
+		circuit.printMatrix();
+
 		Timer timer = new Timer();
 		timer.schedule(new Simulator(circuit), 1000, 100);
-		
+
 		new SimWindow(circuit);
 	}
 

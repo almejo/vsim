@@ -17,8 +17,8 @@ import cl.almejo.vsim.circuit.Circuit;
 
 public class Clock extends Gate {
 
-	public Clock(Circuit circuit, ClockParams params) {
-		super(circuit, params);
+	public Clock(Circuit circuit, ClockParams params, ClockDescriptor descriptor) {
+		super(circuit, params, descriptor);
 		_pins = new Pin[1];
 		_pins[0] = new ClockPin(this, circuit.getScheduler(), 0);
 		_pins[0].hasChanged();

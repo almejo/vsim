@@ -56,7 +56,7 @@ public class Link {
 				return previous;
 			}
 			previous = next;
-		} while (previous != next);
+		} while (previous != this);
 		return null;
 	}
 }
