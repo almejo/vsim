@@ -23,11 +23,10 @@ public class NotPin extends Pin {
 
 	@Override
 	public void hasChanged() {
-		super.hasChanged();
-		((Not) _gate).getPin(1).program(newVal(((Not) _gate).getPin(0).getInValue()), _gate.getParams().getDelay());
+		_gate.getPin(1).program(newVal(_gate.getPin(0).getInValue()), _gate.getParams().getDelay());
 	}
 
 	private byte newVal(byte inValue) {
-		return (byte) (inValue == 0 ? 1 : 0);
+		return inValue == Constants.OFF ? Constants.ON : Constants.OFF;
 	}
 }

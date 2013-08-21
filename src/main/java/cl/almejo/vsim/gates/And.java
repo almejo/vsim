@@ -17,8 +17,8 @@ import cl.almejo.vsim.circuit.Circuit;
 
 public class And extends Gate {
 
-	public And(Circuit circuit, GateParameters params) {
-		super(circuit, params);
+	public And(Circuit circuit, GateParameters params, AndDescriptor andDescriptor) {
+		super(circuit, params, andDescriptor);
 		_pins = new AndPin[3];
 		_pins[0] = new AndPin(this, circuit.getScheduler(), 0);
 		_pins[1] = new AndPin(this, circuit.getScheduler(), 1);

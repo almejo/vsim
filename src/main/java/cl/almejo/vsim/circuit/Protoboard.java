@@ -15,7 +15,6 @@ package cl.almejo.vsim.circuit;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -25,15 +24,7 @@ import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.Pin;
 
 public class Protoboard {
-	private Matrix _matrix = new Matrix();
-
-	private static Hashtable<Byte, Color> STATECOLORS = new Hashtable<>();
-
-	static {
-		STATECOLORS.put(Constants.THREE_STATE, new Color(0, 200, 0));
-		STATECOLORS.put(Constants.ON, new Color(200, 0, 0));
-		STATECOLORS.put(Constants.OFF, new Color(0, 0, 0));
-	}
+	private Matrix<Contact> _matrix = new Matrix<>();
 
 	public Protoboard() {
 	}
@@ -42,6 +33,15 @@ public class Protoboard {
 		Contact contact = poke(x, y);
 		contact.addPin(pinId, gate);
 		reconnect(contact);
+	}
+
+	public void removePin(byte pinId, Gate gate, int x, int y) {
+		Contact contact = poke(x, y);
+
+		contact.removePin(pinId, gate);
+
+		reconnect(contact);
+		testForDelete(contact);
 	}
 
 	private List<Contact> reconnect(Contact contact) {
@@ -187,7 +187,7 @@ public class Protoboard {
 		contactA.connect(Constants.EAST);
 		contactB.connect(Constants.WEST);
 
-		List<Contact> contacts = reconnectInnerContactsVerticaly(contactA, contactB);
+		List<Contact> contacts = reconnectInnerContactsHorizontaly(contactA, contactB);
 
 		contacts.add(contactA);
 		contacts.add(contactB);
@@ -235,11 +235,21 @@ public class Protoboard {
 	}
 
 	private List<Contact> reconnectInnerContactsVerticaly(Contact contactA, Contact contactB) {
-		List<Contact> contacts = ((List<Contact>) _matrix.getBetween(contactA, contactB));
+		List<Contact> contacts = _matrix.getBetween(contactA, contactB);
 
 		for (Contact contact : contacts) {
 			contact.connect(Constants.NORTH);
 			contact.connect(Constants.SOUTH);
+		}
+		return reconnect(getAllContactsAttached(contactA, new LinkedList<Contact>()));
+	}
+	
+	private List<Contact> reconnectInnerContactsHorizontaly(Contact contactA, Contact contactB) {
+		List<Contact> contacts = _matrix.getBetween(contactA, contactB);
+
+		for (Contact contact : contacts) {
+			contact.connect(Constants.EAST);
+			contact.connect(Constants.WEST);
 		}
 		return reconnect(getAllContactsAttached(contactA, new LinkedList<Contact>()));
 	}
@@ -250,10 +260,10 @@ public class Protoboard {
 
 		Contact previous = null;
 		for (Integer x : coords) {
-			List<Contact> verticalContacts = (List<Contact>) _matrix.getVerticalContacts(x);
+			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
 			for (Contact contact : verticalContacts) {
 				g.setColor(getContactColor(contact));
-				g.fillRect(contact.getX() - 3, contact.getY() - 3, 6, 6);
+				g.fillOval(contact.getX() - 3, contact.getY() - 3, 6, 6);
 				if (previous != null && contact.isConnected(Constants.SOUTH)) {
 					g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
 				}
@@ -264,7 +274,7 @@ public class Protoboard {
 		previous = null;
 		coords = _matrix.getYCoords();
 		for (Integer y : coords) {
-			List<Contact> verticalContacts = (List<Contact>) _matrix.getHorizontalContacts(y);
+			List<Contact> verticalContacts = _matrix.getHorizontalContacts(y);
 			for (Contact contact : verticalContacts) {
 				g.setColor(getContactColor(contact));
 				if (previous != null && contact.isConnected(Constants.WEST)) {
@@ -279,8 +289,14 @@ public class Protoboard {
 
 	private Color getContactColor(Contact contact) {
 		if (contact.getGuidePin() != null) {
-			return STATECOLORS.get(contact.getGuidePin().getInValue());
+			return Constants.STATECOLORS.get(contact.getGuidePin().getInValue());
 		}
-		return STATECOLORS.get(Constants.THREE_STATE);
+		return Constants.STATECOLORS.get(Constants.THREE_STATE);
 	}
+
+	public void printMatrix() { 
+		System.out.println("matriz");
+		System.out.println(_matrix);
+	}
+
 }
