@@ -15,6 +15,7 @@ package cl.almejo.vsim.circuit;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -25,9 +26,6 @@ import cl.almejo.vsim.gates.Pin;
 
 public class Protoboard {
 	private Matrix<Contact> _matrix = new Matrix<Contact>();
-
-	public Protoboard() {
-	}
 
 	public void addPin(int pinId, Gate gate, int x, int y) {
 		Contact contact = poke(x, y);
@@ -243,7 +241,7 @@ public class Protoboard {
 		}
 		return reconnect(getAllContactsAttached(contactA, new LinkedList<Contact>()));
 	}
-	
+
 	private List<Contact> reconnectInnerContactsHorizontaly(Contact contactA, Contact contactB) {
 		List<Contact> contacts = _matrix.getBetween(contactA, contactB);
 
@@ -254,7 +252,7 @@ public class Protoboard {
 		return reconnect(getAllContactsAttached(contactA, new LinkedList<Contact>()));
 	}
 
-	public void paint(Graphics2D g) {
+	public void paint(Graphics2D g, Rectangle rectangle) {
 		Color color = g.getColor();
 		Set<Integer> coords = _matrix.getXCoords();
 
@@ -265,7 +263,9 @@ public class Protoboard {
 				g.setColor(getContactColor(contact));
 				g.fillOval(contact.getX() - 3, contact.getY() - 3, 6, 6);
 				if (previous != null && contact.isConnected(Constants.SOUTH)) {
-					g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
+					if (rectangle.contains(contact.getX(), contact.getY()) || rectangle.contains(previous.getX(), previous.getY())) {
+						g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
+					}
 				}
 				previous = contact;
 			}
@@ -278,7 +278,9 @@ public class Protoboard {
 			for (Contact contact : verticalContacts) {
 				g.setColor(getContactColor(contact));
 				if (previous != null && contact.isConnected(Constants.WEST)) {
-					g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
+					if (rectangle.contains(contact.getX(), contact.getY()) || rectangle.contains(previous.getX(), previous.getY())) {
+						g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
+					}
 				}
 				previous = contact;
 			}
@@ -293,10 +295,4 @@ public class Protoboard {
 		}
 		return Constants.STATECOLORS.get(Constants.THREE_STATE);
 	}
-
-	public void printMatrix() { 
-		System.out.println("matriz");
-		System.out.println(_matrix);
-	}
-
 }

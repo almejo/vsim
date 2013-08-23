@@ -13,9 +13,6 @@
 
 package cl.almejo.vsim.simulation;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.SimWindow;
 import cl.almejo.vsim.gates.And;
@@ -29,53 +26,7 @@ import cl.almejo.vsim.gates.Not;
 import cl.almejo.vsim.gates.NotDescriptor;
 import cl.almejo.vsim.gates.NotParams;
 
-class P {
-	int getX() {
-		return 0;
-	}
-}
-
-class C extends P {
-	int getX() {
-		return 5;
-	}
-}
-
-class M<T extends P> {
-	T _t;
-	M() {
-
-	}
-	M(T t) {
-		_t = t;
-	}
-
-	int getX() {
-		return _t.getX();
-	}
-}
 public class Main {
-
-	class Simulator extends TimerTask {
-
-		M<C> m = new M<C>();
-
-		private Circuit _circuit;
-		private long _lastSimulationTime;
-		Simulator(Circuit circuit) {
-			_circuit = circuit;
-			_lastSimulationTime = System.currentTimeMillis();
-		}
-
-		@Override
-		public void run() {
-			long currentTime = System.currentTimeMillis();
-			long simulationTime = currentTime - _lastSimulationTime;
-			_lastSimulationTime = currentTime;
-			_circuit.getScheduler().run((int) simulationTime);
-		}
-
-	}
 
 	public Main() {
 		Circuit circuit = new Circuit();
@@ -96,12 +47,8 @@ public class Main {
 		circuit.connect(112, 96, 300, 96);
 		circuit.connect(112, 128, 300, 128);
 		circuit.connect(332, 112, 400, 112);
-		System.out.println("----------------------");
-		circuit.printMatrix();
 
-		Timer timer = new Timer();
-		timer.schedule(new Simulator(circuit), 1000, 100);
-
+		new SimWindow(circuit);
 		new SimWindow(circuit);
 	}
 

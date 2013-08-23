@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.IconGate;
@@ -12,28 +14,77 @@ import cl.almejo.vsim.simulation.Scheduler;
 
 public class Circuit {
 
+	class Simulator extends TimerTask {
+
+		private Circuit _circuit;
+		private long _lastSimulationTime;
+		
+		Simulator(Circuit circuit) {
+			_circuit = circuit;
+			_lastSimulationTime = System.currentTimeMillis();
+		}
+
+		@Override
+		public void run() {
+			long currentTime = System.currentTimeMillis();
+			long simulationTime = currentTime - _lastSimulationTime;
+			_lastSimulationTime = currentTime;
+			_circuit.getScheduler().run((int) simulationTime);
+		}
+
+	}
+	
+	class RepaintTask extends TimerTask {
+
+		private final Circuit _circuit;
+
+		public RepaintTask(Circuit circuit) {
+			_circuit = circuit;
+		}
+
+		@Override
+		public void run() {
+			_circuit.repaint();
+		}
+	}
+
 	private static final int GRIDSIZE = 8;
 
 	Scheduler _scheduler;
 
 	List<IconGate> _icons = new LinkedList<IconGate>();
+	List<CircuitCanvas> _canvases = new LinkedList<CircuitCanvas>();
 
 	private Protoboard _protoboard;
 
-	private Rectangle _extent = new Rectangle();
+	private Timer _paintTimer = new Timer();
+
+	private Timer _simulationTimer = new Timer();
 
 	public Circuit() {
 		_protoboard = new Protoboard();
 		_scheduler = new Scheduler();
+
+		_paintTimer.schedule(new RepaintTask(this), 100, 100);
+		_simulationTimer.schedule(new Simulator(this), 1000, 100);
+
+	}
+
+	public void repaint() {
+		for (CircuitCanvas canvas : _canvases) {
+			canvas.repaint();
+		}
 	}
 
 	public Scheduler getScheduler() {
 		return _scheduler;
 	}
 
-	public void paint(Graphics2D graphics) {
-		drawGates(graphics);
-		_protoboard.paint(graphics);
+	public void paint(Graphics2D graphics, Rectangle rectangle) {
+		if (graphics != null) {
+			drawGates(graphics, rectangle);
+			_protoboard.paint(graphics, rectangle);
+		}
 	}
 
 	public void add(IconGate icon, int x, int y) {
@@ -41,8 +92,8 @@ public class Circuit {
 
 		Dimension size = icon.getSize();
 
-		int _xi = Circuit.gridTrunc(x);// ((int) (x - size.getWidth() / 2)));
-		int _yi = Circuit.gridTrunc(y);// ((int) (y - size.getHeight() / 2)));
+		int _xi = Circuit.gridTrunc(x);
+		int _yi = Circuit.gridTrunc(y);
 
 		icon.setBounds(_xi, _yi, (int) size.getWidth(), (int) size.getHeight());
 
@@ -50,17 +101,17 @@ public class Circuit {
 
 		activate(icon);
 
-		_extent.union(icon);
-		System.out.println(_extent);
 	}
 
 	public static int gridTrunc(int coord) {
 		return coord & (~(GRIDSIZE - 1));
 	}
 
-	private void drawGates(Graphics2D graphics) {
+	private void drawGates(Graphics2D graphics, Rectangle rectangle) {
 		for (IconGate iconGate : _icons) {
-			iconGate.paint(graphics);
+			if (rectangle.intersects(iconGate)) {
+				iconGate.paint(graphics);
+			}
 		}
 	}
 
@@ -88,7 +139,11 @@ public class Circuit {
 		_protoboard.connect(gridTrunc(xi), gridTrunc(yi), gridTrunc(xf), gridTrunc(yf));
 	}
 
-	public void printMatrix() {
-		_protoboard.printMatrix();
+	public void add(CircuitCanvas canvas) {
+		_canvases.add(canvas);
+	}
+
+	public void remove(CircuitCanvas canvas) {
+		_canvases.remove(canvas);
 	}
 }

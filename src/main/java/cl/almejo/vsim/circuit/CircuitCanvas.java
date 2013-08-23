@@ -15,6 +15,7 @@ package cl.almejo.vsim.circuit;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import javax.swing.JPanel;
 
@@ -26,13 +27,20 @@ public class CircuitCanvas extends JPanel {
 
 	public CircuitCanvas(Circuit circuit) {
 		_circuit = circuit;
+		_circuit.add(this);
 	}
+
+	private Rectangle _viewport = new Rectangle();
 
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		_circuit.paint((Graphics2D)g);
-		repaint();
+		g.drawRect(1, 1, (int) getSize().getWidth() - 2, (int) getSize().getHeight() - 2);
+		_circuit.paint((Graphics2D) g, _viewport);
+	}
+
+	public void resizeViewport() {
+		_viewport.setSize(getSize());
 	}
 
 }
