@@ -24,7 +24,7 @@ import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.Pin;
 
 public class Protoboard {
-	private Matrix<Contact> _matrix = new Matrix<>();
+	private Matrix<Contact> _matrix = new Matrix<Contact>();
 
 	public Protoboard() {
 	}

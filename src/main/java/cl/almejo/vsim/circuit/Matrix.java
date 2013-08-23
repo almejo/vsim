@@ -151,7 +151,7 @@ public class Matrix<T extends Point> {
 	}
 
 	public static void main(String[] args) {
-		Matrix<Point> matrix = new Matrix<>();
+		Matrix<Point> matrix = new Matrix<Point>();
 		matrix.add(new Point(-80, 30));
 		matrix.add(new Point(-80, 10));
 		matrix.add(new Point(-80, 30));
