@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
+import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
 
 public class IconGate extends Rectangle {
@@ -17,6 +18,10 @@ public class IconGate extends Rectangle {
 	private AffineTransform _transform = new AffineTransform();
 	private AffineTransform _origianlTransformation;
 
+	public IconGate() {
+		super();
+	}
+	
 	public IconGate(Gate gate) {
 		_gate = gate;
 	}
@@ -91,5 +96,12 @@ public class IconGate extends Rectangle {
 	
 	public Point getTransformedPinPos(byte pinId) {
 		return getTransformed(getPinPos(pinId));
+	}
+	
+	public IconGate getInstance(Circuit circuit) {
+		IconGate iconGate = new IconGate();
+
+		iconGate.setGate(_gate.getGateDescriptor().make(circuit, _gate.getParams()));
+		return iconGate;
 	}
 }

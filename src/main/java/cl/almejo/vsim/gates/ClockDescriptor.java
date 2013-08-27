@@ -44,4 +44,9 @@ public class ClockDescriptor extends GateDescriptor {
 		return new Dimension(16, 16);
 	}
 
+	@Override
+	public Gate make(Circuit circuit, GateParameters params) {
+		return new Clock(circuit, (GateParameters) params.clone(), this);
+	}
+
 }

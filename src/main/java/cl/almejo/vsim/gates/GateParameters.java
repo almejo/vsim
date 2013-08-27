@@ -10,18 +10,27 @@
  * @author: Alejandro Vera
  *
  */
- 
+
 package cl.almejo.vsim.gates;
 
-abstract public class GateParameters {
+abstract public class GateParameters implements Cloneable {
 
 	protected int _delay;
 
 	public GateParameters(int delay) {
 		_delay = delay;
 	}
-	
+
 	public int getDelay() {
 		return _delay;
+	}
+
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

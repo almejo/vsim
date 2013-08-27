@@ -40,5 +40,9 @@ public class AndDescriptor extends GateDescriptor {
 	public Dimension getSize() {
 		return new Dimension(32, 16);
 	}
-
+	
+	@Override
+	public Gate make(Circuit circuit, GateParameters params) {
+		return new And(circuit, (GateParameters) params.clone(), this);
+	}
 }
