@@ -66,6 +66,8 @@ public class Circuit {
 
 	private Timer _simulationTimer = new Timer();
 
+	private int _nextGateId = 0;
+
 	public Circuit() {
 		_protoboard = new Protoboard();
 		_scheduler = new Scheduler();
@@ -183,5 +185,9 @@ public class Circuit {
 
 	public void undoableConnect(int xi, int yi, int xf, int yf) {
 		_commandManager.apply(new ConnectCommand(this, gridTrunc(xi), gridTrunc(yi),gridTrunc(xf), gridTrunc(yf)));
+	}
+
+	public int getNextGateId() {
+		return _nextGateId++;
 	}
 }

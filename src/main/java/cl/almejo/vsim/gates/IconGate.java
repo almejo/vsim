@@ -11,18 +11,21 @@ import cl.almejo.vsim.circuit.Point;
 public class IconGate extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
-	Gate _gate;
+	private Gate _gate;
+	private int _id;
 
 	private AffineTransform _translateTransformation = new AffineTransform();
 	private AffineTransform _rotateTransformation = new AffineTransform();
 	private AffineTransform _transform = new AffineTransform();
 	private AffineTransform _origianlTransformation;
 
-	public IconGate() {
+	public IconGate(int id) {
 		super();
+		_id = id;
 	}
 	
-	public IconGate(Gate gate) {
+	public IconGate(int id, Gate gate) {
+		this(id);
 		_gate = gate;
 	}
 
@@ -99,9 +102,10 @@ public class IconGate extends Rectangle {
 	}
 	
 	public IconGate getInstance(Circuit circuit) {
-		IconGate iconGate = new IconGate();
-
+		IconGate iconGate = new IconGate(circuit.getNextGateId());
 		iconGate.setGate(_gate.getGateDescriptor().make(circuit, _gate.getParams()));
 		return iconGate;
 	}
+	
+	
 }

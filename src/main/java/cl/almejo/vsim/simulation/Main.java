@@ -32,16 +32,16 @@ public class Main {
 		Circuit circuit = new Circuit();
 
 		ClockDescriptor descriptor = new ClockDescriptor();
-		IconGate iconClock = new IconGate(new Clock(circuit, new ClockParams(1000, 1000), descriptor));
+		IconGate iconClock = new IconGate(circuit.getNextGateId(), new Clock(circuit, new ClockParams(1000, 1000), descriptor));
 		circuit.add(iconClock, 100, 80);
 
-		IconGate iconClock2 = new IconGate(new Clock(circuit, new ClockParams(3000, 3000), descriptor));
+		IconGate iconClock2 = new IconGate(circuit.getNextGateId(), new Clock(circuit, new ClockParams(3000, 3000), descriptor));
 		circuit.add(iconClock2, 100, 118);
 
-		IconGate iconAnd = new IconGate(new And(circuit, new AndParams(1), new AndDescriptor()));
+		IconGate iconAnd = new IconGate(circuit.getNextGateId(), new And(circuit, new AndParams(1), new AndDescriptor()));
 		circuit.add(iconAnd, 300, 96);
 
-		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1), new NotDescriptor()));
+		IconGate iconNot = new IconGate(circuit.getNextGateId(), new Not(circuit, new NotParams(1), new NotDescriptor()));
 		circuit.add(iconNot, 400, 96);
 
 		circuit.undoableConnect(112, 96, 300, 96);
