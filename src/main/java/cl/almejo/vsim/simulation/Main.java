@@ -44,9 +44,9 @@ public class Main {
 		IconGate iconNot = new IconGate(new Not(circuit, new NotParams(1), new NotDescriptor()));
 		circuit.add(iconNot, 400, 96);
 
-		circuit.connect(112, 96, 300, 96);
-		circuit.connect(112, 128, 300, 128);
-		circuit.connect(332, 112, 400, 112);
+		circuit.undoableConnect(112, 96, 300, 96);
+		circuit.undoableConnect(112, 128, 300, 128);
+		circuit.undoableConnect(332, 112, 400, 112);
 
 		new SimWindow(circuit);
 		new SimWindow(circuit);

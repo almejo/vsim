@@ -44,33 +44,33 @@ public class Matrix<T extends Point> {
 		}
 	}
 
-	public FindResult findHorizontal(int x, int y) {
+	public FindResult<T> findHorizontal(int x, int y) {
 		if (!_verticalTable.containsKey(y)) {
-			return new FindResult(null, null, null);
+			return new FindResult<T>(null, null, null);
 		}
 
-		Point previous = null;
-		Point hit = null;
-		Point next = null;
+		T previous = null;
+		T hit = null;
+		T next = null;
 		List<T> points = _verticalTable.get(y);
 		int i = 0;
-		for (Point point : points) {
+		for (T point : points) {
 			if (point.getX() == x) {
 				hit = point;
 				if (i < points.size() - 1) {
 					next = points.get(i + 1);
 				}
-				return new FindResult(hit, previous, next);
+				return new FindResult<T>(hit, previous, next);
 			}
 			previous = point;
 			i++;
 		}
-		return new FindResult(null, null, null);
+		return new FindResult<T>(null, null, null);
 	}
 
-	public FindResult findVertical(int x, int y) {
+	public FindResult<T> findVertical(int x, int y) {
 		if (!_horizontalTable.containsKey(x)) {
-			return new FindResult(null, null, null);
+			return new FindResult<T>(null, null, null);
 		}
 
 		T previous = null;
@@ -84,16 +84,20 @@ public class Matrix<T extends Point> {
 				if (i < points.size() - 1) {
 					next = points.get(i + 1);
 				}
-				return new FindResult(hit, previous, next);
+				return new FindResult<T>(hit, previous, next);
 			}
 			previous = point;
 			i++;
 		}
-		return new FindResult(null, null, null);
+		return new FindResult<T>(null, null, null);
 	}
 
 	List<T> getBetween(T a, T b) {
 
+		if (a == null || b == null) {
+			return new LinkedList<T>();
+		}
+		
 		List<T> list;
 		Comparator<T> comparator;
 		if (a.getX() == b.getX()) {

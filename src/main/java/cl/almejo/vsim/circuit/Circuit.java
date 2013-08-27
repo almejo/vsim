@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cl.almejo.vsim.circuit.commands.CommandManager;
+import cl.almejo.vsim.circuit.commands.ConnectCommand;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.simulation.Scheduler;
@@ -18,7 +20,7 @@ public class Circuit {
 
 		private Circuit _circuit;
 		private long _lastSimulationTime;
-		
+
 		Simulator(Circuit circuit) {
 			_circuit = circuit;
 			_lastSimulationTime = System.currentTimeMillis();
@@ -33,7 +35,7 @@ public class Circuit {
 		}
 
 	}
-	
+
 	class RepaintTask extends TimerTask {
 
 		private final Circuit _circuit;
@@ -50,9 +52,12 @@ public class Circuit {
 
 	private static final int GRIDSIZE = 8;
 
+	CommandManager _commandManager = new CommandManager();
+
 	Scheduler _scheduler;
 
 	List<IconGate> _icons = new LinkedList<IconGate>();
+
 	List<CircuitCanvas> _canvases = new LinkedList<CircuitCanvas>();
 
 	private Protoboard _protoboard;
@@ -145,5 +150,38 @@ public class Circuit {
 
 	public void remove(CircuitCanvas canvas) {
 		_canvases.remove(canvas);
+	}
+
+	public List<Connection<Contact>> findToDisconnect(int x, int y) {
+		return _protoboard.findToDisconnect(x, y);
+	}
+
+	public void disconnect(Contact contactA, Contact contactB) {
+		_protoboard.disconnect(contactA, contactB);
+	}
+
+	public void disconnectBetween(int xi, int yi, int xf, int yf) {
+		_protoboard.disconnectBetween(xi, yi, xf, yf);
+	}
+
+	public List<Connection<Contact>> findBeforeConnect(int xi, int yi, int xf, int yf) {
+		return _protoboard.findBeforeConnect(xi, yi, xf, yf);
+	}
+
+
+	public void undo() {
+		_commandManager.undo();
+	}
+
+	public void redo() {
+		_commandManager.redo();
+	}
+
+	public void disconnect(int xi, int yi, int xf, int yf) {
+		_protoboard.disconnect(xi, yi, xf, yf);
+	}
+
+	public void undoableConnect(int xi, int yi, int xf, int yf) {
+		_commandManager.apply(new ConnectCommand(this, gridTrunc(xi), gridTrunc(yi),gridTrunc(xf), gridTrunc(yf)));
 	}
 }

@@ -93,4 +93,20 @@ public class Contact extends Point {
 			+ (isConnected(Constants.SOUTH) ? "S" : "-") + (isConnected(Constants.WEST) ? "W" : "-") + ")";
 	}
 
+	public void disconnect(Contact contact) {
+		if (_x < contact.getX()) {
+			disconnect(Constants.EAST);
+		} else if (_x > contact.getX()) {
+			disconnect(Constants.WEST);
+		} else if (_y < contact.getY()) {
+			disconnect(Constants.NORTH);
+		} else if (_y > contact.getY()) {
+			disconnect(Constants.SOUTH);
+		}
+	}
+
+	public void disconnect(byte direction) {
+		_conectionMask = (byte) _conectionMask & ~direction;
+	}
+
 }
