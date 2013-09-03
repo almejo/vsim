@@ -50,22 +50,22 @@ public class Matrix<T extends Point> {
 		}
 
 		T previous = null;
-		T hit = null;
 		T next = null;
 		List<T> points = _verticalTable.get(y);
 		int i = 0;
 		for (T point : points) {
 			if (point.getX() == x) {
-				hit = point;
 				if (i < points.size() - 1) {
 					next = points.get(i + 1);
 				}
-				return new FindResult<T>(hit, previous, next);
+				return new FindResult<T>(point, previous, next);
+			} else if (point.getX() > x) {
+				return new FindResult<T>(null, previous, point);
 			}
 			previous = point;
 			i++;
 		}
-		return new FindResult<T>(null, null, null);
+		return new FindResult<T>(null, previous, null);
 	}
 
 	public FindResult<T> findVertical(int x, int y) {
@@ -97,7 +97,7 @@ public class Matrix<T extends Point> {
 		if (a == null || b == null) {
 			return new LinkedList<T>();
 		}
-		
+
 		List<T> list;
 		Comparator<T> comparator;
 		if (a.getX() == b.getX()) {
@@ -114,6 +114,35 @@ public class Matrix<T extends Point> {
 		T point = list.get(ndx++);
 		while (point != null && point != b) {
 			points.add(point);
+			point = list.get(ndx++);
+		}
+		return points;
+	}
+	
+	List<T> getSublist(T a, T b) {
+
+		if (a == null || b == null) {
+			return new LinkedList<T>();
+		}
+
+		List<T> list;
+		Comparator<T> comparator;
+		if (a.getX() == b.getX()) {
+			list = _horizontalTable.get(a.getX());
+			comparator = COMPARATORY;
+		} else {
+			list = _verticalTable.get(a.getY());
+			comparator = COMPARATORX;
+		}
+
+		List<T> points = new LinkedList<T>();
+		int ndx = Collections.binarySearch(list, a, comparator);
+		T point = list.get(ndx++);
+		while (point != null) {
+			points.add(point);
+			if (point == b) {
+				break;
+			}
 			point = list.get(ndx++);
 		}
 		return points;

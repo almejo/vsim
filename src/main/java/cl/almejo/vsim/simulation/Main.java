@@ -47,6 +47,12 @@ public class Main {
 		circuit.undoableConnect(112, 96, 300, 96);
 		circuit.undoableConnect(112, 128, 300, 128);
 		circuit.undoableConnect(332, 112, 400, 112);
+		System.out.println("================================================");
+		circuit.undoableDisconnect(332, 112);
+
+		circuit.undoableConnect(300, 200, 50, 200);
+		circuit.undoableConnect(350, 200, 450, 200);
+		circuit.undoableConnect(100, 200, 500, 200);
 
 		new SimWindow(circuit);
 		new SimWindow(circuit);

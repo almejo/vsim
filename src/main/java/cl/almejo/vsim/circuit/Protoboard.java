@@ -335,26 +335,34 @@ public class Protoboard {
 	}
 
 	public List<Connection<Contact>> findBeforeConnect(int xi, int yi, int xf, int yf) {
-
 		if (xi == xf) {
+			if (yi < yf) {
+				Contact first = findFirst(Constants.NORTH, _matrix.findVertical(xi, yi));
+				Contact last = findLast(Constants.SOUTH, _matrix.findVertical(xf, yf));
+				return findConnections(Constants.NORTH, _matrix.getSublist(first, last));
+			}
+			Contact first = findFirst(Constants.NORTH, _matrix.findVertical(xf, yf));
+			Contact last = findLast(Constants.SOUTH, _matrix.findVertical(xi, yi));
+			return findConnections(Constants.NORTH, _matrix.getSublist(first, last));
+		}
+		if (xi < xf) {
 			Contact first = findFirst(Constants.EAST, _matrix.findHorizontal(xi, yi));
 			Contact last = findLast(Constants.WEST, _matrix.findHorizontal(xf, yf));
-			return findConnections(Constants.EAST, _matrix.getBetween(first, last));
+			return findConnections(Constants.EAST, _matrix.getSublist(first, last));
 		}
-
-		Contact first = findFirst(Constants.NORTH, _matrix.findVertical(xi, yi));
-		Contact last = findLast(Constants.SOUTH, _matrix.findVertical(xf, yf));
-		return findConnections(Constants.NORTH, _matrix.getBetween(first, last));
+		Contact first = findFirst(Constants.EAST, _matrix.findHorizontal(xf, yf));
+		Contact last = findLast(Constants.WEST, _matrix.findHorizontal(xi, yi));
+		return findConnections(Constants.EAST, _matrix.getSublist(first, last));
 	}
 
 	private Contact findLast(byte direction, FindResult<Contact> result) {
-		Contact last = null;
+		Contact hit = null;
 		for (Contact contact : result.list()) {
 			if (contact != null && contact.isConnected(direction)) {
-				last = contact;
+				hit = contact;
 			}
 		}
-		return last;
+		return hit;
 	}
 
 	private Contact findFirst(byte direction, FindResult<Contact> result) {
@@ -369,41 +377,30 @@ public class Protoboard {
 	public void disconnectBetween(int xi, int yi, int xf, int yf) {
 		Contact contactA = null;
 		Contact contactB = null;
-		byte direction = 0;
 
 		if (xi == xf) {
 			if (yi < yf) {
-				contactA = poke(xi, yi);
-				contactB = poke(xf, yf);
+				contactA = findFirst(Constants.NORTH, _matrix.findVertical(xi, yi));
+				contactB = findLast(Constants.SOUTH, _matrix.findVertical(xf, yf));
 			} else {
-				contactA = poke(xf, yf);
-				contactB = poke(xi, yi);
+				contactA = findFirst(Constants.NORTH, _matrix.findVertical(xf, yf));
+				contactB = findLast(Constants.SOUTH, _matrix.findVertical(xi, yi));
 			}
-			direction = Constants.NORTH;
 		} else {
 			if (xi < xf) {
-				contactA = poke(xi, yi);
-				contactB = poke(xf, yf);
+				contactA = findFirst(Constants.EAST, _matrix.findHorizontal(xi, yi));
+				contactB = findLast(Constants.WEST, _matrix.findHorizontal(xf, yf));
 			} else {
-				contactA = poke(xf, yf);
-				contactB = poke(xi, yi);
+				contactA = findFirst(Constants.EAST, _matrix.findHorizontal(xf, yf));
+				contactB = findLast(Constants.WEST, _matrix.findHorizontal(xi, yi));
 			}
-			direction = Constants.EAST;
 		}
 
-		if (contactA == null || contactB == null) {
-			return;
-		}
-		List<Contact> contacts = _matrix.getBetween(contactA, contactB);
-		Contact previous = null;
-		for (Contact contact : contacts) {
-			if (previous != null && previous.isConnected(direction)) {
-				disconnect(previous, contact);
-			}
-			previous = contact;
+		if (contactA != null && contactB != null) {
+			disconnect(contactA.getX(), contactA.getY(), contactB.getX(), contactB.getY());
 		}
 	}
-
+	
 	public void disconnect(int xi, int yi, int xf, int yf) {
 		disconnect(poke(xi, yi), poke(xf, yf));
 	}

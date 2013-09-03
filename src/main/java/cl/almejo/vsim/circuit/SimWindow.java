@@ -32,9 +32,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
-import cl.almejo.vsim.circuit.commands.CommandManager;
-import cl.almejo.vsim.circuit.commands.ConnectCommand;
-
 public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;

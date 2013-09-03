@@ -44,17 +44,12 @@ public class ConnectCommand implements Command {
 
 	@Override
 	public void unDo() {
+		_circuit.disconnectBetween(_xi, _yi, _xf, _yf);
 		if (_connections.size() > 0) {
-			Contact first = _connections.get(0).getFirst();
-			Contact last = _connections.get(_connections.size() - 1).getLast();
-
-			_circuit.disconnectBetween(first.getX(), first.getY(), last.getX(), last.getY());
 			for (Connection<Contact> connection : _connections) {
 				_circuit.connect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(),
 					connection.getLast().getY());
 			}
-		} else {
-			_circuit.disconnect(_xi, _yi, _xf, _yf);
 		}
 	}
 }

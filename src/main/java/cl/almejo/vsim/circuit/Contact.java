@@ -90,9 +90,21 @@ public class Contact extends Point {
 	@Override
 	public String toString() {
 		return super.toString() + " (" + (isConnected(Constants.NORTH) ? "N" : "-") + (isConnected(Constants.EAST) ? "E" : "-")
-			+ (isConnected(Constants.SOUTH) ? "S" : "-") + (isConnected(Constants.WEST) ? "W" : "-") + ")";
+			+ (isConnected(Constants.SOUTH) ? "S" : "-") + (isConnected(Constants.WEST) ? "W" : "-") + ") [" + printPins() + "]";
 	}
 
+	private String printPins() {
+		String ret = "";
+		int i = 0;
+		for (PinGatePar pinGate : _pins.elements()) {
+			if (i > 0) {
+				ret += ", ";
+			}
+			ret += pinGate.getGate() + "-" + pinGate.getPinId();
+			i++;
+		}
+		return ret;
+	}
 	public void disconnect(Contact contact) {
 		if (_x < contact.getX()) {
 			disconnect(Constants.EAST);

@@ -10,6 +10,7 @@ import java.util.TimerTask;
 
 import cl.almejo.vsim.circuit.commands.CommandManager;
 import cl.almejo.vsim.circuit.commands.ConnectCommand;
+import cl.almejo.vsim.circuit.commands.DisconnectCommand;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.simulation.Scheduler;
@@ -189,5 +190,9 @@ public class Circuit {
 
 	public int getNextGateId() {
 		return _nextGateId++;
+	}
+
+	public void undoableDisconnect(int x, int y) {
+		_commandManager.apply(new DisconnectCommand(this, gridTrunc(x), gridTrunc(y)));
 	}
 }
