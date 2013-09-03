@@ -256,8 +256,8 @@ public class Protoboard {
 		Color color = g.getColor();
 		Set<Integer> coords = _matrix.getXCoords();
 
-		Contact previous = null;
 		for (Integer x : coords) {
+			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
 			for (Contact contact : verticalContacts) {
 				g.setColor(getContactColor(contact));
@@ -272,9 +272,9 @@ public class Protoboard {
 			}
 		}
 
-		previous = null;
 		coords = _matrix.getYCoords();
 		for (Integer y : coords) {
+			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getHorizontalContacts(y);
 			for (Contact contact : verticalContacts) {
 				g.setColor(getContactColor(contact));

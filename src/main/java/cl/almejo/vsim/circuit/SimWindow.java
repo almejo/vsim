@@ -19,6 +19,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -32,12 +34,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
-public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener {
+public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener {
 
 	private static final long serialVersionUID = 1L;
 	private CircuitCanvas _canvas;
 	private final Circuit _circuit;
 	private JTextField _text;
+	private int _xi;
+	private int _yi;
+	private int _yf;
+	private int _xf;
 
 	static final KeyStroke ACCELERATOR_UNDO = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
 	static final KeyStroke ACCELERATOR_REDO = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
@@ -83,6 +89,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		getContentPane().add(_canvas, BorderLayout.CENTER);
 		setVisible(true);
 		addComponentListener(this);
+		_canvas.addMouseListener(this);
 		_canvas.resizeViewport();
 		_text = new JTextField();
 		getContentPane().add(_text, BorderLayout.SOUTH);
@@ -206,5 +213,38 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 			_circuit.undoableConnect(Integer.parseInt(points[0].trim()), Integer.parseInt(points[1].trim()), Integer.parseInt(points[2].trim()), Integer.parseInt(points[3].trim()));
 			field.setText("");
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		_xi = e.getX();
+		_yi = e.getY();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		_xf = e.getX();
+		_yf = e.getY();
+		
+		_circuit.undoableConnect(_xi, _yi, _xi, _yf);
+		_circuit.undoableConnect(_xi, _yf, _xf, _yf);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
