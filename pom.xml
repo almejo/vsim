@@ -12,7 +12,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>cl.almejo.vsim.simulation.Main</mainClass>
+							<mainClass>cl.almejo.vsim.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

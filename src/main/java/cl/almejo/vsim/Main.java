@@ -11,11 +11,11 @@
  *
  */
 
-package cl.almejo.vsim.simulation;
+package cl.almejo.vsim;
 
 import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.gui.SimWindow;
 import cl.almejo.vsim.gates.*;
+import cl.almejo.vsim.gui.SimWindow;
 
 public class Main {
 
