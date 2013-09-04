@@ -11,7 +11,10 @@
  *
  */
 
-package cl.almejo.vsim.circuit;
+package cl.almejo.vsim.gui;
+
+import cl.almejo.vsim.circuit.Circuit;
+import cl.almejo.vsim.circuit.CircuitCanvas;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

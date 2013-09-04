@@ -14,7 +14,7 @@
 package cl.almejo.vsim.simulation;
 
 import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.circuit.SimWindow;
+import cl.almejo.vsim.gui.SimWindow;
 import cl.almejo.vsim.gates.*;
 
 public class Main {
