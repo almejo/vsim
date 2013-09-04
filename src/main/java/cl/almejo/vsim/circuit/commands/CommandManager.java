@@ -3,10 +3,10 @@
  * vsim
  *
  * Created on Aug 25, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
@@ -44,13 +44,5 @@ public class CommandManager {
 		Command command = _undone.remove(0);
 		command.apply();
 		_done.add(command);
-	}
-
-	public boolean canRedo() {
-		return _undone.size() > 0;
-	}
-
-	public boolean canUndo() {
-		return _done.size() > 0;
 	}
 }

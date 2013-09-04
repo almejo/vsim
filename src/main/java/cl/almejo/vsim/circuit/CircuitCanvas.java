@@ -3,21 +3,18 @@
  * vsim
  *
  * Created on Aug 16, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
 
 package cl.almejo.vsim.circuit;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 public class CircuitCanvas extends JPanel {
 

@@ -27,6 +27,9 @@ public class Point {
 		if (obj == null) {
 			return false;
 		}
+		if (!(obj instanceof Point)) {
+			return false;
+		}
 		Point p = (Point) obj;
 		return p._x == _x && p._y == _y;
 	}

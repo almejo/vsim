@@ -3,26 +3,24 @@
  * vsim
  *
  * Created on Aug 15, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
 
 package cl.almejo.vsim.circuit;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.Pin;
+
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class Protoboard {
 	private Matrix<Contact> _matrix = new Matrix<Contact>();
@@ -227,7 +225,7 @@ public class Protoboard {
 			return;
 		}
 
-		if (contact.isMiddlePoint() || !contact.isConnected()) {
+		if (contact.isMiddlePoint() || contact.isNotConnected()) {
 			_matrix.remove(contact);
 		}
 	}
@@ -264,7 +262,7 @@ public class Protoboard {
 				g.fillOval(contact.getX() - 3, contact.getY() - 3, 6, 6);
 				if (previous != null && contact.isConnected(Constants.SOUTH)) {
 					if (rectangle.contains(contact.getX(), contact.getY())
-						|| rectangle.contains(previous.getX(), previous.getY())) {
+							|| rectangle.contains(previous.getX(), previous.getY())) {
 						g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
 					}
 				}
@@ -280,7 +278,7 @@ public class Protoboard {
 				g.setColor(getContactColor(contact));
 				if (previous != null && contact.isConnected(Constants.WEST)) {
 					if (rectangle.contains(contact.getX(), contact.getY())
-						|| rectangle.contains(previous.getX(), previous.getY())) {
+							|| rectangle.contains(previous.getX(), previous.getY())) {
 						g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
 					}
 				}
@@ -327,7 +325,7 @@ public class Protoboard {
 		for (Contact contact : contacts) {
 			if (previous != null && previous.isConnected(direction)) {
 				connections.add(new Connection<Contact>(new Contact(previous.getX(), previous.getY()), new Contact(
-					contact.getX(), contact.getY())));
+						contact.getX(), contact.getY())));
 			}
 			previous = contact;
 		}
@@ -375,8 +373,8 @@ public class Protoboard {
 	}
 
 	public void disconnectBetween(int xi, int yi, int xf, int yf) {
-		Contact contactA = null;
-		Contact contactB = null;
+		Contact contactA;
+		Contact contactB;
 
 		if (xi == xf) {
 			if (yi < yf) {
@@ -400,7 +398,7 @@ public class Protoboard {
 			disconnect(contactA.getX(), contactA.getY(), contactB.getX(), contactB.getY());
 		}
 	}
-	
+
 	public void disconnect(int xi, int yi, int xf, int yf) {
 		disconnect(poke(xi, yi), poke(xf, yf));
 	}

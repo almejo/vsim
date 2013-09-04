@@ -3,36 +3,21 @@
  * vsim
  *
  * Created on Aug 16, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
 
 package cl.almejo.vsim.circuit;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.IOException;
-
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
 
 public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener {
 
@@ -42,8 +27,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private JTextField _text;
 	private int _xi;
 	private int _yi;
-	private int _yf;
-	private int _xf;
 
 	static final KeyStroke ACCELERATOR_UNDO = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
 	static final KeyStroke ACCELERATOR_REDO = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
@@ -51,6 +34,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	class RedoAction extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;
+
 		public RedoAction(String text) throws IOException {
 			super(text, new ImageIcon(ImageIO.read(ClassLoader.getSystemResourceAsStream("icons/redo.png"))));
 			setTitle(text);
@@ -85,7 +69,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_circuit = circuit;
 		_canvas = new CircuitCanvas(_circuit);
 		setBounds(100, 100, 450, 300);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		getContentPane().add(_canvas, BorderLayout.CENTER);
 		setVisible(true);
 		addComponentListener(this);
@@ -207,9 +191,9 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 				return;
 			}
 			System.out.println(Circuit.gridTrunc(Integer.parseInt(points[0].trim())) + ", "
-				+ Circuit.gridTrunc(Integer.parseInt(points[1].trim())) + ", "
-				+ Circuit.gridTrunc(Integer.parseInt(points[2].trim())) + ", "
-				+ Circuit.gridTrunc(Integer.parseInt(points[3].trim())));
+					+ Circuit.gridTrunc(Integer.parseInt(points[1].trim())) + ", "
+					+ Circuit.gridTrunc(Integer.parseInt(points[2].trim())) + ", "
+					+ Circuit.gridTrunc(Integer.parseInt(points[3].trim())));
 			_circuit.undoableConnect(Integer.parseInt(points[0].trim()), Integer.parseInt(points[1].trim()), Integer.parseInt(points[2].trim()), Integer.parseInt(points[3].trim()));
 			field.setText("");
 		}
@@ -218,7 +202,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -229,22 +213,18 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		_xf = e.getX();
-		_yf = e.getY();
-		
-		_circuit.undoableConnect(_xi, _yi, _xi, _yf);
-		_circuit.undoableConnect(_xi, _yf, _xf, _yf);
+		_circuit.undoableConnect(_xi, _yi, e.getX(), e.getY());
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

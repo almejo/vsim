@@ -1,19 +1,17 @@
 package cl.almejo.vsim.circuit;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import cl.almejo.vsim.circuit.commands.CommandManager;
 import cl.almejo.vsim.circuit.commands.ConnectCommand;
 import cl.almejo.vsim.circuit.commands.DisconnectCommand;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.simulation.Scheduler;
+
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Circuit {
 
@@ -159,10 +157,6 @@ public class Circuit {
 		return _protoboard.findToDisconnect(x, y);
 	}
 
-	public void disconnect(Contact contactA, Contact contactB) {
-		_protoboard.disconnect(contactA, contactB);
-	}
-
 	public void disconnectBetween(int xi, int yi, int xf, int yf) {
 		_protoboard.disconnectBetween(xi, yi, xf, yf);
 	}
@@ -185,7 +179,24 @@ public class Circuit {
 	}
 
 	public void undoableConnect(int xi, int yi, int xf, int yf) {
-		_commandManager.apply(new ConnectCommand(this, gridTrunc(xi), gridTrunc(yi),gridTrunc(xf), gridTrunc(yf)));
+		xi = gridTrunc(xi);
+		yi = gridTrunc(yi);
+		xf = gridTrunc(xf);
+		yf = gridTrunc(yf);
+
+		if (xi == xf && yi == yf) {
+			return;
+		}
+
+		ConnectCommand command = new ConnectCommand(this);
+		if (yi != yf) {
+			command.connect(xi, yi, xi, yf);
+		}
+		if (xi != xf) {
+			command.connect(xi, yf, xf, yf);
+		}
+
+		_commandManager.apply(command);
 	}
 
 	public int getNextGateId() {

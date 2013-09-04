@@ -1,11 +1,6 @@
 package cl.almejo.vsim.circuit;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Matrix<T extends Point> {
 
@@ -74,7 +69,7 @@ public class Matrix<T extends Point> {
 		}
 
 		T previous = null;
-		T hit = null;
+		T hit;
 		T next = null;
 		List<T> points = _horizontalTable.get(x);
 		int i = 0;
@@ -118,7 +113,7 @@ public class Matrix<T extends Point> {
 		}
 		return points;
 	}
-	
+
 	List<T> getSublist(T a, T b) {
 
 		if (a == null || b == null) {
@@ -155,9 +150,9 @@ public class Matrix<T extends Point> {
 
 	private String drawPointable(Hashtable<Integer, List<T>> table, String title) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(title + "\n");
+		builder.append(title).append("\n");
 		for (Integer key : table.keySet()) {
-			builder.append(key + ": ");
+			builder.append(key).append(": ");
 			for (Point point : table.get(key)) {
 				builder.append(point);
 				builder.append(" ");

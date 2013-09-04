@@ -3,10 +3,10 @@
  * vsim
  *
  * Created on Aug 15, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
@@ -46,22 +46,6 @@ public class OptimisticList<T> {
 			}
 		}
 		return false;
-	}
-
-	public T get(int index) {
-
-		if (index < 0) {
-			return null;
-		}
-
-		if (index == 0) {
-			return _element;
-		}
-
-		if (_list != null) {
-			return _list.get(index + 1);
-		}
-		return null;
 	}
 
 	public List<T> elements() {
@@ -114,7 +98,7 @@ public class OptimisticList<T> {
 			_element = removeAt(0);
 			return element;
 		}
-		return removeAt(i++);
+		return removeAt(i);
 	}
 
 	private T removeAt(int index) {
@@ -128,29 +112,15 @@ public class OptimisticList<T> {
 		return null;
 	}
 
-	public int size() {
-		int size = 0;
-
-		if (_element != null) {
-			size++;
-		}
-
-		if (_list != null) {
-			size += _list.size();
-		}
-
-		return size;
-	}
-	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
-		if (_element!=null) {
+		if (_element != null) {
 			builder.append(_element);
-			if (_list!= null){
+			if (_list != null) {
 				for (T element : _list) {
-					builder.append(", " + element.toString());
+					builder.append(", ").append(element.toString());
 				}
 			}
 		}

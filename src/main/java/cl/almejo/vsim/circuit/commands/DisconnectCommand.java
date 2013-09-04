@@ -3,21 +3,21 @@
  * vsim
  *
  * Created on Aug 25, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
 
 package cl.almejo.vsim.circuit.commands;
 
-import java.util.List;
-
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Connection;
 import cl.almejo.vsim.circuit.Contact;
+
+import java.util.List;
 
 public class DisconnectCommand implements Command {
 
@@ -40,7 +40,7 @@ public class DisconnectCommand implements Command {
 	public void unDo() {
 		for (Connection<Contact> connection : _connections) {
 			_circuit.connect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(), connection
-				.getLast().getY());
+					.getLast().getY());
 		}
 	}
 }

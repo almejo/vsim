@@ -3,10 +3,10 @@
  * vsim
  *
  * Created on Aug 12, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
@@ -15,16 +15,7 @@ package cl.almejo.vsim.simulation;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.SimWindow;
-import cl.almejo.vsim.gates.And;
-import cl.almejo.vsim.gates.AndDescriptor;
-import cl.almejo.vsim.gates.AndParams;
-import cl.almejo.vsim.gates.Clock;
-import cl.almejo.vsim.gates.ClockDescriptor;
-import cl.almejo.vsim.gates.ClockParams;
-import cl.almejo.vsim.gates.IconGate;
-import cl.almejo.vsim.gates.Not;
-import cl.almejo.vsim.gates.NotDescriptor;
-import cl.almejo.vsim.gates.NotParams;
+import cl.almejo.vsim.gates.*;
 
 public class Main {
 

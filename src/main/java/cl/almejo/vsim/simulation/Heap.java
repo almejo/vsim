@@ -3,10 +3,10 @@
  * vsim
  *
  * Created on Aug 1, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
@@ -77,10 +77,6 @@ public class Heap {
 		}
 	}
 
-	public boolean isEmpty() {
-		return _size == 0;
-	}
-
 	@Override
 	public String toString() {
 		String string = "";
@@ -92,9 +88,7 @@ public class Heap {
 
 	private void enlarge() {
 		HeapElement[] newArray = new HeapElement[_elements.length + 2];
-		for (int j = 0; j < _elements.length; j++) {
-			newArray[j] = _elements[j];
-		}
+		System.arraycopy(_elements, 0, newArray, 0, _elements.length);
 		_elements = newArray;
 	}
 

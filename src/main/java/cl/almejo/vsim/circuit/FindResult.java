@@ -3,10 +3,10 @@
  * vsim
  *
  * Created on Aug 15, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
@@ -32,24 +32,12 @@ public class FindResult<T extends Point> {
 		return _hit;
 	}
 
-	public void setHit(T hit) {
-		_hit = hit;
-	}
-
 	public T getPrevious() {
 		return _previous;
 	}
 
-	public void setPrevious(T previous) {
-		_previous = previous;
-	}
-
 	public T getNext() {
 		return _next;
-	}
-
-	public void setNext(T next) {
-		_next = next;
 	}
 
 	public List<T> list() {
