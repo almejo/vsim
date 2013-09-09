@@ -25,9 +25,8 @@ import java.io.IOException;
 public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener {
 
 	private static final long serialVersionUID = 1L;
-	private CircuitCanvas _canvas;
+	private final CircuitCanvas _canvas;
 	private final Circuit _circuit;
-	private JTextField _text;
 	private int _xi;
 	private int _yi;
 
@@ -78,9 +77,9 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		addComponentListener(this);
 		_canvas.addMouseListener(this);
 		_canvas.resizeViewport();
-		_text = new JTextField();
-		getContentPane().add(_text, BorderLayout.SOUTH);
-		_text.addKeyListener(this);
+		JTextField text = new JTextField();
+		getContentPane().add(text, BorderLayout.SOUTH);
+		text.addKeyListener(this);
 
 		JMenuBar menubar = new JMenuBar();
 		JMenuItem menuItem = new JMenuItem();

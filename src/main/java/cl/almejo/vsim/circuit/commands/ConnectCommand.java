@@ -38,7 +38,12 @@ public class ConnectCommand implements Command {
 		}
 
 		void apply() {
+			System.out.println("Creando conneccion");
 			_previousConnections = _circuit.findBeforeConnect(_xi, _yi, _xf, _yf);
+			for (Connection connection: _previousConnections) {
+				System.out.println("..." + connection);
+			}
+			System.out.println("==>" + _xi + ", " + _yi + ", "+ _xf + ", "+_yf);
 			_circuit.connect(_xi, _yi, _xf, _yf);
 		}
 
@@ -50,7 +55,6 @@ public class ConnectCommand implements Command {
 							connection.getLast().getY());
 				}
 			}
-
 		}
 	}
 

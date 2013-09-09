@@ -69,22 +69,22 @@ public class Matrix<T extends Point> {
 		}
 
 		T previous = null;
-		T hit;
 		T next = null;
 		List<T> points = _horizontalTable.get(x);
 		int i = 0;
 		for (T point : points) {
 			if (point.getY() == y) {
-				hit = point;
 				if (i < points.size() - 1) {
 					next = points.get(i + 1);
 				}
-				return new FindResult<T>(hit, previous, next);
+				return new FindResult<T>(point, previous, next);
+			} else if  (point.getY()>y) {
+				return new FindResult<T>(null, previous, point);
 			}
 			previous = point;
 			i++;
 		}
-		return new FindResult<T>(null, null, null);
+		return new FindResult<T>(null, previous, null);
 	}
 
 	List<T> getBetween(T a, T b) {

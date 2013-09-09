@@ -29,4 +29,9 @@ public class Connection<T> {
 	public T getLast() {
 		return _last;
 	}
+
+	@Override
+	public String toString() {
+		return "[[" + _first.toString() + " --> " + _last + "]]";
+	}
 }
