@@ -61,8 +61,6 @@ public class Circuit {
 
 	private Protoboard _protoboard;
 
-	private Timer _paintTimer = new Timer();
-
 	private Timer _simulationTimer = new Timer();
 
 	private int _nextGateId = 0;
@@ -71,7 +69,7 @@ public class Circuit {
 		_protoboard = new Protoboard();
 		_scheduler = new Scheduler();
 
-		_paintTimer.schedule(new RepaintTask(this), 100, 100);
+		new Timer().schedule(new RepaintTask(this), 100, 100);
 		_simulationTimer.schedule(new Simulator(this), 1000, 100);
 
 	}

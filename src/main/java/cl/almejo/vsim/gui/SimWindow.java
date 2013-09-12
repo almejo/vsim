@@ -215,6 +215,10 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		if (e.isControlDown() && e.getClickCount() == 2) {
+			_circuit.undoableDisconnect(e.getX(), e.getY());
+			return;
+		}
 		_circuit.undoableConnect(_xi, _yi, e.getX(), e.getY());
 	}
 
