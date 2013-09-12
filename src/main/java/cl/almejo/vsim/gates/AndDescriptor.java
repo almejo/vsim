@@ -3,22 +3,20 @@
  * vsim
  *
  * Created on Aug 17, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
- 
-package cl.almejo.vsim.gates;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
+package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
+
+import java.awt.*;
 
 public class AndDescriptor extends GateDescriptor {
 
@@ -30,6 +28,7 @@ public class AndDescriptor extends GateDescriptor {
 		_type = GateTypes.NORMAL;
 		_pinCount = 3;
 	}
+
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
 		graphics.setColor(Color.blue);
@@ -41,4 +40,8 @@ public class AndDescriptor extends GateDescriptor {
 		return new Dimension(32, 16);
 	}
 
+	@Override
+	public Gate make(Circuit circuit, GateParameters params) {
+		return new And(circuit, (GateParameters) params.clone(), this);
+	}
 }

@@ -3,10 +3,10 @@
  * vsim
  *
  * Created on Aug 2, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
@@ -38,13 +38,10 @@ public class ClockPin extends Pin {
 		}
 	}
 
-	private ClockEvent _clockEvent;
-
 	public ClockPin(Clock clock, Scheduler scheduler, int pinId) {
 		super(clock, scheduler, pinId);
 		ClockParams params = (ClockParams) clock.getParams();
-		_clockEvent = new ClockEvent(clock, scheduler);
-		_clockEvent.schedule(params.getTimeUp());
+		new ClockEvent(clock, scheduler).schedule(params.getTimeUp());
 	}
 
 	@Override

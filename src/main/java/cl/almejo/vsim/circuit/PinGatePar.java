@@ -3,10 +3,10 @@
  * vsim
  *
  * Created on Aug 15, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
@@ -31,7 +31,7 @@ public class PinGatePar {
 	public Gate getGate() {
 		return _gate;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "(" + _pinId + ", " + _gate + ")";
