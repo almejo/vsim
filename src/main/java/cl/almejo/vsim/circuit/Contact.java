@@ -3,22 +3,22 @@
  * vsim
  *
  * Created on Aug 15, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
 
 package cl.almejo.vsim.circuit;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.Pin;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class Contact extends Point {
 
@@ -63,10 +63,6 @@ public class Contact extends Point {
 		return _guidePin;
 	}
 
-	public void setPin(Pin pin) {
-		_guidePin = pin;
-	}
-
 	public boolean hasPins() {
 		return !_pins.isEmpty();
 	}
@@ -83,14 +79,43 @@ public class Contact extends Point {
 		_conectionMask = (byte) _conectionMask | direction;
 	}
 
-	public boolean isConnected() {
-		return _conectionMask != 0;
+	public boolean isNotConnected() {
+		return _conectionMask == 0;
 	}
 
 	@Override
 	public String toString() {
 		return super.toString() + " (" + (isConnected(Constants.NORTH) ? "N" : "-") + (isConnected(Constants.EAST) ? "E" : "-")
-			+ (isConnected(Constants.SOUTH) ? "S" : "-") + (isConnected(Constants.WEST) ? "W" : "-") + ")";
+				+ (isConnected(Constants.SOUTH) ? "S" : "-") + (isConnected(Constants.WEST) ? "W" : "-") + ") [" + printPins() + "]";
+	}
+
+	private String printPins() {
+		String ret = "";
+		int i = 0;
+		for (PinGatePar pinGate : _pins.elements()) {
+			if (i > 0) {
+				ret += ", ";
+			}
+			ret += pinGate.getGate() + "-" + pinGate.getPinId();
+			i++;
+		}
+		return ret;
+	}
+
+	public void disconnect(Contact contact) {
+		if (_x < contact.getX()) {
+			disconnect(Constants.EAST);
+		} else if (_x > contact.getX()) {
+			disconnect(Constants.WEST);
+		} else if (_y < contact.getY()) {
+			disconnect(Constants.NORTH);
+		} else if (_y > contact.getY()) {
+			disconnect(Constants.SOUTH);
+		}
+	}
+
+	public void disconnect(byte direction) {
+		_conectionMask = (byte) _conectionMask & ~direction;
 	}
 
 }

@@ -3,10 +3,10 @@
  * vsim
  *
  * Created on Aug 2, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
@@ -67,7 +67,7 @@ public abstract class Pin extends Link {
 			byte oldValue = pin.getInValue();
 			pin.setInValue(lineVal);
 			if (lineVal != oldValue && pin.getOutValue() == Constants.THREE_STATE
-				&& pin.getProgrammedValue() == Constants.THREE_STATE) {
+					&& pin.getProgrammedValue() == Constants.THREE_STATE) {
 				pin.hasChanged();
 			}
 

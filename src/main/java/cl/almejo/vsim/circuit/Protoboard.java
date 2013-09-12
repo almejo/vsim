@@ -3,26 +3,24 @@
  * vsim
  *
  * Created on Aug 15, 2013
- * 
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
- * 
+ *
  * @author: Alejandro Vera
  *
  */
 
 package cl.almejo.vsim.circuit;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.Pin;
+
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class Protoboard {
 	private Matrix<Contact> _matrix = new Matrix<Contact>();
@@ -96,21 +94,21 @@ public class Protoboard {
 
 		contacts.add(contact);
 
-		FindResult resultH = _matrix.findHorizontal(contact._x, contact._y);
+		FindResult<Contact> resultH = _matrix.findHorizontal(contact._x, contact._y);
 
-		FindResult resultV = _matrix.findVertical(contact._x, contact._y);
+		FindResult<Contact> resultV = _matrix.findVertical(contact._x, contact._y);
 
 		if (contact.isConnected(Constants.EAST)) {
-			getAllContactsAttached((Contact) resultH.getNext(), contacts);
+			getAllContactsAttached(resultH.getNext(), contacts);
 		}
 		if (contact.isConnected(Constants.WEST)) {
-			getAllContactsAttached((Contact) resultH.getPrevious(), contacts);
+			getAllContactsAttached(resultH.getPrevious(), contacts);
 		}
 		if (contact.isConnected(Constants.NORTH)) {
-			getAllContactsAttached((Contact) resultV.getNext(), contacts);
+			getAllContactsAttached(resultV.getNext(), contacts);
 		}
 		if (contact.isConnected(Constants.SOUTH)) {
-			getAllContactsAttached((Contact) resultV.getPrevious(), contacts);
+			getAllContactsAttached(resultV.getPrevious(), contacts);
 		}
 
 		return contacts;
@@ -118,10 +116,10 @@ public class Protoboard {
 
 	private Contact poke(int x, int y) {
 		System.out.println("buscando en " + new Point(x, y));
-		FindResult result = _matrix.findHorizontal(x, y);
+		FindResult<Contact> result = _matrix.findHorizontal(x, y);
 		System.out.println(result);
 		if (result.getHit() != null) {
-			return (Contact) result.getHit();
+			return result.getHit();
 		}
 
 		Contact contact = new Contact(x, y);
@@ -131,24 +129,24 @@ public class Protoboard {
 	}
 
 	private void connectToSorrounding(Contact contact) {
-		FindResult resultH = _matrix.findHorizontal(contact.getX(), contact.getY());
+		FindResult<Contact> resultH = _matrix.findHorizontal(contact.getX(), contact.getY());
 
-		FindResult resultV = _matrix.findVertical(contact.getX(), contact.getY());
+		FindResult<Contact> resultV = _matrix.findVertical(contact.getX(), contact.getY());
 
-		if (resultH.getPrevious() != null && ((Contact) resultH.getPrevious()).isConnected(Constants.EAST)) {
-			((Contact) resultH.getHit()).connect(Constants.WEST);
+		if (resultH.getPrevious() != null && resultH.getPrevious().isConnected(Constants.EAST)) {
+			resultH.getHit().connect(Constants.WEST);
 		}
 
-		if (resultH.getNext() != null && ((Contact) resultH.getNext()).isConnected(Constants.WEST)) {
-			((Contact) resultH.getHit()).connect(Constants.EAST);
+		if (resultH.getNext() != null && resultH.getNext().isConnected(Constants.WEST)) {
+			resultH.getHit().connect(Constants.EAST);
 		}
 
-		if (resultV.getPrevious() != null && ((Contact) resultV.getPrevious()).isConnected(Constants.NORTH)) {
-			((Contact) resultH.getHit()).connect(Constants.SOUTH);
+		if (resultV.getPrevious() != null && resultV.getPrevious().isConnected(Constants.NORTH)) {
+			resultH.getHit().connect(Constants.SOUTH);
 		}
 
-		if (resultV.getNext() != null && ((Contact) resultV.getNext()).isConnected(Constants.SOUTH)) {
-			((Contact) resultH.getHit()).connect(Constants.NORTH);
+		if (resultV.getNext() != null && resultV.getNext().isConnected(Constants.SOUTH)) {
+			resultH.getHit().connect(Constants.NORTH);
 		}
 	}
 
@@ -227,7 +225,7 @@ public class Protoboard {
 			return;
 		}
 
-		if (contact.isMiddlePoint() || !contact.isConnected()) {
+		if (contact.isMiddlePoint() || contact.isNotConnected()) {
 			_matrix.remove(contact);
 		}
 	}
@@ -256,14 +254,15 @@ public class Protoboard {
 		Color color = g.getColor();
 		Set<Integer> coords = _matrix.getXCoords();
 
-		Contact previous = null;
 		for (Integer x : coords) {
+			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
 			for (Contact contact : verticalContacts) {
 				g.setColor(getContactColor(contact));
 				g.fillOval(contact.getX() - 3, contact.getY() - 3, 6, 6);
 				if (previous != null && contact.isConnected(Constants.SOUTH)) {
-					if (rectangle.contains(contact.getX(), contact.getY()) || rectangle.contains(previous.getX(), previous.getY())) {
+					if (rectangle.contains(contact.getX(), contact.getY())
+							|| rectangle.contains(previous.getX(), previous.getY())) {
 						g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
 					}
 				}
@@ -271,14 +270,15 @@ public class Protoboard {
 			}
 		}
 
-		previous = null;
 		coords = _matrix.getYCoords();
 		for (Integer y : coords) {
+			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getHorizontalContacts(y);
 			for (Contact contact : verticalContacts) {
 				g.setColor(getContactColor(contact));
 				if (previous != null && contact.isConnected(Constants.WEST)) {
-					if (rectangle.contains(contact.getX(), contact.getY()) || rectangle.contains(previous.getX(), previous.getY())) {
+					if (rectangle.contains(contact.getX(), contact.getY())
+							|| rectangle.contains(previous.getX(), previous.getY())) {
 						g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
 					}
 				}
@@ -294,5 +294,112 @@ public class Protoboard {
 			return Constants.STATECOLORS.get(contact.getGuidePin().getInValue());
 		}
 		return Constants.STATECOLORS.get(Constants.THREE_STATE);
+	}
+
+	public List<Connection<Contact>> findToDisconnect(int x, int y) {
+
+		List<Connection<Contact>> connections = findConnections(Constants.EAST, _matrix.findHorizontal(x, y).list());
+
+		if (connections.size() > 0) {
+			return connections;
+		}
+
+		return findConnections(Constants.NORTH, _matrix.findVertical(x, y).list());
+	}
+
+	public void disconnect(Contact contactA, Contact contactB) {
+		contactA.disconnect(contactB);
+		contactB.disconnect(contactA);
+
+		reconnect(contactA);
+		reconnect(contactB);
+
+		testForDelete(contactA);
+		testForDelete(contactB);
+	}
+
+	private List<Connection<Contact>> findConnections(byte direction, List<Contact> contacts) {
+
+		List<Connection<Contact>> connections = new LinkedList<Connection<Contact>>();
+		Contact previous = null;
+		for (Contact contact : contacts) {
+			if (previous != null && previous.isConnected(direction)) {
+				connections.add(new Connection<Contact>(new Contact(previous.getX(), previous.getY()), new Contact(
+						contact.getX(), contact.getY())));
+			}
+			previous = contact;
+		}
+		return connections;
+	}
+
+	public List<Connection<Contact>> findBeforeConnect(int xi, int yi, int xf, int yf) {
+		if (xi == xf) {
+			if (yi < yf) {
+				Contact first = findFirst(Constants.NORTH, _matrix.findVertical(xi, yi));
+				Contact last = findLast(Constants.SOUTH, _matrix.findVertical(xf, yf));
+				return findConnections(Constants.NORTH, _matrix.getSublist(first, last));
+			}
+			Contact first = findFirst(Constants.NORTH, _matrix.findVertical(xf, yf));
+			Contact last = findLast(Constants.SOUTH, _matrix.findVertical(xi, yi));
+			return findConnections(Constants.NORTH, _matrix.getSublist(first, last));
+		}
+		if (xi < xf) {
+			Contact first = findFirst(Constants.EAST, _matrix.findHorizontal(xi, yi));
+			Contact last = findLast(Constants.WEST, _matrix.findHorizontal(xf, yf));
+			return findConnections(Constants.EAST, _matrix.getSublist(first, last));
+		}
+		Contact first = findFirst(Constants.EAST, _matrix.findHorizontal(xf, yf));
+		Contact last = findLast(Constants.WEST, _matrix.findHorizontal(xi, yi));
+		return findConnections(Constants.EAST, _matrix.getSublist(first, last));
+	}
+
+	private Contact findLast(byte direction, FindResult<Contact> result) {
+		Contact hit = null;
+		for (Contact contact : result.list()) {
+			if (contact != null && contact.isConnected(direction)) {
+				hit = contact;
+			}
+		}
+		return hit;
+	}
+
+	private Contact findFirst(byte direction, FindResult<Contact> result) {
+		for (Contact contact : result.list()) {
+			if (contact != null && contact.isConnected(direction)) {
+				return contact;
+			}
+		}
+		return null;
+	}
+
+	public void disconnectBetween(int xi, int yi, int xf, int yf) {
+		Contact contactA;
+		Contact contactB;
+
+		if (xi == xf) {
+			if (yi < yf) {
+				contactA = findFirst(Constants.NORTH, _matrix.findVertical(xi, yi));
+				contactB = findLast(Constants.SOUTH, _matrix.findVertical(xf, yf));
+			} else {
+				contactA = findFirst(Constants.NORTH, _matrix.findVertical(xf, yf));
+				contactB = findLast(Constants.SOUTH, _matrix.findVertical(xi, yi));
+			}
+		} else {
+			if (xi < xf) {
+				contactA = findFirst(Constants.EAST, _matrix.findHorizontal(xi, yi));
+				contactB = findLast(Constants.WEST, _matrix.findHorizontal(xf, yf));
+			} else {
+				contactA = findFirst(Constants.EAST, _matrix.findHorizontal(xf, yf));
+				contactB = findLast(Constants.WEST, _matrix.findHorizontal(xi, yi));
+			}
+		}
+
+		if (contactA != null && contactB != null) {
+			disconnect(contactA.getX(), contactA.getY(), contactB.getX(), contactB.getY());
+		}
+	}
+
+	public void disconnect(int xi, int yi, int xf, int yf) {
+		disconnect(poke(xi, yi), poke(xf, yf));
 	}
 }

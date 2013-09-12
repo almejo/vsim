@@ -1,23 +1,29 @@
 package cl.almejo.vsim.gates;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
-
+import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
+
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class IconGate extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
-	Gate _gate;
+	private Gate _gate;
+	private int _id;
 
 	private AffineTransform _translateTransformation = new AffineTransform();
 	private AffineTransform _rotateTransformation = new AffineTransform();
 	private AffineTransform _transform = new AffineTransform();
 	private AffineTransform _origianlTransformation;
 
-	public IconGate(Gate gate) {
+	public IconGate(int id) {
+		super();
+		_id = id;
+	}
+
+	public IconGate(int id, Gate gate) {
+		this(id);
 		_gate = gate;
 	}
 
@@ -34,7 +40,7 @@ public class IconGate extends Rectangle {
 		_gate.getGateDescriptor().paint(graphics, this);
 		popMatrix(graphics);
 	}
-	
+
 	private void popMatrix(Graphics2D graphics) {
 		graphics.setTransform(_origianlTransformation);
 	}
@@ -45,7 +51,8 @@ public class IconGate extends Rectangle {
 		newTransform.concatenate(_transform);
 		graphics.setTransform(newTransform);
 	}
-	
+
+	@Override
 	public Dimension getSize() {
 		return _gate.getGateDescriptor().getSize();
 	}
@@ -53,7 +60,7 @@ public class IconGate extends Rectangle {
 	public void moveTo(int xf, int yf) {
 		setLocation(xf, yf);
 		setTranslation(xf, yf);
-		
+
 	}
 
 	private void setTranslation(int x, int y) {
@@ -74,7 +81,7 @@ public class IconGate extends Rectangle {
 	public int getPinsCount() {
 		return _gate.getPinCount();
 	}
-	
+
 	public Point getPinPos(byte pinId) {
 		return _gate.getGateDescriptor().getPinPosition(pinId);
 	}
@@ -82,14 +89,22 @@ public class IconGate extends Rectangle {
 	public Pin getPin(int i) {
 		return _gate.getPin(i);
 	}
-	
+
 	public Point getTransformed(Point point) {
 		java.awt.geom.Point2D.Double point2d = new java.awt.geom.Point2D.Double(point.getX(), point.getY());
 		_transform.transform(point2d, point2d);
 		return new Point((int) point2d.getX(), (int) point2d.getY());
 	}
-	
+
 	public Point getTransformedPinPos(byte pinId) {
 		return getTransformed(getPinPos(pinId));
 	}
+
+	public IconGate getInstance(Circuit circuit) {
+		IconGate iconGate = new IconGate(circuit.getNextGateId());
+		iconGate.setGate(_gate.getGateDescriptor().make(circuit, _gate.getParams()));
+		return iconGate;
+	}
+
+
 }
