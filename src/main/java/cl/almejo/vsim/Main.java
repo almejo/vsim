@@ -17,6 +17,8 @@ import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.gates.*;
 import cl.almejo.vsim.gui.SimWindow;
 
+import javax.swing.*;
+
 public class Main {
 
 	public Main() {
@@ -44,6 +46,19 @@ public class Main {
 		circuit.undoableConnect(300, 200, 50, 200);
 		circuit.undoableConnect(350, 200, 450, 200);
 		circuit.undoableConnect(100, 200, 500, 200);
+
+		try {
+			UIManager.setLookAndFeel(
+					UIManager.getSystemLookAndFeelClassName());
+		} catch (UnsupportedLookAndFeelException ex) {
+			System.out.println("Unable to load native look and feel");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		} catch (InstantiationException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
 
 		new SimWindow(circuit);
 		new SimWindow(circuit);

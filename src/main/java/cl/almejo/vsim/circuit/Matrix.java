@@ -78,7 +78,7 @@ public class Matrix<T extends Point> {
 					next = points.get(i + 1);
 				}
 				return new FindResult<T>(point, previous, next);
-			} else if  (point.getY()>y) {
+			} else if (point.getY() > y) {
 				return new FindResult<T>(null, previous, point);
 			}
 			previous = point;
