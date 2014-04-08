@@ -3,7 +3,7 @@ VSim
 
 Dillinger is digital circuits simulator.
 
-Vsim is a rewrite from scratch of my University Thesis JCSim. You can try JCSim from my [bitbucket repository](https://bitbucket.org/almejo/jcsim).
+Vsim is a rewrite from scratch of my University Thesis JCSim. You can try JCSim from my [repository](https://bitbucket.org/almejo/jcsim).
 
 VSim is in very early stage of development and it lacks a lot of features that JCSim already has. Simulation of gates and pins is working but it lacks a proper interface.
 
