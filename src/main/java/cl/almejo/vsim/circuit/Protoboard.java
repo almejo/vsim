@@ -24,6 +24,11 @@ import java.util.Set;
 
 public class Protoboard {
 	private Matrix<Contact> _matrix = new Matrix<Contact>();
+	private boolean _drawConnectPreview;
+	private int _connectionStartX;
+	private int _connectionStartY;
+	private int _connectionEndX;
+	private int _connectionEndY;
 
 	public void addPin(int pinId, Gate gate, int x, int y) {
 		Contact contact = poke(x, y);
@@ -285,7 +290,7 @@ public class Protoboard {
 				previous = contact;
 			}
 		}
-
+		drawConnectPreview(g);
 		g.setColor(color);
 	}
 
@@ -401,5 +406,40 @@ public class Protoboard {
 
 	public void disconnect(int xi, int yi, int xf, int yf) {
 		disconnect(poke(xi, yi), poke(xf, yf));
+	}
+
+	public void setDrawConnectPreview(boolean draw) {
+		_drawConnectPreview = draw;
+	}
+
+	public void setConnectPreview(int xi, int yi, int xf, int yf) {
+		_connectionStartX = xi;
+		_connectionStartY = yi;
+		_connectionEndX = xf;
+		_connectionEndY = yf;
+	}
+
+	public void drawConnectPreview(Graphics2D graphics) {
+		if (!_drawConnectPreview) {
+			return;
+		}
+
+		int xi = Circuit.gridTrunc(_connectionStartX);// + Circuit.HALF_GRIDSIZE;
+		int yi = Circuit.gridTrunc(_connectionStartY);// + Circuit.HALF_GRIDSIZE;
+		int xf = Circuit.gridTrunc(_connectionEndX);// + Circuit.HALF_GRIDSIZE;
+		int yf = Circuit.gridTrunc(_connectionEndY);// + Circuit.HALF_GRIDSIZE;
+
+		graphics.setColor(Color.blue);
+
+		if (xi == xf && yi == yf) {
+			return;
+		}
+
+		if (yi != yf) {
+			graphics.drawLine(xi, yi, xi, yf);
+		}
+		if (xi != xf) {
+			graphics.drawLine(xi, yf, xf, yf);
+		}
 	}
 }

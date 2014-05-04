@@ -17,12 +17,13 @@ import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.CircuitCanvas;
 import cl.almejo.vsim.gui.actions.*;
+import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener {
+public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener {
 
 	private static final long serialVersionUID = 1L;
 	private final CircuitCanvas _canvas;
@@ -30,6 +31,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private int _xi;
 	private int _yi;
 
+	private ActionToolHelper _toolHelper = ActionToolHelper.CURSOR;
 
 	static final KeyStroke ACCELERATOR_NEW = KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
 	static final KeyStroke ACCELERATOR_OPEN = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
@@ -66,19 +68,20 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction ONLINE_HELP_ACTION = new OnlineHelpAction(Messages.t("action.help.online"), Messages.t("action.help.online.description"), null, null, this);
 	private final WindowAction ABOUT_ACTION = new AboutAction(Messages.t("action.help.about"), Messages.t("action.help.about.description"), null, null, this);
 
-	private final WindowAction CURSOR_TOOL_ACTION = new CursorToolAction(Messages.t("action.tool.cursor"), Messages.t("action.tool.cursor.description"), "cursor.png", null, this);
-	private final WindowAction MOVE_VIEWPORT_TOOL_ACTION = new MoveViewToolPort(Messages.t("action.tool.move.viewport"), Messages.t("action.tool.move.viewport.description"), "move-viewport.png", null, this);
-	private final WindowAction WIRES_TOOL_ACTION = new WiresToolAction(Messages.t("action.tool.wires"), Messages.t("action.tool.wires.description"), "wires.png", null, this);
-	private final WindowAction AND2_TOOL_ACTION = new And2ToolAction(Messages.t("action.tool.and2"), Messages.t("action.tool.and2.description"), "and2.png", null, this);
-	private final WindowAction AND3_TOOL_ACTION = new And3ToolAction(Messages.t("action.tool.and3"), Messages.t("action.tool.and3.description"), "and3.png", null, this);
-	private final WindowAction NOT_TOOL_ACTION = new NotToolAction(Messages.t("action.tool.not"), Messages.t("action.tool.not.description"), "not.png", null, this);
-	private final WindowAction CLOCK_TOOL_ACTION = new ClockToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this);
+	private final WindowAction CURSOR_TOOL_ACTION = new ToolAction(Messages.t("action.tool.cursor"), Messages.t("action.tool.cursor.description"), "cursor.png", null, this, ActionToolHelper.CURSOR);
+	private final WindowAction MOVE_VIEWPORT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.move.viewport"), Messages.t("action.tool.move.viewport.description"), "move-viewport.png", null, this, ActionToolHelper.CURSOR);
+	private final WindowAction WIRES_TOOL_ACTION = new ToolAction(Messages.t("action.tool.wires"), Messages.t("action.tool.wires.description"), "wires.png", null, this, ActionToolHelper.WIRES);
+	private final WindowAction AND2_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and2"), Messages.t("action.tool.and2.description"), "and2.png", null, this, ActionToolHelper.CURSOR);
+	private final WindowAction AND3_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and3"), Messages.t("action.tool.and3.description"), "and3.png", null, this, ActionToolHelper.CURSOR);
+	private final WindowAction NOT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.not"), Messages.t("action.tool.not.description"), "not.png", null, this, ActionToolHelper.CURSOR);
+	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, ActionToolHelper.CURSOR);
 
 
 	public SimWindow(Circuit circuit) {
 		setTitle(Messages.t("main.title"));
 		_circuit = circuit;
 		_canvas = new CircuitCanvas(_circuit);
+
 		setBounds(100, 100, 450, 300);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,9 +90,12 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 		setVisible(true);
+
 		addComponentListener(this);
 		_canvas.addMouseListener(this);
+		_canvas.addMouseMotionListener(this);
 		_canvas.resizeViewport();
+
 		JTextField text = new JTextField();
 		getContentPane().add(text, BorderLayout.SOUTH);
 		text.addKeyListener(this);
@@ -182,7 +188,9 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.setLayout(new GridLayout(0, 2));
 
 		ButtonGroup group = new ButtonGroup();
-		panel.add(newGrouppedButton(CURSOR_TOOL_ACTION, group));
+		JToggleButton button = newGrouppedButton(CURSOR_TOOL_ACTION, group);
+		button.setSelected(true);
+		panel.add(button);
 		panel.add(newGrouppedButton(MOVE_VIEWPORT_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(WIRES_TOOL_ACTION, group));
 
@@ -292,41 +300,39 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		System.out.println(e.getKeyCode());
-		if (e.getKeyCode() == 10) {
-			JTextField field = (JTextField) e.getSource();
-			String[] points = field.getText().split(",");
-			if (points.length < 4) {
-				return;
-			}
-			System.out.println(Circuit.gridTrunc(Integer.parseInt(points[0].trim())) + ", "
-					+ Circuit.gridTrunc(Integer.parseInt(points[1].trim())) + ", "
-					+ Circuit.gridTrunc(Integer.parseInt(points[2].trim())) + ", "
-					+ Circuit.gridTrunc(Integer.parseInt(points[3].trim())));
-			_circuit.undoableConnect(Integer.parseInt(points[0].trim()), Integer.parseInt(points[1].trim()), Integer.parseInt(points[2].trim()), Integer.parseInt(points[3].trim()));
-			field.setText("");
-		}
+//		System.out.println(e.getKeyCode());
+//		if (e.getKeyCode() == 10) {
+//			JTextField field = (JTextField) e.getSource();
+//			String[] points = field.getText().split(",");
+//			if (points.length < 4) {
+//				return;
+//			}
+//			System.out.println(Circuit.gridTrunc(Integer.parseInt(points[0].trim())) + ", "
+//					+ Circuit.gridTrunc(Integer.parseInt(points[1].trim())) + ", "
+//					+ Circuit.gridTrunc(Integer.parseInt(points[2].trim())) + ", "
+//					+ Circuit.gridTrunc(Integer.parseInt(points[3].trim())));
+//			_circuit.undoableConnect(Integer.parseInt(points[0].trim()), Integer.parseInt(points[1].trim()), Integer.parseInt(points[2].trim()), Integer.parseInt(points[3].trim()));
+//			field.setText("");
+//		}
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		_xi = e.getX();
-		_yi = e.getY();
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (e.isControlDown() && e.getClickCount() == 2) {
-			_circuit.undoableDisconnect(e.getX(), e.getY());
+	public void mouseClicked(MouseEvent event) {
+		if (event.getClickCount() >= 2) {
+			_toolHelper.mouseDoubleClicked(this, event);
 			return;
 		}
-		_circuit.undoableConnect(_xi, _yi, e.getX(), e.getY());
+		_toolHelper.mouseClicked(this, event);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {
+		_toolHelper.mouseDown(this, event);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent event) {
+		_toolHelper.mouseUp(this, event);
 	}
 
 	@Override
@@ -340,4 +346,40 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void mouseDragged(MouseEvent event) {
+		_toolHelper.mouseDragged(this, event);
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent event) {
+		_toolHelper.mouseMoved(this, event);
+	}
+
+	public void setToolHelper(ActionToolHelper toolHelper) {
+		_toolHelper = toolHelper;
+	}
+
+	public void undoableConnect(int xi, int yi, int xf, int yf) {
+		_circuit.undoableConnect(xi, yi, xf, yf);
+	}
+
+	public Circuit getCircuit() {
+		return _circuit;
+	}
+
+	public void undoableDisconnect(int x, int y) {
+		_circuit.undoableDisconnect(x, y);
+	}
+
+	public void setDrawConnectPreview(boolean draw) {
+		_circuit.setDrawConnectPriew(draw);
+	}
+
+	public void setConnectPreview(int xi, int yi, int xf, int yf) {
+		_circuit.setConnectPreview(xi, yi, xf, yf);
+	}
+
+
 }
