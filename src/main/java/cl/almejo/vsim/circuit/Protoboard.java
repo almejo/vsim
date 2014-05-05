@@ -18,17 +18,32 @@ import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.Pin;
 
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 public class Protoboard {
+
+	class MarchingAnts extends TimerTask {
+
+		@Override
+		public void run() {
+			Protoboard.this._dashPhase += 0.9f;
+		}
+
+	}
+
+	private static final float[] DASH = {5.0f, 5.0f};
 	private Matrix<Contact> _matrix = new Matrix<Contact>();
 	private boolean _drawConnectPreview;
 	private int _connectionStartX;
 	private int _connectionStartY;
 	private int _connectionEndX;
 	private int _connectionEndY;
+	private float _dashPhase = 0f;
+
+	public Protoboard() {
+		new Timer().schedule(new MarchingAnts(), 100, 100);
+	}
 
 	public void addPin(int pinId, Gate gate, int x, int y) {
 		Contact contact = poke(x, y);
@@ -429,11 +444,20 @@ public class Protoboard {
 		int xf = Circuit.gridTrunc(_connectionEndX);// + Circuit.HALF_GRIDSIZE;
 		int yf = Circuit.gridTrunc(_connectionEndY);// + Circuit.HALF_GRIDSIZE;
 
-		graphics.setColor(Color.blue);
 
 		if (xi == xf && yi == yf) {
 			return;
 		}
+
+		Stroke oldStroke = graphics.getStroke();
+		graphics.setStroke(new BasicStroke(1.5f
+				, BasicStroke.CAP_ROUND
+				, BasicStroke.JOIN_MITER
+				, 1.5f
+				, DASH
+				, _dashPhase));
+
+		graphics.setColor(Color.BLACK);
 
 		if (yi != yf) {
 			graphics.drawLine(xi, yi, xi, yf);
@@ -441,5 +465,6 @@ public class Protoboard {
 		if (xi != xf) {
 			graphics.drawLine(xi, yf, xf, yf);
 		}
+		graphics.setStroke(oldStroke);
 	}
 }
