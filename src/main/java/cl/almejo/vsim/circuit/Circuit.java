@@ -204,4 +204,13 @@ public class Circuit {
 	public void undoableDisconnect(int x, int y) {
 		_commandManager.apply(new DisconnectCommand(this, gridTrunc(x), gridTrunc(y)));
 	}
+
+	public void setDrawConnectPriew(boolean draw) {
+		_protoboard.setDrawConnectPreview(draw);
+	}
+
+	public void setConnectPreview(int xi, int yi, int xf, int yf) {
+		_protoboard.setConnectPreview(xi, yi, xf, yf);
+
+	}
 }

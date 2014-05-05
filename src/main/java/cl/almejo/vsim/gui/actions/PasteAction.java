@@ -21,7 +21,7 @@ public class PasteAction extends WindowAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("pause");
+		System.out.println("paste");
 	}
 
 }
