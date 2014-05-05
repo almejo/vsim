@@ -16,6 +16,8 @@ package cl.almejo.vsim.gui;
 import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.CircuitCanvas;
+import cl.almejo.vsim.circuit.CircuitEvent;
+import cl.almejo.vsim.circuit.CircuitStateListner;
 import cl.almejo.vsim.gui.actions.*;
 import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
 
@@ -23,13 +25,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener {
+public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener, CircuitStateListner {
 
 	private static final long serialVersionUID = 1L;
 	private final CircuitCanvas _canvas;
 	private final Circuit _circuit;
-	private int _xi;
-	private int _yi;
 
 	private ActionToolHelper _toolHelper = ActionToolHelper.CURSOR;
 
@@ -78,8 +78,10 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 
 	public SimWindow(Circuit circuit) {
+
 		setTitle(Messages.t("main.title"));
 		_circuit = circuit;
+		_circuit.addCircuitEventListener(this);
 		_canvas = new CircuitCanvas(_circuit);
 
 		setBounds(100, 100, 450, 300);
@@ -99,9 +101,11 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		JTextField text = new JTextField();
 		getContentPane().add(text, BorderLayout.SOUTH);
 		text.addKeyListener(this);
-		addMenu();
 
+		addMenu();
 		addMainToolbar();
+		PAUSE_ACTION.setEnabled(_circuit.isSimulationRunning());
+		START_ACTION.setEnabled(!_circuit.isSimulationRunning());
 	}
 
 	private void addMenu() {
@@ -178,7 +182,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		toolBar.add(newGrouppedButton(START_ACTION, group));
 		toolBar.add(newGrouppedButton(PAUSE_ACTION, group));
-
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 	}
 
@@ -381,5 +384,16 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_circuit.setConnectPreview(xi, yi, xf, yf);
 	}
 
+	@Override
+	public void onPause(CircuitEvent event) {
+		PAUSE_ACTION.setEnabled(false);
+		START_ACTION.setEnabled(true);
+	}
+
+	@Override
+	public void onResume(CircuitEvent event) {
+		PAUSE_ACTION.setEnabled(true);
+		START_ACTION.setEnabled(false);
+	}
 
 }

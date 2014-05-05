@@ -13,7 +13,7 @@
 
 package cl.almejo.vsim.circuit.commands;
 
-public interface Command {
+interface Command {
 	public void apply();
 
 	public void unDo();

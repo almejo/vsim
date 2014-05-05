@@ -21,7 +21,7 @@ public class StartStopSimulationAction extends WindowAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("start/stop pressed");
+		getWindow().getCircuit().toggleSimulation();
 	}
 
 }

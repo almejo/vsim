@@ -32,6 +32,7 @@ public class Scheduler {
 
 	private long _time = 0;
 
+	@SuppressWarnings("InfiniteLoopStatement")
 	public void run(long simulationTime) {
 		schedule(new StopEvent(this), simulationTime);
 		try {

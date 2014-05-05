@@ -15,9 +15,14 @@ import java.util.TimerTask;
 
 public class Circuit {
 
+	private Simulator _simulatorTask;
+	private boolean _simulationIsRunning = false;
+	private LinkedList<CircuitStateListner> _stateListeners = new LinkedList<CircuitStateListner>();
+
 	class Simulator extends TimerTask {
 
 		private Circuit _circuit;
+
 		private long _lastSimulationTime;
 
 		Simulator(Circuit circuit) {
@@ -51,13 +56,13 @@ public class Circuit {
 
 	private static final int GRIDSIZE = 8;
 
-	CommandManager _commandManager = new CommandManager();
+	private CommandManager _commandManager = new CommandManager();
 
-	Scheduler _scheduler;
+	private Scheduler _scheduler;
 
-	List<IconGate> _icons = new LinkedList<IconGate>();
+	private List<IconGate> _icons = new LinkedList<IconGate>();
 
-	List<CircuitCanvas> _canvases = new LinkedList<CircuitCanvas>();
+	private List<CircuitCanvas> _canvases = new LinkedList<CircuitCanvas>();
 
 	private Protoboard _protoboard;
 
@@ -70,8 +75,11 @@ public class Circuit {
 		_scheduler = new Scheduler();
 
 		new Timer().schedule(new RepaintTask(this), 100, 100);
-		_simulationTimer.schedule(new Simulator(this), 1000, 100);
+		startSimulation();
+	}
 
+	public void addCircuitEventListener(CircuitStateListner listener) {
+		_stateListeners.add(listener);
 	}
 
 	public void repaint() {
@@ -213,4 +221,44 @@ public class Circuit {
 		_protoboard.setConnectPreview(xi, yi, xf, yf);
 
 	}
+
+	public void toggleSimulation() {
+		if (_simulationIsRunning) {
+			stopSimulation();
+		} else {
+			startSimulation();
+		}
+	}
+
+	public boolean isSimulationRunning() {
+		return _simulationIsRunning;
+	}
+
+	private void startSimulation() {
+		_simulatorTask = new Simulator(this);
+		_simulationTimer.schedule(_simulatorTask, 1000, 100);
+		_simulationIsRunning = true;
+		sendResumeEvent();
+	}
+
+	private void stopSimulation() {
+		_simulatorTask.cancel();
+		_simulationTimer.purge();
+		_simulationIsRunning = false;
+		sendPauseEvent();
+	}
+	private void sendPauseEvent() {
+		CircuitEvent event = new CircuitEvent();
+		for(CircuitStateListner listner:_stateListeners) {
+			listner.onPause(event);
+		}
+	}
+
+	private void sendResumeEvent() {
+		CircuitEvent event = new CircuitEvent();
+		for(CircuitStateListner listner:_stateListeners) {
+			listner.onResume(event);
+		}
+	}
+
 }
