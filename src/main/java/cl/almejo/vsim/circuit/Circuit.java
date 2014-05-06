@@ -19,6 +19,7 @@ public class Circuit {
 	private boolean _simulationIsRunning = false;
 	private LinkedList<CircuitStateListner> _stateListeners = new LinkedList<CircuitStateListner>();
 
+
 	class Simulator extends TimerTask {
 
 		private Circuit _circuit;
@@ -112,7 +113,7 @@ public class Circuit {
 		icon.moveTo(Circuit.gridTrunc(x), Circuit.gridTrunc(y));
 
 		activate(icon);
-
+		sendChangedEvent();
 	}
 
 	public static int gridTrunc(int coord) {
@@ -174,10 +175,12 @@ public class Circuit {
 
 	public void undo() {
 		_commandManager.undo();
+		sendUndoEvent();
 	}
 
 	public void redo() {
 		_commandManager.redo();
+		sendRedoEvent();
 	}
 
 	public void disconnect(int xi, int yi, int xf, int yf) {
@@ -203,6 +206,7 @@ public class Circuit {
 		}
 
 		_commandManager.apply(command);
+		sendChangedEvent();
 	}
 
 	public int getNextGateId() {
@@ -211,6 +215,7 @@ public class Circuit {
 
 	public void undoableDisconnect(int x, int y) {
 		_commandManager.apply(new DisconnectCommand(this, gridTrunc(x), gridTrunc(y)));
+		sendChangedEvent();
 	}
 
 	public void setDrawConnectPriew(boolean draw) {
@@ -247,18 +252,47 @@ public class Circuit {
 		_simulationIsRunning = false;
 		sendPauseEvent();
 	}
+
+	private void sendChangedEvent() {
+		CircuitEvent event = new CircuitEvent(this);
+		for(CircuitStateListner listner:_stateListeners) {
+			listner.onChanged(event);
+		}
+	}
+
+	private void sendUndoEvent() {
+		CircuitEvent event = new CircuitEvent(this);
+		for(CircuitStateListner listner:_stateListeners) {
+			listner.onUndo(event);
+		}
+	}
+
+	private void sendRedoEvent() {
+		CircuitEvent event = new CircuitEvent(this);
+		for(CircuitStateListner listner:_stateListeners) {
+			listner.onRedo(event);
+		}
+	}
+
 	private void sendPauseEvent() {
-		CircuitEvent event = new CircuitEvent();
+		CircuitEvent event = new CircuitEvent(this);
 		for(CircuitStateListner listner:_stateListeners) {
 			listner.onPause(event);
 		}
 	}
 
 	private void sendResumeEvent() {
-		CircuitEvent event = new CircuitEvent();
+		CircuitEvent event = new CircuitEvent(this);
 		for(CircuitStateListner listner:_stateListeners) {
 			listner.onResume(event);
 		}
 	}
 
+	public boolean canUndo() {
+		return _commandManager.canUndo();
+	}
+
+	public boolean canRedo() {
+		return _commandManager.canRedo();
+	}
 }

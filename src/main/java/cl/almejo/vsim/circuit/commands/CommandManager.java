@@ -45,4 +45,12 @@ public class CommandManager {
 		command.apply();
 		_done.add(command);
 	}
+
+	public boolean canUndo() {
+		return _done.size() > 0;
+	}
+
+	public boolean canRedo() {
+		return _undone.size() > 0;
+	}
 }
