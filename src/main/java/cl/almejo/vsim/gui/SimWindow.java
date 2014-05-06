@@ -104,8 +104,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		addMenu();
 		addMainToolbar();
-		PAUSE_ACTION.setEnabled(_circuit.isSimulationRunning());
-		START_ACTION.setEnabled(!_circuit.isSimulationRunning());
+		updateActionStates();
 	}
 
 	private void addMenu() {
@@ -384,16 +383,59 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_circuit.setConnectPreview(xi, yi, xf, yf);
 	}
 
+	private void updateActionStates() {
+		updateStartPause(_circuit);
+		updateUndoRedo(_circuit);
+		updateFileOperationActions();
+		updateCutCopyPaste();
+	}
+
+	private void updateCutCopyPaste() {
+		CUT_ACTION.setEnabled(false);
+		COPY_ACTION.setEnabled(false);
+		PASTE_ACTION.setEnabled(false);
+	}
+
+	private void updateFileOperationActions() {
+		NEW_ACTION.setEnabled(false);
+		OPEN_ACTION.setEnabled(false);
+		SAVE_ACTION.setEnabled(false);
+		SAVE_AS_ACTION.setEnabled(false);
+	}
+
 	@Override
 	public void onPause(CircuitEvent event) {
-		PAUSE_ACTION.setEnabled(false);
-		START_ACTION.setEnabled(true);
+		updateStartPause(event.getCircuit());
 	}
 
 	@Override
 	public void onResume(CircuitEvent event) {
-		PAUSE_ACTION.setEnabled(true);
-		START_ACTION.setEnabled(false);
+		updateStartPause(event.getCircuit());
+	}
+
+	@Override
+	public void onChanged(CircuitEvent event) {
+		updateUndoRedo(event.getCircuit());
+	}
+
+	@Override
+	public void onUndo(CircuitEvent event) {
+		updateUndoRedo(event.getCircuit());
+	}
+
+	@Override
+	public void onRedo(CircuitEvent event) {
+		updateUndoRedo(event.getCircuit());
+	}
+
+	private void updateUndoRedo(Circuit circuit) {
+		UNDO_ACTION.setEnabled(circuit.canUndo());
+		REDO_ACTION.setEnabled(circuit.canRedo());
+	}
+
+	private void updateStartPause(Circuit circuit) {
+		PAUSE_ACTION.setEnabled(circuit.isSimulationRunning());
+		START_ACTION.setEnabled(!circuit.isSimulationRunning());
 	}
 
 }
