@@ -14,7 +14,8 @@
 package cl.almejo.vsim;
 
 import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.gates.*;
+import cl.almejo.vsim.gates.Gate;
+import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gui.SimWindow;
 
 import javax.swing.*;
@@ -24,24 +25,16 @@ public class Main {
 	public Main() {
 		Circuit circuit = new Circuit();
 
-		ClockDescriptor descriptor = new ClockDescriptor();
-		IconGate iconClock = new IconGate(circuit.getNextGateId(), new Clock(circuit, new ClockParams(1000, 1000), descriptor));
-		circuit.add(iconClock, 100, 80);
+		circuit.undoableAddGate(GateFactory.getInstnce(Gate.CLOCK, circuit), 100, 80);
 
-		IconGate iconClock2 = new IconGate(circuit.getNextGateId(), new Clock(circuit, new ClockParams(3000, 3000), descriptor));
-		circuit.add(iconClock2, 100, 118);
+		circuit.undoableAddGate(GateFactory.getInstnce(Gate.CLOCK, circuit), 100, 118);
 
-		IconGate iconAnd = new IconGate(circuit.getNextGateId(), new And(circuit, new AndParams(1), new AndDescriptor()));
-		circuit.add(iconAnd, 300, 96);
-
-		IconGate iconNot = new IconGate(circuit.getNextGateId(), new Not(circuit, new NotParams(1), new NotDescriptor()));
-		circuit.add(iconNot, 400, 96);
+		circuit.undoableAddGate(GateFactory.getInstnce(Gate.AND2, circuit), 300, 96);
+		circuit.undoableAddGate(GateFactory.getInstnce(Gate.NOT, circuit), 400, 96);
 
 		circuit.undoableConnect(112, 96, 300, 96);
 		circuit.undoableConnect(112, 128, 300, 128);
 		circuit.undoableConnect(332, 112, 400, 112);
-		System.out.println("================================================");
-		circuit.undoableDisconnect(332, 112);
 
 		circuit.undoableConnect(300, 200, 50, 200);
 		circuit.undoableConnect(350, 200, 450, 200);
@@ -53,11 +46,11 @@ public class Main {
 		} catch (UnsupportedLookAndFeelException ex) {
 			System.out.println("Unable to load native look and feel");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			e.printStackTrace();
 		} catch (InstantiationException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			e.printStackTrace();
 		}
 
 		new SimWindow(circuit);

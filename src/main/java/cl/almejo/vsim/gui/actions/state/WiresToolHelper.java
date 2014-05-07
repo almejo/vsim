@@ -1,6 +1,5 @@
 package cl.almejo.vsim.gui.actions.state;
 
-import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.gui.SimWindow;
 
 import java.awt.event.MouseEvent;
@@ -21,8 +20,8 @@ public class WiresToolHelper extends ActionToolHelper {
 	public void mouseDown(SimWindow window, MouseEvent event) {
 		_xi = event.getX();
 		_yi = event.getY();
-		window.setDrawConnectPreview(true);
-		window.setConnectPreview(_xi, _yi, _xi, _yi);
+		window.getCircuit().setDrawConnectPreview(true);
+		window.getCircuit().setConnectPreview(_xi, _yi, _xi, _yi);
 		_connecting = true;
 	}
 
@@ -32,7 +31,7 @@ public class WiresToolHelper extends ActionToolHelper {
 			window.undoableConnect(_xi, _yi, event.getX(), event.getY());
 			_connecting = false;
 		}
-		window.setDrawConnectPreview(false);
+		window.getCircuit().setDrawConnectPreview(false);
 
 	}
 
@@ -41,15 +40,12 @@ public class WiresToolHelper extends ActionToolHelper {
 		if (event.isControlDown()) {
 			window.undoableDisconnect(event.getX(), event.getY());
 		}
-		window.setDrawConnectPreview(false);
+		window.getCircuit().setDrawConnectPreview(false);
 	}
 
 	public void mouseDragged(SimWindow window, MouseEvent event) {
 		if (_connecting) {
-			window.setConnectPreview(_xi
-					, _yi
-					, Circuit.gridTrunc(event.getX())
-					, Circuit.gridTrunc(event.getY()));
+			window.getCircuit().setConnectPreview(_xi, _yi, event.getX(), event.getY());
 		}
 	}
 }

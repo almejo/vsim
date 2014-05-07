@@ -36,4 +36,13 @@ public class PinGatePar {
 	public String toString() {
 		return "(" + _pinId + ", " + _gate + ")";
 	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof PinGatePar)) {
+			return super.equals(object);
+		}
+		PinGatePar par = (PinGatePar) object;
+		return par.getPinId() == _pinId && par.getGate() == _gate;
+	}
 }

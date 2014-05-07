@@ -1,6 +1,7 @@
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.circuit.Circuit;
+import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gui.SimWindow;
 
 import java.awt.*;

@@ -17,6 +17,11 @@ import cl.almejo.vsim.circuit.Circuit;
 
 public class Gate {
 
+	public static final int CLOCK = 0;
+	public static final int AND2 = 1;
+	public static final int AND3 = 2;
+	public static final int NOT = 3;
+
 	protected Pin[] _pins;
 	protected Circuit _circuit;
 	protected GateParameters _parameters;
