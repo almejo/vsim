@@ -8,11 +8,9 @@ package cl.almejo.vsim.gui.actions;
  */
 
 import cl.almejo.vsim.gui.SimWindow;
-import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 
@@ -45,6 +43,5 @@ public abstract class WindowAction extends AbstractAction {
 	public SimWindow getWindow() {
 		return _window;
 	}
-
 
 }

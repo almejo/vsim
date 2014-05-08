@@ -36,6 +36,4 @@ public abstract class ActionToolHelper {
 	public void mouseUp(SimWindow window, MouseEvent event) {
 	}
 
-	public void drawPreview(Graphics2D graphics2D, Circuit circuit) {
-	}
 }

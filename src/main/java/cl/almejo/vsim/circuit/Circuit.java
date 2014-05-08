@@ -1,8 +1,6 @@
 package cl.almejo.vsim.circuit;
 
-import cl.almejo.vsim.circuit.commands.CommandManager;
-import cl.almejo.vsim.circuit.commands.ConnectCommand;
-import cl.almejo.vsim.circuit.commands.DisconnectCommand;
+import cl.almejo.vsim.circuit.commands.*;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.simulation.Scheduler;
@@ -17,8 +15,7 @@ public class Circuit {
 
 	private Simulator _simulatorTask;
 	private boolean _simulationIsRunning = false;
-	private LinkedList<CircuitStateListner> _stateListeners = new LinkedList<CircuitStateListner>();
-
+	private LinkedList<CircuitStateListener> _stateListeners = new LinkedList<CircuitStateListener>();
 
 	class Simulator extends TimerTask {
 
@@ -79,7 +76,7 @@ public class Circuit {
 		startSimulation();
 	}
 
-	public void addCircuitEventListener(CircuitStateListner listener) {
+	public void addCircuitEventListener(CircuitStateListener listener) {
 		_stateListeners.add(listener);
 	}
 
@@ -105,15 +102,23 @@ public class Circuit {
 
 		Dimension size = icon.getSize();
 
-		int _xi = Circuit.gridTrunc(x);
-		int _yi = Circuit.gridTrunc(y);
-
-		icon.setBounds(_xi, _yi, (int) size.getWidth(), (int) size.getHeight());
-
-		icon.moveTo(Circuit.gridTrunc(x), Circuit.gridTrunc(y));
+		icon.setBounds(gridTrunc(x), gridTrunc(y), (int) size.getWidth(), (int) size.getHeight());
+		icon.moveTo(gridTrunc(x), gridTrunc(y));
 
 		activate(icon);
 		sendChangedEvent();
+	}
+
+	public void remove(IconGate icon) {
+		desactivate(icon);
+		_icons.remove(icon);
+		sendChangedEvent();
+	}
+
+	public void desactivate(IconGate icon) {
+		for (byte pinId = 0; pinId < icon.getPinsCount(); pinId++) {
+			removePin(pinId, icon.getTransformedPinPos(pinId), icon.getGate());
+		}
 	}
 
 	public static int gridTrunc(int coord) {
@@ -131,12 +136,6 @@ public class Circuit {
 	public void activate(IconGate icon) {
 		for (byte pinId = 0; pinId < icon.getPinsCount(); pinId++) {
 			addPin(pinId, icon.getTransformedPinPos(pinId), icon.getGate());
-		}
-	}
-
-	public void desactivate(IconGate icon) {
-		for (byte pinId = 0; pinId < icon.getPinsCount(); pinId++) {
-			removePin(pinId, icon.getPinPos(pinId), icon.getGate());
 		}
 	}
 
@@ -158,6 +157,17 @@ public class Circuit {
 
 	public void remove(CircuitCanvas canvas) {
 		_canvases.remove(canvas);
+	}
+
+	public IconGate findIcon(int x, int y) {
+		int _x = gridTrunc(x);
+		int _y = gridTrunc(y);
+
+		for (IconGate iconGate : _icons) {
+			if (iconGate.contains(_x, _y))
+				return iconGate;
+		}
+		return null;
 	}
 
 	public List<Connection<Contact>> findToDisconnect(int x, int y) {
@@ -182,6 +192,19 @@ public class Circuit {
 		_commandManager.redo();
 		sendRedoEvent();
 	}
+
+	public void undoableAddGate(IconGate iconGate, int x, int y) {
+		AddGateCommand command = new AddGateCommand(this, iconGate, gridTrunc(x), gridTrunc(y));
+		_commandManager.apply(command);
+		sendChangedEvent();
+	}
+
+	public void undoableRemoveGate(int x, int y) {
+		RemoveGateCommand command = new RemoveGateCommand(this, gridTrunc(x), gridTrunc(y));
+		_commandManager.apply(command);
+		sendChangedEvent();
+	}
+
 
 	public void disconnect(int xi, int yi, int xf, int yf) {
 		_protoboard.disconnect(xi, yi, xf, yf);
@@ -218,12 +241,12 @@ public class Circuit {
 		sendChangedEvent();
 	}
 
-	public void setDrawConnectPriew(boolean draw) {
+	public void setDrawConnectPreview(boolean draw) {
 		_protoboard.setDrawConnectPreview(draw);
 	}
 
 	public void setConnectPreview(int xi, int yi, int xf, int yf) {
-		_protoboard.setConnectPreview(xi, yi, xf, yf);
+		_protoboard.setConnectPreview(xi, yi, gridTrunc(xf), gridTrunc(yf));
 
 	}
 
@@ -255,36 +278,36 @@ public class Circuit {
 
 	private void sendChangedEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		for(CircuitStateListner listner:_stateListeners) {
-			listner.onChanged(event);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onChanged(event);
 		}
 	}
 
 	private void sendUndoEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		for(CircuitStateListner listner:_stateListeners) {
-			listner.onUndo(event);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onUndo(event);
 		}
 	}
 
 	private void sendRedoEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		for(CircuitStateListner listner:_stateListeners) {
-			listner.onRedo(event);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onRedo(event);
 		}
 	}
 
 	private void sendPauseEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		for(CircuitStateListner listner:_stateListeners) {
-			listner.onPause(event);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onPause(event);
 		}
 	}
 
 	private void sendResumeEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		for(CircuitStateListner listner:_stateListeners) {
-			listner.onResume(event);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onResume(event);
 		}
 	}
 

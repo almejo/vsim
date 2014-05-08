@@ -67,10 +67,11 @@ public class ConnectCommand implements Command {
 	}
 
 	@Override
-	public void apply() {
+	public boolean apply() {
 		for (UndoableConnection connection : _undoableConnections) {
 			connection.apply();
 		}
+		return true;
 	}
 
 	@Override

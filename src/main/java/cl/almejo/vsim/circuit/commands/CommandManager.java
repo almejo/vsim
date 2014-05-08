@@ -22,9 +22,10 @@ public class CommandManager {
 	private List<Command> _undone = new LinkedList<Command>();
 
 	public void apply(Command command) {
-		command.apply();
-		_done.add(command);
-		_undone.clear();
+		if (command.apply()) {
+			_done.add(command);
+			_undone.clear();
+		}
 	}
 
 	public void undo() {
