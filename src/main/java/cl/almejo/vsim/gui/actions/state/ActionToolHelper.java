@@ -1,7 +1,6 @@
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gui.SimWindow;
 
 import java.awt.*;
@@ -37,6 +36,4 @@ public abstract class ActionToolHelper {
 	public void mouseUp(SimWindow window, MouseEvent event) {
 	}
 
-	public void drawPreview(Graphics2D graphics2D, Circuit circuit) {
-	}
 }

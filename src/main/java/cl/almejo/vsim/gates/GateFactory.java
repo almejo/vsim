@@ -3,7 +3,7 @@ package cl.almejo.vsim.gates;
 import cl.almejo.vsim.circuit.Circuit;
 
 public class GateFactory {
-	public static IconGate getInstnce(int gateIndex, Circuit circuit) {
+	public static IconGate getInstance(int gateIndex, Circuit circuit) {
 		switch (gateIndex) {
 			case Gate.CLOCK:
 				ClockDescriptor descriptor = new ClockDescriptor();

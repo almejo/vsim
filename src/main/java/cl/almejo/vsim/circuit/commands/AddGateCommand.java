@@ -31,8 +31,9 @@ public class AddGateCommand implements Command {
 	}
 
 	@Override
-	public void apply() {
+	public boolean apply() {
 		_circuit.add(_iconGate, _x, _y);
+		return true;
 	}
 
 	@Override

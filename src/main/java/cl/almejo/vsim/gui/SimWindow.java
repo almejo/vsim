@@ -17,17 +17,17 @@ import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.CircuitCanvas;
 import cl.almejo.vsim.circuit.CircuitEvent;
-import cl.almejo.vsim.circuit.CircuitStateListner;
+import cl.almejo.vsim.circuit.CircuitStateListener;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gui.actions.*;
 import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
-import cl.almejo.vsim.gui.actions.state.AddGateToolHelper;
+import cl.almejo.vsim.gui.actions.state.GateToolHelper;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener, CircuitStateListner {
+public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener, CircuitStateListener {
 
 	private static final long serialVersionUID = 1L;
 	private final CircuitCanvas _canvas;
@@ -73,10 +73,10 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction CURSOR_TOOL_ACTION = new ToolAction(Messages.t("action.tool.cursor"), Messages.t("action.tool.cursor.description"), "cursor.png", null, this, ActionToolHelper.CURSOR);
 	private final WindowAction MOVE_VIEWPORT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.move.viewport"), Messages.t("action.tool.move.viewport.description"), "move-viewport.png", null, this, ActionToolHelper.CURSOR);
 	private final WindowAction WIRES_TOOL_ACTION = new ToolAction(Messages.t("action.tool.wires"), Messages.t("action.tool.wires.description"), "wires.png", null, this, ActionToolHelper.WIRES);
-	private final WindowAction AND2_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and2"), Messages.t("action.tool.and2.description"), "and2.png", null, this, new AddGateToolHelper(Gate.AND2));
-	private final WindowAction AND3_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and3"), Messages.t("action.tool.and3.description"), "and3.png", null, this, new AddGateToolHelper(Gate.AND3));
-	private final WindowAction NOT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.not"), Messages.t("action.tool.not.description"), "not.png", null, this, new AddGateToolHelper(Gate.NOT));
-	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, new AddGateToolHelper(Gate.CLOCK));
+	private final WindowAction AND2_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and2"), Messages.t("action.tool.and2.description"), "and2.png", null, this, new GateToolHelper(Gate.AND2));
+	private final WindowAction AND3_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and3"), Messages.t("action.tool.and3.description"), "and3.png", null, this, new GateToolHelper(Gate.AND3));
+	private final WindowAction NOT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.not"), Messages.t("action.tool.not.description"), "not.png", null, this, new GateToolHelper(Gate.NOT));
+	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, new GateToolHelper(Gate.CLOCK));
 
 
 	public SimWindow(Circuit circuit) {

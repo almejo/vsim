@@ -30,10 +30,11 @@ public class DisconnectCommand implements Command {
 	}
 
 	@Override
-	public void apply() {
+	public boolean apply() {
 		for (Connection<Contact> connection : _connections) {
 			_circuit.disconnect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(), connection.getLast().getY());
 		}
+		return true;
 	}
 
 	@Override

@@ -1,9 +1,6 @@
 package cl.almejo.vsim.circuit;
 
-import cl.almejo.vsim.circuit.commands.AddGateCommand;
-import cl.almejo.vsim.circuit.commands.CommandManager;
-import cl.almejo.vsim.circuit.commands.ConnectCommand;
-import cl.almejo.vsim.circuit.commands.DisconnectCommand;
+import cl.almejo.vsim.circuit.commands.*;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.simulation.Scheduler;
@@ -18,11 +15,7 @@ public class Circuit {
 
 	private Simulator _simulatorTask;
 	private boolean _simulationIsRunning = false;
-	private LinkedList<CircuitStateListner> _stateListeners = new LinkedList<CircuitStateListner>();
-
-	public void setGatePreview(int gateIndex, int x, int y) {
-	}
-
+	private LinkedList<CircuitStateListener> _stateListeners = new LinkedList<CircuitStateListener>();
 
 	class Simulator extends TimerTask {
 
@@ -83,7 +76,7 @@ public class Circuit {
 		startSimulation();
 	}
 
-	public void addCircuitEventListener(CircuitStateListner listener) {
+	public void addCircuitEventListener(CircuitStateListener listener) {
 		_stateListeners.add(listener);
 	}
 
@@ -128,7 +121,6 @@ public class Circuit {
 		}
 	}
 
-
 	public static int gridTrunc(int coord) {
 		return coord & (~(GRIDSIZE - 1));
 	}
@@ -167,6 +159,17 @@ public class Circuit {
 		_canvases.remove(canvas);
 	}
 
+	public IconGate findIcon(int x, int y) {
+		int _x = gridTrunc(x);
+		int _y = gridTrunc(y);
+
+		for (IconGate iconGate : _icons) {
+			if (iconGate.contains(_x, _y))
+				return iconGate;
+		}
+		return null;
+	}
+
 	public List<Connection<Contact>> findToDisconnect(int x, int y) {
 		return _protoboard.findToDisconnect(x, y);
 	}
@@ -195,6 +198,13 @@ public class Circuit {
 		_commandManager.apply(command);
 		sendChangedEvent();
 	}
+
+	public void undoableRemoveGate(int x, int y) {
+		RemoveGateCommand command = new RemoveGateCommand(this, gridTrunc(x), gridTrunc(y));
+		_commandManager.apply(command);
+		sendChangedEvent();
+	}
+
 
 	public void disconnect(int xi, int yi, int xf, int yf) {
 		_protoboard.disconnect(xi, yi, xf, yf);
@@ -268,36 +278,36 @@ public class Circuit {
 
 	private void sendChangedEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		for (CircuitStateListner listner : _stateListeners) {
-			listner.onChanged(event);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onChanged(event);
 		}
 	}
 
 	private void sendUndoEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		for (CircuitStateListner listner : _stateListeners) {
-			listner.onUndo(event);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onUndo(event);
 		}
 	}
 
 	private void sendRedoEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		for (CircuitStateListner listner : _stateListeners) {
-			listner.onRedo(event);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onRedo(event);
 		}
 	}
 
 	private void sendPauseEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		for (CircuitStateListner listner : _stateListeners) {
-			listner.onPause(event);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onPause(event);
 		}
 	}
 
 	private void sendResumeEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		for (CircuitStateListner listner : _stateListeners) {
-			listner.onResume(event);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onResume(event);
 		}
 	}
 

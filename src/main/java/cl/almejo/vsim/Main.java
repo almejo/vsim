@@ -25,12 +25,12 @@ public class Main {
 	public Main() {
 		Circuit circuit = new Circuit();
 
-		circuit.undoableAddGate(GateFactory.getInstnce(Gate.CLOCK, circuit), 100, 80);
+		circuit.undoableAddGate(GateFactory.getInstance(Gate.CLOCK, circuit), 100, 80);
 
-		circuit.undoableAddGate(GateFactory.getInstnce(Gate.CLOCK, circuit), 100, 118);
+		circuit.undoableAddGate(GateFactory.getInstance(Gate.CLOCK, circuit), 100, 118);
 
-		circuit.undoableAddGate(GateFactory.getInstnce(Gate.AND2, circuit), 300, 96);
-		circuit.undoableAddGate(GateFactory.getInstnce(Gate.NOT, circuit), 400, 96);
+		circuit.undoableAddGate(GateFactory.getInstance(Gate.AND2, circuit), 300, 96);
+		circuit.undoableAddGate(GateFactory.getInstance(Gate.NOT, circuit), 400, 96);
 
 		circuit.undoableConnect(112, 96, 300, 96);
 		circuit.undoableConnect(112, 128, 300, 128);

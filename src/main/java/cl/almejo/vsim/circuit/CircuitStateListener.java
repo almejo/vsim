@@ -3,7 +3,7 @@ package cl.almejo.vsim.circuit;
 /**
  * Created by alejo on 5/4/14.
  */
-public interface CircuitStateListner {
+public interface CircuitStateListener {
 
 	public void onPause(CircuitEvent event);
 

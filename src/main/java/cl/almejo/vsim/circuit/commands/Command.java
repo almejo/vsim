@@ -14,7 +14,8 @@
 package cl.almejo.vsim.circuit.commands;
 
 interface Command {
-	public void apply();
+	public boolean apply();
 
 	public void unDo();
+
 }

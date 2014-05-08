@@ -33,7 +33,7 @@ public class OptimisticList<T> {
 	}
 
 	public boolean contains(T element) {
-		return (_element != null && _element.equals(element)) || ( _list != null && _list.contains(element));
+		return (_element != null && _element.equals(element)) || (_list != null && _list.contains(element));
 	}
 
 	public List<T> elements() {
