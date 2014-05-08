@@ -25,6 +25,8 @@ public abstract class GateDescriptor {
 
 	protected GateTypes _type;
 
+	protected GateParameters _parameters;
+
 	public void paint(Graphics2D graphics, IconGate iconGate) {
 		drawGate(graphics, iconGate, 0, 0);// Circuit.gridTrunc((int) iconGate.getX()), Circuit.gridTrunc((int) iconGate.getY()));
 	}
@@ -38,4 +40,8 @@ public abstract class GateDescriptor {
 	}
 
 	public abstract Gate make(Circuit circuit, GateParameters params);
+
+	public int getPinCount() {
+		return _pinCount;
+	}
 }

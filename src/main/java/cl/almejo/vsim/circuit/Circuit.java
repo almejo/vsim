@@ -79,6 +79,7 @@ public class Circuit {
 
 	private int _nextGateId = 0;
 
+
 	public Circuit() {
 		_protoboard = new Protoboard();
 		_scheduler = new Scheduler();

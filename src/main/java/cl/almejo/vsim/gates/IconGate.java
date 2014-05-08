@@ -113,7 +113,7 @@ public class IconGate extends Rectangle {
 
 	public IconGate getInstance(Circuit circuit) {
 		IconGate iconGate = new IconGate(circuit.getNextGateId());
-		iconGate.setGate(_gate.getGateDescriptor().make(circuit, _gate.getParams()));
+		iconGate.setGate(_gate.getGateDescriptor().make(circuit, _gate.getParamameters()));
 		return iconGate;
 	}
 
