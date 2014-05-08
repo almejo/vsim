@@ -1,12 +1,15 @@
-package cl.almejo.vsim.gui.actions;
-
 /**
- * Created with IntelliJ IDEA.
- * User: alejo
- * Date: 9/16/13
- * Time: 11:31 PM
- * To change this template use File | Settings | File Templates.
+ *
+ * vsim
+ *
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author: Alejandro Vera
+ *
  */
+
+package cl.almejo.vsim.gui.actions;
 
 import cl.almejo.vsim.gui.SimWindow;
 

@@ -2,8 +2,6 @@
  *
  * vsim
  *
- * Created on Aug 16, 2013
- *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *

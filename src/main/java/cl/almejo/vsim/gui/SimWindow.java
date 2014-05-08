@@ -2,14 +2,13 @@
  *
  * vsim
  *
- * Created on Aug 16, 2013
- *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
  * @author: Alejandro Vera
  *
  */
+
 
 package cl.almejo.vsim.gui;
 
@@ -52,7 +51,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction OPEN_ACTION = new OpenAction(Messages.t("action.open"), Messages.t("action.open.description"), "open.png", ACCELERATOR_OPEN, this);
 	private final WindowAction SAVE_ACTION = new SaveAction(Messages.t("action.save"), Messages.t("action.save.description"), "save.png", ACCELERATOR_SAVE, this);
 	private final WindowAction SAVE_AS_ACTION = new SaveAsAction(Messages.t("action.saveas"), Messages.t("action.saveas.description"), null, ACCELERATOR_SAVE_AS, this);
-	private final WindowAction QUIT_ACTION = new RedoAction(Messages.t("action.quit"), Messages.t("action.quit.description"), null, ACCELERATOR_QUIT, this);
+	private final WindowAction QUIT_ACTION = new QuitAction(Messages.t("action.quit"), Messages.t("action.quit.description"), null, ACCELERATOR_QUIT, this);
 
 	private final WindowAction CUT_ACTION = new CutAction(Messages.t("action.cut"), Messages.t("action.cut.description"), "cut.png", ACCELERATOR_CUT, this);
 	private final WindowAction COPY_ACTION = new CopyAction(Messages.t("action.copy"), Messages.t("action.copy.description"), "copy.png", ACCELERATOR_COPY, this);
