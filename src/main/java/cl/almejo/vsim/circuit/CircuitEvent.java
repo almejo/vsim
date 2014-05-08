@@ -1,8 +1,16 @@
+/**
+ *
+ * vsim
+ *
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author: Alejandro Vera
+ *
+ */
+
 package cl.almejo.vsim.circuit;
 
-/**
- * Created by alejo on 5/4/14.
- */
 public class CircuitEvent {
 
 	private final Circuit _circuit;

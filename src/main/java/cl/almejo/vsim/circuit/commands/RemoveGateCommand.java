@@ -1,11 +1,19 @@
+/**
+ *
+ * vsim
+ *
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author: Alejandro Vera
+ *
+ */
+
 package cl.almejo.vsim.circuit.commands;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.gates.IconGate;
 
-/**
- * Created by alejo on 5/7/14.
- */
 public class RemoveGateCommand implements Command {
 
 	private final Circuit _circuit;

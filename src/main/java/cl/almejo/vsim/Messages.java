@@ -1,15 +1,19 @@
+/**
+ *
+ * vsim
+ *
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author: Alejandro Vera
+ *
+ */
+
 package cl.almejo.vsim;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-/**
- * Created with IntelliJ IDEA.
- * User: alejo
- * Date: 9/16/13
- * Time: 11:12 PM
- * To change this template use File | Settings | File Templates.
- */
 
 public class Messages {
 	private static final String BUNDLE_NAME = "i18n.messages";
