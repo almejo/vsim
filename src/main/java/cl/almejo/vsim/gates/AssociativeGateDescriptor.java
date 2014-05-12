@@ -16,11 +16,17 @@ import java.awt.*;
 
 public class AssociativeGateDescriptor extends GateDescriptor {
 	private final int[][] _behavior;
+	private static int _associativeType;
+
+	public static final int ASSOCIATIVE_TYPE_AND = 0;
+	public static final int ASSOCIATIVE_TYPE_OR = 1;
 
 	public AssociativeGateDescriptor(AssociateveGateParameters parameters) {
 		_parameters = parameters;
 		_behavior = parameters.getBehavior();
 		_pinPosition = new Point[parameters.getPinCount() + 1];
+		_associativeType = parameters.getAssociativeType();
+		System.out.println(_associativeType);
 
 		int dy = 32 / (parameters.getPinCount() - 1);
 		for (int i = 0; i < parameters.getPinCount(); i++) {
@@ -33,8 +39,18 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
-		graphics.setColor(Color.blue);
-		graphics.fillArc(-32, 0, 64, 32, -90, 180);
+		switch (_associativeType) {
+			case ASSOCIATIVE_TYPE_AND:
+				graphics.setColor(Color.blue);
+				graphics.fillArc(-32, 0, 64, 32, -90, 180);
+				break;
+			case ASSOCIATIVE_TYPE_OR:
+				graphics.setColor(Color.YELLOW);
+//				Integer []pointsX = new Integer[] {-32, 0, 32, 64, 32, 0, 32, 16, 16};
+//				Integer []pointsY = new Integer[] {0, , 32, 48, 32, 0, 32, 16, 16};
+				graphics.fillArc(-32, 0, 64, 32, -90, 180);
+				break;
+		}
 	}
 
 	@Override

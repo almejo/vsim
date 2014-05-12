@@ -41,6 +41,10 @@ public class NotDescriptor extends GateDescriptor {
 
 	@Override
 	public Gate make(Circuit circuit, GateParameters params) {
-		return new Not(circuit, (GateParameters) params.clone(), this);
+		try {
+			return new Not(circuit, params.clone(), this);
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 }

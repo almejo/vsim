@@ -15,6 +15,7 @@ public class AssociativeGate extends Gate {
 
 	public AssociativeGate(Circuit circuit, GateParameters parameters, GateDescriptor descriptor) {
 		super(circuit, parameters, descriptor);
+		System.out.println (descriptor);
 		_pins = new AssociativePin[descriptor.getPinCount()];
 		for (int i = 0; i < descriptor.getPinCount(); i++) {
 			_pins[i] = new AssociativePin(this, circuit.getScheduler(), i);

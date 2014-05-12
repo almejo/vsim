@@ -31,7 +31,10 @@ public class Gate {
 	public static final int AND2 = 1;
 	public static final int AND3 = 2;
 	public static final int AND4 = 3;
-	public static final int NOT = 4;
+	public static final int OR2 = 4;
+	public static final int OR3 = 5;
+	public static final int OR4 = 6;
+	public static final int NOT = 10;
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;

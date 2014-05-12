@@ -25,6 +25,10 @@ public class GateFactory {
 	private final static AssociativeGateDescriptor ASSOC_AND3_DESCRIPTOR;
 	private final static AssociativeGateDescriptor ASSOC_AND4_DESCRIPTOR;
 
+	private final static AssociativeGateDescriptor ASSOC_OR2_DESCRIPTOR;
+	private final static AssociativeGateDescriptor ASSOC_OR3_DESCRIPTOR;
+	private final static AssociativeGateDescriptor ASSOC_OR4_DESCRIPTOR;
+
 	static {
 		BEHAVIOR_AND = new int[3][3];
 		BEHAVIOR_OR = new int[3][3];
@@ -49,9 +53,13 @@ public class GateFactory {
 		BEHAVIOR_AND[2][2] = 1;
 
 		CLOCK_DESCRIPTOR = new ClockDescriptor();
-		ASSOC_AND2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 2, BEHAVIOR_AND));
-		ASSOC_AND3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_AND));
-		ASSOC_AND4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_AND));
+		ASSOC_AND2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 2, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND));
+		ASSOC_AND3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND));
+		ASSOC_AND4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND));
+
+		ASSOC_OR2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 2, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR));
+		ASSOC_OR3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR));
+		ASSOC_OR4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR));
 		NOT_DESCRIPTOR = new NotDescriptor();
 	}
 
@@ -66,6 +74,12 @@ public class GateFactory {
 					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND3_DESCRIPTOR.getParameters().clone(), ASSOC_AND3_DESCRIPTOR));
 				case Gate.AND4:
 					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND4_DESCRIPTOR.getParameters().clone(), ASSOC_AND4_DESCRIPTOR));
+				case Gate.OR2:
+					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR2_DESCRIPTOR.getParameters().clone(), ASSOC_OR2_DESCRIPTOR));
+				case Gate.OR3:
+					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR3_DESCRIPTOR.getParameters().clone(), ASSOC_OR3_DESCRIPTOR));
+				case Gate.OR4:
+					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR4_DESCRIPTOR.getParameters().clone(), ASSOC_OR4_DESCRIPTOR));
 				case Gate.NOT:
 					return new IconGate(circuit.getNextGateId(), new Not(circuit, new NotParams(1), NOT_DESCRIPTOR));
 				default:
