@@ -30,7 +30,8 @@ public class Gate {
 	public static final int CLOCK = 0;
 	public static final int AND2 = 1;
 	public static final int AND3 = 2;
-	public static final int NOT = 3;
+	public static final int AND4 = 3;
+	public static final int NOT = 4;
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;
@@ -43,7 +44,7 @@ public class Gate {
 		_gateDescriptor = gateDescriptor;
 	}
 
-	public GateParameters getParams() {
+	public GateParameters getParamameters() {
 		return _parameters;
 	}
 

@@ -12,7 +12,6 @@
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.gates.GateFactory;
-import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gui.SimWindow;
 
 import java.awt.event.MouseEvent;
