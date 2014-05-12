@@ -74,6 +74,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction WIRES_TOOL_ACTION = new ToolAction(Messages.t("action.tool.wires"), Messages.t("action.tool.wires.description"), "wires.png", null, this, ActionToolHelper.WIRES);
 	private final WindowAction AND2_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and2"), Messages.t("action.tool.and2.description"), "and2.png", null, this, new GateToolHelper(Gate.AND2));
 	private final WindowAction AND3_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and3"), Messages.t("action.tool.and3.description"), "and3.png", null, this, new GateToolHelper(Gate.AND3));
+	private final WindowAction AND4_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and3"), Messages.t("action.tool.and3.description"), "and4.png", null, this, new GateToolHelper(Gate.AND4));
 	private final WindowAction NOT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.not"), Messages.t("action.tool.not.description"), "not.png", null, this, new GateToolHelper(Gate.NOT));
 	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, new GateToolHelper(Gate.CLOCK));
 
@@ -131,6 +132,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(WIRES_TOOL_ACTION, Messages.c("menu.tool.wires.mnemonic")));
 		menu.add(newMenuItem(AND2_TOOL_ACTION, Messages.c("menu.tool.and2.mnemonic")));
 		menu.add(newMenuItem(AND3_TOOL_ACTION, Messages.c("menu.tool.and3.mnemonic")));
+		menu.add(newMenuItem(AND4_TOOL_ACTION, Messages.c("menu.tool.and4.mnemonic")));
 		menu.add(newMenuItem(CLOCK_TOOL_ACTION, Messages.c("menu.tool.clock.mnemonic")));
 		menu.add(newMenuItem(NOT_TOOL_ACTION, Messages.c("menu.tool.not.mnemonic")));
 
@@ -199,6 +201,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		panel.add(newGrouppedButton(AND2_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(AND3_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(AND4_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(NOT_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(CLOCK_TOOL_ACTION, group));
 		return panel;

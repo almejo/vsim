@@ -269,20 +269,20 @@ public class Protoboard {
 		return reconnect(getAllContactsAttached(contactA, new LinkedList<Contact>()));
 	}
 
-	public void paint(Graphics2D g, Rectangle rectangle) {
-		Color color = g.getColor();
+	public void paint(Graphics2D graphics, Rectangle rectangle) {
+		Color color = graphics.getColor();
 		Set<Integer> coords = _matrix.getXCoords();
 
 		for (Integer x : coords) {
 			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
 			for (Contact contact : verticalContacts) {
-				g.setColor(getContactColor(contact));
-				g.fillOval(contact.getX() - 3, contact.getY() - 3, 6, 6);
+				graphics.setColor(getContactColor(contact));
+				graphics.fillOval(contact.getX() - 3, contact.getY() - 3, 6, 6);
 				if (previous != null && contact.isConnected(Constants.SOUTH)) {
 					if (rectangle.contains(contact.getX(), contact.getY())
 							|| rectangle.contains(previous.getX(), previous.getY())) {
-						g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
+						graphics.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
 					}
 				}
 				previous = contact;
@@ -294,18 +294,18 @@ public class Protoboard {
 			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getHorizontalContacts(y);
 			for (Contact contact : verticalContacts) {
-				g.setColor(getContactColor(contact));
+				graphics.setColor(getContactColor(contact));
 				if (previous != null && contact.isConnected(Constants.WEST)) {
 					if (rectangle.contains(contact.getX(), contact.getY())
 							|| rectangle.contains(previous.getX(), previous.getY())) {
-						g.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
+						graphics.drawLine(previous.getX(), previous.getY(), contact.getX(), contact.getY());
 					}
 				}
 				previous = contact;
 			}
 		}
-		drawConnectPreview(g);
-		g.setColor(color);
+		drawConnectPreview(graphics);
+		graphics.setColor(color);
 	}
 
 	private Color getContactColor(Contact contact) {

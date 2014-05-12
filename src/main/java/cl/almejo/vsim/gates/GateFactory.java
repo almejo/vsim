@@ -56,6 +56,9 @@ public class GateFactory {
 			case Gate.AND3:
 				parameters = new AssociateveGateParameters(1, 3, BEHAVIOR_AND);
 				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, parameters, new AssociativeGateDescriptor((parameters))));
+			case Gate.AND4:
+				parameters = new AssociateveGateParameters(1, 4, BEHAVIOR_AND);
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, parameters, new AssociativeGateDescriptor((parameters))));
 			case Gate.NOT:
 				return new IconGate(circuit.getNextGateId(), new Not(circuit, new NotParams(1), new NotDescriptor()));
 			default:

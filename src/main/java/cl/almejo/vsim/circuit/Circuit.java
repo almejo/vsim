@@ -104,6 +104,7 @@ public class Circuit {
 
 	public void paint(Graphics2D graphics, Rectangle rectangle) {
 		if (graphics != null) {
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			drawGates(graphics, rectangle);
 			_protoboard.paint(graphics, rectangle);
 		}
