@@ -19,6 +19,11 @@ public class GateFactory {
 
 	private static final int[][] BEHAVIOR_OR;
 
+	private final static ClockDescriptor CLOCK_DESCRIPTOR;
+	private final static NotDescriptor NOT_DESCRIPTOR;
+	private final static AssociativeGateDescriptor ASSOC_AND2_DESCRIPTOR;
+	private final static AssociativeGateDescriptor ASSOC_AND3_DESCRIPTOR;
+	private final static AssociativeGateDescriptor ASSOC_AND4_DESCRIPTOR;
 
 	static {
 		BEHAVIOR_AND = new int[3][3];
@@ -43,26 +48,31 @@ public class GateFactory {
 		BEHAVIOR_AND[2][1] = 0;
 		BEHAVIOR_AND[2][2] = 1;
 
+		CLOCK_DESCRIPTOR = new ClockDescriptor();
+		ASSOC_AND2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 2, BEHAVIOR_AND));
+		ASSOC_AND3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_AND));
+		ASSOC_AND4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_AND));
+		NOT_DESCRIPTOR = new NotDescriptor();
 	}
 
 	public static IconGate getInstance(int gateIndex, Circuit circuit) {
-		switch (gateIndex) {
-			case Gate.CLOCK:
-				ClockDescriptor descriptor = new ClockDescriptor();
-				return new IconGate(circuit.getNextGateId(), new Clock(circuit, new ClockParams(1000, 1000), descriptor));
-			case Gate.AND2:
-				AssociateveGateParameters parameters = new AssociateveGateParameters(1, 2, BEHAVIOR_AND);
-				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, parameters, new AssociativeGateDescriptor((parameters))));
-			case Gate.AND3:
-				parameters = new AssociateveGateParameters(1, 3, BEHAVIOR_AND);
-				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, parameters, new AssociativeGateDescriptor((parameters))));
-			case Gate.AND4:
-				parameters = new AssociateveGateParameters(1, 4, BEHAVIOR_AND);
-				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, parameters, new AssociativeGateDescriptor((parameters))));
-			case Gate.NOT:
-				return new IconGate(circuit.getNextGateId(), new Not(circuit, new NotParams(1), new NotDescriptor()));
-			default:
-				break;
+		try {
+			switch (gateIndex) {
+				case Gate.CLOCK:
+					return new IconGate(circuit.getNextGateId(), new Clock(circuit, new ClockParams(1000, 1000), CLOCK_DESCRIPTOR));
+				case Gate.AND2:
+					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND2_DESCRIPTOR.getParameters().clone(), ASSOC_AND2_DESCRIPTOR));
+				case Gate.AND3:
+					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND3_DESCRIPTOR.getParameters().clone(), ASSOC_AND3_DESCRIPTOR));
+				case Gate.AND4:
+					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND4_DESCRIPTOR.getParameters().clone(), ASSOC_AND4_DESCRIPTOR));
+				case Gate.NOT:
+					return new IconGate(circuit.getNextGateId(), new Not(circuit, new NotParams(1), NOT_DESCRIPTOR));
+				default:
+					break;
+			}
+		} catch (CloneNotSupportedException e) {
+			return null;
 		}
 		return null;
 	}

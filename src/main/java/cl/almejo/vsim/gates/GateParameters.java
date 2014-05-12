@@ -23,9 +23,9 @@ abstract public class GateParameters implements Cloneable {
 		return _delay;
 	}
 
-	public Object clone() {
+	public GateParameters clone() throws CloneNotSupportedException {
 		try {
-			return super.clone();
+			return (GateParameters) super.clone();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
