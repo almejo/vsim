@@ -43,7 +43,11 @@ public class ClockDescriptor extends GateDescriptor {
 
 	@Override
 	public Gate make(Circuit circuit, GateParameters params) {
-		return new Clock(circuit, (GateParameters) params.clone(), this);
+		try {
+			return new Clock(circuit, params.clone(), this);
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 
 }
