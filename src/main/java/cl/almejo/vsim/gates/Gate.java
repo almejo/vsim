@@ -36,6 +36,7 @@ public class Gate {
 	public static final int OR4 = 6;
 	public static final int NOT = 10;
 	public static final int FLIP_FLOP_DATA = 11;
+	public static final int TRISTATE = 12;
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;

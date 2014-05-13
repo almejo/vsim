@@ -63,7 +63,7 @@ public class Circuit {
 		}
 	}
 
-	private static final int GRIDSIZE = 8;
+	public static final int GRIDSIZE = 8;
 
 	private CommandManager _commandManager = new CommandManager();
 

@@ -22,7 +22,7 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 	public static final int ASSOCIATIVE_TYPE_OR = 1;
 
 	public AssociativeGateDescriptor(AssociateveGateParameters parameters) {
-		_parameters = parameters;
+		super(parameters);
 		_behavior = parameters.getBehavior();
 		_pinPosition = new Point[parameters.getPinCount() + 1];
 		_associativeType = parameters.getAssociativeType();

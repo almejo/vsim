@@ -74,13 +74,14 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction WIRES_TOOL_ACTION = new ToolAction(Messages.t("action.tool.wires"), Messages.t("action.tool.wires.description"), "wires.png", null, this, ActionToolHelper.WIRES);
 	private final WindowAction AND2_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and2"), Messages.t("action.tool.and2.description"), "and2.png", null, this, new GateToolHelper(Gate.AND2));
 	private final WindowAction AND3_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and3"), Messages.t("action.tool.and3.description"), "and3.png", null, this, new GateToolHelper(Gate.AND3));
-	private final WindowAction AND4_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and3"), Messages.t("action.tool.and3.description"), "and4.png", null, this, new GateToolHelper(Gate.AND4));
+	private final WindowAction AND4_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and4"), Messages.t("action.tool.and4.description"), "and4.png", null, this, new GateToolHelper(Gate.AND4));
 	private final WindowAction OR2_TOOL_ACTION = new ToolAction(Messages.t("action.tool.or2"), Messages.t("action.tool.or2.description"), "or2.png", null, this, new GateToolHelper(Gate.OR2));
 	private final WindowAction OR3_TOOL_ACTION = new ToolAction(Messages.t("action.tool.or3"), Messages.t("action.tool.or3.description"), "or3.png", null, this, new GateToolHelper(Gate.OR3));
 	private final WindowAction OR4_TOOL_ACTION = new ToolAction(Messages.t("action.tool.or4"), Messages.t("action.tool.or4.description"), "or4.png", null, this, new GateToolHelper(Gate.OR4));
 	private final WindowAction NOT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.not"), Messages.t("action.tool.not.description"), "not.png", null, this, new GateToolHelper(Gate.NOT));
 	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, new GateToolHelper(Gate.CLOCK));
-	private final WindowAction FLIP_FLOP_DATA_TOOL_ACTION = new ToolAction(Messages.t("action.tool.flip.flop.data"), Messages.t("action.tool.flip.flop.data.description"), "clock.png", null, this, new GateToolHelper(Gate.FLIP_FLOP_DATA));
+	private final WindowAction FLIP_FLOP_DATA_TOOL_ACTION = new ToolAction(Messages.t("action.tool.flip.flop.data"), Messages.t("action.tool.flip.flop.data.description"), "flipflopdata.png", null, this, new GateToolHelper(Gate.FLIP_FLOP_DATA));
+	private final WindowAction TRISTATE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.tristate.data"), Messages.t("action.tool.tristate.description"), "tristate.png", null, this, new GateToolHelper(Gate.TRISTATE));
 
 
 	public SimWindow(Circuit circuit) {
@@ -90,7 +91,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_circuit.addCircuitEventListener(this);
 		_canvas = new CircuitCanvas(_circuit);
 
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 500, 500);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -143,6 +144,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(CLOCK_TOOL_ACTION, Messages.c("menu.tool.clock.mnemonic")));
 		menu.add(newMenuItem(NOT_TOOL_ACTION, Messages.c("menu.tool.not.mnemonic")));
 		menu.add(newMenuItem(FLIP_FLOP_DATA_TOOL_ACTION, Messages.c("menu.tool.flip.flop.data.mnemonic")));
+		menu.add(newMenuItem(TRISTATE_TOOL_ACTION, Messages.c("menu.tool.tristate.mnemonic")));
 
 		menu = newMenu(Messages.t("menu.simulation"), KeyEvent.VK_F, menuBar);
 		menu.add(newMenuItem(START_ACTION, Messages.c("menu.simulation.start.mnemonic")));
@@ -218,6 +220,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.add(newGrouppedButton(NOT_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(CLOCK_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(FLIP_FLOP_DATA_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(TRISTATE_TOOL_ACTION, group));
 		return panel;
 	}
 

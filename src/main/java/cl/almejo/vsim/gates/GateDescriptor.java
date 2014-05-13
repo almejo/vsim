@@ -27,6 +27,10 @@ public abstract class GateDescriptor {
 
 	protected GateParameters _parameters;
 
+	public GateDescriptor(GateParameters parameters){
+		_parameters = parameters;
+	}
+
 	public void paint(Graphics2D graphics, IconGate iconGate) {
 		drawGate(graphics, iconGate, 0, 0);// Circuit.gridTrunc((int) iconGate.getX()), Circuit.gridTrunc((int) iconGate.getY()));
 	}

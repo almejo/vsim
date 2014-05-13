@@ -12,7 +12,7 @@
 
 package cl.almejo.vsim.gates;
 
-public class ClockParams extends GateParameters {
+public class ClockParameters extends GateParameters {
 
 	private long _timeUp;
 
@@ -20,7 +20,7 @@ public class ClockParams extends GateParameters {
 
 	private byte _state = Constants.OFF;
 
-	public ClockParams(long timeDown, long timeUp) {
+	public ClockParameters(long timeDown, long timeUp) {
 		super(0);
 		_timeDown = timeDown;
 		_timeUp = timeUp;

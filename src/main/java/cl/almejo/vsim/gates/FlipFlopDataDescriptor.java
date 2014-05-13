@@ -15,7 +15,7 @@ import java.awt.*;
 
 public class FlipFlopDataDescriptor extends GateDescriptor {
 	public FlipFlopDataDescriptor(FlipFlopDataParameters parameters) {
-		_parameters = parameters;
+		super(parameters);
 		_pinPosition = new Point[3];
 		_pinPosition[0] = new Point(0, 16);
 		_pinPosition[1] = new Point(32, 16);

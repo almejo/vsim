@@ -27,7 +27,7 @@ public class ClockPin extends Pin {
 		}
 
 		public void happen() {
-			ClockParams params = (ClockParams) _clock.getParamameters();
+			ClockParameters params = (ClockParameters) _clock.getParamameters();
 			int state = params.getState();
 			schedule(state == Constants.OFF ? params.getTimeUp() : params.getTimeDown());
 
@@ -39,12 +39,12 @@ public class ClockPin extends Pin {
 
 	public ClockPin(Clock clock, Scheduler scheduler, int pinId) {
 		super(clock, scheduler, pinId);
-		ClockParams params = (ClockParams) clock.getParamameters();
+		ClockParameters params = (ClockParameters) clock.getParamameters();
 		new ClockEvent(clock, scheduler).schedule(params.getTimeUp());
 	}
 
 	@Override
 	public void hasChanged() {
-		program(((ClockParams) _gate.getParamameters()).getState(), 0);
+		program(((ClockParameters) _gate.getParamameters()).getState(), 0);
 	}
 }
