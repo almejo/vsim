@@ -29,6 +29,8 @@ public class GateFactory {
 	private final static AssociativeGateDescriptor ASSOC_OR3_DESCRIPTOR;
 	private final static AssociativeGateDescriptor ASSOC_OR4_DESCRIPTOR;
 
+	private static final FlipFlopDataDescriptor FLIP_FLOP_DATA_DESCRIPTOR;
+
 	static {
 		BEHAVIOR_AND = new int[3][3];
 		BEHAVIOR_OR = new int[3][3];
@@ -61,6 +63,8 @@ public class GateFactory {
 		ASSOC_OR3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR));
 		ASSOC_OR4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR));
 		NOT_DESCRIPTOR = new NotDescriptor();
+
+		FLIP_FLOP_DATA_DESCRIPTOR = new FlipFlopDataDescriptor(new FlipFlopDataParameters(1));
 	}
 
 	public static IconGate getInstance(int gateIndex, Circuit circuit) {
@@ -82,6 +86,8 @@ public class GateFactory {
 					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR4_DESCRIPTOR.getParameters().clone(), ASSOC_OR4_DESCRIPTOR));
 				case Gate.NOT:
 					return new IconGate(circuit.getNextGateId(), new Not(circuit, new NotParams(1), NOT_DESCRIPTOR));
+				case Gate.FLIP_FLOP_DATA:
+					return new IconGate(circuit.getNextGateId(), new FlipFlopData(circuit, FLIP_FLOP_DATA_DESCRIPTOR.getParameters().clone(), FLIP_FLOP_DATA_DESCRIPTOR));
 				default:
 					break;
 			}

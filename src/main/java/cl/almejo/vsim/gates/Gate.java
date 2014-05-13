@@ -35,16 +35,17 @@ public class Gate {
 	public static final int OR3 = 5;
 	public static final int OR4 = 6;
 	public static final int NOT = 10;
+	public static final int FLIP_FLOP_DATA = 11;
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;
 	protected GateParameters _parameters;
 	private GateDescriptor _gateDescriptor;
 
-	public Gate(Circuit circuit, GateParameters params, GateDescriptor gateDescriptor) {
+	public Gate(Circuit circuit, GateParameters parameters, GateDescriptor descriptor) {
 		_circuit = circuit;
-		_parameters = params;
-		_gateDescriptor = gateDescriptor;
+		_parameters = parameters;
+		_gateDescriptor = descriptor;
 	}
 
 	public GateParameters getParamameters() {

@@ -44,4 +44,8 @@ public abstract class GateDescriptor {
 	public int getPinCount() {
 		return _pinCount;
 	}
+
+	public GateParameters getParameters(){
+		return _parameters;
+	}
 }

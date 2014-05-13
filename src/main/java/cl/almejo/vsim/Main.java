@@ -31,12 +31,15 @@ public class Main {
 		circuit.undoableAddGate(GateFactory.getInstance(Gate.AND2, circuit), 300, 96);
 		circuit.undoableAddGate(GateFactory.getInstance(Gate.NOT, circuit), 400, 96);
 
+		circuit.undoableAddGate(GateFactory.getInstance(Gate.OR3, circuit), 100, 318);
+
 		circuit.undoableConnect(112, 96, 300, 96);
 		circuit.undoableConnect(112, 128, 300, 128);
 		circuit.undoableConnect(332, 112, 400, 112);
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			GTKHelper.installGtkPopupBugWorkaround();
 		} catch (UnsupportedLookAndFeelException ex) {
 			System.out.println("Unable to load native look and feel");
 		} catch (ClassNotFoundException e) {

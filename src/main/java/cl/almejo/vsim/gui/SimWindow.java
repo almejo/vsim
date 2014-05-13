@@ -80,6 +80,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction OR4_TOOL_ACTION = new ToolAction(Messages.t("action.tool.or4"), Messages.t("action.tool.or4.description"), "or4.png", null, this, new GateToolHelper(Gate.OR4));
 	private final WindowAction NOT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.not"), Messages.t("action.tool.not.description"), "not.png", null, this, new GateToolHelper(Gate.NOT));
 	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, new GateToolHelper(Gate.CLOCK));
+	private final WindowAction FLIP_FLOP_DATA_TOOL_ACTION = new ToolAction(Messages.t("action.tool.flip.flop.data"), Messages.t("action.tool.flip.flop.data.description"), "clock.png", null, this, new GateToolHelper(Gate.FLIP_FLOP_DATA));
 
 
 	public SimWindow(Circuit circuit) {
@@ -141,6 +142,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(OR4_TOOL_ACTION, Messages.c("menu.tool.or4.mnemonic")));
 		menu.add(newMenuItem(CLOCK_TOOL_ACTION, Messages.c("menu.tool.clock.mnemonic")));
 		menu.add(newMenuItem(NOT_TOOL_ACTION, Messages.c("menu.tool.not.mnemonic")));
+		menu.add(newMenuItem(FLIP_FLOP_DATA_TOOL_ACTION, Messages.c("menu.tool.flip.flop.data.mnemonic")));
 
 		menu = newMenu(Messages.t("menu.simulation"), KeyEvent.VK_F, menuBar);
 		menu.add(newMenuItem(START_ACTION, Messages.c("menu.simulation.start.mnemonic")));
@@ -215,6 +217,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		
 		panel.add(newGrouppedButton(NOT_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(CLOCK_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(FLIP_FLOP_DATA_TOOL_ACTION, group));
 		return panel;
 	}
 
