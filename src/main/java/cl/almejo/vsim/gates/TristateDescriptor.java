@@ -17,14 +17,15 @@ import cl.almejo.vsim.circuit.Point;
 
 import java.awt.*;
 
-public class NotDescriptor extends GateDescriptor {
-	public NotDescriptor(NotParameters parameters) {
+public class TristateDescriptor extends GateDescriptor {
+	public TristateDescriptor(TristateParameters parameters) {
 		super(parameters);
-		_pinPosition = new Point[2];
+		_pinPosition = new Point[3];
 		_pinPosition[0] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(16));
 		_pinPosition[1] = new Point(Circuit.gridTrunc(32), Circuit.gridTrunc(16));
+		_pinPosition[2] = new Point(Circuit.gridTrunc(16), Circuit.gridTrunc(32));
 		_type = GateTypes.NORMAL;
-		_pinCount = 2;
+		_pinCount = 3;
 	}
 
 	@Override
@@ -33,6 +34,8 @@ public class NotDescriptor extends GateDescriptor {
 		int[] pointsX = new int[]{0, 32, 0};
 		int[] pointsY = new int[]{0, 16, 32};
 		graphics.fillPolygon(pointsX, pointsY, 3);
+		graphics.drawLine(Circuit.gridTrunc(16), Circuit.gridTrunc(16), Circuit.gridTrunc(16), Circuit.gridTrunc(32));
+		graphics.fillRect(Circuit.gridTrunc(16) - Circuit.GRIDSIZE / 4, Circuit.gridTrunc(16), Circuit.GRIDSIZE /2, 16);
 	}
 
 	@Override
@@ -42,10 +45,6 @@ public class NotDescriptor extends GateDescriptor {
 
 	@Override
 	public Gate make(Circuit circuit, GateParameters params) {
-		try {
-			return new Not(circuit, params.clone(), this);
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
+		return null;
 	}
 }

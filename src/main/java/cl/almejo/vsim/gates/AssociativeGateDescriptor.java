@@ -1,6 +1,6 @@
 /**
  * vsim
- * <p/>
+ *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
@@ -16,17 +16,16 @@ import java.awt.*;
 
 public class AssociativeGateDescriptor extends GateDescriptor {
 	private final int[][] _behavior;
-	private static int _associativeType;
+	private int _associativeType;
 
 	public static final int ASSOCIATIVE_TYPE_AND = 0;
 	public static final int ASSOCIATIVE_TYPE_OR = 1;
 
 	public AssociativeGateDescriptor(AssociateveGateParameters parameters) {
-		_parameters = parameters;
+		super(parameters);
 		_behavior = parameters.getBehavior();
 		_pinPosition = new Point[parameters.getPinCount() + 1];
 		_associativeType = parameters.getAssociativeType();
-		System.out.println(_associativeType);
 
 		int dy = 32 / (parameters.getPinCount() - 1);
 		for (int i = 0; i < parameters.getPinCount(); i++) {
@@ -39,16 +38,15 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
+		graphics.setColor(Color.blue);
 		switch (_associativeType) {
 			case ASSOCIATIVE_TYPE_AND:
-				graphics.setColor(Color.blue);
 				graphics.fillArc(-32, 0, 64, 32, -90, 180);
 				break;
 			case ASSOCIATIVE_TYPE_OR:
-				graphics.setColor(Color.YELLOW);
-//				Integer []pointsX = new Integer[] {-32, 0, 32, 64, 32, 0, 32, 16, 16};
-//				Integer []pointsY = new Integer[] {0, , 32, 48, 32, 0, 32, 16, 16};
-				graphics.fillArc(-32, 0, 64, 32, -90, 180);
+				int []pointsX = new int[] {0, 16, 24, 32, 24,  16, 0, 4, 8, 4};
+				int []pointsY = new int[] {0 , 0, 8, 16, 24, 32, 32, 24, 16, 8};
+				graphics.fillPolygon(pointsX, pointsY, 10);
 				break;
 		}
 	}
@@ -72,7 +70,4 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 		return ((AssociateveGateParameters) _parameters).getPinCount() + 1;
 	}
 
-	public GateParameters getParameters() {
-		return _parameters;
-	}
 }

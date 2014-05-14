@@ -15,6 +15,7 @@ package cl.almejo.vsim.gates;
 import cl.almejo.vsim.simulation.Scheduler;
 
 public abstract class Pin extends Link {
+	private final int _pinId;
 	protected byte _inValue = Constants.THREE_STATE;
 	protected byte _outValue = Constants.THREE_STATE;
 
@@ -26,6 +27,7 @@ public abstract class Pin extends Link {
 	public Pin(Gate gate, Scheduler scheduler, int pinId) {
 		_gate = gate;
 		_pinEvent = new PinEvent(this, scheduler, pinId);
+		_pinId = pinId;
 	}
 
 	public void connect(Link pin) {
@@ -103,5 +105,9 @@ public abstract class Pin extends Link {
 
 	public void setOutValue(byte value) {
 		_outValue = value;
+	}
+
+	public int getPinId() {
+		return _pinId;
 	}
 }
