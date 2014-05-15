@@ -24,7 +24,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.*;
 import java.util.List;
 
@@ -44,7 +43,11 @@ public class Circuit {
 			for (Map gate : gates) {
 				System.out.println(gate);
 				Map position = (Map) gate.get("position");
-				circuit.undoableAddGate(GateFactory.getInstance((String) gate.get("type"), circuit), (Integer) position.get("x"), (Integer) position.get("y"));
+				IconGate iconGate = GateFactory.getInstance((String) gate.get("type"), circuit);
+
+				iconGate.getGate().getParamameters().setValues((Map<String, Object>) gate.get("parameters"));
+
+				circuit.undoableAddGate(iconGate, (Integer) position.get("x"), (Integer) position.get("y"));
 			}
 			List<Map> connections = (List<Map>) info.get("connections");
 			for (Map connection : connections) {
@@ -71,6 +74,11 @@ public class Circuit {
 			position.put("x", (int) iconGate.getX());
 			position.put("y", (int) iconGate.getY());
 			gateInfo.put("position", position);
+
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			iconGate.getGate().getParamameters().getValues(parameters);
+			gateInfo.put("parameters", parameters);
+
 			gates.add(gateInfo);
 		}
 		map.put("gates", gates);
@@ -85,10 +93,10 @@ public class Circuit {
 			allConnections.add(connectionMap);
 		}
 		map.put("connections", allConnections);
-		StringWriter writer = new StringWriter();
 		try {
-			new ObjectMapper().writeValue(writer, map);
-			FileUtils.writeStringToFile(new File(s), writer.toString());
+			ObjectMapper mapper  = new ObjectMapper();
+			String string = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
+			FileUtils.writeStringToFile(new File(s), string);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

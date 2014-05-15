@@ -11,6 +11,8 @@
 
 package cl.almejo.vsim.gates;
 
+import java.util.Map;
+
 abstract public class GateParameters implements Cloneable {
 
 	protected int _delay;
@@ -21,6 +23,14 @@ abstract public class GateParameters implements Cloneable {
 
 	public int getDelay() {
 		return _delay;
+	}
+
+	public void setValues(Map<String , Object> parameters) {
+		_delay = (Integer) parameters.get("delay");
+	}
+
+	public void getValues(Map<String, Object> parameters) {
+		parameters.put("delay", _delay);
 	}
 
 	public GateParameters clone() throws CloneNotSupportedException {

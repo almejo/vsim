@@ -12,6 +12,8 @@
 
 package cl.almejo.vsim.gates;
 
+import java.util.Map;
+
 public class ClockParameters extends GateParameters {
 
 	private long _timeUp;
@@ -21,9 +23,21 @@ public class ClockParameters extends GateParameters {
 	private byte _state = Constants.OFF;
 
 	public ClockParameters(long timeDown, long timeUp) {
-		super(0);
+		super(1);
 		_timeDown = timeDown;
 		_timeUp = timeUp;
+	}
+
+	public void setValues(Map<String , Object> parameters) {
+		super.setValues(parameters);
+		_timeDown = (Integer) parameters.get("time-down");
+		_timeUp = (Integer) parameters.get("time-up");
+	}
+
+	public void getValues(Map<String, Object> parameters) {
+		super.getValues(parameters);
+		parameters.put("time-down", _timeDown);
+		parameters.put("time-up", _timeUp);
 	}
 
 	public long getTimeUp() {
