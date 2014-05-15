@@ -91,7 +91,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_circuit.addCircuitEventListener(this);
 		_canvas = new CircuitCanvas(_circuit);
 
-		setBounds(100, 100, 500, 500);
+		setBounds(100, 100, 700, 700);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -412,7 +412,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private void updateFileOperationActions() {
 		NEW_ACTION.setEnabled(false);
 		OPEN_ACTION.setEnabled(false);
-		SAVE_ACTION.setEnabled(false);
+		//SAVE_ACTION.setEnabled(false);
 		SAVE_AS_ACTION.setEnabled(false);
 	}
 

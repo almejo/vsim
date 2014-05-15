@@ -18,12 +18,12 @@ import cl.almejo.vsim.circuit.Point;
 import java.awt.*;
 
 public class NotDescriptor extends GateDescriptor {
-	public NotDescriptor(NotParameters parameters) {
-		super(parameters);
+	public NotDescriptor(NotParameters parameters, String type) {
+		super(parameters, type);
 		_pinPosition = new Point[2];
 		_pinPosition[0] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(16));
 		_pinPosition[1] = new Point(Circuit.gridTrunc(32), Circuit.gridTrunc(16));
-		_type = GateTypes.NORMAL;
+		_gateType = GateTypes.NORMAL;
 		_pinCount = 2;
 	}
 

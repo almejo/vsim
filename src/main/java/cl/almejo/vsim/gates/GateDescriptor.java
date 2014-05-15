@@ -23,12 +23,15 @@ public abstract class GateDescriptor {
 
 	protected int _pinCount = 0;
 
-	protected GateTypes _type;
+	protected GateTypes _gateType;
+
+	protected String _type;
 
 	protected GateParameters _parameters;
 
-	public GateDescriptor(GateParameters parameters){
+	public GateDescriptor(GateParameters parameters, String type){
 		_parameters = parameters;
+		_type = type;
 	}
 
 	public void paint(Graphics2D graphics, IconGate iconGate) {
@@ -51,5 +54,9 @@ public abstract class GateDescriptor {
 
 	public GateParameters getParameters(){
 		return _parameters;
+	}
+
+	public String getType() {
+		return _type;
 	}
 }

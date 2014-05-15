@@ -13,29 +13,17 @@
 package cl.almejo.vsim;
 
 import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.gates.Gate;
-import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gui.SimWindow;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Main {
 
-	public Main() {
-		Circuit circuit = new Circuit();
-
-		circuit.undoableAddGate(GateFactory.getInstance(Gate.CLOCK, circuit), 100, 80);
-
-		circuit.undoableAddGate(GateFactory.getInstance(Gate.CLOCK, circuit), 100, 118);
-
-		circuit.undoableAddGate(GateFactory.getInstance(Gate.AND2, circuit), 300, 96);
-		circuit.undoableAddGate(GateFactory.getInstance(Gate.NOT, circuit), 400, 96);
-
-		circuit.undoableAddGate(GateFactory.getInstance(Gate.OR3, circuit), 100, 318);
-
-		circuit.undoableConnect(112, 96, 300, 96);
-		circuit.undoableConnect(112, 128, 300, 128);
-		circuit.undoableConnect(332, 112, 400, 112);
+	public Main() throws IOException {
+		Circuit circuit =  Circuit.load(FileUtils.readFileToString(new File("circuit.json")));
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -51,10 +39,13 @@ public class Main {
 		}
 
 		new SimWindow(circuit);
-		new SimWindow(circuit);
 	}
 
 	public static void main(String[] args) {
-		new Main();
+		try {
+			new Main();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

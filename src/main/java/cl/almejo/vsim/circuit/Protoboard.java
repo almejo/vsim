@@ -271,9 +271,8 @@ public class Protoboard {
 
 	public void paint(Graphics2D graphics, Rectangle rectangle) {
 		Color color = graphics.getColor();
-		Set<Integer> coords = _matrix.getXCoords();
 
-		for (Integer x : coords) {
+		for (Integer x : _matrix.getXCoords()) {
 			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
 			for (Contact contact : verticalContacts) {
@@ -289,8 +288,7 @@ public class Protoboard {
 			}
 		}
 
-		coords = _matrix.getYCoords();
-		for (Integer y : coords) {
+		for (Integer y : _matrix.getYCoords()) {
 			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getHorizontalContacts(y);
 			for (Contact contact : verticalContacts) {
@@ -465,5 +463,31 @@ public class Protoboard {
 			graphics.drawLine(xi, yf, xf, yf);
 		}
 		graphics.setStroke(oldStroke);
+	}
+
+	public List<Connection<Contact>> getAllConnections() {
+		List<Connection<Contact>> list = new LinkedList<Connection<Contact>>();
+		for (Integer y : _matrix.getYCoords()) {
+			Contact previous = null;
+			List<Contact> verticalContacts = _matrix.getHorizontalContacts(y);
+			for (Contact contact : verticalContacts) {
+				if (previous != null && contact.isConnected(Constants.WEST)) {
+					list.add(new Connection<Contact>(previous, contact));
+				}
+				previous = contact;
+			}
+		}
+
+		for (Integer x : _matrix.getXCoords()) {
+			Contact previous = null;
+			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
+			for (Contact contact : verticalContacts) {
+				if (previous != null && contact.isConnected(Constants.SOUTH)) {
+					list.add(new Connection<Contact>(previous, contact));
+				}
+				previous = contact;
+			}
+		}
+		return list;
 	}
 }

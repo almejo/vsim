@@ -13,20 +13,90 @@ package cl.almejo.vsim.circuit;
 
 import cl.almejo.vsim.circuit.commands.*;
 import cl.almejo.vsim.gates.Gate;
+import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.simulation.Scheduler;
+import org.apache.commons.io.FileUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.awt.*;
-import java.util.LinkedList;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.*;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Circuit {
 
 	private Simulator _simulatorTask;
 	private boolean _simulationIsRunning = false;
 	private LinkedList<CircuitStateListener> _stateListeners = new LinkedList<CircuitStateListener>();
+
+	@SuppressWarnings("unchecked")
+	public static Circuit load(String s) {
+		Circuit circuit = new Circuit();
+		try {
+
+			Map info = new ObjectMapper().readValue(s, Map.class);
+			List<Map> gates = (List<Map>) info.get("gates");
+			for (Map gate : gates) {
+				System.out.println(gate);
+				Map position = (Map) gate.get("position");
+				circuit.undoableAddGate(GateFactory.getInstance((String) gate.get("type"), circuit), (Integer) position.get("x"), (Integer) position.get("y"));
+			}
+			List<Map> connections = (List<Map>) info.get("connections");
+			for (Map connection : connections) {
+				circuit.undoableConnect((Integer) connection.get("xi"), (Integer) connection.get("yi"), (Integer) connection.get("xf"), (Integer) connection.get("yf"));
+			}
+			circuit.cleanHistory();
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return circuit;
+	}
+
+	public void save(String s) {
+		Map<String, Object> map = new HashMap<String, Object>()				;
+		List<Map> gates = new LinkedList<Map>();
+		for(IconGate iconGate : _icons) {
+			Map<String, Object> gateInfo  = new HashMap<String, Object>();
+			gateInfo.put("type", iconGate.getGate().getGateDescriptor().getType());
+			Map<String, Integer> position = new HashMap<String, Integer>();
+			position.put("x", (int) iconGate.getX());
+			position.put("y", (int) iconGate.getY());
+			gateInfo.put("position", position);
+			gates.add(gateInfo);
+		}
+		map.put("gates", gates);
+
+		List<Map<String, Integer>> allConnections = new LinkedList<Map<String, Integer>>();
+		for(Connection<Contact> connection: _protoboard.getAllConnections()){
+			Map<String, Integer> connectionMap = new HashMap<String, Integer>();
+			connectionMap.put("xi", connection.getFirst().getX());
+			connectionMap.put("yi", connection.getFirst().getY());
+			connectionMap.put("xf", connection.getLast().getX());
+			connectionMap.put("yf", connection.getLast().getY());
+			allConnections.add(connectionMap);
+		}
+		map.put("connections", allConnections);
+		StringWriter writer = new StringWriter();
+		try {
+			new ObjectMapper().writeValue(writer, map);
+			FileUtils.writeStringToFile(new File(s), writer.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void cleanHistory() {
+		_commandManager.cleanHistory();
+	}
 
 	class Simulator extends TimerTask {
 

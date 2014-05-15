@@ -24,7 +24,8 @@ public class SaveAction extends WindowAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("save");
+
+		_window.getCircuit().save("circuit.json");
 	}
 
 }

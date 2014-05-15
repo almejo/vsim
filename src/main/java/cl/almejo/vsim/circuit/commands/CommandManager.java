@@ -52,4 +52,9 @@ public class CommandManager {
 	public boolean canRedo() {
 		return _undone.size() > 0;
 	}
+
+	public void cleanHistory() {
+		_undone.clear();
+		_done.clear();
+	}
 }

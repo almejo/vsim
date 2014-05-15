@@ -237,4 +237,5 @@ public class Matrix<T extends Point> {
 	public List<T> getHorizontalContacts(Integer y) {
 		return _verticalTable.get(y);
 	}
+
 }

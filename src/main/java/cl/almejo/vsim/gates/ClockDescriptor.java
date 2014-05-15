@@ -19,11 +19,11 @@ import java.awt.*;
 
 public class ClockDescriptor extends GateDescriptor {
 
-	public ClockDescriptor(ClockParameters parameters) {
-		super(parameters);
+	public ClockDescriptor(ClockParameters parameters, String type) {
+		super(parameters, type);
 		_pinPosition = new Point[1];
 		_pinPosition[0] = new Point(Circuit.gridTrunc(16), Circuit.gridTrunc(16));
-		_type = GateTypes.NORMAL;
+		_gateType = GateTypes.NORMAL;
 		_pinCount = 1;
 	}
 
