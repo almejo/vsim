@@ -25,10 +25,10 @@ VSim currently has:
 
 The first milestone is to reach feature parity with JCSim. From There all will be new features and exploration of new ideas.
 
-- Add all gate types
+- Add all basic gate types [done]
 - Add template gates
 - Add debug gates
-- Load/Save
+- Load/Save [partially]
 - Rotate gates
 - Config gates
 - Move and Zoom the canvas
