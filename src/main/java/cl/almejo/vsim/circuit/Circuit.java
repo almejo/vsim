@@ -33,12 +33,15 @@ public class Circuit {
 	private boolean _simulationIsRunning = false;
 	private LinkedList<CircuitStateListener> _stateListeners = new LinkedList<CircuitStateListener>();
 
+	private String _name;
+	private Command _lastSavedCommand = null;
+
 	@SuppressWarnings("unchecked")
-	public static Circuit load(String s) {
+	public static Circuit load(String map, String name) {
 		Circuit circuit = new Circuit();
 		try {
 
-			Map info = new ObjectMapper().readValue(s, Map.class);
+			Map info = new ObjectMapper().readValue(map, Map.class);
 			List<Map> gates = (List<Map>) info.get("gates");
 			for (Map gate : gates) {
 				System.out.println(gate);
@@ -53,7 +56,10 @@ public class Circuit {
 			for (Map connection : connections) {
 				circuit.undoableConnect((Integer) connection.get("xi"), (Integer) connection.get("yi"), (Integer) connection.get("xf"), (Integer) connection.get("yf"));
 			}
+
+			circuit.setName(name);
 			circuit.cleanHistory();
+			circuit.markAsUnmodified();
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -65,10 +71,10 @@ public class Circuit {
 	}
 
 	public void save(String s) {
-		Map<String, Object> map = new HashMap<String, Object>()				;
+		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map> gates = new LinkedList<Map>();
-		for(IconGate iconGate : _icons) {
-			Map<String, Object> gateInfo  = new HashMap<String, Object>();
+		for (IconGate iconGate : _icons) {
+			Map<String, Object> gateInfo = new HashMap<String, Object>();
 			gateInfo.put("type", iconGate.getGate().getGateDescriptor().getType());
 			Map<String, Integer> position = new HashMap<String, Integer>();
 			position.put("x", (int) iconGate.getX());
@@ -84,7 +90,7 @@ public class Circuit {
 		map.put("gates", gates);
 
 		List<Map<String, Integer>> allConnections = new LinkedList<Map<String, Integer>>();
-		for(Connection<Contact> connection: _protoboard.getAllConnections()){
+		for (Connection<Contact> connection : _protoboard.getAllConnections()) {
 			Map<String, Integer> connectionMap = new HashMap<String, Integer>();
 			connectionMap.put("xi", connection.getFirst().getX());
 			connectionMap.put("yi", connection.getFirst().getY());
@@ -93,8 +99,12 @@ public class Circuit {
 			allConnections.add(connectionMap);
 		}
 		map.put("connections", allConnections);
+
+		Map<String, String> properties = new HashMap<String, String>();
+		map.put("properties", properties);
+		markAsUnmodified();
 		try {
-			ObjectMapper mapper  = new ObjectMapper();
+			ObjectMapper mapper = new ObjectMapper();
 			String string = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
 			FileUtils.writeStringToFile(new File(s), string);
 		} catch (IOException e) {
@@ -277,11 +287,13 @@ public class Circuit {
 	public void undo() {
 		_commandManager.undo();
 		sendUndoEvent();
+		sendChangedEvent();
 	}
 
 	public void redo() {
 		_commandManager.redo();
 		sendRedoEvent();
+		sendChangedEvent();
 	}
 
 	public void undoableAddGate(IconGate iconGate, int x, int y) {
@@ -367,6 +379,13 @@ public class Circuit {
 		sendPauseEvent();
 	}
 
+	private void sendMarkedAdUnmodifiedEvent() {
+		CircuitEvent event = new CircuitEvent(this);
+		for (CircuitStateListener listener : _stateListeners) {
+			listener.onMarkedAsUnmodified(event);
+		}
+	}
+
 	private void sendChangedEvent() {
 		CircuitEvent event = new CircuitEvent(this);
 		for (CircuitStateListener listener : _stateListeners) {
@@ -409,4 +428,23 @@ public class Circuit {
 	public boolean canRedo() {
 		return _commandManager.canRedo();
 	}
+
+	public String getName() {
+		return _name;
+	}
+
+	public void setName(String name) {
+		_name = name;
+	}
+
+	public boolean isModified() {
+		return _lastSavedCommand != _commandManager.getLastApplied();
+	}
+
+	public void markAsUnmodified() {
+		_lastSavedCommand = _commandManager.getLastApplied();
+		sendMarkedAdUnmodifiedEvent();
+	}
+
+
 }

@@ -23,7 +23,7 @@ import java.io.IOException;
 public class Main {
 
 	public Main() throws IOException {
-		Circuit circuit =  Circuit.load(FileUtils.readFileToString(new File("circuit.json")));
+		Circuit circuit =  Circuit.load(FileUtils.readFileToString(new File("circuit.json")), "circuit.json");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

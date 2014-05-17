@@ -57,4 +57,12 @@ public class CommandManager {
 		_undone.clear();
 		_done.clear();
 	}
+
+
+	public Command getLastApplied() {
+		if (_done.isEmpty()) {
+			return null;
+		}
+		return _done.get(_done.size() - 1);
+	}
 }

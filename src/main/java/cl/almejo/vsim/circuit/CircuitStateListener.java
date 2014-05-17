@@ -22,4 +22,6 @@ public interface CircuitStateListener {
 	void onUndo(CircuitEvent event);
 
 	void onRedo(CircuitEvent event);
+
+	void onMarkedAsUnmodified(CircuitEvent event);
 }

@@ -86,7 +86,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	public SimWindow(Circuit circuit) {
 
-		setTitle(Messages.t("main.title"));
+		setTitle(circuit.getName() + " | " + Messages.t("main.title"));
 		_circuit = circuit;
 		_circuit.addCircuitEventListener(this);
 		_canvas = new CircuitCanvas(_circuit);
@@ -212,11 +212,11 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.add(newGrouppedButton(AND2_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(AND3_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(AND4_TOOL_ACTION, group));
-		
+
 		panel.add(newGrouppedButton(OR2_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(OR3_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(OR4_TOOL_ACTION, group));
-		
+
 		panel.add(newGrouppedButton(NOT_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(CLOCK_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(FLIP_FLOP_DATA_TOOL_ACTION, group));
@@ -428,7 +428,13 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void onChanged(CircuitEvent event) {
+		SAVE_ACTION.setEnabled(_circuit.isModified());
 		updateUndoRedo(event.getCircuit());
+		updateTitle();
+	}
+
+	public void updateTitle() {
+		setTitle(_circuit.getName() + " " + (_circuit.isModified() ? "* " : "") + "| " + Messages.t("main.title"));
 	}
 
 	@Override
@@ -439,6 +445,12 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	@Override
 	public void onRedo(CircuitEvent event) {
 		updateUndoRedo(event.getCircuit());
+	}
+
+	@Override
+	public void onMarkedAsUnmodified(CircuitEvent event) {
+		updateTitle();
+		SAVE_ACTION.setEnabled(_circuit.isModified());
 	}
 
 	private void updateUndoRedo(Circuit circuit) {
