@@ -19,6 +19,8 @@ import cl.almejo.vsim.simulation.Scheduler;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.IOException;
@@ -26,6 +28,8 @@ import java.util.*;
 import java.util.List;
 
 public class Circuit {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Circuit.class);
 
 	private Simulator _simulatorTask;
 	private boolean _simulationIsRunning = false;
@@ -377,10 +381,10 @@ public class Circuit {
 			Map info = new ObjectMapper().readValue(map, Map.class);
 			List<Map> gates = (List<Map>) info.get("gates");
 			for (Map gate : gates) {
-				System.out.println(gate);
+
 				Map position = (Map) gate.get("position");
 				IconGate iconGate = GateFactory.getInstance((String) gate.get("type"), circuit);
-
+				LOGGER.info("Created gate " + iconGate.getId());
 				iconGate.getGate().getParamameters().setValues((Map<String, Object>) gate.get("parameters"));
 
 				circuit.undoableAddGate(iconGate, (Integer) position.get("x"), (Integer) position.get("y"));

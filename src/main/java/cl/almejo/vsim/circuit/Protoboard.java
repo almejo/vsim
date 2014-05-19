@@ -15,12 +15,16 @@ package cl.almejo.vsim.circuit;
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.Pin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class Protoboard {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Protoboard.class);
 
 	class MarchingAnts extends TimerTask {
 
@@ -134,9 +138,8 @@ public class Protoboard {
 	}
 
 	private Contact poke(int x, int y) {
-		System.out.println("buscando en " + new Point(x, y));
 		FindResult<Contact> result = _matrix.findHorizontal(x, y);
-		System.out.println(result);
+		LOGGER.debug("poke " + new Point(x, y) + " ===> " + result.toString());
 		if (result.getHit() != null) {
 			return result.getHit();
 		}

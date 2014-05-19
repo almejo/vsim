@@ -31,7 +31,6 @@ public class PinEvent extends SimulationEvent {
 	@Override
 	public void happen() {
 		_pin.setOutValue(_pin.getProgrammedValue());
-		//System.out.println(_pin.getClass() + "[" + _pinId + "] changed to " + _pin.getOutValue() + " [" + (System.currentTimeMillis() - _time) + "]");
 		_pin.updateValues();
 	}
 }
