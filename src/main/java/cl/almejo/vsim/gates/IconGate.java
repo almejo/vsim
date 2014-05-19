@@ -13,12 +13,14 @@ package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
 public class IconGate extends Rectangle {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(IconGate.class);
 	private static final long serialVersionUID = 1L;
 	private Gate _gate;
 	private int _id;
@@ -75,12 +77,12 @@ public class IconGate extends Rectangle {
 	}
 
 	private void setTranslation(int x, int y) {
-		System.out.println(_translateTransformation);
+		LOGGER.debug("original transformation: " + _translateTransformation);
 		_translateTransformation.setToIdentity();
 		_translateTransformation.translate(x, y);
-		System.out.println(x + " - " + y);
+		LOGGER.debug("Translate to: "  + x + " - " + y);
 		recalculateTransform();
-		System.out.println(_translateTransformation);
+		LOGGER.debug("resulting transformation: " + _translateTransformation.toString());
 	}
 
 	private void recalculateTransform() {
@@ -118,4 +120,7 @@ public class IconGate extends Rectangle {
 	}
 
 
+	public int getId() {
+		return _id;
+	}
 }

@@ -18,13 +18,13 @@ import cl.almejo.vsim.circuit.Point;
 import java.awt.*;
 
 public class TristateDescriptor extends GateDescriptor {
-	public TristateDescriptor(TristateParameters parameters) {
-		super(parameters);
+	public TristateDescriptor(TristateParameters parameters, String type) {
+		super(parameters, type);
 		_pinPosition = new Point[3];
 		_pinPosition[0] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(16));
 		_pinPosition[1] = new Point(Circuit.gridTrunc(32), Circuit.gridTrunc(16));
 		_pinPosition[2] = new Point(Circuit.gridTrunc(16), Circuit.gridTrunc(32));
-		_type = GateTypes.NORMAL;
+		_gateType = GateTypes.NORMAL;
 		_pinCount = 3;
 	}
 

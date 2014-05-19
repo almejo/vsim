@@ -28,7 +28,7 @@ The first milestone is to reach feature parity with JCSim. From There all will b
 - Add all basic gate types [done]
 - Add template gates
 - Add debug gates
-- Load/Save [partially]
+- Load/Save [done]
 - Rotate gates
 - Config gates
 - Move and Zoom the canvas

@@ -55,46 +55,43 @@ public class GateFactory {
 		BEHAVIOR_AND[2][1] = 0;
 		BEHAVIOR_AND[2][2] = 1;
 
-		CLOCK_DESCRIPTOR = new ClockDescriptor(new ClockParameters(1000, 1000));
-		ASSOC_AND2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 2, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND));
-		ASSOC_AND3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND));
-		ASSOC_AND4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND));
+		CLOCK_DESCRIPTOR = new ClockDescriptor(new ClockParameters(1000, 1000), Gate.CLOCK);
+		ASSOC_AND2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 2, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND), Gate.AND2);
+		ASSOC_AND3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND), Gate.AND3);
+		ASSOC_AND4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND), Gate.AND4);
 
-		ASSOC_OR2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 2, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR));
-		ASSOC_OR3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR));
-		ASSOC_OR4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR));
-		NOT_DESCRIPTOR = new NotDescriptor(new NotParameters(1));
+		ASSOC_OR2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 2, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR), Gate.OR2);
+		ASSOC_OR3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR), Gate.OR3);
+		ASSOC_OR4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR), Gate.OR4);
+		NOT_DESCRIPTOR = new NotDescriptor(new NotParameters(1), Gate.NOT);
 
-		TRISTATE_DESCRIPTOR = new TristateDescriptor(new TristateParameters(1));
+		TRISTATE_DESCRIPTOR = new TristateDescriptor(new TristateParameters(1), Gate.TRISTATE);
 
-		FLIP_FLOP_DATA_DESCRIPTOR = new FlipFlopDataDescriptor(new FlipFlopDataParameters(1));
+		FLIP_FLOP_DATA_DESCRIPTOR = new FlipFlopDataDescriptor(new FlipFlopDataParameters(1), Gate.FLIP_FLOP_DATA);
 	}
 
-	public static IconGate getInstance(int gateIndex, Circuit circuit) {
+	public static IconGate getInstance(String gateIndex, Circuit circuit) {
 		try {
-			switch (gateIndex) {
-				case Gate.CLOCK:
-					return new IconGate(circuit.getNextGateId(), new Clock(circuit, CLOCK_DESCRIPTOR.getParameters().clone(), CLOCK_DESCRIPTOR));
-				case Gate.AND2:
-					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND2_DESCRIPTOR.getParameters().clone(), ASSOC_AND2_DESCRIPTOR));
-				case Gate.AND3:
-					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND3_DESCRIPTOR.getParameters().clone(), ASSOC_AND3_DESCRIPTOR));
-				case Gate.AND4:
-					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND4_DESCRIPTOR.getParameters().clone(), ASSOC_AND4_DESCRIPTOR));
-				case Gate.OR2:
-					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR2_DESCRIPTOR.getParameters().clone(), ASSOC_OR2_DESCRIPTOR));
-				case Gate.OR3:
-					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR3_DESCRIPTOR.getParameters().clone(), ASSOC_OR3_DESCRIPTOR));
-				case Gate.OR4:
-					return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR4_DESCRIPTOR.getParameters().clone(), ASSOC_OR4_DESCRIPTOR));
-				case Gate.NOT:
-					return new IconGate(circuit.getNextGateId(), new Not(circuit, NOT_DESCRIPTOR.getParameters().clone(), NOT_DESCRIPTOR));
-				case Gate.FLIP_FLOP_DATA:
-					return new IconGate(circuit.getNextGateId(), new FlipFlopData(circuit, FLIP_FLOP_DATA_DESCRIPTOR.getParameters().clone(), FLIP_FLOP_DATA_DESCRIPTOR));
-				case Gate.TRISTATE:
-					return new IconGate(circuit.getNextGateId(), new Tristate(circuit, TRISTATE_DESCRIPTOR.getParameters().clone(), TRISTATE_DESCRIPTOR));
-				default:
-					break;
+			if (gateIndex.equalsIgnoreCase(Gate.CLOCK)) {
+				return new IconGate(circuit.getNextGateId(), new Clock(circuit, CLOCK_DESCRIPTOR.getParameters().clone(), CLOCK_DESCRIPTOR));
+			} else if (gateIndex.equalsIgnoreCase(Gate.AND2)) {
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND2_DESCRIPTOR.getParameters().clone(), ASSOC_AND2_DESCRIPTOR));
+			} else if (gateIndex.equalsIgnoreCase(Gate.AND3)) {
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND3_DESCRIPTOR.getParameters().clone(), ASSOC_AND3_DESCRIPTOR));
+			} else if (gateIndex.equalsIgnoreCase(Gate.AND4)) {
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND4_DESCRIPTOR.getParameters().clone(), ASSOC_AND4_DESCRIPTOR));
+			} else if (gateIndex.equalsIgnoreCase(Gate.OR2)) {
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR2_DESCRIPTOR.getParameters().clone(), ASSOC_OR2_DESCRIPTOR));
+			} else if (gateIndex.equalsIgnoreCase(Gate.OR3)) {
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR3_DESCRIPTOR.getParameters().clone(), ASSOC_OR3_DESCRIPTOR));
+			} else if (gateIndex.equalsIgnoreCase(Gate.OR4)) {
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR4_DESCRIPTOR.getParameters().clone(), ASSOC_OR4_DESCRIPTOR));
+			} else if (gateIndex.equalsIgnoreCase(Gate.NOT)) {
+				return new IconGate(circuit.getNextGateId(), new Not(circuit, NOT_DESCRIPTOR.getParameters().clone(), NOT_DESCRIPTOR));
+			} else if (gateIndex.equalsIgnoreCase(Gate.FLIP_FLOP_DATA)) {
+				return new IconGate(circuit.getNextGateId(), new FlipFlopData(circuit, FLIP_FLOP_DATA_DESCRIPTOR.getParameters().clone(), FLIP_FLOP_DATA_DESCRIPTOR));
+			} else if (gateIndex.equalsIgnoreCase(Gate.TRISTATE)) {
+				return new IconGate(circuit.getNextGateId(), new Tristate(circuit, TRISTATE_DESCRIPTOR.getParameters().clone(), TRISTATE_DESCRIPTOR));
 			}
 		} catch (CloneNotSupportedException e) {
 			return null;

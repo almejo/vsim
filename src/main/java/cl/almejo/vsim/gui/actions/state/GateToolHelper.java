@@ -17,10 +17,10 @@ import cl.almejo.vsim.gui.SimWindow;
 import java.awt.event.MouseEvent;
 
 public class GateToolHelper extends ActionToolHelper {
-	private final int _gateIndex;
+	private final String _gateType;
 
-	public GateToolHelper(int gateIndex) {
-		_gateIndex = gateIndex;
+	public GateToolHelper(String gateType) {
+		_gateType = gateType;
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class GateToolHelper extends ActionToolHelper {
 			window.getCircuit().undoableRemoveGate(event.getX(), event.getY());
 			return;
 		}
-		window.getCircuit().undoableAddGate(GateFactory.getInstance(_gateIndex, window.getCircuit()), event.getX(), event.getY());
+		window.getCircuit().undoableAddGate(GateFactory.getInstance(_gateType, window.getCircuit()), event.getX(), event.getY());
 	}
 
 

@@ -15,12 +15,16 @@ package cl.almejo.vsim.circuit;
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.Pin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class Protoboard {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Protoboard.class);
 
 	class MarchingAnts extends TimerTask {
 
@@ -134,9 +138,8 @@ public class Protoboard {
 	}
 
 	private Contact poke(int x, int y) {
-		System.out.println("buscando en " + new Point(x, y));
 		FindResult<Contact> result = _matrix.findHorizontal(x, y);
-		System.out.println(result);
+		LOGGER.debug("poke " + new Point(x, y) + " ===> " + result.toString());
 		if (result.getHit() != null) {
 			return result.getHit();
 		}
@@ -271,9 +274,8 @@ public class Protoboard {
 
 	public void paint(Graphics2D graphics, Rectangle rectangle) {
 		Color color = graphics.getColor();
-		Set<Integer> coords = _matrix.getXCoords();
 
-		for (Integer x : coords) {
+		for (Integer x : _matrix.getXCoords()) {
 			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
 			for (Contact contact : verticalContacts) {
@@ -289,8 +291,7 @@ public class Protoboard {
 			}
 		}
 
-		coords = _matrix.getYCoords();
-		for (Integer y : coords) {
+		for (Integer y : _matrix.getYCoords()) {
 			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getHorizontalContacts(y);
 			for (Contact contact : verticalContacts) {
@@ -465,5 +466,31 @@ public class Protoboard {
 			graphics.drawLine(xi, yf, xf, yf);
 		}
 		graphics.setStroke(oldStroke);
+	}
+
+	public List<Connection<Contact>> getAllConnections() {
+		List<Connection<Contact>> list = new LinkedList<Connection<Contact>>();
+		for (Integer y : _matrix.getYCoords()) {
+			Contact previous = null;
+			List<Contact> verticalContacts = _matrix.getHorizontalContacts(y);
+			for (Contact contact : verticalContacts) {
+				if (previous != null && contact.isConnected(Constants.WEST)) {
+					list.add(new Connection<Contact>(previous, contact));
+				}
+				previous = contact;
+			}
+		}
+
+		for (Integer x : _matrix.getXCoords()) {
+			Contact previous = null;
+			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
+			for (Contact contact : verticalContacts) {
+				if (previous != null && contact.isConnected(Constants.SOUTH)) {
+					list.add(new Connection<Contact>(previous, contact));
+				}
+				previous = contact;
+			}
+		}
+		return list;
 	}
 }

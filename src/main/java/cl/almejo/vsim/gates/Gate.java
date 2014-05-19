@@ -27,16 +27,16 @@ import cl.almejo.vsim.circuit.Circuit;
 
 public class Gate {
 
-	public static final int CLOCK = 0;
-	public static final int AND2 = 1;
-	public static final int AND3 = 2;
-	public static final int AND4 = 3;
-	public static final int OR2 = 4;
-	public static final int OR3 = 5;
-	public static final int OR4 = 6;
-	public static final int NOT = 10;
-	public static final int FLIP_FLOP_DATA = 11;
-	public static final int TRISTATE = 12;
+	public static final String CLOCK ="clock";
+	public static final String AND2 = "and2";
+	public static final String AND3 = "and3";
+	public static final String AND4 = "and4";
+	public static final String OR2 = "or2";
+	public static final String OR3 = "or3";
+	public static final String OR4 = "or4";
+	public static final String NOT = "not";
+	public static final String FLIP_FLOP_DATA = "flip-flop-data";
+	public static final String TRISTATE = "tristate";
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;
