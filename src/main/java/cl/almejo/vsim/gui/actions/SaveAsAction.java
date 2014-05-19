@@ -23,7 +23,7 @@ public class SaveAsAction extends WindowAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("save as");
+		_window.saveAs();
 	}
 
 }

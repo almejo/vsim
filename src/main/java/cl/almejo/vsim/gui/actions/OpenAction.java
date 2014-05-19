@@ -18,13 +18,13 @@ import java.awt.event.ActionEvent;
 
 public class OpenAction extends WindowAction {
 
+
 	public OpenAction(String text, String description, String icon, KeyStroke keyStroke, SimWindow window) {
 		super(text, description, icon, keyStroke, window);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("open");
+		_window.load();
 	}
-
 }

@@ -23,13 +23,13 @@ import java.io.IOException;
 public class Main {
 
 	public Main() throws IOException {
-		Circuit circuit =  Circuit.load(FileUtils.readFileToString(new File("circuit.json")), "circuit.json");
+		Circuit circuit =  Circuit.fromJSon(FileUtils.readFileToString(new File("circuit.json")), "circuit.json");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			GTKHelper.installGtkPopupBugWorkaround();
 		} catch (UnsupportedLookAndFeelException ex) {
-			System.out.println("Unable to load native look and feel");
+			System.out.println("Unable to fromJSon native look and feel");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {

@@ -21,16 +21,20 @@ import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gui.actions.*;
 import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
 import cl.almejo.vsim.gui.actions.state.GateToolHelper;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 
 public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener, CircuitStateListener {
 
 	private static final long serialVersionUID = 1L;
 	private final CircuitCanvas _canvas;
-	private final Circuit _circuit;
+	private Circuit _circuit;
 
 	private ActionToolHelper _toolHelper = ActionToolHelper.CURSOR;
 
@@ -82,6 +86,22 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, new GateToolHelper(Gate.CLOCK));
 	private final WindowAction FLIP_FLOP_DATA_TOOL_ACTION = new ToolAction(Messages.t("action.tool.flip.flop.data"), Messages.t("action.tool.flip.flop.data.description"), "flipflopdata.png", null, this, new GateToolHelper(Gate.FLIP_FLOP_DATA));
 	private final WindowAction TRISTATE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.tristate.data"), Messages.t("action.tool.tristate.description"), "tristate.png", null, this, new GateToolHelper(Gate.TRISTATE));
+
+	private static JFileChooser OPEN_FILE_CHOOSER;
+	private static JFileChooser SAVE_AS_FILE_CHOOSER;
+
+	static {
+		OPEN_FILE_CHOOSER = new JFileChooser();
+		OPEN_FILE_CHOOSER.setDialogTitle(Messages.t("file.open"));
+		FileNameExtensionFilter vsimFilter = new FileNameExtensionFilter(Messages.t("file.open.filter.description"), "json");
+		OPEN_FILE_CHOOSER.addChoosableFileFilter(vsimFilter);
+		OPEN_FILE_CHOOSER.setFileFilter(vsimFilter);
+
+		SAVE_AS_FILE_CHOOSER = new JFileChooser();
+		OPEN_FILE_CHOOSER.setDialogTitle(Messages.t("file.save"));
+		OPEN_FILE_CHOOSER.addChoosableFileFilter(vsimFilter);
+		OPEN_FILE_CHOOSER.setFileFilter(vsimFilter);
+	}
 
 
 	public SimWindow(Circuit circuit) {
@@ -410,10 +430,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	private void updateFileOperationActions() {
-		NEW_ACTION.setEnabled(false);
-		OPEN_ACTION.setEnabled(false);
-		//SAVE_ACTION.setEnabled(false);
-		SAVE_AS_ACTION.setEnabled(false);
+		SAVE_ACTION.setEnabled(_circuit.isModified());
 	}
 
 	@Override
@@ -448,7 +465,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	@Override
-	public void onMarkedAsUnmodified(CircuitEvent event) {
+	public void onSaved(CircuitEvent event) {
 		updateTitle();
 		SAVE_ACTION.setEnabled(_circuit.isModified());
 	}
@@ -463,4 +480,81 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		START_ACTION.setEnabled(!circuit.isSimulationRunning());
 	}
 
+	public void load() {
+		if (_circuit != null && _circuit.isModified()) {
+			int replace = askSaveNow();
+			if (replace == JOptionPane.CANCEL_OPTION) {
+				return;
+			}
+			if (replace == JOptionPane.YES_OPTION) {
+				saveAs();
+			}
+		}
+		try {
+			if (OPEN_FILE_CHOOSER.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+				File file = OPEN_FILE_CHOOSER.getSelectedFile();
+				setCircuit(Circuit.fromJSon(FileUtils.readFileToString(file), file.getPath()));
+				System.out.println("Loaded: " + file.getName() + ".");
+			} else {
+				System.out.println("load cancelled by user.");
+			}
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+
+	}
+
+	public void saveAs() {
+		SAVE_AS_FILE_CHOOSER.setSelectedFile(new File(_circuit.getName()));
+		if (SAVE_AS_FILE_CHOOSER.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
+			System.out.println("save cancelled by user.");
+			return;
+		}
+
+		File file = SAVE_AS_FILE_CHOOSER.getSelectedFile();
+		if (file.exists()) {
+			if (askOverwrite() != JOptionPane.YES_OPTION) {
+				return;
+			}
+		}
+
+		System.out.println("saving: " + file.getName() + ".");
+		_circuit.setName(file.getPath());
+		updateTitle();
+		save(file.getPath());
+		System.out.println("saved: " + file.getName() + ".");
+	}
+
+	public void save(String path) {
+		try {
+			FileUtils.writeStringToFile(new File(path), _circuit.toJSon());
+			_circuit.setSaved();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private int askOverwrite() {
+		return JOptionPane.showConfirmDialog(this, Messages.t("file.replace.message"), Messages.t("file.replace.title"),
+				JOptionPane.YES_NO_OPTION);
+	}
+
+	private int askSaveNow() {
+		return JOptionPane.showConfirmDialog(this, Messages.t("file.save.now.message"), Messages.t("file.save.now.title"), JOptionPane.YES_NO_CANCEL_OPTION);
+	}
+
+	public void setCircuit(Circuit circuit) {
+		if (circuit == null) {
+			return;
+		}
+		_circuit.remove(_canvas);
+		_circuit.removeCircuitEventListener(this);
+
+		_circuit = circuit;
+		_circuit.addCircuitEventListener(this);
+		_canvas.setCircuit(_circuit);
+
+		_circuit.setSaved();
+		updateTitle();
+	}
 }

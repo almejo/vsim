@@ -23,5 +23,5 @@ public interface CircuitStateListener {
 
 	void onRedo(CircuitEvent event);
 
-	void onMarkedAsUnmodified(CircuitEvent event);
+	void onSaved(CircuitEvent event);
 }
