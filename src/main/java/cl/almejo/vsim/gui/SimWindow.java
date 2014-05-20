@@ -22,6 +22,8 @@ import cl.almejo.vsim.gui.actions.*;
 import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
 import cl.almejo.vsim.gui.actions.state.GateToolHelper;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -31,6 +33,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener, CircuitStateListener {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimWindow.class);
 
 	private static final long serialVersionUID = 1L;
 	private final CircuitCanvas _canvas;
@@ -487,42 +491,44 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 				return;
 			}
 			if (replace == JOptionPane.YES_OPTION) {
-				saveAs();
+				if (saveAs() == JOptionPane.CANCEL_OPTION) {
+					LOGGER.info("save cancelled by user.");
+				}
 			}
 		}
 		try {
 			if (OPEN_FILE_CHOOSER.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 				File file = OPEN_FILE_CHOOSER.getSelectedFile();
 				setCircuit(Circuit.fromJSon(FileUtils.readFileToString(file), file.getPath()));
-				System.out.println("Loaded: " + file.getName() + ".");
-			} else {
-				System.out.println("load cancelled by user.");
+				LOGGER.info("Loaded: " + file.getName() + ".");
+				return;
 			}
+			LOGGER.info("load cancelled by user.");
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
 
 	}
 
-	public void saveAs() {
+	public int saveAs() {
 		SAVE_AS_FILE_CHOOSER.setSelectedFile(new File(_circuit.getName()));
 		if (SAVE_AS_FILE_CHOOSER.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
-			System.out.println("save cancelled by user.");
-			return;
+			LOGGER.info("save cancelled by user.");
+			return 0;
 		}
 
 		File file = SAVE_AS_FILE_CHOOSER.getSelectedFile();
 		if (file.exists()) {
 			if (askOverwrite() != JOptionPane.YES_OPTION) {
-				return;
+				return JOptionPane.CANCEL_OPTION;
 			}
 		}
 
-		System.out.println("saving: " + file.getName() + ".");
 		_circuit.setName(file.getPath());
 		updateTitle();
 		save(file.getPath());
-		System.out.println("saved: " + file.getName() + ".");
+		LOGGER.info("saved: " + file.getPath());
+		return JOptionPane.OK_OPTION;
 	}
 
 	public void save(String path) {
