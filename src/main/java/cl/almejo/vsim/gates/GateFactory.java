@@ -29,6 +29,8 @@ public class GateFactory {
 	private final static AssociativeGateDescriptor ASSOC_OR3_DESCRIPTOR;
 	private final static AssociativeGateDescriptor ASSOC_OR4_DESCRIPTOR;
 
+	private final static SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR;
+
 	private static final FlipFlopDataDescriptor FLIP_FLOP_DATA_DESCRIPTOR;
 	private static final TristateDescriptor TRISTATE_DESCRIPTOR;
 
@@ -66,7 +68,7 @@ public class GateFactory {
 		NOT_DESCRIPTOR = new NotDescriptor(new NotParameters(1), Gate.NOT);
 
 		TRISTATE_DESCRIPTOR = new TristateDescriptor(new TristateParameters(1), Gate.TRISTATE);
-
+		SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR = new SevenSegmentsDisplayDescriptor(new SevenSegmentsDisplayParameters(1), Gate.SEVEN_SEGMENTS_DISPLAY);
 		FLIP_FLOP_DATA_DESCRIPTOR = new FlipFlopDataDescriptor(new FlipFlopDataParameters(1), Gate.FLIP_FLOP_DATA);
 	}
 
@@ -92,6 +94,8 @@ public class GateFactory {
 				return new IconGate(circuit.getNextGateId(), new FlipFlopData(circuit, FLIP_FLOP_DATA_DESCRIPTOR.getParameters().clone(), FLIP_FLOP_DATA_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.TRISTATE)) {
 				return new IconGate(circuit.getNextGateId(), new Tristate(circuit, TRISTATE_DESCRIPTOR.getParameters().clone(), TRISTATE_DESCRIPTOR));
+			} else if (gateIndex.equalsIgnoreCase(Gate.SEVEN_SEGMENTS_DISPLAY)) {
+				return new IconGate(circuit.getNextGateId(), new SevenSegmentsDisplay(circuit, SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR.getParameters().clone(), SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR));
 			}
 		} catch (CloneNotSupportedException e) {
 			return null;
