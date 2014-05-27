@@ -47,7 +47,11 @@
     "yi" : 336
   }, {
     "yf" : 496,
+<<<<<<< HEAD
     "xi" : 208,
+=======
+    "xi" : 248,
+>>>>>>> bf8b8ca... Icon, and now it is parametrizable
     "xf" : 256,
     "yi" : 496
   }, {
@@ -88,11 +92,39 @@
   }, {
     "yf" : 352,
     "xi" : 184,
+<<<<<<< HEAD
     "xf" : 304,
     "yi" : 352
   }, {
     "yf" : 328,
     "xi" : 208,
+=======
+    "xf" : 208,
+    "yi" : 352
+  }, {
+    "yf" : 352,
+    "xi" : 208,
+    "xf" : 304,
+    "yi" : 352
+  }, {
+    "yf" : 512,
+    "xi" : 208,
+    "xf" : 224,
+    "yi" : 512
+  }, {
+    "yf" : 328,
+    "xi" : 208,
+    "xf" : 248,
+    "yi" : 328
+  }, {
+    "yf" : 328,
+    "xi" : 248,
+    "xf" : 264,
+    "yi" : 328
+  }, {
+    "yf" : 328,
+    "xi" : 264,
+>>>>>>> bf8b8ca... Icon, and now it is parametrizable
     "xf" : 304,
     "yi" : 328
   }, {
@@ -131,20 +163,48 @@
     "xf" : 80,
     "yi" : 320
   }, {
+<<<<<<< HEAD
+=======
+    "yf" : 512,
+    "xi" : 264,
+    "xf" : 264,
+    "yi" : 328
+  }, {
+>>>>>>> bf8b8ca... Icon, and now it is parametrizable
     "yf" : 248,
     "xi" : 304,
     "xf" : 304,
     "yi" : 232
   }, {
+<<<<<<< HEAD
+=======
+    "yf" : 512,
+    "xi" : 256,
+    "xf" : 256,
+    "yi" : 496
+  }, {
+>>>>>>> bf8b8ca... Icon, and now it is parametrizable
     "yf" : 328,
     "xi" : 208,
     "xf" : 208,
     "yi" : 96
   }, {
+<<<<<<< HEAD
     "yf" : 496,
     "xi" : 208,
     "xf" : 208,
     "yi" : 400
+=======
+    "yf" : 512,
+    "xi" : 208,
+    "xf" : 208,
+    "yi" : 352
+  }, {
+    "yf" : 496,
+    "xi" : 248,
+    "xf" : 248,
+    "yi" : 328
+>>>>>>> bf8b8ca... Icon, and now it is parametrizable
   }, {
     "yf" : 320,
     "xi" : 152,
@@ -264,5 +324,14 @@
       "delay" : 1
     },
     "type" : "not"
+  }, {
+    "position" : {
+      "y" : 512,
+      "x" : 224
+    },
+    "parameters" : {
+      "delay" : 1
+    },
+    "type" : "seven-segments-display"
   } ]
 }

@@ -18,6 +18,9 @@ public class SevenSegmentsDisplayParameters extends GateParameters {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SevenSegmentsDisplayParameters.class);
 
 	private int _number = 0;
+
+	private int _pinCount = 8;
+
 	public SevenSegmentsDisplayParameters(int delay) {
 		super(delay);
 	}
@@ -37,5 +40,9 @@ public class SevenSegmentsDisplayParameters extends GateParameters {
 
 	public int getNumber() {
 		return _number;
+	}
+
+	public int getPinCount() {
+		return _pinCount;
 	}
 }

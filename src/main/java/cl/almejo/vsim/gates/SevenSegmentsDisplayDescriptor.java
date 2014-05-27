@@ -19,30 +19,39 @@ import java.awt.*;
 
 public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 
-	private static final int NUMBER_WIDTH = 20;
-	private static final int NUMBER_HEIGHT = 30;
+	private static final int NUMBER_WIDTH = Circuit.GRIDSIZE * 3;
+	private static final int NUMBER_HEIGHT = Circuit.GRIDSIZE * 4;
+	private static final int NUMBER_OFFSET_X = Circuit.GRIDSIZE;
+	private static final int NUMBER_OFFSET_Y = Circuit.GRIDSIZE;
 
 	public SevenSegmentsDisplayDescriptor(SevenSegmentsDisplayParameters parameters, String type) {
 		super(parameters, type);
-		_pinPosition = new Point[4];
-		_pinPosition[0] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(0));
-		_pinPosition[1] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(16));
-		_pinPosition[2] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(32));
-		_pinPosition[3] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(48));
+		_pinCount = parameters.getPinCount();
+		_pinPosition = new Point[_pinCount];
+		int delta = 64 / _pinCount;
+		for (int i = 0; i < _pinCount; i++) {
+			_pinPosition[i] = new Point(Circuit.gridTrunc(64 - i * delta), Circuit.gridTrunc(0));
+		}
 		_gateType = GateTypes.DEBUG;
-		_pinCount = 4;
+
 	}
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
 		graphics.setColor(Color.blue);
-		graphics.fillRect(0, 0, Circuit.gridTrunc(32), Circuit.gridTrunc(48));
-		drawNumber(graphics, ((SevenSegmentsDisplayParameters) iconGate.getGate().getParamameters()).getNumber(), 6, 6);
+		Dimension dimension = getSize();
+		graphics.fillRect(0, 0, Circuit.gridTrunc(dimension.width), Circuit.gridTrunc(dimension.height));
+
+		int number = ((SevenSegmentsDisplayParameters) iconGate.getGate().getParamameters()).getNumber();
+		for(int i = 0 ; i < (_pinCount / 4); i++) {
+			drawNumber(graphics, number & 15, dimension.width - NUMBER_WIDTH - NUMBER_OFFSET_X - (NUMBER_OFFSET_X + NUMBER_WIDTH) * i , NUMBER_OFFSET_Y);
+			number >>= 4;
+		}
 	}
 
 	@Override
 	public Dimension getSize() {
-		return new Dimension(32, 48);
+		return new Dimension(32 * (_pinCount / 4), 48);
 	}
 
 	@Override

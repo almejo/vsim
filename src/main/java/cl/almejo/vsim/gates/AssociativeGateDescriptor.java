@@ -68,7 +68,7 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 
 	@Override
 	public int getPinCount() {
-		return ((AssociateveGateParameters) _parameters).getPinCount() + 1;
+		return ((AssociateveGateParameters) _originalParameters).getPinCount() + 1;
 	}
 
 }

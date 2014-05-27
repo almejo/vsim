@@ -27,10 +27,10 @@ public abstract class GateDescriptor {
 
 	protected String _type;
 
-	protected GateParameters _parameters;
+	protected GateParameters _originalParameters;
 
 	public GateDescriptor(GateParameters parameters, String type) {
-		_parameters = parameters;
+		_originalParameters = parameters;
 		_type = type;
 	}
 
@@ -52,8 +52,8 @@ public abstract class GateDescriptor {
 		return _pinCount;
 	}
 
-	public GateParameters getParameters() {
-		return _parameters;
+	public GateParameters getOriginalParameters(){
+		return _originalParameters;
 	}
 
 	public String getType() {

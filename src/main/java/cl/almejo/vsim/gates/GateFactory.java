@@ -75,27 +75,27 @@ public class GateFactory {
 	public static IconGate getInstance(String gateIndex, Circuit circuit) {
 		try {
 			if (gateIndex.equalsIgnoreCase(Gate.CLOCK)) {
-				return new IconGate(circuit.getNextGateId(), new Clock(circuit, CLOCK_DESCRIPTOR.getParameters().clone(), CLOCK_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new Clock(circuit, CLOCK_DESCRIPTOR.getOriginalParameters().clone(), CLOCK_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.AND2)) {
-				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND2_DESCRIPTOR.getParameters().clone(), ASSOC_AND2_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND2_DESCRIPTOR.getOriginalParameters().clone(), ASSOC_AND2_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.AND3)) {
-				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND3_DESCRIPTOR.getParameters().clone(), ASSOC_AND3_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND3_DESCRIPTOR.getOriginalParameters().clone(), ASSOC_AND3_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.AND4)) {
-				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND4_DESCRIPTOR.getParameters().clone(), ASSOC_AND4_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_AND4_DESCRIPTOR.getOriginalParameters().clone(), ASSOC_AND4_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.OR2)) {
-				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR2_DESCRIPTOR.getParameters().clone(), ASSOC_OR2_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR2_DESCRIPTOR.getOriginalParameters().clone(), ASSOC_OR2_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.OR3)) {
-				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR3_DESCRIPTOR.getParameters().clone(), ASSOC_OR3_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR3_DESCRIPTOR.getOriginalParameters().clone(), ASSOC_OR3_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.OR4)) {
-				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR4_DESCRIPTOR.getParameters().clone(), ASSOC_OR4_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR4_DESCRIPTOR.getOriginalParameters().clone(), ASSOC_OR4_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.NOT)) {
-				return new IconGate(circuit.getNextGateId(), new Not(circuit, NOT_DESCRIPTOR.getParameters().clone(), NOT_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new Not(circuit, NOT_DESCRIPTOR.getOriginalParameters().clone(), NOT_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.FLIP_FLOP_DATA)) {
-				return new IconGate(circuit.getNextGateId(), new FlipFlopData(circuit, FLIP_FLOP_DATA_DESCRIPTOR.getParameters().clone(), FLIP_FLOP_DATA_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new FlipFlopData(circuit, FLIP_FLOP_DATA_DESCRIPTOR.getOriginalParameters().clone(), FLIP_FLOP_DATA_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.TRISTATE)) {
-				return new IconGate(circuit.getNextGateId(), new Tristate(circuit, TRISTATE_DESCRIPTOR.getParameters().clone(), TRISTATE_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new Tristate(circuit, TRISTATE_DESCRIPTOR.getOriginalParameters().clone(), TRISTATE_DESCRIPTOR));
 			} else if (gateIndex.equalsIgnoreCase(Gate.SEVEN_SEGMENTS_DISPLAY)) {
-				return new IconGate(circuit.getNextGateId(), new SevenSegmentsDisplay(circuit, SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR.getParameters().clone(), SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR));
+				return new IconGate(circuit.getNextGateId(), new SevenSegmentsDisplay(circuit, SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR.getOriginalParameters().clone(), SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR));
 			}
 		} catch (CloneNotSupportedException e) {
 			return null;
