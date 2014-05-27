@@ -16,9 +16,10 @@ import cl.almejo.vsim.circuit.Circuit;
 
 public class SevenSegmentsDisplay extends Gate {
 
-	public SevenSegmentsDisplay(Circuit circuit, GateParameters params, SevenSegmentsDisplayDescriptor descriptor) {
-		super(circuit, params, descriptor);
-		_pins = new SevenSegmentsDisplayPin[4];
+	public SevenSegmentsDisplay(Circuit circuit, GateParameters parameters, SevenSegmentsDisplayDescriptor descriptor) {
+		super(circuit, parameters, descriptor);
+
+		_pins = new SevenSegmentsDisplayPin[descriptor.getPinCount()];
 		for (int pindId = 0; pindId < _pins.length; pindId++) {
 			_pins[pindId] = new SevenSegmentsDisplayPin(this, circuit.getScheduler(), pindId);
 		}
