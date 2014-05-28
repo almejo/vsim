@@ -45,12 +45,12 @@ But also it have some design problems that make it difficult to add new features
 - Proper Save and Load. JCSim serialize the complete circuit.
 - Color Schemes Suport
 - Labels for the objects
-- Componets tree
+- Components tree
 
 ## Why a new program? Why not fix JCSim
 
 The main reason is fun. I love to code and doing it from scratch is a lot of fun. Also, this way I can remember all the
 process to create it and think again about the design. I am not throwing it away, I am using the best parts, like in the
-Pricess Bride book.
+Princess Bride book.
 
 
