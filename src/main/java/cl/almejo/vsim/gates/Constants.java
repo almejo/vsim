@@ -12,9 +12,6 @@
 
 package cl.almejo.vsim.gates;
 
-import java.awt.*;
-import java.util.Hashtable;
-
 public class Constants {
 
 	public static final byte OFF = 0;
@@ -25,11 +22,4 @@ public class Constants {
 	public static final byte EAST = 1 << 1;
 	public static final byte SOUTH = 1 << 2;
 	public static final byte WEST = 1 << 3;
-	public static Hashtable<Byte, Color> STATECOLORS = new Hashtable<Byte, Color>();
-
-	static {
-		STATECOLORS.put(Constants.THREE_STATE, new Color(0, 200, 0));
-		STATECOLORS.put(Constants.ON, new Color(200, 0, 0));
-		STATECOLORS.put(Constants.OFF, new Color(0, 0, 0));
-	}
 }

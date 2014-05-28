@@ -14,6 +14,7 @@ package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
+import cl.almejo.vsim.gui.ColorScheme;
 
 import java.awt.*;
 
@@ -30,7 +31,7 @@ public class TristateDescriptor extends GateDescriptor {
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
-		graphics.setColor(Color.blue);
+		graphics.setColor(ColorScheme.getGates());
 		int[] pointsX = new int[]{0, 32, 0};
 		int[] pointsY = new int[]{0, 16, 32};
 		graphics.fillPolygon(pointsX, pointsY, 3);

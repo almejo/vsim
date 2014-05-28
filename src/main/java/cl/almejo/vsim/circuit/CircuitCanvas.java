@@ -11,6 +11,8 @@
 
 package cl.almejo.vsim.circuit;
 
+import cl.almejo.vsim.gui.ColorScheme;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -30,7 +32,8 @@ public class CircuitCanvas extends JPanel {
 	@Override
 	public void paint(Graphics graphics) {
 		super.paint(graphics);
-		graphics.drawRect(1, 1, (int) getSize().getWidth() - 2, (int) getSize().getHeight() - 2);
+		graphics.setColor(ColorScheme.getBackground());
+		graphics.fillRect(1, 1, (int) getSize().getWidth() - 2, (int) getSize().getHeight() - 2);
 		_circuit.paint((Graphics2D) graphics, _viewport);
 	}
 

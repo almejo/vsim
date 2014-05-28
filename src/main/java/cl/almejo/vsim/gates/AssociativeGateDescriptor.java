@@ -11,6 +11,7 @@ package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
+import cl.almejo.vsim.gui.ColorScheme;
 
 import java.awt.*;
 
@@ -38,7 +39,7 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
-		graphics.setColor(Color.blue);
+		graphics.setColor(ColorScheme.getGates());
 		switch (_associativeType) {
 			case ASSOCIATIVE_TYPE_AND:
 				graphics.fillArc(-32, 0, 64, 32, -90, 180);

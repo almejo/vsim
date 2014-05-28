@@ -1,0 +1,16 @@
+{    "default": {
+    "background": "#bdbdbd",
+    "bus-on": "#ff0000",
+    "gates": "#0000ff",
+    "ground": "#00ff00",
+    "off": "#000000",
+    "wires-on": "#ff0000"
+}, "pastel": {
+    "background": "#bdbdbd",
+    "bus-on": "#ff0000",
+    "gates": "#389CD1",
+    "ground": "#4DE39D",
+    "off": "#000000",
+    "wires-on": "#DB5340"
+}
+}

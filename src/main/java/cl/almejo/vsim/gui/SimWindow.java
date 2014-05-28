@@ -218,6 +218,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		toolBar.add(newGrouppedButton(START_ACTION, group));
 		toolBar.add(newGrouppedButton(PAUSE_ACTION, group));
+
+		toolBar.add(ColorScheme.getCombox());
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 	}
 
