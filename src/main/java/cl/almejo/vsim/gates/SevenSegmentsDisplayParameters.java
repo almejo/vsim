@@ -19,10 +19,11 @@ public class SevenSegmentsDisplayParameters extends GateParameters {
 
 	private int _number = 0;
 
-	private int _pinCount = 8;
+	private final int _pinCount;
 
-	public SevenSegmentsDisplayParameters(int delay) {
+	public SevenSegmentsDisplayParameters(int delay, int pinCount) {
 		super(delay);
+		_pinCount = pinCount;
 	}
 
 

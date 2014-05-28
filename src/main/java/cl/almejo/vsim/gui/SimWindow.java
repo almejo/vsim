@@ -91,6 +91,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction FLIP_FLOP_DATA_TOOL_ACTION = new ToolAction(Messages.t("action.tool.flip.flop.data"), Messages.t("action.tool.flip.flop.data.description"), "flipflopdata.png", null, this, new GateToolHelper(Gate.FLIP_FLOP_DATA));
 	private final WindowAction TRISTATE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.tristate"), Messages.t("action.tool.tristate.description"), "tristate.png", null, this, new GateToolHelper(Gate.TRISTATE));
 	private final WindowAction SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display"), Messages.t("action.tool.seven.segments.display.description"), "seven.segments.display.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY));
+	private final WindowAction SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION_DOUBLE = new ToolAction(Messages.t("action.tool.seven.segments.display.double"), Messages.t("action.tool.seven.segments.display.double.description"), "seven.segments.display.double.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE));
 
 	private static JFileChooser OPEN_FILE_CHOOSER;
 	private static JFileChooser SAVE_AS_FILE_CHOOSER;
@@ -171,6 +172,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(FLIP_FLOP_DATA_TOOL_ACTION, Messages.c("menu.tool.flip.flop.data.mnemonic")));
 		menu.add(newMenuItem(TRISTATE_TOOL_ACTION, Messages.c("menu.tool.tristate.mnemonic")));
 		menu.add(newMenuItem(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION, Messages.c("menu.tool.seven.segments.display.mnemonic")));
+		menu.add(newMenuItem(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION_DOUBLE, Messages.c("menu.tool.seven.segments.display.double.mnemonic")));
 
 		menu = newMenu(Messages.t("menu.simulation"), KeyEvent.VK_F, menuBar);
 		menu.add(newMenuItem(START_ACTION, Messages.c("menu.simulation.start.mnemonic")));
@@ -247,6 +249,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.add(newGrouppedButton(CLOCK_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(FLIP_FLOP_DATA_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION_DOUBLE, group));
 		panel.add(newGrouppedButton(TRISTATE_TOOL_ACTION, group));
 		return panel;
 	}
