@@ -19,18 +19,21 @@ import java.awt.*;
 
 public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 
-	private static final int NUMBER_WIDTH = Circuit.GRIDSIZE * 3;
+	private static final int NUMBER_WIDTH = Circuit.GRIDSIZE * 2;
 	private static final int NUMBER_HEIGHT = Circuit.GRIDSIZE * 4;
-	private static final int NUMBER_OFFSET_X = Circuit.GRIDSIZE;
+	private static final int NUMBER_OFFSET_X = 8;
 	private static final int NUMBER_OFFSET_Y = Circuit.GRIDSIZE;
+	public static final int STROKE_WIDTH = 4;
+	private static final Stroke NUMBER_STROKE = new BasicStroke(STROKE_WIDTH);
 
 	public SevenSegmentsDisplayDescriptor(SevenSegmentsDisplayParameters parameters, String type) {
 		super(parameters, type);
 		_pinCount = parameters.getPinCount();
 		_pinPosition = new Point[_pinCount];
-		int delta = 64 / _pinCount;
+		Dimension dimension = getSize();
+		int delta = (int) dimension.getWidth() / _pinCount;
 		for (int i = 0; i < _pinCount; i++) {
-			_pinPosition[i] = new Point(Circuit.gridTrunc(64 - i * delta), Circuit.gridTrunc(0));
+			_pinPosition[i] = new Point(Circuit.gridTrunc((int) dimension.getWidth() - i * delta), Circuit.gridTrunc(0));
 		}
 		_gateType = GateTypes.DEBUG;
 
@@ -40,18 +43,26 @@ public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
 		graphics.setColor(Color.blue);
 		Dimension dimension = getSize();
-		graphics.fillRect(0, 0, Circuit.gridTrunc(dimension.width), Circuit.gridTrunc(dimension.height));
+		int unitWidth = dimension.width / (_pinCount / 4);
+		graphics.fillRoundRect(0, 0, Circuit.gridTrunc(dimension.width), Circuit.gridTrunc(dimension.height), 5, 5);
 
 		int number = ((SevenSegmentsDisplayParameters) iconGate.getGate().getParamameters()).getNumber();
-		for(int i = 0 ; i < (_pinCount / 4); i++) {
-			drawNumber(graphics, number & 15, dimension.width - NUMBER_WIDTH - NUMBER_OFFSET_X - (NUMBER_OFFSET_X + NUMBER_WIDTH) * i , NUMBER_OFFSET_Y);
+		Stroke oldStroke = graphics.getStroke();
+		graphics.setStroke(NUMBER_STROKE);
+		for (int i = 0; i < (_pinCount / 4); i++) {
+			graphics.setColor(Color.black);
+			int xoffset = dimension.width - (unitWidth * (i + 1)) + NUMBER_OFFSET_X;
+			drawNumber(graphics, 8, xoffset, NUMBER_OFFSET_Y);
+			graphics.setColor(Color.red);
+			drawNumber(graphics, number & 15, xoffset, NUMBER_OFFSET_Y);
 			number >>= 4;
 		}
+		graphics.setStroke(oldStroke);
 	}
 
 	@Override
 	public Dimension getSize() {
-		return new Dimension(32 * (_pinCount / 4), 48);
+		return new Dimension((NUMBER_WIDTH + NUMBER_OFFSET_X * 2) * (_pinCount / 4), 48);
 	}
 
 	@Override
@@ -60,8 +71,6 @@ public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 	}
 
 	public void drawNumber(Graphics2D graphics, int number, int dx, int dy) {
-		graphics.setColor(Color.red);
-
 		switch (number) {
 			case 0:
 				graphics.drawLine(dx, dy, dx + NUMBER_WIDTH, dy);

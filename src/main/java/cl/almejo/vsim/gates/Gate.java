@@ -38,6 +38,7 @@ public class Gate {
 	public static final String FLIP_FLOP_DATA = "flip-flop-data";
 	public static final String TRISTATE = "tristate";
 	public static final String SEVEN_SEGMENTS_DISPLAY = "seven-segments-display";
+	public static final String SEVEN_SEGMENTS_DISPLAY_DOUBLE = "seven-segments-display-double";
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;
