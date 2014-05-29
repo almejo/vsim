@@ -1,16 +1,34 @@
-{    "default": {
-    "background": "#bdbdbd",
-    "bus-on": "#ff0000",
-    "gates": "#0000ff",
-    "ground": "#00ff00",
-    "off": "#000000",
-    "wires-on": "#ff0000"
-}, "pastel": {
-    "background": "#bdbdbd",
-    "bus-on": "#ff0000",
-    "gates": "#389CD1",
-    "ground": "#4DE39D",
-    "off": "#000000",
-    "wires-on": "#DB5340"
-}
+{
+  "pastel" : {
+    "wires-on" : "#db5340",
+    "background" : "#bdbdbd",
+    "bus-on" : "#ff0000",
+    "ground" : "#00ff00",
+    "off" : "#000000",
+    "gates" : "#389cd1"
+  },
+  "default" : {
+    "wires-on" : "#ff0000",
+    "background" : "#bdbdbd",
+    "bus-on" : "#ff0000",
+    "ground" : "#00ff00",
+    "off" : "#000000",
+    "gates" : "#0000ff"
+  },
+  "Twilight" : {
+    "wires-on" : "#800000",
+    "background" : "#000000",
+    "bus-on" : "#ff0000",
+    "ground" : "#008000",
+    "off" : "#808080",
+    "gates" : "#004680"
+  },
+  "custom" : {
+    "wires-on" : "#c1321e",
+    "background" : "#3c3c3c",
+    "bus-on" : "#ff0000",
+    "ground" : "#00ff00",
+    "off" : "#000000",
+    "gates" : "#01621a"
+  }
 }

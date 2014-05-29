@@ -32,9 +32,9 @@ public class ClockDescriptor extends GateDescriptor {
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
 		graphics.setColor(ColorScheme.getGates());
 		graphics.fillRoundRect(x, y, 16, 16, 3, 3);
-		graphics.fillRect(x + 12, y + 12, 9, 9);
+		graphics.fillOval(x + 12, y + 12, 9, 9);
 		graphics.setColor(ColorScheme.getColor(iconGate.getPin(0)));
-		graphics.fillRect(x + 4, y + 4, 8, 8);
+		graphics.fillOval(x + 4, y + 4, 8, 8);
 
 	}
 

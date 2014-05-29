@@ -12,6 +12,7 @@ package cl.almejo.vsim.gui;
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Pin;
 import org.apache.commons.io.FileUtils;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.swing.*;
@@ -25,17 +26,8 @@ import java.util.Map;
 
 public class ColorScheme {
 
-	private Color _background = Color.GRAY;
-
-	private Color _ground = Color.GREEN;
-
-	private Color _off = Color.BLACK;
-
-	private Color _wireOn = Color.RED;
-
-	private Color _busOn = Color.RED;
-
-	private Color _gates = Color.BLUE;
+	private static JComboBox<String> _comboBox;
+	private HashMap<String, Color> _colors = new HashMap<String, Color>();
 
 	private static ColorScheme _current;
 
@@ -50,13 +42,11 @@ public class ColorScheme {
 			Map<String, Map<String, String>> schemes = (Map<String, Map<String, String>>) new ObjectMapper().readValue(json, Map.class);
 			for (String name : schemes.keySet()) {
 				Map<String, String> map = schemes.get(name);
-				ColorScheme scheme = new ColorScheme();
-				scheme.setBackground(new Color(Integer.parseInt(map.get("background").replace("#", ""), 16), false));
-				scheme.setBusOn(new Color(Integer.parseInt(map.get("bus-on").replace("#", ""), 16), false));
-				scheme.setGates(new Color(Integer.parseInt(map.get("gates").replace("#", ""), 16), false));
-				scheme.setGround(new Color(Integer.parseInt(map.get("ground").replace("#", ""), 16), false));
-				scheme.setOff(new Color(Integer.parseInt(map.get("off").replace("#", ""), 16), false));
-				scheme.setWireOn(new Color(Integer.parseInt(map.get("wires-on").replace("#", ""), 16), false));
+				ColorScheme scheme = new ColorScheme(name);
+
+				for (String colorName : map.keySet()) {
+					scheme.set(colorName, new Color(Integer.parseInt(map.get(colorName).replace("#", ""), 16), false));
+				}
 				_schemes.put(name, scheme);
 			}
 			_current = _schemes.get("default");
@@ -65,28 +55,63 @@ public class ColorScheme {
 		}
 	}
 
+	private String _name;
+
+	public ColorScheme(String name) {
+		_name = name;
+		_colors.put("background", Color.GRAY);
+		_colors.put("bus-on", Color.RED);
+		_colors.put("gates", Color.BLUE);
+		_colors.put("ground", Color.GREEN);
+		_colors.put("off", Color.BLACK);
+		_colors.put("wires-on", Color.RED);
+	}
+
+	public static String save() throws IOException {
+		HashMap<String, HashMap<String, String>> map = new HashMap<String, HashMap<String, String>>();
+		for (String schemeName : _schemes.keySet()) {
+			ColorScheme scheme = _schemes.get(schemeName);
+			HashMap<String, String> colors = new HashMap<String, String>();
+			for (String colorName : scheme._colors.keySet()) {
+				Color color = scheme._colors.get(colorName);
+				colors.put(colorName, "#" + Integer.toHexString(color.getRGB()).substring(2));
+			}
+			map.put(schemeName, colors);
+		}
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
+	}
+
+	public void set(String colorName, Color color) {
+		_colors.put(colorName, color);
+	}
+
+	public Color get(String name) {
+		return _colors.get(name);
+	}
+
 	public static Color getBackground() {
-		return _current._background;
+		return _current.get("background");
 	}
 
 	public static Color getBusOn() {
-		return _current._busOn;
+		return _current.get("bus-on");
 	}
 
 	public static Color getGates() {
-		return _current._gates;
+		return _current.get("gates");
 	}
 
 	public static Color getGround() {
-		return _current._ground;
+		return _current.get("ground");
 	}
 
 	public static Color getWireOn() {
-		return _current._wireOn;
+		return _current.get("wires-on");
 	}
 
 	public static Color getOff() {
-		return _current._off;
+		return _current.get("off");
 	}
 
 	public static Color getColor(Pin pin) {
@@ -94,42 +119,36 @@ public class ColorScheme {
 				: pin.getInValue() == Constants.ON ? getWireOn() : getOff();
 	}
 
-	private void setBackground(Color background) {
-		_background = background;
-	}
-
-	private void setBusOn(Color busOn) {
-		_busOn = busOn;
-	}
-
-	private void setGates(Color gates) {
-		_gates = gates;
-	}
-
-	private void setGround(Color ground) {
-		_ground = ground;
-	}
-
-	private void setOff(Color off) {
-		_off = off;
-	}
-
-	private void setWireOn(Color wireOn) {
-		_wireOn = wireOn;
-	}
-
-	public static Component getCombox() {
-		JComboBox<String> comboBox = new JComboBox<String>(_schemes.keySet().toArray(new String[_schemes.keySet().size()]));
-		comboBox.addActionListener(new ActionListener() {
+	public static JComboBox getCombox() {
+		_comboBox = new JComboBox<String>(_schemes.keySet().toArray(new String[_schemes.keySet().size()]));
+		_comboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JComboBox jcmbType = (JComboBox) e.getSource();
-				String cmbType = (String) jcmbType.getSelectedItem();
-				_current = _schemes.get(cmbType);
+				JComboBox combobox = (JComboBox) e.getSource();
+				_current = _schemes.get((String) combobox.getSelectedItem());
 			}
 		});
-		comboBox.setSelectedItem("default");
-		return comboBox;
+		_comboBox.setSelectedItem("default");
+		return _comboBox;
+	}
+
+	public static ColorScheme getScheme(String name) {
+		return _schemes.get(name);
+	}
+
+	public static void add(String name) {
+		_schemes.put(name, new ColorScheme(name));
+		_comboBox.addItem(name);
+		_comboBox.setSelectedItem(name);
+		_current = _schemes.get((String) _comboBox.getSelectedItem());
+	}
+
+	public static String getCurrentName() {
+		return _current.getName();
+	}
+
+	public String getName() {
+		return _name;
 	}
 }
 

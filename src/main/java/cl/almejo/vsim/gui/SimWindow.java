@@ -32,7 +32,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener, CircuitStateListener {
+public class SimWindow extends JFrame implements ComponentListener, WindowListener, MouseListener, MouseMotionListener, CircuitStateListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimWindow.class);
 
@@ -107,6 +107,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		OPEN_FILE_CHOOSER.setFileFilter(vsimFilter);
 	}
 
+	private JComboBox _colorSchemeCombobox;
+
 
 	public SimWindow(Circuit circuit) {
 
@@ -129,13 +131,80 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_canvas.addMouseMotionListener(this);
 		_canvas.resizeViewport();
 
-		JTextField text = new JTextField();
-		getContentPane().add(text, BorderLayout.SOUTH);
-		text.addKeyListener(this);
-
 		addMenu();
 		addMainToolbar();
 		updateActionStates();
+
+		//if (System.getProperty("vsim.debug").equals("true")) {
+		getContentPane().add(getColorChooser(), BorderLayout.SOUTH);
+		//}
+	}
+
+	private Component getColorChooser() {
+		JPanel panel = new JPanel();
+		addChooser(panel, "gates");
+		addChooser(panel, "background");
+		addChooser(panel, "bus-on");
+		addChooser(panel, "gates");
+		addChooser(panel, "ground");
+		addChooser(panel, "off");
+		addChooser(panel, "wires-on");
+
+		JButton button = new JButton("Save");
+		panel.add(button);
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					FileUtils.writeStringToFile(new File("colors.json"), ColorScheme.save());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		button = new JButton("new");
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String input = JOptionPane.showInputDialog("Nombre para el nuevo tema", "");
+				if (input != null) {
+					while (exists(input)) {
+						JOptionPane.showMessageDialog(SimWindow.this, "El nombre ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+						input = JOptionPane.showInputDialog(this, input);
+					}
+					ColorScheme.add(input);
+				}
+			}
+
+			private boolean exists(String name) {
+				for (int i = 0; i < _colorSchemeCombobox.getItemCount(); i++) {
+					if (_colorSchemeCombobox.getItemAt(i).equals(name.trim())) {
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+		panel.add(button);
+		return panel;
+	}
+
+	private void addChooser(JPanel panel, final String label) {
+		JButton button = new JButton(label);
+		ActionListener actionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JButton button = (JButton) e.getSource();
+				String themeName = (String) _colorSchemeCombobox.getSelectedItem();
+				Color color = JColorChooser.showDialog(button, "Choose " + label + " Color", ColorScheme.getScheme(themeName).get(label));
+				if (color != null) {
+					ColorScheme.getScheme(themeName).set(label, color);
+					button.setText(label);
+				}
+			}
+		};
+		button.addActionListener(actionListener);
+		panel.add(button);
 	}
 
 	private void addMenu() {
@@ -219,7 +288,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		toolBar.add(newGrouppedButton(START_ACTION, group));
 		toolBar.add(newGrouppedButton(PAUSE_ACTION, group));
 
-		toolBar.add(ColorScheme.getCombox());
+		_colorSchemeCombobox = ColorScheme.getCombox();
+		toolBar.add(_colorSchemeCombobox);
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 	}
 
@@ -335,34 +405,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-//		System.out.println(e.getKeyCode());
-//		if (e.getKeyCode() == 10) {
-//			JTextField field = (JTextField) e.getSource();
-//			String[] points = field.getText().split(",");
-//			if (points.length < 4) {
-//				return;
-//			}
-//			System.out.println(Circuit.gridTrunc(Integer.parseInt(points[0].trim())) + ", "
-//					+ Circuit.gridTrunc(Integer.parseInt(points[1].trim())) + ", "
-//					+ Circuit.gridTrunc(Integer.parseInt(points[2].trim())) + ", "
-//					+ Circuit.gridTrunc(Integer.parseInt(points[3].trim())));
-//			_circuit.undoableConnect(Integer.parseInt(points[0].trim()), Integer.parseInt(points[1].trim()), Integer.parseInt(points[2].trim()), Integer.parseInt(points[3].trim()));
-//			field.setText("");
-//		}
 	}
 
 	@Override
