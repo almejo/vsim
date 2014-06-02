@@ -24,21 +24,22 @@ public class Main {
 
 	public Main() throws IOException {
 		File file = new File("circuit.json");
-		Circuit circuit =  Circuit.fromJSon(FileUtils.readFileToString(file), file.getAbsolutePath());
+		Circuit circuit = Circuit.fromJSon(FileUtils.readFileToString(file), file.getAbsolutePath());
+		if ("native".equalsIgnoreCase(System.getProperty("vsim.look"))) {
 
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			GTKHelper.installGtkPopupBugWorkaround();
-		} catch (UnsupportedLookAndFeelException ex) {
-			System.out.println("Unable to fromJSon native look and feel");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				GTKHelper.installGtkPopupBugWorkaround();
+			} catch (UnsupportedLookAndFeelException ex) {
+				System.out.println("Unable to fromJSon native look and feel");
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
-
 		new SimWindow(circuit);
 	}
 

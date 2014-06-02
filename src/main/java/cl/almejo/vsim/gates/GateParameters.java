@@ -25,7 +25,7 @@ abstract public class GateParameters implements Cloneable {
 		return _delay;
 	}
 
-	public void setValues(Map<String , Object> parameters) {
+	public void setValues(Map<String, Object> parameters) {
 		_delay = (Integer) parameters.get("delay");
 	}
 

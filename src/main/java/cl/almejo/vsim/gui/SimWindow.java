@@ -32,7 +32,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-public class SimWindow extends JFrame implements ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener, CircuitStateListener {
+public class SimWindow extends JFrame implements ComponentListener, WindowListener, MouseListener, MouseMotionListener, CircuitStateListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimWindow.class);
 
@@ -53,6 +53,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	static final KeyStroke ACCELERATOR_PASTE = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
 	static final KeyStroke ACCELERATOR_UNDO = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
 	static final KeyStroke ACCELERATOR_REDO = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+	static final KeyStroke ACCELERATOR_PREFERENCES = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK);
 
 
 	private final WindowAction NEW_ACTION = new NewAction(Messages.t("action.new"), Messages.t("action.new.description"), "new.png", ACCELERATOR_NEW, this);
@@ -66,6 +67,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction PASTE_ACTION = new PasteAction(Messages.t("action.paste"), Messages.t("action.paste.description"), "paste.png", ACCELERATOR_PASTE, this);
 	private final WindowAction UNDO_ACTION = new UndoAction(Messages.t("action.undo"), Messages.t("action.undo.description"), "undo.png", ACCELERATOR_UNDO, this);
 	private final WindowAction REDO_ACTION = new RedoAction(Messages.t("action.redo"), Messages.t("action.redo.description"), "redo.png", ACCELERATOR_REDO, this);
+	private final WindowAction PREFERENCES_ACTION = new PreferencesAction(Messages.t("action.preferences"), Messages.t("action.preferences.description"), null, ACCELERATOR_PREFERENCES, this);
 
 	private final WindowAction START_ACTION = new StartStopSimulationAction(Messages.t("action.start"), Messages.t("action.start.description"), "play.png", null, this);
 	private final WindowAction PAUSE_ACTION = new StartStopSimulationAction(Messages.t("action.pause"), Messages.t("action.pause.description"), "pause.png", null, this);
@@ -107,7 +109,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		OPEN_FILE_CHOOSER.setFileFilter(vsimFilter);
 	}
 
-
 	public SimWindow(Circuit circuit) {
 
 		setTitle(circuit.getName() + " | " + Messages.t("main.title"));
@@ -129,10 +130,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_canvas.addMouseMotionListener(this);
 		_canvas.resizeViewport();
 
-		JTextField text = new JTextField();
-		getContentPane().add(text, BorderLayout.SOUTH);
-		text.addKeyListener(this);
-
 		addMenu();
 		addMainToolbar();
 		updateActionStates();
@@ -147,13 +144,14 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(SAVE_AS_ACTION, Messages.c("menu.file.saveas.mnemonic")));
 		menu.addSeparator();
 		menu.add(newMenuItem(QUIT_ACTION, Messages.c("menu.file.quit.mnemonic")));
-		menu = newMenu(Messages.t("menu.edit"), KeyEvent.VK_F, menuBar);
 
+		menu = newMenu(Messages.t("menu.edit"), KeyEvent.VK_F, menuBar);
 		menu.add(newMenuItem(CUT_ACTION, Messages.c("menu.edit.cut.mnemonic")));
 		menu.add(newMenuItem(COPY_ACTION, Messages.c("menu.edit.copy.mnemonic")));
 		menu.add(newMenuItem(PASTE_ACTION, Messages.c("menu.edit.paste.mnemonic")));
 		menu.add(newMenuItem(UNDO_ACTION, Messages.c("menu.edit.undo.mnemonic")));
 		menu.add(newMenuItem(REDO_ACTION, Messages.c("menu.edit.redo.mnemonic")));
+		menu.add(newMenuItem(PREFERENCES_ACTION, Messages.c("menu.edit.preferences.mnemonic")));
 
 		menu = newMenu(Messages.t("menu.tools"), KeyEvent.VK_H, menuBar);
 		menu.add(newMenuItem(CURSOR_TOOL_ACTION, Messages.c("menu.tool.cursor.mnemonic")));
@@ -218,6 +216,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		toolBar.add(newGrouppedButton(START_ACTION, group));
 		toolBar.add(newGrouppedButton(PAUSE_ACTION, group));
+
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 	}
 
@@ -333,34 +332,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-//		System.out.println(e.getKeyCode());
-//		if (e.getKeyCode() == 10) {
-//			JTextField field = (JTextField) e.getSource();
-//			String[] points = field.getText().split(",");
-//			if (points.length < 4) {
-//				return;
-//			}
-//			System.out.println(Circuit.gridTrunc(Integer.parseInt(points[0].trim())) + ", "
-//					+ Circuit.gridTrunc(Integer.parseInt(points[1].trim())) + ", "
-//					+ Circuit.gridTrunc(Integer.parseInt(points[2].trim())) + ", "
-//					+ Circuit.gridTrunc(Integer.parseInt(points[3].trim())));
-//			_circuit.undoableConnect(Integer.parseInt(points[0].trim()), Integer.parseInt(points[1].trim()), Integer.parseInt(points[2].trim()), Integer.parseInt(points[3].trim()));
-//			field.setText("");
-//		}
 	}
 
 	@Override

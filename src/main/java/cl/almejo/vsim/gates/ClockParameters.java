@@ -28,7 +28,7 @@ public class ClockParameters extends GateParameters {
 		_timeUp = timeUp;
 	}
 
-	public void setValues(Map<String , Object> parameters) {
+	public void setValues(Map<String, Object> parameters) {
 		super.setValues(parameters);
 		_timeDown = (Integer) parameters.get("time-down");
 		_timeUp = (Integer) parameters.get("time-up");
