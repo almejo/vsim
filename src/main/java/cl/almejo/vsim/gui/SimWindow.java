@@ -53,6 +53,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	static final KeyStroke ACCELERATOR_PASTE = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
 	static final KeyStroke ACCELERATOR_UNDO = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
 	static final KeyStroke ACCELERATOR_REDO = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+	static final KeyStroke ACCELERATOR_PREFERENCES = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK);
 
 
 	private final WindowAction NEW_ACTION = new NewAction(Messages.t("action.new"), Messages.t("action.new.description"), "new.png", ACCELERATOR_NEW, this);
@@ -66,6 +67,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction PASTE_ACTION = new PasteAction(Messages.t("action.paste"), Messages.t("action.paste.description"), "paste.png", ACCELERATOR_PASTE, this);
 	private final WindowAction UNDO_ACTION = new UndoAction(Messages.t("action.undo"), Messages.t("action.undo.description"), "undo.png", ACCELERATOR_UNDO, this);
 	private final WindowAction REDO_ACTION = new RedoAction(Messages.t("action.redo"), Messages.t("action.redo.description"), "redo.png", ACCELERATOR_REDO, this);
+	private final WindowAction PREFERENCES_ACTION = new PreferencesAction(Messages.t("action.preferences"), Messages.t("action.preferences.description"), null, ACCELERATOR_PREFERENCES, this);
 
 	private final WindowAction START_ACTION = new StartStopSimulationAction(Messages.t("action.start"), Messages.t("action.start.description"), "play.png", null, this);
 	private final WindowAction PAUSE_ACTION = new StartStopSimulationAction(Messages.t("action.pause"), Messages.t("action.pause.description"), "pause.png", null, this);
@@ -107,9 +109,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		OPEN_FILE_CHOOSER.setFileFilter(vsimFilter);
 	}
 
-	private JComboBox _colorSchemeCombobox;
-
-
 	public SimWindow(Circuit circuit) {
 
 		setTitle(circuit.getName() + " | " + Messages.t("main.title"));
@@ -134,77 +133,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		addMenu();
 		addMainToolbar();
 		updateActionStates();
-
-		//if (System.getProperty("vsim.debug").equals("true")) {
-		getContentPane().add(getColorChooser(), BorderLayout.SOUTH);
-		//}
-	}
-
-	private Component getColorChooser() {
-		JPanel panel = new JPanel();
-		addChooser(panel, "gates");
-		addChooser(panel, "background");
-		addChooser(panel, "bus-on");
-		addChooser(panel, "gates");
-		addChooser(panel, "ground");
-		addChooser(panel, "off");
-		addChooser(panel, "wires-on");
-
-		JButton button = new JButton("Save");
-		panel.add(button);
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					FileUtils.writeStringToFile(new File("colors.json"), ColorScheme.save());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		button = new JButton("new");
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String input = JOptionPane.showInputDialog("Nombre para el nuevo tema", "");
-				if (input != null) {
-					while (exists(input)) {
-						JOptionPane.showMessageDialog(SimWindow.this, "El nombre ya existe", "Error", JOptionPane.ERROR_MESSAGE);
-						input = JOptionPane.showInputDialog(this, input);
-					}
-					ColorScheme.add(input);
-				}
-			}
-
-			private boolean exists(String name) {
-				for (int i = 0; i < _colorSchemeCombobox.getItemCount(); i++) {
-					if (_colorSchemeCombobox.getItemAt(i).equals(name.trim())) {
-						return true;
-					}
-				}
-				return false;
-			}
-		});
-		panel.add(button);
-		return panel;
-	}
-
-	private void addChooser(JPanel panel, final String label) {
-		JButton button = new JButton(label);
-		ActionListener actionListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JButton button = (JButton) e.getSource();
-				String themeName = (String) _colorSchemeCombobox.getSelectedItem();
-				Color color = JColorChooser.showDialog(button, "Choose " + label + " Color", ColorScheme.getScheme(themeName).get(label));
-				if (color != null) {
-					ColorScheme.getScheme(themeName).set(label, color);
-					button.setText(label);
-				}
-			}
-		};
-		button.addActionListener(actionListener);
-		panel.add(button);
 	}
 
 	private void addMenu() {
@@ -216,13 +144,14 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(SAVE_AS_ACTION, Messages.c("menu.file.saveas.mnemonic")));
 		menu.addSeparator();
 		menu.add(newMenuItem(QUIT_ACTION, Messages.c("menu.file.quit.mnemonic")));
-		menu = newMenu(Messages.t("menu.edit"), KeyEvent.VK_F, menuBar);
 
+		menu = newMenu(Messages.t("menu.edit"), KeyEvent.VK_F, menuBar);
 		menu.add(newMenuItem(CUT_ACTION, Messages.c("menu.edit.cut.mnemonic")));
 		menu.add(newMenuItem(COPY_ACTION, Messages.c("menu.edit.copy.mnemonic")));
 		menu.add(newMenuItem(PASTE_ACTION, Messages.c("menu.edit.paste.mnemonic")));
 		menu.add(newMenuItem(UNDO_ACTION, Messages.c("menu.edit.undo.mnemonic")));
 		menu.add(newMenuItem(REDO_ACTION, Messages.c("menu.edit.redo.mnemonic")));
+		menu.add(newMenuItem(PREFERENCES_ACTION, Messages.c("menu.edit.preferences.mnemonic")));
 
 		menu = newMenu(Messages.t("menu.tools"), KeyEvent.VK_H, menuBar);
 		menu.add(newMenuItem(CURSOR_TOOL_ACTION, Messages.c("menu.tool.cursor.mnemonic")));
@@ -288,8 +217,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		toolBar.add(newGrouppedButton(START_ACTION, group));
 		toolBar.add(newGrouppedButton(PAUSE_ACTION, group));
 
-		_colorSchemeCombobox = ColorScheme.getCombox();
-		toolBar.add(_colorSchemeCombobox);
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 	}
 

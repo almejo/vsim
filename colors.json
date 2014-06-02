@@ -15,6 +15,14 @@
     "off" : "#000000",
     "gates" : "#0000ff"
   },
+  "test" : {
+    "wires-on" : "#ff0000",
+    "background" : "#009933",
+    "bus-on" : "#ff0000",
+    "ground" : "#00ff00",
+    "off" : "#000000",
+    "gates" : "#ff0000"
+  },
   "Twilight" : {
     "wires-on" : "#800000",
     "background" : "#000000",

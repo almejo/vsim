@@ -27,7 +27,7 @@ import cl.almejo.vsim.circuit.Circuit;
 
 public class Gate {
 
-	public static final String CLOCK ="clock";
+	public static final String CLOCK = "clock";
 	public static final String AND2 = "and2";
 	public static final String AND3 = "and3";
 	public static final String AND4 = "and4";

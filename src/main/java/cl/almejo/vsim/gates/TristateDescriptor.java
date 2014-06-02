@@ -36,7 +36,7 @@ public class TristateDescriptor extends GateDescriptor {
 		int[] pointsY = new int[]{0, 16, 32};
 		graphics.fillPolygon(pointsX, pointsY, 3);
 		graphics.drawLine(Circuit.gridTrunc(16), Circuit.gridTrunc(16), Circuit.gridTrunc(16), Circuit.gridTrunc(32));
-		graphics.fillRect(Circuit.gridTrunc(16) - Circuit.GRIDSIZE / 4, Circuit.gridTrunc(16), Circuit.GRIDSIZE /2, 16);
+		graphics.fillRect(Circuit.gridTrunc(16) - Circuit.GRIDSIZE / 4, Circuit.gridTrunc(16), Circuit.GRIDSIZE / 2, 16);
 	}
 
 	@Override

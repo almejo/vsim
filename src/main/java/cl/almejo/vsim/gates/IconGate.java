@@ -80,7 +80,7 @@ public class IconGate extends Rectangle {
 		LOGGER.debug("original transformation: " + _translateTransformation);
 		_translateTransformation.setToIdentity();
 		_translateTransformation.translate(x, y);
-		LOGGER.debug("Translate to: "  + x + " - " + y);
+		LOGGER.debug("Translate to: " + x + " - " + y);
 		recalculateTransform();
 		LOGGER.debug("resulting transformation: " + _translateTransformation.toString());
 	}

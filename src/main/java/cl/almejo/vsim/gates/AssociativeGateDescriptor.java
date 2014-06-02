@@ -45,8 +45,8 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 				graphics.fillArc(-32, 0, 64, 32, -90, 180);
 				break;
 			case ASSOCIATIVE_TYPE_OR:
-				int []pointsX = new int[] {0, 16, 24, 32, 24,  16, 0, 4, 8, 4};
-				int []pointsY = new int[] {0 , 0, 8, 16, 24, 32, 32, 24, 16, 8};
+				int[] pointsX = new int[]{0, 16, 24, 32, 24, 16, 0, 4, 8, 4};
+				int[] pointsY = new int[]{0, 0, 8, 16, 24, 32, 32, 24, 16, 8};
 				graphics.fillPolygon(pointsX, pointsY, 10);
 				break;
 		}

@@ -104,24 +104,4 @@ public class Heap {
 		}
 		return false;
 	}
-
-	// public static void main(String[] args) {
-	// Heap heap = new Heap();
-	// Random random = new Random(new Date().getTime());
-	// for (int i = 0; i < 50; i++) {
-	// int val = random.nextInt(1000);
-	// System.out.println("insertando " + val);
-	// heap.insert(new HeapElement(val));
-	// }
-	// System.out.println(heap);
-	//
-	// try {
-	// for (int i = 0; i < 50; i++) {
-	// System.out.println(heap.remove());
-	// }
-	// } catch (EmptyHeapException e) {
-	// e.printStackTrace();
-	// }
-	// }
-
 }

@@ -12,13 +12,9 @@ package cl.almejo.vsim.gui;
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Pin;
 import org.apache.commons.io.FileUtils;
-import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,7 +22,6 @@ import java.util.Map;
 
 public class ColorScheme {
 
-	private static JComboBox<String> _comboBox;
 	private HashMap<String, Color> _colors = new HashMap<String, Color>();
 
 	private static ColorScheme _current;
@@ -82,6 +77,18 @@ public class ColorScheme {
 		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
 	}
 
+	public static ColorScheme getCurrent() {
+		return _current;
+	}
+
+	public static String[] getNames() {
+		return _schemes.keySet().toArray(new String[_schemes.keySet().size()]);
+	}
+
+	public static void setCurrent(String name) {
+		_current = _schemes.get(name);
+	}
+
 	public void set(String colorName, Color color) {
 		_colors.put(colorName, color);
 	}
@@ -119,36 +126,26 @@ public class ColorScheme {
 				: pin.getInValue() == Constants.ON ? getWireOn() : getOff();
 	}
 
-	public static JComboBox getCombox() {
-		_comboBox = new JComboBox<String>(_schemes.keySet().toArray(new String[_schemes.keySet().size()]));
-		_comboBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JComboBox combobox = (JComboBox) e.getSource();
-				_current = _schemes.get((String) combobox.getSelectedItem());
-			}
-		});
-		_comboBox.setSelectedItem("default");
-		return _comboBox;
-	}
-
 	public static ColorScheme getScheme(String name) {
 		return _schemes.get(name);
 	}
 
 	public static void add(String name) {
 		_schemes.put(name, new ColorScheme(name));
-		_comboBox.addItem(name);
-		_comboBox.setSelectedItem(name);
-		_current = _schemes.get((String) _comboBox.getSelectedItem());
-	}
-
-	public static String getCurrentName() {
-		return _current.getName();
+		_current = _schemes.get(name);
 	}
 
 	public String getName() {
 		return _name;
+	}
+
+	public static boolean exists(String name) {
+		for (String schemeName : _schemes.keySet()) {
+			if (schemeName.equalsIgnoreCase(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
 
