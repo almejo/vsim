@@ -39,6 +39,7 @@ public class Gate {
 	public static final String TRISTATE = "tristate";
 	public static final String SEVEN_SEGMENTS_DISPLAY = "seven-segments-display";
 	public static final String SEVEN_SEGMENTS_DISPLAY_DOUBLE = "seven-segments-display-double";
+	public static final String LED = "led";
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;

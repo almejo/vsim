@@ -421,7 +421,6 @@ public class Circuit {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			iconGate.getGate().getParamameters().getValues(parameters);
 			gateInfo.put("parameters", parameters);
-
 			gates.add(gateInfo);
 		}
 		map.put("gates", gates);
