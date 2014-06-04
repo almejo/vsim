@@ -38,7 +38,7 @@ public class NotDescriptor extends GateDescriptor {
 
 	@Override
 	public Dimension getSize() {
-		return new Dimension(32, 16);
+		return new Dimension(32, 32);
 	}
 
 	@Override

@@ -24,27 +24,28 @@ public class LedDescriptor extends GateDescriptor {
 		_pinCount = 1;
 		_pinPosition = new Point[1];
 		Dimension dimension = getSize();
-		_pinPosition[0] = new Point(Circuit.gridTrunc(dimension.width/2) + Circuit.GRIDSIZE / 2, Circuit.gridTrunc(dimension.height));
+		_pinPosition[0] = new Point(Circuit.gridTrunc(dimension.width / 2) + Circuit.GRIDSIZE / 2, Circuit.gridTrunc(dimension.height));
 		_gateType = GateTypes.DEBUG;
 	}
 
 	@SuppressWarnings("SuspiciousNameCombination")
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
-		graphics.setColor(Color.GRAY);
 		Dimension dimension = getSize();
-		graphics.drawRect(0, 0, dimension.width, dimension.height);
+		int delta = 4;
 		if (((Led) iconGate.getGate()).getValue() == Constants.ON) {
 			graphics.setColor(ColorScheme.getWireOn());
 			graphics.fillOval(0, 0, dimension.width, dimension.width);
 		} else {
 			graphics.setColor(ColorScheme.getOff());
 			graphics.drawOval(0, 0, dimension.width, dimension.width);
+			graphics.drawLine(dimension.width / 2, dimension.height / 2 + delta, dimension.width / 3, dimension.height / 5 + delta);
+			graphics.drawLine(dimension.width / 2, dimension.height / 2 + delta, dimension.width - dimension.width / 3, dimension.height / 5 + delta);
 		}
 		graphics.setColor(ColorScheme.getGates());
 		graphics.fillRect(dimension.width / 3, dimension.width, Circuit.GRIDSIZE, Circuit.GRIDSIZE);
 		LedParameters parameters = (LedParameters) iconGate.getGate().getParamameters();
-		if (parameters.getText()!= null && !parameters.getText().trim().equalsIgnoreCase("")) {
+		if (parameters.getText() != null && !parameters.getText().trim().equalsIgnoreCase("")) {
 			graphics.setColor(ColorScheme.getGates());
 			graphics.drawString(parameters.getText(), dimension.width + Circuit.GRIDSIZE, dimension.height / 2);
 		}
