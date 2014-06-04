@@ -29,7 +29,7 @@ public abstract class GateDescriptor {
 
 	protected GateParameters _originalParameters;
 
-	public GateDescriptor(GateParameters parameters, String type){
+	public GateDescriptor(GateParameters parameters, String type) {
 		_originalParameters = parameters;
 		_type = type;
 	}

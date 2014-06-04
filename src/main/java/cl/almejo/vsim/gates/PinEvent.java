@@ -18,7 +18,6 @@ import cl.almejo.vsim.simulation.SimulationEvent;
 public class PinEvent extends SimulationEvent {
 
 	private Pin _pin;
-	long _time = System.currentTimeMillis();
 	private int _pinId;
 
 

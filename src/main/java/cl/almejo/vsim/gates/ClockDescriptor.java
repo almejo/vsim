@@ -14,6 +14,7 @@ package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
+import cl.almejo.vsim.gui.ColorScheme;
 
 import java.awt.*;
 
@@ -29,11 +30,11 @@ public class ClockDescriptor extends GateDescriptor {
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
-		graphics.setColor(Color.blue);
+		graphics.setColor(ColorScheme.getGates());
 		graphics.fillRoundRect(x, y, 16, 16, 3, 3);
-		graphics.fillRect(x + 12, y + 12, 9, 9);
-		graphics.setColor(Constants.STATECOLORS.get(iconGate.getPin(0).getInValue()));
-		graphics.fillRect(x + 4, y + 4, 8, 8);
+		graphics.fillOval(x + 12, y + 12, 9, 9);
+		graphics.setColor(ColorScheme.getColor(iconGate.getPin(0)));
+		graphics.fillOval(x + 4, y + 4, 8, 8);
 
 	}
 

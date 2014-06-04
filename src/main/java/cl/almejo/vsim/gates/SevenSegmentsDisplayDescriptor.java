@@ -14,16 +14,18 @@ package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
+import cl.almejo.vsim.gui.ColorScheme;
 
 import java.awt.*;
 
 public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 
-	private static final int NUMBER_WIDTH = Circuit.GRIDSIZE * 3;
+	private static final int NUMBER_WIDTH = Circuit.GRIDSIZE * 2;
 	private static final int NUMBER_HEIGHT = Circuit.GRIDSIZE * 4;
-	private static final int NUMBER_OFFSET_X = 4;
+	private static final int NUMBER_OFFSET_X = 8;
 	private static final int NUMBER_OFFSET_Y = Circuit.GRIDSIZE;
-	private static final Stroke NUMBER_STROKE = new BasicStroke(3);
+	public static final int STROKE_WIDTH = 4;
+	private static final Stroke NUMBER_STROKE = new BasicStroke(STROKE_WIDTH);
 
 	public SevenSegmentsDisplayDescriptor(SevenSegmentsDisplayParameters parameters, String type) {
 		super(parameters, type);
@@ -40,7 +42,7 @@ public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
-		graphics.setColor(Color.blue);
+		graphics.setColor(ColorScheme.getGates());
 		Dimension dimension = getSize();
 		int unitWidth = dimension.width / (_pinCount / 4);
 		graphics.fillRoundRect(0, 0, Circuit.gridTrunc(dimension.width), Circuit.gridTrunc(dimension.height), 5, 5);
@@ -49,10 +51,10 @@ public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 		Stroke oldStroke = graphics.getStroke();
 		graphics.setStroke(NUMBER_STROKE);
 		for (int i = 0; i < (_pinCount / 4); i++) {
-			graphics.setColor(Color.black);
+			graphics.setColor(ColorScheme.getOff());
 			int xoffset = dimension.width - (unitWidth * (i + 1)) + NUMBER_OFFSET_X;
 			drawNumber(graphics, 8, xoffset, NUMBER_OFFSET_Y);
-			graphics.setColor(Color.red);
+			graphics.setColor(ColorScheme.getWireOn());
 			drawNumber(graphics, number & 15, xoffset, NUMBER_OFFSET_Y);
 			number >>= 4;
 		}

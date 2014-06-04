@@ -1,0 +1,42 @@
+{
+  "pastel" : {
+    "wires-on" : "#db5340",
+    "background" : "#bdbdbd",
+    "bus-on" : "#ff0000",
+    "ground" : "#00ff00",
+    "off" : "#000000",
+    "gates" : "#389cd1"
+  },
+  "default" : {
+    "wires-on" : "#ff0000",
+    "background" : "#bdbdbd",
+    "bus-on" : "#ff0000",
+    "ground" : "#00ff00",
+    "off" : "#000000",
+    "gates" : "#0000ff"
+  },
+  "test" : {
+    "wires-on" : "#ff0000",
+    "background" : "#009933",
+    "bus-on" : "#ff0000",
+    "ground" : "#00ff00",
+    "off" : "#000000",
+    "gates" : "#ff0000"
+  },
+  "Twilight" : {
+    "wires-on" : "#800000",
+    "background" : "#000000",
+    "bus-on" : "#ff0000",
+    "ground" : "#008000",
+    "off" : "#808080",
+    "gates" : "#004680"
+  },
+  "custom" : {
+    "wires-on" : "#c1321e",
+    "background" : "#3c3c3c",
+    "bus-on" : "#ff0000",
+    "ground" : "#00ff00",
+    "off" : "#000000",
+    "gates" : "#01621a"
+  }
+}

@@ -333,5 +333,14 @@
       "delay" : 1
     },
     "type" : "seven-segments-display-double"
+  }, {
+    "position" : {
+      "y" : 536,
+      "x" : 344
+    },
+    "parameters" : {
+      "delay" : 0
+    },
+    "type" : "led"
   } ]
 }

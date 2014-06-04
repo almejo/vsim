@@ -27,7 +27,7 @@ import cl.almejo.vsim.circuit.Circuit;
 
 public class Gate {
 
-	public static final String CLOCK ="clock";
+	public static final String CLOCK = "clock";
 	public static final String AND2 = "and2";
 	public static final String AND3 = "and3";
 	public static final String AND4 = "and4";
@@ -39,6 +39,7 @@ public class Gate {
 	public static final String TRISTATE = "tristate";
 	public static final String SEVEN_SEGMENTS_DISPLAY = "seven-segments-display";
 	public static final String SEVEN_SEGMENTS_DISPLAY_DOUBLE = "seven-segments-display-double";
+	public static final String LED = "led";
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;

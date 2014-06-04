@@ -50,6 +50,14 @@ public class IconGate extends Rectangle {
 
 	public void paint(Graphics2D graphics) {
 		pushMatrix(graphics);
+		Dimension dimension = _gate.getGateDescriptor().getSize();
+		int separation = 2;
+		int border = 8;
+		graphics.setColor(Color.GRAY);
+		graphics.drawLine(-(separation + border), -separation, dimension.width + (border + separation), -separation);
+		graphics.drawLine(-separation, -(separation + border), -separation, dimension.height + separation + border);
+		graphics.drawLine(dimension.width + separation, -(separation + border), dimension.width + separation, dimension.height + separation + border);
+		graphics.drawLine(-(separation + border), dimension.height + separation, dimension.width + separation + border, dimension.height + separation);
 		_gate.getGateDescriptor().paint(graphics, this);
 		popMatrix(graphics);
 	}
@@ -80,7 +88,7 @@ public class IconGate extends Rectangle {
 		LOGGER.debug("original transformation: " + _translateTransformation);
 		_translateTransformation.setToIdentity();
 		_translateTransformation.translate(x, y);
-		LOGGER.debug("Translate to: "  + x + " - " + y);
+		LOGGER.debug("Translate to: " + x + " - " + y);
 		recalculateTransform();
 		LOGGER.debug("resulting transformation: " + _translateTransformation.toString());
 	}

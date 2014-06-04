@@ -10,6 +10,7 @@ package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
+import cl.almejo.vsim.gui.ColorScheme;
 
 import java.awt.*;
 
@@ -26,9 +27,9 @@ public class FlipFlopDataDescriptor extends GateDescriptor {
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
-		graphics.setColor(Color.blue);
+		graphics.setColor(ColorScheme.getGates());
 		Dimension dimension = getSize();
-		graphics.drawRect(0, 0, dimension.width, dimension.height);
+		graphics.fillRect(0, 0, dimension.width, dimension.height);
 	}
 
 	@Override

@@ -15,12 +15,15 @@ package cl.almejo.vsim.circuit;
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.Pin;
+import cl.almejo.vsim.gui.ColorScheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.*;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Protoboard {
 
@@ -311,9 +314,9 @@ public class Protoboard {
 
 	private Color getContactColor(Contact contact) {
 		if (contact.getGuidePin() != null) {
-			return Constants.STATECOLORS.get(contact.getGuidePin().getInValue());
+			return ColorScheme.getColor(contact.getGuidePin());
 		}
-		return Constants.STATECOLORS.get(Constants.THREE_STATE);
+		return ColorScheme.getGround();
 	}
 
 	public List<Connection<Contact>> findToDisconnect(int x, int y) {

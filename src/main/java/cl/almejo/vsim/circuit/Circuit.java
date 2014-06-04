@@ -374,11 +374,11 @@ public class Circuit {
 
 
 	@SuppressWarnings("unchecked")
-	public static Circuit fromJSon(String map, String name) {
+	public static Circuit fromJSon(String json, String name) {
 		Circuit circuit = new Circuit();
 		try {
 
-			Map info = new ObjectMapper().readValue(map, Map.class);
+			Map info = new ObjectMapper().readValue(json, Map.class);
 			List<Map> gates = (List<Map>) info.get("gates");
 			for (Map gate : gates) {
 
@@ -421,7 +421,6 @@ public class Circuit {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			iconGate.getGate().getParamameters().getValues(parameters);
 			gateInfo.put("parameters", parameters);
-
 			gates.add(gateInfo);
 		}
 		map.put("gates", gates);
