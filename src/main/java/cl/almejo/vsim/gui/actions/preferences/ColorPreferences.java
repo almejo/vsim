@@ -45,6 +45,7 @@ public class ColorPreferences extends JPanel {
 		addColorChooser(pickers, "ground");
 		addColorChooser(pickers, "off");
 		addColorChooser(pickers, "wires-on");
+		addColorChooser(pickers, "signal");
 		add(pickers);
 
 		JPanel buttons = new JPanel();

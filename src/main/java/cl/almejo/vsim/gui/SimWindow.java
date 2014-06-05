@@ -127,9 +127,12 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		_timeDiagramCanvas = new TimeDiagramCanvas();
-		_canvas.setPreferredSize(new Dimension(800, 1800));
+		JSplitPane rightSplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _canvas, _timeDiagramCanvas);
+		rightSplitpane.setOneTouchExpandable(true);
+		rightSplitpane.setDividerLocation(500);
+
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel()), new JSplitPane(JSplitPane.VERTICAL_SPLIT, _canvas, _timeDiagramCanvas));
+				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel()), rightSplitpane);
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 

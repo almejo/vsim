@@ -60,6 +60,7 @@ public class ColorScheme {
 		_colors.put("ground", Color.GREEN);
 		_colors.put("off", Color.BLACK);
 		_colors.put("wires-on", Color.RED);
+		_colors.put("signal", Color.RED);
 	}
 
 	public static String save() throws IOException {
@@ -99,6 +100,10 @@ public class ColorScheme {
 
 	public static Color getBackground() {
 		return _current.get("background");
+	}
+
+	public static Color getSignal() {
+		return _current.get("signal");
 	}
 
 	public static Color getBusOn() {

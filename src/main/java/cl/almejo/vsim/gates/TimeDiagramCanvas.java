@@ -24,8 +24,7 @@ public class TimeDiagramCanvas extends JPanel {
 	private int _position = 0;
 	private static final int SIGNAL_HEIGHT = 20;
 	private static final int SPACE_BETWEEN_SIGNALS = 10;
-	private static int SIGNAL_HEIGHT_HALF = SIGNAL_HEIGHT / 2;
-	;
+	private static final int SIGNAL_HEIGHT_HALF = SIGNAL_HEIGHT / 2;
 
 	public TimeDiagramCanvas() {
 		setPreferredSize(new Dimension(1000, 200));
@@ -42,7 +41,7 @@ public class TimeDiagramCanvas extends JPanel {
 		Graphics2D graphics = (Graphics2D) getGraphics();
 		int index = 0;
 		for (byte value : values) {
-			graphics.setColor(ColorScheme.getWireOn());;
+			graphics.setColor(ColorScheme.getSignal());
 			switch (value) {
 				case Constants.ON:
 					graphics.drawLine(_position, delta - SIGNAL_HEIGHT, _position + 1, delta - SIGNAL_HEIGHT);
