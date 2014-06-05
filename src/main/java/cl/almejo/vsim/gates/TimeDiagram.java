@@ -16,7 +16,11 @@ import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.simulation.Scheduler;
 import cl.almejo.vsim.simulation.SimulationEvent;
 
-public class TimeDiagram extends Gate {
+import javax.swing.*;
+
+public class TimeDiagram extends Gate implements DisplayInfoGate {
+
+	private final PlotEvent _plotEvent;
 
 	private TimeDiagramCanvas _timeDiagramCanvas;
 
@@ -42,8 +46,8 @@ public class TimeDiagram extends Gate {
 		for (int pindId = 0; pindId < _pins.length; pindId++) {
 			_pins[pindId] = new SimplePin(this, circuit.getScheduler(), pindId);
 		}
-		PlotEvent plotEvent = new PlotEvent(circuit.getScheduler(), this);
-		plotEvent.schedule(1);
+		_plotEvent = new PlotEvent(circuit.getScheduler(), this);
+		_timeDiagramCanvas = new TimeDiagramCanvas();
 	}
 
 	private void plot() {
@@ -55,8 +59,12 @@ public class TimeDiagram extends Gate {
 		}
 	}
 
-	public void setCanvas(TimeDiagramCanvas canvas) {
-		_timeDiagramCanvas = canvas;
-		_timeDiagramCanvas.clean();
+	@Override
+	public JPanel getDisplay() {
+		return _timeDiagramCanvas;
+	}
+
+	public void startDisplay() {
+		_plotEvent.schedule(1);
 	}
 }

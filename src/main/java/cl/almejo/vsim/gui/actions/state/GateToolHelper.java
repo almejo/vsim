@@ -11,6 +11,7 @@
 
 package cl.almejo.vsim.gui.actions.state;
 
+import cl.almejo.vsim.gates.DisplayInfoGate;
 import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gui.SimWindow;
@@ -33,6 +34,12 @@ public class GateToolHelper extends ActionToolHelper {
 		}
 		IconGate iconGate = GateFactory.getInstance(_gateType, window.getCircuit());
 		window.getCircuit().undoableAddGate(iconGate, event.getX(), event.getY());
+
+		if (iconGate.getGate() instanceof DisplayInfoGate) {
+			window.addDisplayPanel("#" + iconGate.getId(), ((DisplayInfoGate) iconGate.getGate()).getDisplay());
+			((DisplayInfoGate) iconGate.getGate()).startDisplay();
+		}
+
 		return iconGate;
 	}
 

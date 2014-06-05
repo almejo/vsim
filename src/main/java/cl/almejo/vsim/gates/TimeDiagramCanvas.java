@@ -17,7 +17,7 @@ import cl.almejo.vsim.gui.ColorScheme;
 import javax.swing.*;
 import java.awt.*;
 
-public class TimeDiagramCanvas extends JPanel {
+public class TimeDiagramCanvas extends JPanel implements DisplayPanel {
 
 	private byte[][] _values = new byte[4][1000];
 
@@ -28,6 +28,18 @@ public class TimeDiagramCanvas extends JPanel {
 
 	public TimeDiagramCanvas() {
 		setPreferredSize(new Dimension(1000, 200));
+		setBackground(ColorScheme.getBackground());
+	}
+
+
+	@Override
+	public void paint(Graphics graphics) {
+//		System.out.println("PAINT!!!");
+		super.paint(graphics);
+
+//		for (int i = 0; i < _values[0].length; i++) {
+//			drawInstant(new byte[]{_values[0][i], _values[1][i], _values[2][i], _values[3][i]}, (Graphics2D) graphics, i);
+//		}
 	}
 
 	public void plot(byte[] values) {
@@ -37,40 +49,40 @@ public class TimeDiagramCanvas extends JPanel {
 		for (int i = 0; i < values.length; i++) {
 			_values[i][_position] = values[i];
 		}
+		if (!isVisible()) {
+			return;
+		}
+		drawInstant(values, (Graphics2D) getGraphics(), _position);
+		_position++;
+	}
+
+	private void drawInstant(byte[] values, Graphics2D graphics, int positionInstance) {
 		int delta = SIGNAL_HEIGHT + 10;
-		Graphics2D graphics = (Graphics2D) getGraphics();
 		int index = 0;
 		for (byte value : values) {
 			graphics.setColor(ColorScheme.getSignal());
 			switch (value) {
 				case Constants.ON:
-					graphics.drawLine(_position, delta - SIGNAL_HEIGHT, _position + 1, delta - SIGNAL_HEIGHT);
+					graphics.drawLine(positionInstance, delta - SIGNAL_HEIGHT, positionInstance + 1, delta - SIGNAL_HEIGHT);
 					break;
 				case Constants.OFF:
-					graphics.drawLine(_position, delta, _position + 1, delta);
+					graphics.drawLine(positionInstance, delta, positionInstance + 1, delta);
 					break;
 				default:
 					graphics.setColor(ColorScheme.getGround());
-					graphics.drawLine(_position, delta - SIGNAL_HEIGHT_HALF, _position + 1, delta - SIGNAL_HEIGHT_HALF);
+					graphics.drawLine(positionInstance, delta - SIGNAL_HEIGHT_HALF, positionInstance + 1, delta - SIGNAL_HEIGHT_HALF);
 					break;
 			}
 
-			if (_position > 0) {
-				if (_values[index][_position - 1] != Constants.THREE_STATE && _values[index][_position] != _values[index][_position - 1]) {
-					graphics.drawLine(_position, delta - SIGNAL_HEIGHT, _position, delta);
+			if (positionInstance > 0) {
+				if (_values[index][positionInstance - 1] != Constants.THREE_STATE && _values[index][positionInstance] != _values[index][positionInstance - 1]) {
+					graphics.drawLine(_position, delta - SIGNAL_HEIGHT, positionInstance, delta);
 				}
 			}
 			delta += SPACE_BETWEEN_SIGNALS + SIGNAL_HEIGHT;
 			index++;
 		}
-
-		_position++;
-	}
-
-	public void clean() {
-		Dimension dimension = getSize();
-		Graphics2D graphics = (Graphics2D) getGraphics();
 		graphics.setColor(ColorScheme.getBackground());
-		graphics.fillRect(0, 0, dimension.width, dimension.height);
+		graphics.fillRect(_position + 2, 0, 20 , getHeight());
 	}
 }
