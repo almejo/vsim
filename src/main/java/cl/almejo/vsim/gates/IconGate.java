@@ -50,16 +50,20 @@ public class IconGate extends Rectangle {
 
 	public void paint(Graphics2D graphics) {
 		pushMatrix(graphics);
-		Dimension dimension = _gate.getGateDescriptor().getSize();
 		int separation = 2;
 		int border = 8;
+		drawFrame(graphics, separation, border);
+		_gate.getGateDescriptor().paint(graphics, this);
+		popMatrix(graphics);
+	}
+
+	private void drawFrame(Graphics2D graphics, int separation, int border) {
+		Dimension dimension = _gate.getGateDescriptor().getSize();
 		graphics.setColor(Color.GRAY);
 		graphics.drawLine(-(separation + border), -separation, dimension.width + (border + separation), -separation);
 		graphics.drawLine(-separation, -(separation + border), -separation, dimension.height + separation + border);
 		graphics.drawLine(dimension.width + separation, -(separation + border), dimension.width + separation, dimension.height + separation + border);
 		graphics.drawLine(-(separation + border), dimension.height + separation, dimension.width + separation + border, dimension.height + separation);
-		_gate.getGateDescriptor().paint(graphics, this);
-		popMatrix(graphics);
 	}
 
 	private void popMatrix(Graphics2D graphics) {

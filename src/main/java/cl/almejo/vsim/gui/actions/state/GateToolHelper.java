@@ -12,6 +12,7 @@
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.gates.GateFactory;
+import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gui.SimWindow;
 
 import java.awt.event.MouseEvent;
@@ -24,13 +25,15 @@ public class GateToolHelper extends ActionToolHelper {
 	}
 
 	@Override
-	public void mouseClicked(SimWindow window, MouseEvent event) {
+	public IconGate mouseClicked(SimWindow window, MouseEvent event) {
 		super.mouseClicked(window, event);
 		if (event.isControlDown()) {
 			window.getCircuit().undoableRemoveGate(event.getX(), event.getY());
-			return;
+			return null;
 		}
-		window.getCircuit().undoableAddGate(GateFactory.getInstance(_gateType, window.getCircuit()), event.getX(), event.getY());
+		IconGate iconGate = GateFactory.getInstance(_gateType, window.getCircuit());
+		window.getCircuit().undoableAddGate(iconGate, event.getX(), event.getY());
+		return iconGate;
 	}
 
 

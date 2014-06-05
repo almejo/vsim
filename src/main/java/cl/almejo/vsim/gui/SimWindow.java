@@ -18,9 +18,11 @@ import cl.almejo.vsim.circuit.CircuitCanvas;
 import cl.almejo.vsim.circuit.CircuitEvent;
 import cl.almejo.vsim.circuit.CircuitStateListener;
 import cl.almejo.vsim.gates.Gate;
+import cl.almejo.vsim.gates.TimeDiagramCanvas;
 import cl.almejo.vsim.gui.actions.*;
 import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
 import cl.almejo.vsim.gui.actions.state.GateToolHelper;
+import cl.almejo.vsim.gui.actions.state.TimeDiagramToolHelper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	private static final long serialVersionUID = 1L;
 	private final CircuitCanvas _canvas;
+	private final TimeDiagramCanvas _timeDiagramCanvas;
 	private Circuit _circuit;
 
 	private ActionToolHelper _toolHelper = ActionToolHelper.CURSOR;
@@ -92,9 +95,10 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, new GateToolHelper(Gate.CLOCK));
 	private final WindowAction FLIP_FLOP_DATA_TOOL_ACTION = new ToolAction(Messages.t("action.tool.flip.flop.data"), Messages.t("action.tool.flip.flop.data.description"), "flipflopdata.png", null, this, new GateToolHelper(Gate.FLIP_FLOP_DATA));
 	private final WindowAction TRISTATE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.tristate"), Messages.t("action.tool.tristate.description"), "tristate.png", null, this, new GateToolHelper(Gate.TRISTATE));
-	private final WindowAction SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display"), Messages.t("action.tool.seven.segments.display.description"), "seven.segments.display.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY));
-	private final WindowAction SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display.double"), Messages.t("action.tool.seven.segments.display.double.description"), "seven.segments.display.double.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE));
-	private final WindowAction LED_TOOL_ACTION = new ToolAction(Messages.t("action.tool.led.double"), Messages.t("action.tool.led.description"), "seven.segments.display.double.png", null, this, new GateToolHelper(Gate.LED));
+	private final WindowAction SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display"), Messages.t("action.tool.seven.segments.display.description"), "seven-segments-display.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY));
+	private final WindowAction SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display.double"), Messages.t("action.tool.seven.segments.display.double.description"), "seven-segments-display-double.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE));
+	private final WindowAction LED_TOOL_ACTION = new ToolAction(Messages.t("action.tool.led"), Messages.t("action.tool.led.description"), "led.png", null, this, new GateToolHelper(Gate.LED));
+	private final WindowAction TIME_DIAGRAM_TOOL_ACTION = new ToolAction(Messages.t("action.tool.time.diagram"), Messages.t("action.tool.time.diagram.description"), "time-diagram.png", null, this, new TimeDiagramToolHelper(Gate.TIME_DIAGRAM));
 
 	private static JFileChooser OPEN_FILE_CHOOSER;
 	private static JFileChooser SAVE_AS_FILE_CHOOSER;
@@ -122,10 +126,13 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		setBounds(100, 100, 700, 700);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		_timeDiagramCanvas = new TimeDiagramCanvas();
+		_canvas.setPreferredSize(new Dimension(800, 1800));
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel()), _canvas);
+				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel()), new JSplitPane(JSplitPane.VERTICAL_SPLIT, _canvas, _timeDiagramCanvas));
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
+
 		setVisible(true);
 
 		addComponentListener(this);
@@ -173,6 +180,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION, Messages.c("menu.tool.seven.segments.display.mnemonic")));
 		menu.add(newMenuItem(SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION, Messages.c("menu.tool.seven.segments.display.double.mnemonic")));
 		menu.add(newMenuItem(LED_TOOL_ACTION, Messages.c("menu.tool.led.mnemonic")));
+		menu.add(newMenuItem(TIME_DIAGRAM_TOOL_ACTION, Messages.c("menu.tool.led.mnemonic")));
 
 		menu = newMenu(Messages.t("menu.simulation"), KeyEvent.VK_F, menuBar);
 		menu.add(newMenuItem(START_ACTION, Messages.c("menu.simulation.start.mnemonic")));
@@ -253,6 +261,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.add(newGrouppedButton(SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(TRISTATE_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(LED_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(TIME_DIAGRAM_TOOL_ACTION, group));
 		return panel;
 	}
 
@@ -520,5 +529,9 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		_circuit.setSaved();
 		updateTitle();
+	}
+
+	public TimeDiagramCanvas getTimeDiagramCanvas() {
+		return _timeDiagramCanvas;
 	}
 }

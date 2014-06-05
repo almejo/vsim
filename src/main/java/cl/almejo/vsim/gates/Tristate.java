@@ -18,10 +18,9 @@ public class Tristate extends Gate {
 
 	public Tristate(Circuit circuit, GateParameters params, TristateDescriptor descriptor) {
 		super(circuit, params, descriptor);
-
 		_pins = new TristatePin[3];
-		_pins[0] = new TristatePin(this, circuit.getScheduler(), 0);
-		_pins[1] = new TristatePin(this, circuit.getScheduler(), 1);
-		_pins[2] = new TristatePin(this, circuit.getScheduler(), 2);
+		for(int pinId = 0;pinId < 3; pinId++) {
+			_pins[pinId] = new TristatePin(this, circuit.getScheduler(), pinId);
+		}
 	}
 }

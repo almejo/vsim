@@ -35,6 +35,7 @@ public class GateFactory {
 	private static final FlipFlopDataDescriptor FLIP_FLOP_DATA_DESCRIPTOR;
 	private static final TristateDescriptor TRISTATE_DESCRIPTOR;
 	private static final LedDescriptor LED_DESCRIPTOR;
+	private static final TimeDiagramDescriptor TIME_DIAGRAM_DESCRIPTOR;
 
 	static {
 		BEHAVIOR_AND = new int[3][3];
@@ -74,6 +75,7 @@ public class GateFactory {
 		SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR_DOUBLE = new SevenSegmentsDisplayDescriptor(new SevenSegmentsDisplayParameters(1, 8), Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE);
 		FLIP_FLOP_DATA_DESCRIPTOR = new FlipFlopDataDescriptor(new FlipFlopDataParameters(1), Gate.FLIP_FLOP_DATA);
 		LED_DESCRIPTOR = new LedDescriptor(new LedParameters("Led"), Gate.LED);
+		TIME_DIAGRAM_DESCRIPTOR= new TimeDiagramDescriptor(new TimeDiagramParameters(1), Gate.TIME_DIAGRAM);
 	}
 
 	public static IconGate getInstance(String gateIndex, Circuit circuit) {
@@ -116,6 +118,9 @@ public class GateFactory {
 			}
 			if (gateIndex.equalsIgnoreCase(Gate.LED)) {
 				return new IconGate(circuit.getNextGateId(), new Led(circuit, LED_DESCRIPTOR.getOriginalParameters().clone(), LED_DESCRIPTOR));
+			}
+			if (gateIndex.equalsIgnoreCase(Gate.TIME_DIAGRAM)) {
+				return new IconGate(circuit.getNextGateId(), new TimeDiagram(circuit, TIME_DIAGRAM_DESCRIPTOR.getOriginalParameters().clone(), TIME_DIAGRAM_DESCRIPTOR));
 			}
 		} catch (CloneNotSupportedException e) {
 			return null;
