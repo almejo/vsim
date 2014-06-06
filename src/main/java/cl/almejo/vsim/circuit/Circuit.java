@@ -15,6 +15,7 @@ import cl.almejo.vsim.circuit.commands.*;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
+import cl.almejo.vsim.gui.ColorScheme;
 import cl.almejo.vsim.simulation.Scheduler;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -119,8 +120,19 @@ public class Circuit {
 	public void paint(Graphics2D graphics, Rectangle rectangle) {
 		if (graphics != null) {
 			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			drawGrid(graphics, rectangle);
 			drawGates(graphics, rectangle);
 			_protoboard.paint(graphics, rectangle);
+		}
+	}
+
+	private void drawGrid(Graphics2D graphics, Rectangle rectangle) {
+		graphics.setColor(ColorScheme.getGrid());
+		for (int x = Circuit.gridTrunc(rectangle.x - 10); x < rectangle.getWidth(); x += Circuit.GRIDSIZE * 2) {
+			graphics.drawLine(x, 0, x, (int) rectangle.getHeight());
+		}
+		for (int y = Circuit.gridTrunc(rectangle.y - 10); y < rectangle.getHeight(); y += Circuit.GRIDSIZE * 2) {
+			graphics.drawLine(0, y, (int) rectangle.getWidth(), y);
 		}
 	}
 

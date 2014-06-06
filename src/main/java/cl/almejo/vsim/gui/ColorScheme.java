@@ -34,7 +34,7 @@ public class ColorScheme {
 		try {
 			String json = FileUtils.readFileToString(file);
 
-			Map<String, Map<String, String>> schemes = (Map<String, Map<String, String>>) new ObjectMapper().readValue(json, Map.class);
+			@SuppressWarnings("unchecked") Map<String, Map<String, String>> schemes = (Map<String, Map<String, String>>) new ObjectMapper().readValue(json, Map.class);
 			for (String name : schemes.keySet()) {
 				Map<String, String> map = schemes.get(name);
 				ColorScheme scheme = new ColorScheme(name);
@@ -61,6 +61,8 @@ public class ColorScheme {
 		_colors.put("off", Color.BLACK);
 		_colors.put("wires-on", Color.RED);
 		_colors.put("signal", Color.RED);
+		_colors.put("grid", Color.GRAY);
+		_colors.put("label", Color.YELLOW);
 	}
 
 	public static String save() throws IOException {
@@ -88,6 +90,10 @@ public class ColorScheme {
 
 	public static void setCurrent(String name) {
 		_current = _schemes.get(name);
+	}
+
+	public static Color getGrid() {
+		return _current.get("grid");
 	}
 
 	public void set(String colorName, Color color) {
@@ -151,6 +157,10 @@ public class ColorScheme {
 			}
 		}
 		return false;
+	}
+
+	public static Color getLabel() {
+		return _current.get("label");
 	}
 }
 

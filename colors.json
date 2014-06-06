@@ -5,7 +5,9 @@
     "bus-on" : "#ff0000",
     "ground" : "#00ff00",
     "off" : "#000000",
+    "grid" : "#cccccc",
     "signal" : "#db5340",
+    "label" : "#cc6600",
     "gates" : "#389cd1"
   },
   "default" : {
@@ -14,7 +16,9 @@
     "bus-on" : "#ff0000",
     "ground" : "#00ff00",
     "off" : "#000000",
+    "grid" : "#cccccc",
     "signal" : "#ff0000",
+    "label" : "#ffff00",
     "gates" : "#0000ff"
   },
   "test" : {
@@ -23,7 +27,9 @@
     "bus-on" : "#ff0000",
     "ground" : "#00ff00",
     "off" : "#000000",
+    "grid" : "#808080",
     "signal" : "#ff0000",
+    "label" : "#808080",
     "gates" : "#ff0000"
   },
   "Twilight" : {
@@ -32,7 +38,9 @@
     "bus-on" : "#ff0000",
     "ground" : "#008000",
     "off" : "#808080",
+    "grid" : "#808080",
     "signal" : "#990099",
+    "label" : "#808080",
     "gates" : "#004680"
   },
   "custom" : {
@@ -41,7 +49,9 @@
     "bus-on" : "#ff0000",
     "ground" : "#00ff00",
     "off" : "#000000",
+    "grid" : "#808080",
     "signal" : "#c1321e",
+    "label" : "#808080",
     "gates" : "#01621a"
   }
 }

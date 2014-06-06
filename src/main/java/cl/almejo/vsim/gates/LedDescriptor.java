@@ -46,7 +46,7 @@ public class LedDescriptor extends GateDescriptor {
 		graphics.fillRect(dimension.width / 3, dimension.width, Circuit.GRIDSIZE, Circuit.GRIDSIZE);
 		LedParameters parameters = (LedParameters) iconGate.getGate().getParamameters();
 		if (parameters.getText() != null && !parameters.getText().trim().equalsIgnoreCase("")) {
-			graphics.setColor(ColorScheme.getGates());
+			graphics.setColor(ColorScheme.getLabel());
 			graphics.drawString(parameters.getText(), dimension.width + Circuit.GRIDSIZE, dimension.height / 2);
 		}
 	}

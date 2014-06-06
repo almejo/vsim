@@ -277,7 +277,6 @@ public class Protoboard {
 
 	public void paint(Graphics2D graphics, Rectangle rectangle) {
 		Color color = graphics.getColor();
-
 		for (Integer x : _matrix.getXCoords()) {
 			Contact previous = null;
 			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
@@ -468,6 +467,8 @@ public class Protoboard {
 		if (xi != xf) {
 			graphics.drawLine(xi, yf, xf, yf);
 		}
+		graphics.fillOval(xi - 3, yi - 3, 6, 6);
+		graphics.fillOval(xf - 3, yf - 3, 6, 6);
 		graphics.setStroke(oldStroke);
 	}
 

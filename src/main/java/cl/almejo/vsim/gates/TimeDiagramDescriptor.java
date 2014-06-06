@@ -33,6 +33,8 @@ public class TimeDiagramDescriptor extends GateDescriptor {
 		graphics.setColor(ColorScheme.getGates());
 		Dimension dimension = getSize();
 		graphics.fillRect(0, 0, dimension.width, dimension.height);
+		graphics.setColor(ColorScheme.getLabel());
+		graphics.drawString("#" + iconGate.getId(), (int) dimension.getWidth() + 10, (int) dimension.getHeight() / 2);
 	}
 
 	@Override

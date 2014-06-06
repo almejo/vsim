@@ -22,7 +22,7 @@ public class TimeDiagram extends Gate implements DisplayInfoGate {
 
 	private final PlotEvent _plotEvent;
 
-	private TimeDiagramCanvas _timeDiagramCanvas;
+	private TimeDiagramDisplay _timeDiagramCanvas;
 
 	class PlotEvent extends SimulationEvent {
 
@@ -47,7 +47,7 @@ public class TimeDiagram extends Gate implements DisplayInfoGate {
 			_pins[pindId] = new SimplePin(this, circuit.getScheduler(), pindId);
 		}
 		_plotEvent = new PlotEvent(circuit.getScheduler(), this);
-		_timeDiagramCanvas = new TimeDiagramCanvas();
+		_timeDiagramCanvas = new TimeDiagramDisplay();
 	}
 
 	private void plot() {
