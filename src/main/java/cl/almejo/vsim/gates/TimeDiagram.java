@@ -36,7 +36,7 @@ public class TimeDiagram extends Gate implements DisplayInfoGate {
 		@Override
 		public void happen() {
 			_timeDiagram.plot();
-			schedule(100);
+			schedule(150);
 		}
 	}
 
