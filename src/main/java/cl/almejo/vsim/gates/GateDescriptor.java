@@ -52,7 +52,7 @@ public abstract class GateDescriptor {
 		return _pinCount;
 	}
 
-	public GateParameters getOriginalParameters(){
+	public GateParameters getOriginalParameters() {
 		return _originalParameters;
 	}
 

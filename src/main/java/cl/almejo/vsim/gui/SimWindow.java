@@ -97,6 +97,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display.double"), Messages.t("action.tool.seven.segments.display.double.description"), "seven-segments-display-double.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE));
 	private final WindowAction LED_TOOL_ACTION = new ToolAction(Messages.t("action.tool.led"), Messages.t("action.tool.led.description"), "led.png", null, this, new GateToolHelper(Gate.LED));
 	private final WindowAction TIME_DIAGRAM_TOOL_ACTION = new ToolAction(Messages.t("action.tool.time.diagram"), Messages.t("action.tool.time.diagram.description"), "time-diagram.png", null, this, new GateToolHelper(Gate.TIME_DIAGRAM));
+	private final WindowAction SWITCH_TOOL_ACTION = new ToolAction(Messages.t("action.tool.switch"), Messages.t("action.tool.switch.description"), "time-diagram.png", null, this, new GateToolHelper(Gate.SWITCH));
 
 	private static JFileChooser OPEN_FILE_CHOOSER;
 	private static JFileChooser SAVE_AS_FILE_CHOOSER;
@@ -181,7 +182,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION, Messages.c("menu.tool.seven.segments.display.mnemonic")));
 		menu.add(newMenuItem(SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION, Messages.c("menu.tool.seven.segments.display.double.mnemonic")));
 		menu.add(newMenuItem(LED_TOOL_ACTION, Messages.c("menu.tool.led.mnemonic")));
-		menu.add(newMenuItem(TIME_DIAGRAM_TOOL_ACTION, Messages.c("menu.tool.led.mnemonic")));
+		menu.add(newMenuItem(TIME_DIAGRAM_TOOL_ACTION, Messages.c("menu.tool.time.diagram.mnemonic")));
+		menu.add(newMenuItem(SWITCH_TOOL_ACTION, Messages.c("menu.tool.switch.mnemonic")));
 
 		menu = newMenu(Messages.t("menu.simulation"), KeyEvent.VK_F, menuBar);
 		menu.add(newMenuItem(START_ACTION, Messages.c("menu.simulation.start.mnemonic")));
@@ -263,6 +265,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.add(newGrouppedButton(TRISTATE_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(LED_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(TIME_DIAGRAM_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(SWITCH_TOOL_ACTION, group));
 		return panel;
 	}
 

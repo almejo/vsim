@@ -29,13 +29,15 @@ public class GateFactory {
 	private final static AssociativeGateDescriptor ASSOC_OR3_DESCRIPTOR;
 	private final static AssociativeGateDescriptor ASSOC_OR4_DESCRIPTOR;
 
-	private final static SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR;
-	private final static SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR_DOUBLE;
-
 	private static final FlipFlopDataDescriptor FLIP_FLOP_DATA_DESCRIPTOR;
+
 	private static final TristateDescriptor TRISTATE_DESCRIPTOR;
 	private static final LedDescriptor LED_DESCRIPTOR;
 	private static final TimeDiagramDescriptor TIME_DIAGRAM_DESCRIPTOR;
+	private static final SwitchDescriptor SWITCH_DESCRIPTOR;
+	private final static SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR;
+	private final static SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR_DOUBLE;
+
 
 	static {
 		BEHAVIOR_AND = new int[3][3];
@@ -75,7 +77,8 @@ public class GateFactory {
 		SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR_DOUBLE = new SevenSegmentsDisplayDescriptor(new SevenSegmentsDisplayParameters(1, 8), Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE);
 		FLIP_FLOP_DATA_DESCRIPTOR = new FlipFlopDataDescriptor(new FlipFlopDataParameters(1), Gate.FLIP_FLOP_DATA);
 		LED_DESCRIPTOR = new LedDescriptor(new LedParameters("Led"), Gate.LED);
-		TIME_DIAGRAM_DESCRIPTOR= new TimeDiagramDescriptor(new TimeDiagramParameters(1), Gate.TIME_DIAGRAM);
+		TIME_DIAGRAM_DESCRIPTOR = new TimeDiagramDescriptor(new TimeDiagramParameters(1), Gate.TIME_DIAGRAM);
+		SWITCH_DESCRIPTOR = new SwitchDescriptor(new SwitchParameters(Constants.ON, 1), Gate.SWITCH);
 	}
 
 	public static IconGate getInstance(String gateIndex, Circuit circuit) {
@@ -121,6 +124,9 @@ public class GateFactory {
 			}
 			if (gateIndex.equalsIgnoreCase(Gate.TIME_DIAGRAM)) {
 				return new IconGate(circuit.getNextGateId(), new TimeDiagram(circuit, TIME_DIAGRAM_DESCRIPTOR.getOriginalParameters().clone(), TIME_DIAGRAM_DESCRIPTOR));
+			}
+			if (gateIndex.equalsIgnoreCase(Gate.SWITCH)) {
+				return new IconGate(circuit.getNextGateId(), new Switch(circuit, SWITCH_DESCRIPTOR.getOriginalParameters().clone(), SWITCH_DESCRIPTOR));
 			}
 		} catch (CloneNotSupportedException e) {
 			return null;

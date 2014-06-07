@@ -41,6 +41,7 @@ public class Gate {
 	public static final String SEVEN_SEGMENTS_DISPLAY_DOUBLE = "seven-segments-display-double";
 	public static final String LED = "led";
 	public static final String TIME_DIAGRAM = "time-diagram";
+	public static final String SWITCH = "switch";
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;

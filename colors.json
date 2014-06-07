@@ -6,7 +6,7 @@
     "ground" : "#00ff00",
     "off" : "#000000",
     "grid" : "#cccccc",
-    "signal" : "#db5340",
+    "signal" : "#990033",
     "label" : "#cc6600",
     "gates" : "#389cd1"
   },
