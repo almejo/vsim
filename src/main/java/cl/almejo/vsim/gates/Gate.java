@@ -70,4 +70,6 @@ public class Gate {
 		return _pins.length;
 	}
 
+	public void parametersUpdated() {
+	}
 }

@@ -398,7 +398,7 @@ public class Circuit {
 				IconGate iconGate = GateFactory.getInstance((String) gate.get("type"), circuit);
 				LOGGER.info("Created gate " + iconGate.getId());
 				iconGate.getGate().getParamameters().setValues((Map<String, Object>) gate.get("parameters"));
-
+				iconGate.getGate().parametersUpdated();
 				circuit.undoableAddGate(iconGate, (Integer) position.get("x"), (Integer) position.get("y"));
 			}
 			List<Map> connections = (List<Map>) info.get("connections");

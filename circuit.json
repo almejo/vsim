@@ -27,7 +27,7 @@
     "yi" : 512
   }, {
     "yf" : 512,
-    "xi" : 464,
+    "xi" : 456,
     "xf" : 512,
     "yi" : 512
   }, {
@@ -38,11 +38,6 @@
   }, {
     "yf" : 552,
     "xi" : 456,
-    "xf" : 464,
-    "yi" : 552
-  }, {
-    "yf" : 552,
-    "xi" : 464,
     "xf" : 512,
     "yi" : 552
   }, {
@@ -404,24 +399,6 @@
     "type" : "led"
   }, {
     "position" : {
-      "y" : 504,
-      "x" : 432
-    },
-    "parameters" : {
-      "delay" : 1
-    },
-    "type" : "switch"
-  }, {
-    "position" : {
-      "y" : 544,
-      "x" : 432
-    },
-    "parameters" : {
-      "delay" : 1
-    },
-    "type" : "switch"
-  }, {
-    "position" : {
       "y" : 488,
       "x" : 504
     },
@@ -438,5 +415,25 @@
       "delay" : 0
     },
     "type" : "led"
+  }, {
+    "position" : {
+      "y" : 504,
+      "x" : 424
+    },
+    "parameters" : {
+      "value" : 1,
+      "delay" : 1
+    },
+    "type" : "switch"
+  }, {
+    "position" : {
+      "y" : 544,
+      "x" : 424
+    },
+    "parameters" : {
+      "value" : 0,
+      "delay" : 1
+    },
+    "type" : "switch"
   } ]
 }

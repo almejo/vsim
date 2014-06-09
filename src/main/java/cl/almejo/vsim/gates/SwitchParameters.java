@@ -10,6 +10,8 @@
  */
 package cl.almejo.vsim.gates;
 
+import java.util.Map;
+
 public class SwitchParameters extends GateParameters {
 	private byte _value;
 
@@ -21,5 +23,17 @@ public class SwitchParameters extends GateParameters {
 	public byte getValue() {
 		return _value;
 	}
+
+
+	public void setValues(Map<String, Object> parameters) {
+		super.setValues(parameters);
+		_value = ((Integer) parameters.get("value")).byteValue();
+	}
+
+	public void getValues(Map<String, Object> parameters) {
+		super.getValues(parameters);
+		parameters.put("value", _value);
+	}
+
 
 }
