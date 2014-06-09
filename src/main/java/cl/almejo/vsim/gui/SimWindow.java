@@ -81,7 +81,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction ABOUT_ACTION = new AboutAction(Messages.t("action.help.about"), Messages.t("action.help.about.description"), null, null, this);
 
 	private final WindowAction CURSOR_TOOL_ACTION = new ToolAction(Messages.t("action.tool.cursor"), Messages.t("action.tool.cursor.description"), "cursor.png", null, this, ActionToolHelper.CURSOR);
-	private final WindowAction MOVE_VIEWPORT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.move.viewport"), Messages.t("action.tool.move.viewport.description"), "move-viewport.png", null, this, ActionToolHelper.MOVE_VIEWPORT);
+	private final WindowAction MOVE_VIEWPORT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.move.viewport"), Messages.t("action.tool.move.viewport.description"), "move-viewport.png", null, this, ActionToolHelper.CURSOR);
 	private final WindowAction WIRES_TOOL_ACTION = new ToolAction(Messages.t("action.tool.wires"), Messages.t("action.tool.wires.description"), "wires.png", null, this, ActionToolHelper.WIRES);
 	private final WindowAction AND2_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and2"), Messages.t("action.tool.and2.description"), "and2.png", null, this, new GateToolHelper(Gate.AND2));
 	private final WindowAction AND3_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and3"), Messages.t("action.tool.and3.description"), "and3.png", null, this, new GateToolHelper(Gate.AND3));
@@ -97,7 +97,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display.double"), Messages.t("action.tool.seven.segments.display.double.description"), "seven-segments-display-double.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE));
 	private final WindowAction LED_TOOL_ACTION = new ToolAction(Messages.t("action.tool.led"), Messages.t("action.tool.led.description"), "led.png", null, this, new GateToolHelper(Gate.LED));
 	private final WindowAction TIME_DIAGRAM_TOOL_ACTION = new ToolAction(Messages.t("action.tool.time.diagram"), Messages.t("action.tool.time.diagram.description"), "time-diagram.png", null, this, new GateToolHelper(Gate.TIME_DIAGRAM));
-	private final WindowAction SWITCH_TOOL_ACTION = new ToolAction(Messages.t("action.tool.switch"), Messages.t("action.tool.switch.description"), "switch.png", null, this, new GateToolHelper(Gate.SWITCH));
+	private final WindowAction SWITCH_TOOL_ACTION = new ToolAction(Messages.t("action.tool.switch"), Messages.t("action.tool.switch.description"), "time-diagram.png", null, this, new GateToolHelper(Gate.SWITCH));
 
 	private static JFileChooser OPEN_FILE_CHOOSER;
 	private static JFileChooser SAVE_AS_FILE_CHOOSER;
@@ -537,9 +537,5 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	public void addDisplayPanel(String idInstance, JPanel displayPanel) {
 		_displaysPane.add(idInstance, displayPanel);
-	}
-
-	public CircuitCanvas getCanvas() {
-		return _canvas;
 	}
 }

@@ -12,8 +12,6 @@
 
 package cl.almejo.vsim.gates;
 
-import java.awt.geom.AffineTransform;
-
 public class Constants {
 
 	public static final byte OFF = 0;
@@ -24,10 +22,4 @@ public class Constants {
 	public static final byte EAST = 1 << 1;
 	public static final byte SOUTH = 1 << 2;
 	public static final byte WEST = 1 << 3;
-	public static AffineTransform TRANSFORM_IDENTITY;
-
-	static {
-		TRANSFORM_IDENTITY = new AffineTransform();
-		TRANSFORM_IDENTITY.setToIdentity();
-	}
 }
