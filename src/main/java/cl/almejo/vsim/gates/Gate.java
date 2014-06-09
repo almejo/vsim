@@ -37,6 +37,11 @@ public class Gate {
 	public static final String NOT = "not";
 	public static final String FLIP_FLOP_DATA = "flip-flop-data";
 	public static final String TRISTATE = "tristate";
+	public static final String SEVEN_SEGMENTS_DISPLAY = "seven-segments-display";
+	public static final String SEVEN_SEGMENTS_DISPLAY_DOUBLE = "seven-segments-display-double";
+	public static final String LED = "led";
+	public static final String TIME_DIAGRAM = "time-diagram";
+	public static final String SWITCH = "switch";
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;
@@ -65,4 +70,6 @@ public class Gate {
 		return _pins.length;
 	}
 
+	public void parametersUpdated() {
+	}
 }

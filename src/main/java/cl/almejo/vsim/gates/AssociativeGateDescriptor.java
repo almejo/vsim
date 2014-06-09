@@ -54,7 +54,7 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 
 	@Override
 	public Dimension getSize() {
-		return new Dimension(32, 16);
+		return new Dimension(32, 32);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 
 	@Override
 	public int getPinCount() {
-		return ((AssociateveGateParameters) _parameters).getPinCount() + 1;
+		return ((AssociateveGateParameters) _originalParameters).getPinCount() + 1;
 	}
 
 }

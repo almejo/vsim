@@ -33,7 +33,7 @@ public class ColorPreferences extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		JPanel pickers = new JPanel();
-		pickers.setLayout(new GridLayout(8, 2));
+		pickers.setLayout(new GridLayout(10, 2));
 
 		pickers.add(new Label(Messages.t("preferences.color.scheme.current.label")));
 		_comboBox = createSchemeCombobox();
@@ -45,6 +45,9 @@ public class ColorPreferences extends JPanel {
 		addColorChooser(pickers, "ground");
 		addColorChooser(pickers, "off");
 		addColorChooser(pickers, "wires-on");
+		addColorChooser(pickers, "signal");
+		addColorChooser(pickers, "grid");
+		addColorChooser(pickers, "label");
 		add(pickers);
 
 		JPanel buttons = new JPanel();

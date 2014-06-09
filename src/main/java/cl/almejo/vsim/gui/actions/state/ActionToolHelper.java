@@ -22,7 +22,8 @@ public abstract class ActionToolHelper {
 	public void mouseDragged(SimWindow window, MouseEvent event) {
 	}
 
-	public void mouseClicked(SimWindow window, MouseEvent event) {
+	public Object mouseClicked(SimWindow window, MouseEvent event) {
+		return null;
 	}
 
 	public void mouseDoubleClicked(SimWindow window, MouseEvent event) {

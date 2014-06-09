@@ -39,6 +39,23 @@ public class Main {
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
+		} else if ("Nimbus".equalsIgnoreCase(System.getProperty("vsim.look"))) {
+			for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					try {
+						UIManager.setLookAndFeel(info.getClassName());
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} catch (InstantiationException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (UnsupportedLookAndFeelException e) {
+						e.printStackTrace();
+					}
+					break;
+				}
+			}
 		}
 		new SimWindow(circuit);
 	}

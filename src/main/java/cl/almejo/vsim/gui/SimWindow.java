@@ -38,6 +38,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	private static final long serialVersionUID = 1L;
 	private final CircuitCanvas _canvas;
+	private final JTabbedPane _displaysPane;
 	private Circuit _circuit;
 
 	private ActionToolHelper _toolHelper = ActionToolHelper.CURSOR;
@@ -92,6 +93,11 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, new GateToolHelper(Gate.CLOCK));
 	private final WindowAction FLIP_FLOP_DATA_TOOL_ACTION = new ToolAction(Messages.t("action.tool.flip.flop.data"), Messages.t("action.tool.flip.flop.data.description"), "flipflopdata.png", null, this, new GateToolHelper(Gate.FLIP_FLOP_DATA));
 	private final WindowAction TRISTATE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.tristate"), Messages.t("action.tool.tristate.description"), "tristate.png", null, this, new GateToolHelper(Gate.TRISTATE));
+	private final WindowAction SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display"), Messages.t("action.tool.seven.segments.display.description"), "seven-segments-display.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY));
+	private final WindowAction SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display.double"), Messages.t("action.tool.seven.segments.display.double.description"), "seven-segments-display-double.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE));
+	private final WindowAction LED_TOOL_ACTION = new ToolAction(Messages.t("action.tool.led"), Messages.t("action.tool.led.description"), "led.png", null, this, new GateToolHelper(Gate.LED));
+	private final WindowAction TIME_DIAGRAM_TOOL_ACTION = new ToolAction(Messages.t("action.tool.time.diagram"), Messages.t("action.tool.time.diagram.description"), "time-diagram.png", null, this, new GateToolHelper(Gate.TIME_DIAGRAM));
+	private final WindowAction SWITCH_TOOL_ACTION = new ToolAction(Messages.t("action.tool.switch"), Messages.t("action.tool.switch.description"), "time-diagram.png", null, this, new GateToolHelper(Gate.SWITCH));
 
 	private static JFileChooser OPEN_FILE_CHOOSER;
 	private static JFileChooser SAVE_AS_FILE_CHOOSER;
@@ -119,10 +125,16 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		setBounds(100, 100, 700, 700);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		_displaysPane = new JTabbedPane();
+		JSplitPane rightSplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _canvas, _displaysPane);
+		rightSplitpane.setOneTouchExpandable(true);
+		rightSplitpane.setDividerLocation(500);
+
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel()), _canvas);
+				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel()), rightSplitpane);
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
+
 		setVisible(true);
 
 		addComponentListener(this);
@@ -167,6 +179,11 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(NOT_TOOL_ACTION, Messages.c("menu.tool.not.mnemonic")));
 		menu.add(newMenuItem(FLIP_FLOP_DATA_TOOL_ACTION, Messages.c("menu.tool.flip.flop.data.mnemonic")));
 		menu.add(newMenuItem(TRISTATE_TOOL_ACTION, Messages.c("menu.tool.tristate.mnemonic")));
+		menu.add(newMenuItem(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION, Messages.c("menu.tool.seven.segments.display.mnemonic")));
+		menu.add(newMenuItem(SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION, Messages.c("menu.tool.seven.segments.display.double.mnemonic")));
+		menu.add(newMenuItem(LED_TOOL_ACTION, Messages.c("menu.tool.led.mnemonic")));
+		menu.add(newMenuItem(TIME_DIAGRAM_TOOL_ACTION, Messages.c("menu.tool.time.diagram.mnemonic")));
+		menu.add(newMenuItem(SWITCH_TOOL_ACTION, Messages.c("menu.tool.switch.mnemonic")));
 
 		menu = newMenu(Messages.t("menu.simulation"), KeyEvent.VK_F, menuBar);
 		menu.add(newMenuItem(START_ACTION, Messages.c("menu.simulation.start.mnemonic")));
@@ -243,7 +260,12 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.add(newGrouppedButton(NOT_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(CLOCK_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(FLIP_FLOP_DATA_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(TRISTATE_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(LED_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(TIME_DIAGRAM_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(SWITCH_TOOL_ACTION, group));
 		return panel;
 	}
 
@@ -277,32 +299,22 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -312,26 +324,18 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -355,14 +359,10 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -533,5 +533,9 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		_circuit.setSaved();
 		updateTitle();
+	}
+
+	public void addDisplayPanel(String idInstance, JPanel displayPanel) {
+		_displaysPane.add(idInstance, displayPanel);
 	}
 }
