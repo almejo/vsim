@@ -87,7 +87,7 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 
 	public void moveViewport(int deltaX, int deltaY) {
 		System.out.println("antes-> " + _viewport);
-		_viewport.translate(deltaX, deltaY);
+		_viewport.translate(-deltaX, -deltaY);
 		System.out.println(deltaX + " " + deltaY + " ===> " + _viewport);
 
 		_translation.translate(deltaX, deltaY);

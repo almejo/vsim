@@ -129,7 +129,7 @@ public class Circuit {
 	private void drawGrid(Graphics2D graphics, Rectangle rectangle) {
 		graphics.setColor(ColorScheme.getGrid());
 		for (int x = Circuit.gridTrunc(rectangle.x - 10); x < rectangle.getWidth(); x += Circuit.GRIDSIZE * 2) {
-			graphics.drawLine(x, 0, x, (int) rectangle.getHeight());
+			graphics.drawLine(x,  Circuit.gridTrunc(rectangle.y - 10), x,  Circuit.gridTrunc(rectangle.y - 10) + (int) rectangle.getHeight());
 		}
 		for (int y = Circuit.gridTrunc(rectangle.y - 10); y < rectangle.getHeight(); y += Circuit.GRIDSIZE * 2) {
 			graphics.drawLine(0, y, (int) rectangle.getWidth(), y);

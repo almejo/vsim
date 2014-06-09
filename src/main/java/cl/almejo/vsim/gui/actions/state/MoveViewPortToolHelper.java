@@ -13,6 +13,7 @@ package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.gui.SimWindow;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class MoveViewPortToolHelper extends ActionToolHelper {
@@ -23,11 +24,12 @@ public class MoveViewPortToolHelper extends ActionToolHelper {
 	public void mouseDown(SimWindow window, MouseEvent event) {
 		_lastX = event.getX();
 		_lastY = event.getY();
+		window.getCanvas().setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 	}
 
 	@Override
 	public void mouseUp(SimWindow window, MouseEvent event) {
-
+		window.getCanvas().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	@Override
