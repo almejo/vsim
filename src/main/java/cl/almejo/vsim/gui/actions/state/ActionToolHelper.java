@@ -18,6 +18,7 @@ public abstract class ActionToolHelper {
 
 	public final static ActionToolHelper CURSOR = new CursorToolHelper();
 	public final static ActionToolHelper WIRES = new WiresToolHelper();
+	public static final ActionToolHelper MOVE_VIEWPORT = new MoveViewPortToolHelper();
 
 	public void mouseDragged(SimWindow window, MouseEvent event) {
 	}
