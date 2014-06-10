@@ -54,7 +54,6 @@ public class MoveViewPortToolHelper extends ActionToolHelper {
 		int toMoveX = 0;
 		int toMoveY = 0;
 		if (Math.abs(_accumulatedX) > Math.abs(Circuit.GRIDSIZE)) {
-			System.out.println("Accumulated > " + Circuit.GRIDSIZE);
 			int rest = _accumulatedX - (_accumulatedX / Circuit.GRIDSIZE) * Circuit.GRIDSIZE;
 			toMoveX = _accumulatedX - rest;
 			_accumulatedX = rest;
