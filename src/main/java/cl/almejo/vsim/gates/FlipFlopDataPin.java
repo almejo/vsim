@@ -19,7 +19,6 @@ public class FlipFlopDataPin extends Pin {
 
 	@Override
 	public void hasChanged() {
-		System.out.println(getPinId());
 		if (getPinId() == 2 && getInValue() == 0) {
 			_gate.getPin(1).program(_gate.getPin(0).getInValue(), _gate.getParamameters().getDelay());
 		}

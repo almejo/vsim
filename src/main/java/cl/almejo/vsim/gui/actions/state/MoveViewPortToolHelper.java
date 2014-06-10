@@ -48,9 +48,7 @@ public class MoveViewPortToolHelper extends ActionToolHelper {
 		int deltaX = event.getX() - _lastX;
 		int deltaY = event.getY() - _lastY;
 
-		System.out.println("deltaX: " + deltaX);
 		_accumulatedX += deltaX;
-		System.out.println("accumulatedX: " + _accumulatedX);
 		_accumulatedY += deltaY;
 
 		int toMoveX = 0;
@@ -60,15 +58,12 @@ public class MoveViewPortToolHelper extends ActionToolHelper {
 			int rest = _accumulatedX - (_accumulatedX / Circuit.GRIDSIZE) * Circuit.GRIDSIZE;
 			toMoveX = _accumulatedX - rest;
 			_accumulatedX = rest;
-			System.out.println("toMoveX: " + toMoveX);
-			System.out.println("_accumulatedX: " + toMoveX);
 		}
 		if (Math.abs(_accumulatedY) > Circuit.GRIDSIZE) {
 			int rest = _accumulatedY - (_accumulatedY / Circuit.GRIDSIZE) * Circuit.GRIDSIZE;
 			toMoveY = _accumulatedY - rest;
 			_accumulatedY = rest;
 		}
-		System.out.println(toMoveX + " " + toMoveY);
 		window.getCanvas().moveViewport(toMoveX, toMoveY);
 		_lastX = event.getX();
 		_lastY = event.getY();

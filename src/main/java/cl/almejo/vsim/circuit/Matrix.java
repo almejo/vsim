@@ -189,39 +189,6 @@ public class Matrix<T extends Point> {
 		}
 	}
 
-	public static void main(String[] args) {
-		Matrix<Point> matrix = new Matrix<Point>();
-		matrix.add(new Point(-80, 30));
-		matrix.add(new Point(-80, 10));
-		matrix.add(new Point(-80, 30));
-		matrix.add(new Point(-80, 30));
-		matrix.add(new Point(-80, 60));
-		matrix.add(new Point(-80, 0));
-		matrix.add(new Point(0, 0));
-		matrix.add(new Point(10, 0));
-		matrix.add(new Point(24, 10));
-		matrix.add(new Point(0, 10));
-		matrix.add(new Point(10, 10));
-		matrix.add(new Point(10, 11));
-		matrix.add(new Point(10, 15));
-		matrix.add(new Point(10, 15));
-		matrix.add(new Point(15, 0));
-		matrix.add(new Point(-11, 0));
-		matrix.add(new Point(40, 20));
-		matrix.add(new Point(-40, 0));
-		matrix.add(new Point(-10, 0));
-
-		Matrix<Contact> matrix2 = new Matrix<Contact>();
-		matrix2.add(new Contact(10, 10));
-		System.out.println(matrix2);
-
-		System.out.println(matrix);
-		System.out.println(matrix.findHorizontal(10, 10));
-		System.out.println(matrix.findHorizontal(24, 10));
-		System.out.println(matrix.findHorizontal(0, 10));
-		System.out.println(matrix.findHorizontal(-80, 10));
-	}
-
 	public Set<Integer> getXCoords() {
 		return _horizontalTable.keySet();
 	}

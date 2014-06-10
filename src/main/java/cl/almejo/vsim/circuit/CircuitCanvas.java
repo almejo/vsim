@@ -11,6 +11,7 @@
 
 package cl.almejo.vsim.circuit;
 
+import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gui.ColorScheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.geom.AffineTransform;
 
 public class CircuitCanvas extends JPanel implements ComponentListener {
 
@@ -27,6 +29,9 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	private static final long serialVersionUID = 1L;
 
 	private Circuit _circuit;
+	private AffineTransform _translation = new AffineTransform();
+	private AffineTransform _computedTransformation = new AffineTransform();
+
 
 	public CircuitCanvas(Circuit circuit) {
 		_circuit = circuit;
@@ -40,10 +45,21 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 
 	@Override
 	public void paint(Graphics graphics) {
-		super.paint(graphics);
-		graphics.setColor(ColorScheme.getBackground());
-		graphics.fillRect(1, 1, (int) getSize().getWidth() - 2, (int) getSize().getHeight() - 2);
-		_circuit.paint((Graphics2D) graphics, _viewport);
+
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setColor(ColorScheme.getBackground());
+
+		graphics2D.fillRect(0, 0, (int) getSize().getWidth(), (int) getSize().getHeight());
+
+		AffineTransform transform = new AffineTransform(_computedTransformation);
+
+		transform.concatenate(graphics2D.getTransform());
+
+		graphics2D.setTransform(transform);
+
+		_circuit.paint(graphics2D, _viewport);
+
+		graphics2D.setTransform(Constants.TRANSFORM_IDENTITY);
 	}
 
 	public void resizeViewport() {

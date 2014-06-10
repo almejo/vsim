@@ -31,7 +31,7 @@ public class Main {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				GTKHelper.installGtkPopupBugWorkaround();
 			} catch (UnsupportedLookAndFeelException ex) {
-				System.out.println("Unable to fromJSon native look and feel");
+				ex.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (InstantiationException e) {
