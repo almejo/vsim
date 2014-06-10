@@ -10,12 +10,7 @@
  */
 package cl.almejo.vsim.gates;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class SevenSegmentsDisplayParameters extends GateParameters {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(SevenSegmentsDisplayParameters.class);
 
 	private int _number = 0;
 
@@ -36,7 +31,6 @@ public class SevenSegmentsDisplayParameters extends GateParameters {
 		}
 
 		_number = value;
-		LOGGER.debug("SevenSegmentsUpdated: " + value);
 	}
 
 	public int getNumber() {
