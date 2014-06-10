@@ -75,4 +75,19 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	public void componentHidden(ComponentEvent e) {
 		LOGGER.info("componentHidden");
 	}
+
+	public void moveViewport(int deltaX, int deltaY) {
+		_viewport.translate(-deltaX, -deltaY);
+		_translation.translate(deltaX, deltaY);
+		_computedTransformation.setToIdentity();
+		_computedTransformation.concatenate(_translation);
+	}
+
+	public int toCircuitCoordinatesX(int x) {
+		return (int) (x + _viewport.getX());
+	}
+
+	public int toCircuitCoordinatesY(int y) {
+		return (int) (y + _viewport.getY());
+	}
 }
