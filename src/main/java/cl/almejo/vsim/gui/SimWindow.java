@@ -26,19 +26,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-public class SimWindow extends JFrame implements ComponentListener, WindowListener, MouseListener, MouseMotionListener, CircuitStateListener {
+public class SimWindow extends JFrame implements ComponentListener, WindowListener, MouseListener, MouseMotionListener, CircuitStateListener, ChangeListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimWindow.class);
 
 	private static final long serialVersionUID = 1L;
 	private final CircuitCanvas _canvas;
 	private final JTabbedPane _displaysPane;
+	private final JSlider _zoomSlider;
 	private Circuit _circuit;
 
 	private ActionToolHelper _toolHelper = ActionToolHelper.CURSOR;
@@ -135,16 +139,38 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 
+		_zoomSlider = createZoomSlider();
+		JPanel statusBar = getStatusBar();
+		statusBar.add(new JLabel("zoom"));
+		statusBar.add(_zoomSlider);
+		getContentPane().add(statusBar, BorderLayout.SOUTH);
+
 		setVisible(true);
 
 		addComponentListener(this);
 		_canvas.addMouseListener(this);
+		_canvas.setZoom(1.0);
 		_canvas.addMouseMotionListener(this);
 		_canvas.resizeViewport();
 
 		addMenu();
 		addMainToolbar();
 		updateActionStates();
+	}
+
+	private JSlider createZoomSlider() {
+		JSlider zoomSlider = new JSlider(2, 17,8);
+		zoomSlider.setSnapToTicks(true);
+		zoomSlider.setMinorTickSpacing(1);
+		//zoomSlider.setPaintTicks(true);
+		zoomSlider.addChangeListener(this);
+		return zoomSlider;
+	}
+
+	private JPanel getStatusBar() {
+		JPanel statusBar = new JPanel();
+		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		return statusBar;
 	}
 
 	private void addMenu() {
@@ -541,5 +567,13 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	public CircuitCanvas getCanvas() {
 		return _canvas;
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		JSlider slider = (JSlider) e.getSource();
+		//if (!slider.getValueIsAdjusting()) {
+			_canvas.setZoom(0.125 * slider.getValue());
+		//}
 	}
 }

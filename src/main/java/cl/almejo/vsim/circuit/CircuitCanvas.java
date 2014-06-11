@@ -29,8 +29,10 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	private static final long serialVersionUID = 1L;
 
 	private Circuit _circuit;
-	private AffineTransform _translation = new AffineTransform();
+	private AffineTransform _translationTransformation = new AffineTransform();
 	private AffineTransform _computedTransformation = new AffineTransform();
+	private AffineTransform _zoomTransformation = new AffineTransform();
+	private double _zoom;
 
 
 	public CircuitCanvas(Circuit circuit) {
@@ -57,7 +59,9 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 
 		graphics2D.setTransform(transform);
 
-		_circuit.paint(graphics2D, _viewport);
+		Rectangle viewport = new Rectangle(_viewport);
+		viewport.setFrame(_viewport.getX(), _viewport.getY(), 1.0/_zoom*_viewport.getWidth(), 1.0/_zoom*_viewport.getHeight());
+		_circuit.paint(graphics2D, viewport);
 
 		graphics2D.setTransform(Constants.TRANSFORM_IDENTITY);
 	}
@@ -93,17 +97,32 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	}
 
 	public void moveViewport(int deltaX, int deltaY) {
+		deltaX /= _zoom;
+		deltaY /= _zoom;
 		_viewport.translate(-deltaX, -deltaY);
-		_translation.translate(deltaX, deltaY);
+		_translationTransformation.translate(deltaX, deltaY);
+		updateTransformation();
+	}
+
+	private void updateTransformation() {
 		_computedTransformation.setToIdentity();
-		_computedTransformation.concatenate(_translation);
+		_computedTransformation.concatenate(_zoomTransformation);
+		_computedTransformation.concatenate(_translationTransformation);
 	}
 
 	public int toCircuitCoordinatesX(int x) {
-		return (int) (x + _viewport.getX());
+		return (int) ((((double) x) / _zoom)  + _viewport.getX());
 	}
 
 	public int toCircuitCoordinatesY(int y) {
-		return (int) (y + _viewport.getY());
+		return (int) ((((double) y) / _zoom)  + _viewport.getY());
 	}
+
+	public void setZoom(double zoom) {
+		_zoom = zoom;
+		_zoomTransformation.setToIdentity();
+		_zoomTransformation.scale(zoom, zoom);
+		updateTransformation();
+	}
+
 }
