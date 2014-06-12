@@ -32,7 +32,7 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	private AffineTransform _translationTransformation = new AffineTransform();
 	private AffineTransform _computedTransformation = new AffineTransform();
 	private AffineTransform _zoomTransformation = new AffineTransform();
-	private double _zoom;
+	private double _zoom = 1.0;
 
 
 	public CircuitCanvas(Circuit circuit) {
@@ -49,21 +49,19 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	public void paint(Graphics graphics) {
 
 		Graphics2D graphics2D = (Graphics2D) graphics;
-		graphics2D.setColor(ColorScheme.getBackground());
-
-		graphics2D.fillRect(0, 0, (int) getSize().getWidth(), (int) getSize().getHeight());
+		clean(graphics2D);
 
 		AffineTransform transform = new AffineTransform(_computedTransformation);
-
 		transform.concatenate(graphics2D.getTransform());
 
 		graphics2D.setTransform(transform);
-
-		Rectangle viewport = new Rectangle(_viewport);
-		viewport.setFrame(_viewport.getX(), _viewport.getY(), 1.0/_zoom*_viewport.getWidth(), 1.0/_zoom*_viewport.getHeight());
-		_circuit.paint(graphics2D, viewport);
-
+		_circuit.paint(graphics2D, _viewport);
 		graphics2D.setTransform(Constants.TRANSFORM_IDENTITY);
+	}
+
+	private void clean(Graphics2D graphics2D) {
+		graphics2D.setColor(ColorScheme.getBackground());
+		graphics2D.fillRect(0, 0, (int) getSize().getWidth(), (int) getSize().getHeight());
 	}
 
 	public void resizeViewport() {
@@ -111,14 +109,15 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	}
 
 	public int toCircuitCoordinatesX(int x) {
-		return (int) ((((double) x) / _zoom)  + _viewport.getX());
+		return (int) ((((double) x) / _zoom) + _viewport.getX());
 	}
 
 	public int toCircuitCoordinatesY(int y) {
-		return (int) ((((double) y) / _zoom)  + _viewport.getY());
+		return (int) ((((double) y) / _zoom) + _viewport.getY());
 	}
 
 	public void setZoom(double zoom) {
+		_viewport.setFrame(_viewport.getX(), _viewport.getY(), _zoom / zoom * _viewport.getWidth(), _zoom / zoom * _viewport.getHeight());
 		_zoom = zoom;
 		_zoomTransformation.setToIdentity();
 		_zoomTransformation.scale(zoom, zoom);

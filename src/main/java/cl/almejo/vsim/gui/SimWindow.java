@@ -158,15 +158,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		updateActionStates();
 	}
 
-	private JSlider createZoomSlider() {
-		JSlider zoomSlider = new JSlider(2, 17,8);
-		zoomSlider.setSnapToTicks(true);
-		zoomSlider.setMinorTickSpacing(1);
-		//zoomSlider.setPaintTicks(true);
-		zoomSlider.addChangeListener(this);
-		return zoomSlider;
-	}
-
 	private JPanel getStatusBar() {
 		JPanel statusBar = new JPanel();
 		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -569,11 +560,20 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		return _canvas;
 	}
 
+	private JSlider createZoomSlider() {
+		JSlider zoomSlider = new JSlider(1, 8 ,4);
+		zoomSlider.setSnapToTicks(true);
+		zoomSlider.setMinorTickSpacing(1);
+		//zoomSlider.setPaintTicks(true);
+		zoomSlider.addChangeListener(this);
+		return zoomSlider;
+	}
+
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		JSlider slider = (JSlider) e.getSource();
-		//if (!slider.getValueIsAdjusting()) {
-			_canvas.setZoom(0.125 * slider.getValue());
-		//}
+		if (!slider.getValueIsAdjusting()) {
+			_canvas.setZoom(0.25 * slider.getValue());
+		}
 	}
 }
