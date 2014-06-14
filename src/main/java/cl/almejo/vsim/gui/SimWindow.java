@@ -572,8 +572,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		JSlider slider = (JSlider) e.getSource();
-		if (!slider.getValueIsAdjusting()) {
+		//if (!slider.getValueIsAdjusting()) {
 			_canvas.setZoom(0.25 * slider.getValue());
-		}
+		//D}
 	}
 }

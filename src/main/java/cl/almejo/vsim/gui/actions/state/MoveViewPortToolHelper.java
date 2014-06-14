@@ -41,7 +41,7 @@ public class MoveViewPortToolHelper extends ActionToolHelper {
 
 	@Override
 	public void mouseDoubleClicked(SimWindow window, MouseEvent event) {
-
+		window.getCanvas().centerViewportTo(window.getCanvas().toCircuitCoordinatesX(event.getX()), window.getCanvas().toCircuitCoordinatesY(event.getY()));
 	}
 
 	public void mouseDragged(SimWindow window, MouseEvent event) {

@@ -33,9 +33,6 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	private AffineTransform _computedTransformation = new AffineTransform();
 	private AffineTransform _zoomTransformation = new AffineTransform();
 	private double _zoom = 1.0;
-	private double _oldDx;
-	private double _oldDy;
-
 
 	public CircuitCanvas(Circuit circuit) {
 		_circuit = circuit;
@@ -55,7 +52,7 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 
 		graphics2D.setColor(Color.GREEN);
 		graphics2D.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
-		graphics2D.drawLine(0, getHeight()/2, getWidth() , getHeight()/2);
+		graphics2D.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
 		AffineTransform transform = new AffineTransform(_computedTransformation);
 		transform.concatenate(graphics2D.getTransform());
 
@@ -99,9 +96,19 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 		LOGGER.info("componentHidden");
 	}
 
+	public void centerViewportTo(int x, int y) {
+		moveViewport((int) _viewport.getCenterX()- x,  (int) _viewport.getCenterY()- y);
+	}
+
+	public void translateViewportTo(int x, int y) {
+		int dx = x - (int) _viewport.getX();
+		int dy = y - (int) _viewport.getY();
+		_viewport.translate(dx, dy);
+		_translationTransformation.translate(-dx, -dy);
+		updateTransformation();
+	}
+
 	public void moveViewport(int deltaX, int deltaY) {
-//		deltaX /= _zoom;
-//		deltaY /= _zoom;
 		_viewport.translate(-deltaX, -deltaY);
 		_translationTransformation.translate(deltaX, deltaY);
 		updateTransformation();
@@ -122,32 +129,16 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	}
 
 	public void setZoom(double zoom) {
-		resetViewportToOldZoom();
-		double dx = getDeltaX(zoom);
-		double dy = getDeltaY(zoom);
-		_oldDx = dx;
-		_oldDy = dy;
+		double centerX = _viewport.getCenterX();
+		double centerY = _viewport.getCenterY();
+		_viewport.setFrame(_viewport.getX(), _viewport.getY(), _viewport.getWidth() * _zoom, _viewport.getHeight() * _zoom);
 		_viewport.setFrame(_viewport.getX(), _viewport.getY(), _viewport.getWidth() / zoom, _viewport.getHeight() / zoom);
-		_zoom = zoom;
 		_zoomTransformation.setToIdentity();
 		_zoomTransformation.scale(zoom, zoom);
-		updateTransformation();
-		moveViewport((int) dx, (int) dy);
-	}
-
-	private double getDeltaX(double zoom) {
-		double centerX = _viewport.getX() + _viewport.getWidth() / 2;
-		return (centerX - centerX * zoom) / zoom;
-	}
-
-	private double getDeltaY(double zoom) {
-		double centerY = _viewport.getY() + _viewport.getHeight() / 2;
-		return (centerY - centerY * zoom) / zoom;
-	}
-
-	private void resetViewportToOldZoom() {
-		moveViewport((int) -_oldDx, (int) -_oldDy);
-		_viewport.setFrame(_viewport.getX(), _viewport.getY(), _viewport.getWidth() * _zoom, _viewport.getHeight() * _zoom);
+		int cornerX = (int) (centerX - _viewport.getWidth() / 2);
+		int cornerY = (int) (centerY - _viewport.getHeight() / 2);
+		translateViewportTo(cornerX, cornerY);
+		_zoom = zoom;
 	}
 
 }
