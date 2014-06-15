@@ -38,6 +38,11 @@ public class Circuit {
 
 	private String _name;
 	private Command _lastSavedCommand = null;
+	private boolean _showGrid = true;
+
+	public void toggleGrid() {
+		_showGrid = !_showGrid;
+	}
 
 	class Simulator extends TimerTask {
 
@@ -120,7 +125,9 @@ public class Circuit {
 	public void paint(Graphics2D graphics, Rectangle rectangle) {
 		if (graphics != null) {
 			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			drawGrid(graphics, rectangle);
+			if (_showGrid) {
+				drawGrid(graphics, rectangle);
+			}
 			drawGates(graphics, rectangle);
 			_protoboard.paint(graphics, rectangle);
 		}

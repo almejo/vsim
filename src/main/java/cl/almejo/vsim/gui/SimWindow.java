@@ -26,6 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
@@ -54,6 +57,9 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	static final KeyStroke ACCELERATOR_PASTE = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
 	static final KeyStroke ACCELERATOR_UNDO = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
 	static final KeyStroke ACCELERATOR_REDO = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+
+	static final KeyStroke ACCELERATOR_SHOW_GRID = KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK);
+
 	static final KeyStroke ACCELERATOR_PREFERENCES = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK);
 
 
@@ -69,6 +75,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction UNDO_ACTION = new UndoAction(Messages.t("action.undo"), Messages.t("action.undo.description"), "undo.png", ACCELERATOR_UNDO, this);
 	private final WindowAction REDO_ACTION = new RedoAction(Messages.t("action.redo"), Messages.t("action.redo.description"), "redo.png", ACCELERATOR_REDO, this);
 	private final WindowAction PREFERENCES_ACTION = new PreferencesAction(Messages.t("action.preferences"), Messages.t("action.preferences.description"), null, ACCELERATOR_PREFERENCES, this);
+
+	private final WindowAction SHOW_GRID_ACTION = new ShowGridAction(Messages.t("action.grid.show"), Messages.t("action.grid.show.description"), null, ACCELERATOR_SHOW_GRID, this);
 
 	private final WindowAction START_ACTION = new StartStopSimulationAction(Messages.t("action.start"), Messages.t("action.start.description"), "play.png", null, this);
 	private final WindowAction PAUSE_ACTION = new StartStopSimulationAction(Messages.t("action.pause"), Messages.t("action.pause.description"), "pause.png", null, this);
@@ -135,16 +143,27 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 
+		JPanel statusBar = getStatusBar();
+		statusBar.add(createZoomSlider());
+		getContentPane().add(statusBar, BorderLayout.SOUTH);
+
 		setVisible(true);
 
 		addComponentListener(this);
 		_canvas.addMouseListener(this);
+		_canvas.setZoom(1.0);
 		_canvas.addMouseMotionListener(this);
 		_canvas.resizeViewport();
 
 		addMenu();
 		addMainToolbar();
 		updateActionStates();
+	}
+
+	private JPanel getStatusBar() {
+		JPanel statusBar = new JPanel();
+		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		return statusBar;
 	}
 
 	private void addMenu() {
@@ -164,6 +183,9 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(UNDO_ACTION, Messages.c("menu.edit.undo.mnemonic")));
 		menu.add(newMenuItem(REDO_ACTION, Messages.c("menu.edit.redo.mnemonic")));
 		menu.add(newMenuItem(PREFERENCES_ACTION, Messages.c("menu.edit.preferences.mnemonic")));
+
+		menu = newMenu(Messages.t("menu.view"), KeyEvent.VK_V, menuBar);
+		menu.add(newCheckboxMenuItem(SHOW_GRID_ACTION, Messages.c("menu.view.grid.mnemonic"), true));
 
 		menu = newMenu(Messages.t("menu.tools"), KeyEvent.VK_H, menuBar);
 		menu.add(newMenuItem(CURSOR_TOOL_ACTION, Messages.c("menu.tool.cursor.mnemonic")));
@@ -207,6 +229,12 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		return menuItem;
 	}
 
+	private JMenuItem newCheckboxMenuItem(WindowAction action, char mnemonic, boolean selected ) {
+		JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(action);
+		menuItem.setMnemonic(mnemonic);
+		menuItem.setSelected(selected);
+		return menuItem;
+	}
 	private JMenu newMenu(String title, int mnemonic, JMenuBar menuBar) {
 		JMenu menu = new JMenu(title);
 		menu.setMnemonic(mnemonic);
@@ -541,5 +569,30 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	public CircuitCanvas getCanvas() {
 		return _canvas;
+	}
+
+	private JPanel createZoomSlider() {
+		JPanel panel = new JPanel();
+		panel.add(new JLabel(Messages.t("zoom.label")));
+		JSlider zoomSlider = new JSlider(1, 8, 4);
+		zoomSlider.setSnapToTicks(true);
+		zoomSlider.setMinorTickSpacing(1);
+		panel.add(zoomSlider);
+		panel.add(getZoomDisplay(zoomSlider));
+		return panel;
+	}
+
+	private JLabel getZoomDisplay(JSlider zoomSlider) {
+		final JLabel label = new JLabel("100%");
+		zoomSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				JSlider slider = (JSlider) e.getSource();
+				double zoom = 0.25 * slider.getValue();
+				_canvas.setZoom(zoom);
+				label.setText(((int) (zoom * 100)) + "%");
+			}
+		});
+		return label;
 	}
 }
