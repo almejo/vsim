@@ -145,4 +145,5 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	public double getZoom() {
 		return _zoom;
 	}
+
 }
