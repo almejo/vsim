@@ -63,7 +63,7 @@ public class MoveViewPortToolHelper extends ActionToolHelper {
 			toMoveY = _accumulatedY - rest;
 			_accumulatedY = rest;
 		}
-		window.getCanvas().moveViewport(toMoveX, toMoveY);
+		window.getCanvas().moveViewport((int) (toMoveX / window.getCanvas().getZoom()), (int) (toMoveY / window.getCanvas().getZoom()));
 		_lastX = event.getX();
 		_lastY = event.getY();
 	}

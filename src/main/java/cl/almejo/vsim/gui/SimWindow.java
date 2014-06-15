@@ -35,14 +35,13 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-public class SimWindow extends JFrame implements ComponentListener, WindowListener, MouseListener, MouseMotionListener, CircuitStateListener, ChangeListener {
+public class SimWindow extends JFrame implements ComponentListener, WindowListener, MouseListener, MouseMotionListener, CircuitStateListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimWindow.class);
 
 	private static final long serialVersionUID = 1L;
 	private final CircuitCanvas _canvas;
 	private final JTabbedPane _displaysPane;
-	private final JSlider _zoomSlider;
 	private Circuit _circuit;
 
 	private ActionToolHelper _toolHelper = ActionToolHelper.CURSOR;
@@ -139,10 +138,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 
-		_zoomSlider = createZoomSlider();
 		JPanel statusBar = getStatusBar();
-		statusBar.add(new JLabel("zoom"));
-		statusBar.add(_zoomSlider);
+		statusBar.add(createZoomSlider());
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 
 		setVisible(true);
@@ -560,20 +557,28 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		return _canvas;
 	}
 
-	private JSlider createZoomSlider() {
-		JSlider zoomSlider = new JSlider(1, 8 ,4);
+	private JPanel createZoomSlider() {
+		JPanel panel = new JPanel();
+		panel.add(new JLabel(Messages.t("zoom.label")));
+		JSlider zoomSlider = new JSlider(1, 8, 4);
 		zoomSlider.setSnapToTicks(true);
 		zoomSlider.setMinorTickSpacing(1);
-		//zoomSlider.setPaintTicks(true);
-		zoomSlider.addChangeListener(this);
-		return zoomSlider;
+		panel.add(zoomSlider);
+		panel.add(getZoomDisplay(zoomSlider));
+		return panel;
 	}
 
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		JSlider slider = (JSlider) e.getSource();
-		//if (!slider.getValueIsAdjusting()) {
-			_canvas.setZoom(0.25 * slider.getValue());
-		//D}
+	private JLabel getZoomDisplay(JSlider zoomSlider) {
+		final JLabel label = new JLabel("100%");
+		zoomSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				JSlider slider = (JSlider) e.getSource();
+				double zoom = 0.25 * slider.getValue();
+				_canvas.setZoom(zoom);
+				label.setText(((int) (zoom * 100)) + "%");
+			}
+		});
+		return label;
 	}
 }

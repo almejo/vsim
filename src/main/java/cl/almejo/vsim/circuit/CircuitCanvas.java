@@ -67,7 +67,8 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	}
 
 	public void resizeViewport() {
-		_viewport.setSize(getSize());
+		Dimension size = getSize();
+		_viewport.setRect(_viewport.getX(), _viewport.getY(), size.getWidth() /_zoom, size.getHeight()/ _zoom);
 	}
 
 	public void setCircuit(Circuit circuit) {
@@ -141,4 +142,7 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 		_zoom = zoom;
 	}
 
+	public double getZoom() {
+		return _zoom;
+	}
 }
