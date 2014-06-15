@@ -50,9 +50,9 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		clean(graphics2D);
 
-		graphics2D.setColor(Color.GREEN);
-		graphics2D.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
-		graphics2D.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
+//		graphics2D.setColor(Color.GREEN);
+//		graphics2D.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
+//		graphics2D.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
 		AffineTransform transform = new AffineTransform(_computedTransformation);
 		transform.concatenate(graphics2D.getTransform());
 
