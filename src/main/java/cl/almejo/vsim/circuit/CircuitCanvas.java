@@ -68,7 +68,7 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 
 	public void resizeViewport() {
 		Dimension size = getSize();
-		_viewport.setRect(_viewport.getX(), _viewport.getY(), size.getWidth() /_zoom, size.getHeight()/ _zoom);
+		_viewport.setRect(_viewport.getX(), _viewport.getY(), size.getWidth() / _zoom, size.getHeight() / _zoom);
 	}
 
 	public void setCircuit(Circuit circuit) {
@@ -98,7 +98,7 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	}
 
 	public void centerViewportTo(int x, int y) {
-		moveViewport((int) _viewport.getCenterX()- x,  (int) _viewport.getCenterY()- y);
+		moveViewport(Circuit.gridTrunc((int) _viewport.getCenterX() - x), Circuit.gridTrunc((int) _viewport.getCenterY() - y));
 	}
 
 	public void translateViewportTo(int x, int y) {
