@@ -1,11 +1,10 @@
 # VSim
 
-Vsim is digital circuits simulator.
+Vsim is digital circuits simulator. 
 
 Vsim is a rewrite from scratch of my University Thesis JCSim. You can try JCSim from my [repository](https://github.com/almejo/jcsim).
 
-VSim is in very early stage of development and it lacks a lot of features that JCSim already has. Simulation of gates
-and pins is working but it lacks a proper interface.
+VSim is in very active development and it still lacks a some of the features that JCSim already has. Right now it is posible to draw simple circuits and save/load them. 
 
 VSim, as JCSim, will be usefull to understand how digital circuits works. In the future it could be used to teach or
 for homework.
@@ -16,10 +15,13 @@ VSim currently has:
 
 - Working simulation
 - Start/Stop simulation
-- And, Not and Clock gates
+- Basic gates: And, Not, FlipFlopData, etc.
+- Debug gates: clock, seven-segments display, a time diagram.
 - Add connections (remove pressing control and click)
 - Add gates (remove pressing control and click)
 - Undo and Redo
+- Move, Resize and Zoom the canvas
+- Select a color-scheme
 
 ## Milestone 1.0
 
@@ -32,7 +34,7 @@ The first milestone is to reach feature parity with JCSim. From There all will b
 - Rotate gates
 - Config gates
 - Move the canvas [done]
-- Zoom the canvas [in progress]
+- Zoom the canvas [done]
 
 ## Future features
 
@@ -41,11 +43,11 @@ But also it have some design problems that make it difficult to add new features
 (and JCSim does not) are:
 
 - Proper cut, copy and paste
-- Undo/Redo
-- Better interface
-- Proper Save and Load. JCSim serialize the complete circuit.
-- Color Schemes Suport
-- Labels for the objects
+- Undo/Redo [done]
+- Better interface  [done]
+- Proper Save and Load. JCSim serialize the complete circuit.  [done]
+- Color Schemes Suport  [done]
+- Labels for the objects 
 - Components tree
 
 ## Why a new program? Why not fix JCSim
@@ -54,4 +56,6 @@ The main reason is fun. I love to code and doing it from scratch is a lot of fun
 process to create it and think again about the design. I am not throwing it away, I am using the best parts, like in the
 Princess Bride book.
 
+## How can you help.
 
+There are a lot of ways you can help. If you see something not working 
