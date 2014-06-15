@@ -58,4 +58,6 @@ Princess Bride book.
 
 ## How can you help.
 
-There are a lot of ways you can help. If you see something not working 
+There are a lot of ways you can help. If you see something not working you can create a new issue in github. You can help me translating it to other languages (the interface is only in spanish right now).
+
+You can always reach me at alejandro.vera at gmail.com
