@@ -58,7 +58,6 @@ public class CursorToolHelper extends ActionToolHelper {
 					, window.getCanvas().toCircuitCoordinatesY(event.getY())
 					, _preview);
 		}
-		System.out.println(_dragging);
 	}
 
 	@Override

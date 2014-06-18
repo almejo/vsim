@@ -202,9 +202,15 @@ public class Circuit {
 			_protoboard.paint(graphics, rectangle);
 			drawGatesDecorations(graphics, rectangle);
 			if (_dragPreview != null) {
+				setAlpha(graphics, 0.5f);
 				graphics.drawImage(_dragPreview, _dragPreviewX, _dragPreviewY, null);
+				setAlpha(graphics, 1.0f);
 			}
 		}
+	}
+
+	private void setAlpha(Graphics2D graphics, float alpha) {
+		graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 	}
 
 	private void drawGrid(Graphics2D graphics, Rectangle rectangle) {
