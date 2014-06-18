@@ -12,6 +12,7 @@
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
+import cl.almejo.vsim.circuit.MarchingAnts;
 import cl.almejo.vsim.circuit.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-public class IconGate extends Rectangle {
+public class IconGate extends Rectangle implements Selectable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IconGate.class);
 	private static final long serialVersionUID = 1L;
 	private Gate _gate;
@@ -29,6 +30,7 @@ public class IconGate extends Rectangle {
 	private AffineTransform _rotateTransformation = new AffineTransform();
 	private AffineTransform _transform = new AffineTransform();
 	private AffineTransform _origianlTransformation;
+	private boolean _selected;
 
 	public IconGate(int id) {
 		super();
@@ -48,13 +50,32 @@ public class IconGate extends Rectangle {
 		_gate = gate;
 	}
 
-	public void paint(Graphics2D graphics) {
+	public void drawIcon(Graphics2D graphics) {
 		pushMatrix(graphics);
-		int separation = 2;
-		int border = 8;
-		drawFrame(graphics, separation, border);
+		if (!isSelected()) {
+			drawFrame(graphics, 2, 8);
+		}
 		_gate.getGateDescriptor().paint(graphics, this);
 		popMatrix(graphics);
+	}
+
+	public void drawDecorations(Graphics2D graphics) {
+		pushMatrix(graphics);
+		if (isSelected()) {
+			drawSelectedDecoration(graphics, 2);
+		}
+		popMatrix(graphics);
+	}
+
+	private void drawSelectedDecoration(Graphics2D graphics, int separation) {
+		Dimension dimension = _gate.getGateDescriptor().getSize();
+		graphics.setColor(Color.WHITE);
+		graphics.drawRect(-separation, -separation, (int) dimension.getWidth() + separation * 2, (int) dimension.getHeight() + separation * 2);
+		Stroke oldStroke = graphics.getStroke();
+		graphics.setColor(Color.BLACK);
+		graphics.setStroke(MarchingAnts.getStroke());
+		graphics.drawRect(-separation, -separation, (int) dimension.getWidth() + separation * 2, (int) dimension.getHeight() + separation * 2);
+		graphics.setStroke(oldStroke);
 	}
 
 	private void drawFrame(Graphics2D graphics, int separation, int border) {
@@ -85,7 +106,6 @@ public class IconGate extends Rectangle {
 	public void moveTo(int xf, int yf) {
 		setLocation(xf, yf);
 		setTranslation(xf, yf);
-
 	}
 
 	private void setTranslation(int x, int y) {
@@ -131,8 +151,32 @@ public class IconGate extends Rectangle {
 		return iconGate;
 	}
 
-
 	public int getId() {
 		return _id;
+	}
+
+	@Override
+	public void select() {
+		_selected = true;
+	}
+
+	@Override
+	public void deselect() {
+		_selected = false;
+	}
+
+	@Override
+	public boolean isSelected() {
+		return _selected;
+	}
+
+	@Override
+	public void drawPreview(Graphics2D graphics, double x, double y) {
+		pushMatrix(graphics);
+		AffineTransform transformation = new AffineTransform(graphics.getTransform());
+		transformation.translate(-x, -y);
+		graphics.setTransform(transformation);
+		_gate.getGateDescriptor().paint(graphics, this);
+		popMatrix(graphics);
 	}
 }

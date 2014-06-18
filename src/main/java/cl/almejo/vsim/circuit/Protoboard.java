@@ -22,33 +22,19 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Protoboard {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Protoboard.class);
 
-	class MarchingAnts extends TimerTask {
-
-		@Override
-		public void run() {
-			Protoboard.this._dashPhase += 0.9f;
-		}
-
-	}
-
-	private static final float[] DASH = {5.0f, 5.0f};
 	private Matrix<Contact> _matrix = new Matrix<Contact>();
 	private boolean _drawConnectPreview;
 	private int _connectionStartX;
 	private int _connectionStartY;
 	private int _connectionEndX;
 	private int _connectionEndY;
-	private float _dashPhase = 0f;
 
 	public Protoboard() {
-		new Timer().schedule(new MarchingAnts(), 100, 100);
 	}
 
 	public void addPin(int pinId, Gate gate, int x, int y) {
@@ -452,12 +438,7 @@ public class Protoboard {
 		}
 
 		Stroke oldStroke = graphics.getStroke();
-		graphics.setStroke(new BasicStroke(1.5f
-				, BasicStroke.CAP_ROUND
-				, BasicStroke.JOIN_MITER
-				, 1.5f
-				, DASH
-				, _dashPhase));
+		graphics.setStroke(MarchingAnts.getStroke());
 
 		graphics.setColor(Color.BLACK);
 

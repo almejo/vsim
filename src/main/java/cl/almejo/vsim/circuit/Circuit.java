@@ -15,7 +15,9 @@ import cl.almejo.vsim.circuit.commands.*;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
+import cl.almejo.vsim.gates.Selectable;
 import cl.almejo.vsim.gui.ColorScheme;
+import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.simulation.Scheduler;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -24,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -39,6 +42,73 @@ public class Circuit {
 	private String _name;
 	private Command _lastSavedCommand = null;
 	private boolean _showGrid = true;
+
+	private Selection<Selectable> _selection = new Selection<Selectable>();
+	private int _dragPreviewY;
+	private int _dragPreviewX;
+	private BufferedImage _dragPreview;
+
+	class Selection<T extends Selectable> implements Draggable {
+		List<T> _objects = new LinkedList<T>();
+
+		public void add(T object) {
+			object.select();
+			_objects.add(object);
+		}
+
+		public void remove(T iconGate) {
+			iconGate.deselect();
+			_objects.remove(iconGate);
+		}
+
+		public void clear() {
+			for (T selectable : _objects) {
+				selectable.deselect();
+			}
+			_objects.clear();
+		}
+
+		@Override
+		public void beforeDrag() {
+
+		}
+
+		@Override
+		public void dragging() {
+
+		}
+
+		@Override
+		public void afterDrag() {
+
+		}
+
+		@Override
+		public BufferedImage getImage() {
+			if (_objects.isEmpty()) {
+				return null;
+			}
+			Rectangle rectangle = new Rectangle((Rectangle) _objects.get(0));
+			for (T selection : _objects) {
+				rectangle.add((Rectangle) selection);
+			}
+			BufferedImage bufferedImage = new BufferedImage(rectangle.width, rectangle.height, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D graphics2D = bufferedImage.createGraphics();
+			for (T selection : _objects) {
+				selection.drawPreview(graphics2D, rectangle.getX(), rectangle.getY());
+			}
+			return bufferedImage;
+		}
+
+		public boolean contains(int x, int y) {
+			for (T selectable : _objects) {
+				if (selectable.contains(x, y)) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 
 	public void toggleGrid() {
 		_showGrid = !_showGrid;
@@ -130,6 +200,10 @@ public class Circuit {
 			}
 			drawGates(graphics, rectangle);
 			_protoboard.paint(graphics, rectangle);
+			drawGatesDecorations(graphics, rectangle);
+			if (_dragPreview != null) {
+				graphics.drawImage(_dragPreview, _dragPreviewX, _dragPreviewY, null);
+			}
 		}
 	}
 
@@ -175,7 +249,15 @@ public class Circuit {
 	private void drawGates(Graphics2D graphics, Rectangle rectangle) {
 		for (IconGate iconGate : _icons) {
 			if (rectangle.intersects(iconGate)) {
-				iconGate.paint(graphics);
+				iconGate.drawIcon(graphics);
+			}
+		}
+	}
+
+	private void drawGatesDecorations(Graphics2D graphics, Rectangle rectangle) {
+		for (IconGate iconGate : _icons) {
+			if (rectangle.intersects(iconGate)) {
+				iconGate.drawDecorations(graphics);
 			}
 		}
 	}
@@ -467,5 +549,44 @@ public class Circuit {
 		_commandManager.cleanHistory();
 	}
 
+	public void select(Selectable selectable) {
+		if (selectable instanceof IconGate) {
+			_selection.add(selectable);
+		}
+	}
 
+	public void clearSelection() {
+		_selection.clear();
+	}
+
+	public void deselect(Selectable selectable) {
+		_selection.remove(selectable);
+	}
+
+	public Selectable findSelectable(int x, int y) {
+		for (IconGate iconGate : _icons) {
+			if (iconGate.contains(x, y)) {
+				return iconGate;
+			}
+		}
+		return null;
+	}
+
+	public Draggable findDraggable(int x, int y) {
+		if (_selection.contains(x, y)) {
+			return _selection;
+		}
+		return null;
+	}
+
+	public void drawDragPreview(int x, int y, BufferedImage preview) {
+		_dragPreviewX = gridTrunc(x);
+		_dragPreviewY = gridTrunc(y);
+		_dragPreview = preview;
+	}
+
+	public void clearDragPreview() {
+		_dragPreview = null;
+	}
 }
+
