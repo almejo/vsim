@@ -12,7 +12,7 @@
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.gates.Selectable;
+import cl.almejo.vsim.circuit.Selection;
 import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.gui.SimWindow;
 
@@ -21,49 +21,66 @@ import java.awt.image.BufferedImage;
 
 public class CursorToolHelper extends ActionToolHelper {
 
-	Draggable _dragging = null;
+	Selection _selection = null;
 	private BufferedImage _preview;
 
 	public Object mouseClicked(SimWindow window, MouseEvent event) {
 		Circuit circuit = window.getCircuit();
-		Selectable selectable = circuit.findSelectable(window.getCanvas().toCircuitCoordinatesX(event.getX())
+		Draggable draggable = circuit.findDraggable(window.getCanvas().toCircuitCoordinatesX(event.getX())
 				, window.getCanvas().toCircuitCoordinatesY(event.getY()));
-		if (selectable != null) {
+		if (draggable != null) {
 			if (event.isShiftDown()) {
-				circuit.select(selectable);
+				circuit.select(draggable);
 			} else if (event.isControlDown()) {
-				circuit.deselect(selectable);
+				circuit.deselect(draggable);
 			} else {
 				circuit.clearSelection();
-				circuit.select(selectable);
+				circuit.select(draggable);
 			}
 		} else {
 			circuit.clearSelection();
 		}
-		return selectable;
+		return draggable;
 	}
 
 	@Override
 	public void mouseDragged(SimWindow window, MouseEvent event) {
 		Circuit circuit = window.getCircuit();
-		if (_dragging == null) {
-			Draggable draggable = circuit.findDraggable(window.getCanvas().toCircuitCoordinatesX(event.getX())
+		if (_selection == null) {
+			Selection selection = circuit.findSelection(window.getCanvas().toCircuitCoordinatesX(event.getX())
 					, window.getCanvas().toCircuitCoordinatesY(event.getY()));
-			if (draggable != null) {
-				_dragging = draggable;
-				_preview = _dragging.getImage();
+
+			if (selection == null) {
+				Draggable draggable = circuit.findDraggable(window.getCanvas().toCircuitCoordinatesX(event.getX())
+						, window.getCanvas().toCircuitCoordinatesY(event.getY()));
+				if (draggable != null) {
+					circuit.setSelection(draggable);
+				}
+				selection = circuit.findSelection(window.getCanvas().toCircuitCoordinatesX(event.getX())
+						, window.getCanvas().toCircuitCoordinatesY(event.getY()));
+
 			}
-		} else if (_preview != null) {
+			if (selection != null) {
+				_selection = selection;
+				_preview = _selection.getImage();
+			}
+			return;
+		}
+		if (_preview != null) {
 			circuit.drawDragPreview(window.getCanvas().toCircuitCoordinatesX(event.getX())
 					, window.getCanvas().toCircuitCoordinatesY(event.getY())
 					, _preview);
 		}
+
 	}
 
 	@Override
 	public void mouseUp(SimWindow window, MouseEvent event) {
-		if (_dragging != null) {
-			_dragging = null;
+		if (_selection != null) {
+			window.getCircuit().undoableDragSelection(_selection
+					, window.getCanvas().toCircuitCoordinatesX(event.getX())
+					, window.getCanvas().toCircuitCoordinatesY(event.getY()));
+			_selection = null;
 			_preview = null;
 			window.getCircuit().clearDragPreview();
 		}

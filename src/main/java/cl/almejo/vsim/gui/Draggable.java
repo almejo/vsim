@@ -11,15 +11,27 @@
 
 package cl.almejo.vsim.gui;
 
-import java.awt.image.BufferedImage;
+import java.awt.*;
 
 public interface Draggable {
 
 	public void beforeDrag();
 
-	public void dragging();
+	public void drag(int x, int y);
 
 	public void afterDrag();
 
-	public BufferedImage getImage();
+	int getOriginalX();
+
+	int getOriginalY();
+
+	public void select();
+
+	public void deselect();
+
+	public boolean isSelected();
+
+	public boolean contains(int x, int y);
+
+	public void drawPreview(Graphics2D graphics2D, double x, double y);
 }

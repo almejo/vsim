@@ -14,13 +14,17 @@ package cl.almejo.vsim.gates;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.MarchingAnts;
 import cl.almejo.vsim.circuit.Point;
+import cl.almejo.vsim.gui.Draggable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.List;
 
-public class IconGate extends Rectangle implements Selectable {
+public class IconGate extends Rectangle implements Draggable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IconGate.class);
 	private static final long serialVersionUID = 1L;
 	private Gate _gate;
@@ -179,4 +183,31 @@ public class IconGate extends Rectangle implements Selectable {
 		_gate.getGateDescriptor().paint(graphics, this);
 		popMatrix(graphics);
 	}
+
+	@Override
+	public void beforeDrag() {
+
+	}
+
+	@Override
+	public void drag(int x, int y) {
+		getGate().getCircuit().remove(this);
+		getGate().getCircuit().add(this, x, y);
+	}
+
+	@Override
+	public void afterDrag() {
+
+	}
+
+	@Override
+	public int getOriginalX() {
+		return (int) getX();
+	}
+
+	@Override
+	public int getOriginalY() {
+		return (int) getY();
+	}
+
 }

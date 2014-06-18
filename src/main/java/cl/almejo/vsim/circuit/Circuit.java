@@ -15,7 +15,6 @@ import cl.almejo.vsim.circuit.commands.*;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
-import cl.almejo.vsim.gates.Selectable;
 import cl.almejo.vsim.gui.ColorScheme;
 import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.simulation.Scheduler;
@@ -43,65 +42,78 @@ public class Circuit {
 	private Command _lastSavedCommand = null;
 	private boolean _showGrid = true;
 
-	private Selection<Selectable> _selection = new Selection<Selectable>();
+	private final GatesSelection _selection = new GatesSelection();
 	private int _dragPreviewY;
 	private int _dragPreviewX;
 	private BufferedImage _dragPreview;
 
-	class Selection<T extends Selectable> implements Draggable {
-		List<T> _objects = new LinkedList<T>();
+	class GatesSelection implements Selection {
+		List<Draggable> _draggables = new LinkedList<Draggable>();
+		Rectangle _extent;
 
-		public void add(T object) {
-			object.select();
-			_objects.add(object);
+		public void add(Draggable selectable) {
+			selectable.select();
+			_draggables.add(selectable);
+			updateExtent();
 		}
 
-		public void remove(T iconGate) {
-			iconGate.deselect();
-			_objects.remove(iconGate);
+		public void remove(Draggable selectable) {
+			selectable.deselect();
+			_draggables.remove(selectable);
 		}
 
 		public void clear() {
-			for (T selectable : _objects) {
-				selectable.deselect();
+			for (Draggable draggable : _draggables) {
+				draggable.deselect();
 			}
-			_objects.clear();
-		}
-
-		@Override
-		public void beforeDrag() {
-
-		}
-
-		@Override
-		public void dragging() {
-
-		}
-
-		@Override
-		public void afterDrag() {
-
+			_draggables.clear();
 		}
 
 		@Override
 		public BufferedImage getImage() {
-			if (_objects.isEmpty()) {
+			if (_draggables.isEmpty()) {
 				return null;
 			}
-			Rectangle rectangle = new Rectangle((Rectangle) _objects.get(0));
-			for (T selection : _objects) {
-				rectangle.add((Rectangle) selection);
-			}
-			BufferedImage bufferedImage = new BufferedImage(rectangle.width, rectangle.height, BufferedImage.TYPE_INT_ARGB);
+			updateExtent();
+			BufferedImage bufferedImage = new BufferedImage(_extent.width, _extent.height, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D graphics2D = bufferedImage.createGraphics();
-			for (T selection : _objects) {
-				selection.drawPreview(graphics2D, rectangle.getX(), rectangle.getY());
+			for (Draggable selection : _draggables) {
+				selection.drawPreview(graphics2D, _extent.getX(), _extent.getY());
 			}
 			return bufferedImage;
 		}
 
+		@Override
+		public List<Draggable> getDraggables() {
+			List<Draggable> draggables = new LinkedList<Draggable>();
+			draggables.addAll(_draggables);
+			return draggables;
+		}
+
+		private void updateExtent() {
+			if (_draggables.isEmpty()) {
+				_extent = new Rectangle();
+				return;
+			}
+			_extent = new Rectangle((Rectangle) _draggables.get(0));
+			for (Draggable selection : _draggables) {
+				_extent.add((Rectangle) selection);
+			}
+		}
+
+		@Override
+		public int getX() {
+			return (int) _extent.getX();
+		}
+
+		@Override
+		public int getY() {
+			return (int) _extent.getY();
+		}
+
+
 		public boolean contains(int x, int y) {
-			for (T selectable : _objects) {
+			for (Draggable selectable : _draggables) {
 				if (selectable.contains(x, y)) {
 					return true;
 				}
@@ -555,9 +567,9 @@ public class Circuit {
 		_commandManager.cleanHistory();
 	}
 
-	public void select(Selectable selectable) {
-		if (selectable instanceof IconGate) {
-			_selection.add(selectable);
+	public void select(Draggable draggable) {
+		if (draggable instanceof IconGate) {
+			_selection.add(draggable);
 		}
 	}
 
@@ -565,11 +577,11 @@ public class Circuit {
 		_selection.clear();
 	}
 
-	public void deselect(Selectable selectable) {
+	public void deselect(Draggable selectable) {
 		_selection.remove(selectable);
 	}
 
-	public Selectable findSelectable(int x, int y) {
+	public Draggable findDraggable(int x, int y) {
 		for (IconGate iconGate : _icons) {
 			if (iconGate.contains(x, y)) {
 				return iconGate;
@@ -578,7 +590,7 @@ public class Circuit {
 		return null;
 	}
 
-	public Draggable findDraggable(int x, int y) {
+	public Selection findSelection(int x, int y) {
 		if (_selection.contains(x, y)) {
 			return _selection;
 		}
@@ -593,6 +605,27 @@ public class Circuit {
 
 	public void clearDragPreview() {
 		_dragPreview = null;
+	}
+
+
+	public void undoableDragSelection(Selection selection, int x, int y) {
+		DragSelectionCommand command = new DragSelectionCommand(this, selection, gridTrunc(x), gridTrunc(y));
+		_commandManager.apply(command);
+		sendChangedEvent();
+	}
+
+	public void drag(List<Draggable> draggables, List<Point> destination) {
+		int i = 0;
+		for (Draggable draggable : draggables) {
+			Point point = destination.get(i);
+			draggable.drag(gridTrunc(point.getX()), gridTrunc(point.getY()));
+			i++;
+		}
+	}
+
+	public void setSelection(Draggable draggable) {
+		_selection.clear();
+		_selection.add(draggable);
 	}
 }
 
