@@ -72,4 +72,8 @@ public class Gate {
 
 	public void parametersUpdated() {
 	}
+
+	public Circuit getCircuit() {
+		return _circuit;
+	}
 }

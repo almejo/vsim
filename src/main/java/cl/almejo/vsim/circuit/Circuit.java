@@ -16,6 +16,7 @@ import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gui.ColorScheme;
+import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.simulation.Scheduler;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -24,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -39,6 +41,91 @@ public class Circuit {
 	private String _name;
 	private Command _lastSavedCommand = null;
 	private boolean _showGrid = true;
+
+	private final GatesSelection _selection = new GatesSelection();
+	private int _dragPreviewY;
+	private int _dragPreviewX;
+	private BufferedImage _dragPreview;
+
+	public void updateSelection() {
+		_selection.updateExtent();
+	}
+
+	class GatesSelection implements Selection {
+		List<Draggable> _draggables = new LinkedList<Draggable>();
+		Rectangle _extent;
+
+		public void add(Draggable selectable) {
+			selectable.select();
+			_draggables.add(selectable);
+			updateExtent();
+		}
+
+		public void remove(Draggable selectable) {
+			selectable.deselect();
+			_draggables.remove(selectable);
+		}
+
+		public void clear() {
+			for (Draggable draggable : _draggables) {
+				draggable.deselect();
+			}
+			_draggables.clear();
+		}
+
+		@Override
+		public BufferedImage getImage() {
+			if (_draggables.isEmpty()) {
+				return null;
+			}
+			updateExtent();
+			BufferedImage bufferedImage = new BufferedImage(_extent.width, _extent.height, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D graphics = bufferedImage.createGraphics();
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			for (Draggable selection : _draggables) {
+				selection.drawPreview(graphics, _extent.getX(), _extent.getY());
+			}
+			return bufferedImage;
+		}
+
+		@Override
+		public List<Draggable> getDraggables() {
+			List<Draggable> draggables = new LinkedList<Draggable>();
+			draggables.addAll(_draggables);
+			return draggables;
+		}
+
+		private void updateExtent() {
+			if (_draggables.isEmpty()) {
+				_extent = new Rectangle();
+				return;
+			}
+			_extent = new Rectangle((Rectangle) _draggables.get(0));
+			for (Draggable selection : _draggables) {
+				_extent.add((Rectangle) selection);
+			}
+		}
+
+		@Override
+		public int getX() {
+			return (int) _extent.getX();
+		}
+
+		@Override
+		public int getY() {
+			return (int) _extent.getY();
+		}
+
+
+		public boolean contains(int x, int y) {
+			for (Draggable selectable : _draggables) {
+				if (selectable.contains(x, y)) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 
 	public void toggleGrid() {
 		_showGrid = !_showGrid;
@@ -130,7 +217,17 @@ public class Circuit {
 			}
 			drawGates(graphics, rectangle);
 			_protoboard.paint(graphics, rectangle);
+			drawGatesDecorations(graphics, rectangle);
+			if (_dragPreview != null) {
+				setAlpha(graphics, 0.5f);
+				graphics.drawImage(_dragPreview, _dragPreviewX, _dragPreviewY, null);
+				setAlpha(graphics, 1.0f);
+			}
 		}
+	}
+
+	private void setAlpha(Graphics2D graphics, float alpha) {
+		graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 	}
 
 	private void drawGrid(Graphics2D graphics, Rectangle rectangle) {
@@ -175,7 +272,15 @@ public class Circuit {
 	private void drawGates(Graphics2D graphics, Rectangle rectangle) {
 		for (IconGate iconGate : _icons) {
 			if (rectangle.intersects(iconGate)) {
-				iconGate.paint(graphics);
+				iconGate.drawIcon(graphics);
+			}
+		}
+	}
+
+	private void drawGatesDecorations(Graphics2D graphics, Rectangle rectangle) {
+		for (IconGate iconGate : _icons) {
+			if (rectangle.intersects(iconGate)) {
+				iconGate.drawDecorations(graphics);
 			}
 		}
 	}
@@ -211,8 +316,9 @@ public class Circuit {
 		int _y = gridTrunc(y);
 
 		for (IconGate iconGate : _icons) {
-			if (iconGate.contains(_x, _y))
+			if (iconGate.contains(_x, _y)) {
 				return iconGate;
+			}
 		}
 		return null;
 	}
@@ -467,5 +573,65 @@ public class Circuit {
 		_commandManager.cleanHistory();
 	}
 
+	public void select(Draggable draggable) {
+		if (draggable instanceof IconGate) {
+			_selection.add(draggable);
+		}
+	}
 
+	public void clearSelection() {
+		_selection.clear();
+	}
+
+	public void deselect(Draggable selectable) {
+		_selection.remove(selectable);
+	}
+
+	public Draggable findDraggable(int x, int y) {
+		for (IconGate iconGate : _icons) {
+			if (iconGate.contains(x, y)) {
+				return iconGate;
+			}
+		}
+		return null;
+	}
+
+	public Selection findSelection(int x, int y) {
+		if (_selection.contains(x, y)) {
+			return _selection;
+		}
+		return null;
+	}
+
+	public void drawDragPreview(int x, int y, BufferedImage preview) {
+		_dragPreviewX = gridTrunc(x);
+		_dragPreviewY = gridTrunc(y);
+		_dragPreview = preview;
+	}
+
+	public void clearDragPreview() {
+		_dragPreview = null;
+	}
+
+
+	public void undoableDragSelection(Selection selection, int x, int y) {
+		DragSelectionCommand command = new DragSelectionCommand(this, selection, gridTrunc(x), gridTrunc(y));
+		_commandManager.apply(command);
+		sendChangedEvent();
+	}
+
+	public void drag(List<Draggable> draggables, List<Point> destination) {
+		int i = 0;
+		for (Draggable draggable : draggables) {
+			Point point = destination.get(i);
+			draggable.drag(gridTrunc(point.getX()), gridTrunc(point.getY()));
+			i++;
+		}
+	}
+
+	public void setSelection(Draggable draggable) {
+		_selection.clear();
+		_selection.add(draggable);
+	}
 }
+
