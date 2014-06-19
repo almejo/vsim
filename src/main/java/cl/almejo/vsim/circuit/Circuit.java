@@ -47,6 +47,10 @@ public class Circuit {
 	private int _dragPreviewX;
 	private BufferedImage _dragPreview;
 
+	public void updateSelection() {
+		_selection.updateExtent();
+	}
+
 	class GatesSelection implements Selection {
 		List<Draggable> _draggables = new LinkedList<Draggable>();
 		Rectangle _extent;
@@ -76,9 +80,10 @@ public class Circuit {
 			}
 			updateExtent();
 			BufferedImage bufferedImage = new BufferedImage(_extent.width, _extent.height, BufferedImage.TYPE_INT_ARGB);
-			Graphics2D graphics2D = bufferedImage.createGraphics();
+			Graphics2D graphics = bufferedImage.createGraphics();
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			for (Draggable selection : _draggables) {
-				selection.drawPreview(graphics2D, _extent.getX(), _extent.getY());
+				selection.drawPreview(graphics, _extent.getX(), _extent.getY());
 			}
 			return bufferedImage;
 		}
@@ -311,8 +316,9 @@ public class Circuit {
 		int _y = gridTrunc(y);
 
 		for (IconGate iconGate : _icons) {
-			if (iconGate.contains(_x, _y))
+			if (iconGate.contains(_x, _y)) {
 				return iconGate;
+			}
 		}
 		return null;
 	}

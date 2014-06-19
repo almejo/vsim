@@ -427,30 +427,36 @@ public class Protoboard {
 			return;
 		}
 
-		int xi = Circuit.gridTrunc(_connectionStartX);// + Circuit.HALF_GRIDSIZE;
-		int yi = Circuit.gridTrunc(_connectionStartY);// + Circuit.HALF_GRIDSIZE;
-		int xf = Circuit.gridTrunc(_connectionEndX);// + Circuit.HALF_GRIDSIZE;
-		int yf = Circuit.gridTrunc(_connectionEndY);// + Circuit.HALF_GRIDSIZE;
+		int xi = Circuit.gridTrunc(_connectionStartX);
+		int yi = Circuit.gridTrunc(_connectionStartY);
+		int xf = Circuit.gridTrunc(_connectionEndX);
+		int yf = Circuit.gridTrunc(_connectionEndY);
 
 
 		if (xi == xf && yi == yf) {
 			return;
 		}
 
+		graphics.setColor(Color.YELLOW);
+		drawConnectionLine(graphics, xi, yi, xf, yf);
+
 		Stroke oldStroke = graphics.getStroke();
 		graphics.setStroke(MarchingAnts.getStroke());
-
 		graphics.setColor(Color.BLACK);
 
-		if (yi != yf) {
-			graphics.drawLine(xi, yi, xi, yf);
-		}
-		if (xi != xf) {
-			graphics.drawLine(xi, yf, xf, yf);
-		}
+		drawConnectionLine(graphics, xi, yi, xf, yf);
 		graphics.fillOval(xi - 3, yi - 3, 6, 6);
 		graphics.fillOval(xf - 3, yf - 3, 6, 6);
 		graphics.setStroke(oldStroke);
+	}
+
+	private void drawConnectionLine(Graphics2D graphics, int xi, int yi, int xf, int yf) {
+		if (yi != yf) {
+			graphics.drawLine(xi, yf, xi, yi);
+		}
+		if (xi != xf) {
+			graphics.drawLine(xf, yf, xi, yf);
+		}
 	}
 
 	public List<Connection<Contact>> getAllConnections() {

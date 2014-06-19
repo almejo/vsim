@@ -23,6 +23,8 @@ public class CursorToolHelper extends ActionToolHelper {
 
 	Selection _selection = null;
 	private BufferedImage _preview;
+	private int _deltaY;
+	private int _deltaX;
 
 	public Object mouseClicked(SimWindow window, MouseEvent event) {
 		Circuit circuit = window.getCircuit();
@@ -46,30 +48,29 @@ public class CursorToolHelper extends ActionToolHelper {
 	@Override
 	public void mouseDragged(SimWindow window, MouseEvent event) {
 		Circuit circuit = window.getCircuit();
+		int x = window.getCanvas().toCircuitCoordinatesX(event.getX());
+		int y = window.getCanvas().toCircuitCoordinatesY(event.getY());
 		if (_selection == null) {
-			Selection selection = circuit.findSelection(window.getCanvas().toCircuitCoordinatesX(event.getX())
-					, window.getCanvas().toCircuitCoordinatesY(event.getY()));
+			Selection selection = circuit.findSelection(x, y);
 
 			if (selection == null) {
-				Draggable draggable = circuit.findDraggable(window.getCanvas().toCircuitCoordinatesX(event.getX())
-						, window.getCanvas().toCircuitCoordinatesY(event.getY()));
+				Draggable draggable = circuit.findDraggable(x, y);
 				if (draggable != null) {
 					circuit.setSelection(draggable);
 				}
-				selection = circuit.findSelection(window.getCanvas().toCircuitCoordinatesX(event.getX())
-						, window.getCanvas().toCircuitCoordinatesY(event.getY()));
+				selection = circuit.findSelection(x, y);
 
 			}
 			if (selection != null) {
 				_selection = selection;
+				_deltaX = x - selection.getX();
+				_deltaY = y - selection.getY();
 				_preview = _selection.getImage();
 			}
 			return;
 		}
 		if (_preview != null) {
-			circuit.drawDragPreview(window.getCanvas().toCircuitCoordinatesX(event.getX())
-					, window.getCanvas().toCircuitCoordinatesY(event.getY())
-					, _preview);
+			circuit.drawDragPreview(x - _deltaX, y - _deltaY, _preview);
 		}
 
 	}
@@ -78,8 +79,8 @@ public class CursorToolHelper extends ActionToolHelper {
 	public void mouseUp(SimWindow window, MouseEvent event) {
 		if (_selection != null) {
 			window.getCircuit().undoableDragSelection(_selection
-					, window.getCanvas().toCircuitCoordinatesX(event.getX())
-					, window.getCanvas().toCircuitCoordinatesY(event.getY()));
+					, window.getCanvas().toCircuitCoordinatesX(event.getX()) - _deltaX
+					, window.getCanvas().toCircuitCoordinatesY(event.getY()) - _deltaY);
 			_selection = null;
 			_preview = null;
 			window.getCircuit().clearDragPreview();

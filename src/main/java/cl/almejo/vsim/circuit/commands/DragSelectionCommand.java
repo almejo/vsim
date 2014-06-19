@@ -26,23 +26,25 @@ public class DragSelectionCommand implements Command {
 	List<Point> origin = new LinkedList<Point>();
 	List<Point> end = new LinkedList<Point>();
 
-	public DragSelectionCommand(Circuit circuit, Selection selection, int x, int y) {
+	public DragSelectionCommand(Circuit circuit, Selection selection, int xf, int yf) {
 		_circuit = circuit;
 		_draggables = selection.getDraggables();
-		for(Draggable draggable: _draggables) {
+		for (Draggable draggable : _draggables) {
 			origin.add(new Point(draggable.getOriginalX(), draggable.getOriginalY()));
-			end.add(new Point(x, y));
+			end.add(new Point(xf + draggable.getOriginalX() - selection.getX(), yf + draggable.getOriginalY() - selection.getY()));
 		}
 	}
 
 	@Override
 	public boolean apply() {
 		_circuit.drag(_draggables, end);
+		_circuit.updateSelection();
 		return true;
 	}
 
 	@Override
 	public void unDo() {
 		_circuit.drag(_draggables, origin);
+		_circuit.updateSelection();
 	}
 }
