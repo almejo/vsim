@@ -70,13 +70,7 @@ public class IconGate extends Rectangle implements Draggable {
 
 	private void drawSelectedDecoration(Graphics2D graphics, int separation) {
 		Dimension dimension = _gate.getGateDescriptor().getSize();
-		graphics.setColor(Color.YELLOW);
-		graphics.drawRect(-separation, -separation, (int) dimension.getWidth() + separation * 2, (int) dimension.getHeight() + separation * 2);
-		Stroke oldStroke = graphics.getStroke();
-		graphics.setColor(Color.BLACK);
-		graphics.setStroke(MarchingAnts.getStroke());
-		graphics.drawRect(-separation, -separation, (int) dimension.getWidth() + separation * 2, (int) dimension.getHeight() + separation * 2);
-		graphics.setStroke(oldStroke);
+		MarchingAnts.drawRect(graphics, -separation, -separation, (int) dimension.getWidth() + separation * 2, (int) dimension.getHeight() + separation * 2);
 	}
 
 	private void drawFrame(Graphics2D graphics, int separation, int border) {

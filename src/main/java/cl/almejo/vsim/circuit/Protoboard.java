@@ -432,31 +432,24 @@ public class Protoboard {
 		int xf = Circuit.gridTrunc(_connectionEndX);
 		int yf = Circuit.gridTrunc(_connectionEndY);
 
-
 		if (xi == xf && yi == yf) {
 			return;
 		}
 
-		graphics.setColor(Color.YELLOW);
-		drawConnectionLine(graphics, xi, yi, xf, yf);
-
-		Stroke oldStroke = graphics.getStroke();
-		graphics.setStroke(MarchingAnts.getStroke());
-		graphics.setColor(Color.BLACK);
-
-		drawConnectionLine(graphics, xi, yi, xf, yf);
+		MarchingAnts.drawLines(graphics, drawConnectionLine(xi, yi, xf, yf));
 		graphics.fillOval(xi - 3, yi - 3, 6, 6);
 		graphics.fillOval(xf - 3, yf - 3, 6, 6);
-		graphics.setStroke(oldStroke);
 	}
 
-	private void drawConnectionLine(Graphics2D graphics, int xi, int yi, int xf, int yf) {
+	private List<Point[]> drawConnectionLine(int xi, int yi, int xf, int yf) {
+		List<Point[]> points = new LinkedList<Point[]>();
 		if (yi != yf) {
-			graphics.drawLine(xi, yf, xi, yi);
+			points.add(new Point[]{new Point(xi, yf), new Point(xi, yi)});
 		}
 		if (xi != xf) {
-			graphics.drawLine(xf, yf, xi, yf);
+			points.add(new Point[]{new Point(xf, yf), new Point(xi, yf)});
 		}
+		return points;
 	}
 
 	public List<Connection<Contact>> getAllConnections() {
