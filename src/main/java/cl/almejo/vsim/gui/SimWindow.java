@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -123,6 +125,77 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		OPEN_FILE_CHOOSER.setFileFilter(vsimFilter);
 	}
 
+	static class ZoomChanger extends JPanel {
+
+		private CircuitCanvas _canvas;
+		public ZoomChanger(CircuitCanvas canvas) {
+			_canvas = canvas;
+			final JSlider zoomSlider = new JSlider(1, 8, 4);
+			add(createChangeZoomButton(" - ", new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (zoomSlider.getValue() > 1) {
+						zoomSlider.setValue(zoomSlider.getValue() - 1);
+					}
+				}
+			}));
+
+			zoomSlider.setSnapToTicks(true);
+			zoomSlider.setMinorTickSpacing(1);
+			add(zoomSlider);
+			add(createChangeZoomButton(" + ", new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (zoomSlider.getValue() < 8) {
+						zoomSlider.setValue(zoomSlider.getValue() + 1);
+					}
+				}
+			}));
+			add(getZoomDisplay(zoomSlider));
+		}
+
+		private JLabel getZoomDisplay(JSlider zoomSlider) {
+			final JLabel label = new JLabel("100%");
+			zoomSlider.addChangeListener(new ChangeListener() {
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					JSlider slider = (JSlider) e.getSource();
+					double zoom = 0.25 * slider.getValue();
+					_canvas.setZoom(zoom);
+					label.setText(((int) (zoom * 100)) + "%");
+				}
+			});
+			return label;
+		}
+
+		public static JButton createChangeZoomButton(String text, MouseAdapter mouseListener) {
+			final JButton button = new JButton(text);
+			final Border raisedBevelBorder = BorderFactory.createRaisedBevelBorder();
+			final Insets insets = raisedBevelBorder.getBorderInsets(button);
+			final EmptyBorder emptyBorder = new EmptyBorder(insets);
+			button.setBorder(emptyBorder);
+			button.setFocusPainted(false);
+			button.setOpaque(false);
+			button.setContentAreaFilled(false);
+			button.getModel().addChangeListener(new ChangeListener() {
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					ButtonModel model = (ButtonModel) e.getSource();
+					if (model.isRollover()) {
+						button.setBorder(raisedBevelBorder);
+					} else {
+						button.setBorder(emptyBorder);
+					}
+				}
+			});
+			button.addMouseListener(mouseListener);
+			return button;
+
+		}
+
+	}
+
+
 	public SimWindow(Circuit circuit) {
 
 		setTitle(circuit.getName() + " | " + Messages.t("main.title"));
@@ -144,7 +217,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 
 		JPanel statusBar = getStatusBar();
-		statusBar.add(createZoomSlider());
+		statusBar.add(new ZoomChanger(_canvas));
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 
 		setVisible(true);
@@ -229,12 +302,13 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		return menuItem;
 	}
 
-	private JMenuItem newCheckboxMenuItem(WindowAction action, char mnemonic, boolean selected ) {
+	private JMenuItem newCheckboxMenuItem(WindowAction action, char mnemonic, boolean selected) {
 		JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(action);
 		menuItem.setMnemonic(mnemonic);
 		menuItem.setSelected(selected);
 		return menuItem;
 	}
+
 	private JMenu newMenu(String title, int mnemonic, JMenuBar menuBar) {
 		JMenu menu = new JMenu(title);
 		menu.setMnemonic(mnemonic);
@@ -571,28 +645,4 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		return _canvas;
 	}
 
-	private JPanel createZoomSlider() {
-		JPanel panel = new JPanel();
-		panel.add(new JLabel(Messages.t("zoom.label")));
-		JSlider zoomSlider = new JSlider(1, 8, 4);
-		zoomSlider.setSnapToTicks(true);
-		zoomSlider.setMinorTickSpacing(1);
-		panel.add(zoomSlider);
-		panel.add(getZoomDisplay(zoomSlider));
-		return panel;
-	}
-
-	private JLabel getZoomDisplay(JSlider zoomSlider) {
-		final JLabel label = new JLabel("100%");
-		zoomSlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSlider slider = (JSlider) e.getSource();
-				double zoom = 0.25 * slider.getValue();
-				_canvas.setZoom(zoom);
-				label.setText(((int) (zoom * 100)) + "%");
-			}
-		});
-		return label;
-	}
 }
