@@ -26,6 +26,7 @@ public class IconGate extends Rectangle implements Draggable {
 	private static final long serialVersionUID = 1L;
 	private Gate _gate;
 	private int _id;
+	private int _rotation;
 
 	private AffineTransform _translateTransformation = new AffineTransform();
 	private AffineTransform _rotateTransformation = new AffineTransform();
@@ -101,6 +102,35 @@ public class IconGate extends Rectangle implements Draggable {
 	public void moveTo(int xf, int yf) {
 		setLocation(xf, yf);
 		setTranslation(xf, yf);
+	}
+
+	public void setRotation(int rotation) {
+		_gate.getCircuit().desactivate(this);
+		updateRotation(rotation);
+		Dimension dimension = getSize();
+		System.out.println(_gate.getGateDescriptor()._type);
+		System.out.println(dimension.width + ", " + dimension.getHeight());
+		java.awt.Point.Double corner = new java.awt.Point.Double(dimension.width, dimension.getHeight());
+		java.awt.Point.Double rotatedCorner = new java.awt.Point.Double();
+		_rotateTransformation.transform(corner, rotatedCorner);
+		System.out.println(rotatedCorner.getX() + ", " + rotatedCorner.getY());
+		moveBy((int) -rotatedCorner.getX()/2 + 50, (int) -rotatedCorner.getY()/2 + 50);
+		_gate.getCircuit().activate(this);
+	}
+
+	private void updateRotation(int rotation) {
+		_rotation = rotation % 4;
+		_rotateTransformation.setToIdentity();
+		_rotateTransformation.rotate(Math.toRadians(_rotation * 90));
+		recalculateTransform();
+	}
+
+	public int getRotation() {
+		return _rotation;
+	}
+
+	private void moveBy(int deltaX, int deltaY) {
+		moveTo((int) getX() + deltaX, (int) getY() + deltaY);
 	}
 
 	private void setTranslation(int x, int y) {

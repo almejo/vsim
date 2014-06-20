@@ -514,6 +514,7 @@ public class Circuit {
 				iconGate.getGate().getParamameters().setValues((Map<String, Object>) gate.get("parameters"));
 				iconGate.getGate().parametersUpdated();
 				circuit.undoableAddGate(iconGate, (Integer) position.get("x"), (Integer) position.get("y"));
+				iconGate.setRotation(2);
 			}
 			List<Map> connections = (List<Map>) info.get("connections");
 			for (Map connection : connections) {
