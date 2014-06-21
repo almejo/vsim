@@ -16,6 +16,7 @@ import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gui.ColorScheme;
+import cl.almejo.vsim.gui.Configurable;
 import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.simulation.Scheduler;
 import org.codehaus.jackson.JsonParseException;
@@ -514,7 +515,6 @@ public class Circuit {
 				iconGate.getGate().getParamameters().setValues((Map<String, Object>) gate.get("parameters"));
 				iconGate.getGate().parametersUpdated();
 				circuit.undoableAddGate(iconGate, (Integer) position.get("x"), (Integer) position.get("y"));
-				iconGate.setRotation(2);
 			}
 			List<Map> connections = (List<Map>) info.get("connections");
 			for (Map connection : connections) {
@@ -597,6 +597,15 @@ public class Circuit {
 		return null;
 	}
 
+	public Configurable findConfigurable(int x, int y) {
+		for (IconGate iconGate : _icons) {
+			if (iconGate.contains(x, y)) {
+				return iconGate;
+			}
+		}
+		return null;
+	}
+
 	public Selection findSelection(int x, int y) {
 		if (_selection.contains(x, y)) {
 			return _selection;
@@ -633,6 +642,18 @@ public class Circuit {
 	public void setSelection(Draggable draggable) {
 		_selection.clear();
 		_selection.add(draggable);
+	}
+
+
+	public void undoableRotateClockWise(Configurable configurable) {
+		RotateClockwiseCommand command = new RotateClockwiseCommand(configurable);
+		_commandManager.apply(command);
+		sendChangedEvent();
+	}
+	public void undoableRotateCounterClockWise(Configurable configurable) {
+		RotateCounterClockwiseCommand command = new RotateCounterClockwiseCommand(configurable);
+		_commandManager.apply(command);
+		sendChangedEvent();
 	}
 }
 

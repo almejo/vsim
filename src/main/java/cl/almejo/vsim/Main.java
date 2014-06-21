@@ -23,7 +23,7 @@ import java.io.IOException;
 public class Main {
 
 	public Main() throws IOException {
-		File file = new File("circuit.json");
+		File file = new File("one.json");
 		Circuit circuit = Circuit.fromJSon(FileUtils.readFileToString(file), file.getAbsolutePath());
 		if ("native".equalsIgnoreCase(System.getProperty("vsim.look"))) {
 

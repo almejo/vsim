@@ -13,9 +13,11 @@ package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Selection;
+import cl.almejo.vsim.gui.Configurable;
 import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.gui.SimWindow;
 
+import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
@@ -27,9 +29,18 @@ public class CursorToolHelper extends ActionToolHelper {
 	private int _deltaX;
 
 	public Object mouseClicked(SimWindow window, MouseEvent event) {
+		int x = window.getCanvas().toCircuitCoordinatesX(event.getX());
+		int y = window.getCanvas().toCircuitCoordinatesY(event.getY());
+
+		if (SwingUtilities.isRightMouseButton(event) ) {
+			Configurable configurable = window.getCircuit().findConfigurable(x, y);
+			if (configurable != null) {
+				doPopupMenu(window.getCircuit(), configurable, window.getCanvas(), event.getX(), event.getY());
+				return null;
+			}
+		}
 		Circuit circuit = window.getCircuit();
-		Draggable draggable = circuit.findDraggable(window.getCanvas().toCircuitCoordinatesX(event.getX())
-				, window.getCanvas().toCircuitCoordinatesY(event.getY()));
+		Draggable draggable = circuit.findDraggable(x, y);
 		if (draggable != null) {
 			if (event.isShiftDown()) {
 				circuit.select(draggable);

@@ -14,14 +14,16 @@ package cl.almejo.vsim.gates;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.MarchingAnts;
 import cl.almejo.vsim.circuit.Point;
+import cl.almejo.vsim.gui.Configurable;
 import cl.almejo.vsim.gui.Draggable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 
-public class IconGate extends Rectangle implements Draggable {
+public class IconGate extends Rectangle implements Draggable, Configurable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IconGate.class);
 	private static final long serialVersionUID = 1L;
 	private Gate _gate;
@@ -30,7 +32,7 @@ public class IconGate extends Rectangle implements Draggable {
 
 	private AffineTransform _translateTransformation = new AffineTransform();
 	private AffineTransform _rotateTransformation = new AffineTransform();
-	private AffineTransform _transform = new AffineTransform();
+	private AffineTransform _transformation = new AffineTransform();
 	private AffineTransform _origianlTransformation;
 	private boolean _selected;
 
@@ -90,7 +92,7 @@ public class IconGate extends Rectangle implements Draggable {
 	private void pushMatrix(Graphics2D graphics) {
 		_origianlTransformation = graphics.getTransform();
 		AffineTransform newTransform = new AffineTransform(graphics.getTransform());
-		newTransform.concatenate(_transform);
+		newTransform.concatenate(_transformation);
 		graphics.setTransform(newTransform);
 	}
 
@@ -108,13 +110,10 @@ public class IconGate extends Rectangle implements Draggable {
 		_gate.getCircuit().desactivate(this);
 		updateRotation(rotation);
 		Dimension dimension = getSize();
-		System.out.println(_gate.getGateDescriptor()._type);
-		System.out.println(dimension.width + ", " + dimension.getHeight());
-		java.awt.Point.Double corner = new java.awt.Point.Double(dimension.width, dimension.getHeight());
-		java.awt.Point.Double rotatedCorner = new java.awt.Point.Double();
-		_rotateTransformation.transform(corner, rotatedCorner);
-		System.out.println(rotatedCorner.getX() + ", " + rotatedCorner.getY());
-		moveBy((int) -rotatedCorner.getX()/2 + 50, (int) -rotatedCorner.getY()/2 + 50);
+//		java.awt.Point.Double corner = new java.awt.Point.Double(dimension.width, dimension.getHeight());
+//		java.awt.Point.Double rotatedCorner = new java.awt.Point.Double();
+//		_rotateTransformation.transform(corner, rotatedCorner);
+//		moveBy((int) -rotatedCorner.getX() / 2 , (int) -rotatedCorner.getY() / 2 );
 		_gate.getCircuit().activate(this);
 	}
 
@@ -129,10 +128,6 @@ public class IconGate extends Rectangle implements Draggable {
 		return _rotation;
 	}
 
-	private void moveBy(int deltaX, int deltaY) {
-		moveTo((int) getX() + deltaX, (int) getY() + deltaY);
-	}
-
 	private void setTranslation(int x, int y) {
 		LOGGER.debug("original transformation: " + _translateTransformation);
 		_translateTransformation.setToIdentity();
@@ -143,9 +138,9 @@ public class IconGate extends Rectangle implements Draggable {
 	}
 
 	private void recalculateTransform() {
-		_transform.setToIdentity();
-		_transform.concatenate(_translateTransformation);
-		_transform.concatenate(_rotateTransformation);
+		_transformation.setToIdentity();
+		_transformation.concatenate(_translateTransformation);
+		_transformation.concatenate(_rotateTransformation);
 	}
 
 	public int getPinsCount() {
@@ -162,7 +157,7 @@ public class IconGate extends Rectangle implements Draggable {
 
 	public Point getTransformed(Point point) {
 		java.awt.geom.Point2D.Double point2d = new java.awt.geom.Point2D.Double(point.getX(), point.getY());
-		_transform.transform(point2d, point2d);
+		_transformation.transform(point2d, point2d);
 		return new Point((int) point2d.getX(), (int) point2d.getY());
 	}
 
@@ -231,4 +226,27 @@ public class IconGate extends Rectangle implements Draggable {
 		return (int) getY();
 	}
 
+	@Override
+	public boolean contains(int x, int y) {
+		java.awt.Point.Double point = new java.awt.Point.Double(x - getX(), y - getY());
+		java.awt.Point.Double transformed = new java.awt.Point.Double();
+		try {
+			_rotateTransformation.inverseTransform(point, transformed);
+		} catch (NoninvertibleTransformException e) {
+			e.printStackTrace();
+			return false;
+		}
+		java.awt.Point.Double moved = new java.awt.Point.Double(transformed.getX() + getX(), transformed.getY() + getY());
+		return super.contains(moved);
+	}
+
+	@Override
+	public void rotateClockwise() {
+		setRotation(getRotation() + 1);
+	}
+
+	@Override
+	public void rotateCounterClockwise() {
+		setRotation(getRotation() - 1);
+	}
 }
