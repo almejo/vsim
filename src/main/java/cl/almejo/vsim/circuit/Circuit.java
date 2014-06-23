@@ -101,9 +101,9 @@ public class Circuit {
 				_extent = new Rectangle();
 				return;
 			}
-			_extent = new Rectangle((Rectangle) _draggables.get(0));
-			for (Draggable selection : _draggables) {
-				_extent.add((Rectangle) selection);
+			_extent = new Rectangle(_draggables.get(0).getExtent());
+			for (Draggable draggable : _draggables) {
+				_extent.add(draggable.getExtent());
 			}
 		}
 
@@ -650,6 +650,7 @@ public class Circuit {
 		_commandManager.apply(command);
 		sendChangedEvent();
 	}
+
 	public void undoableRotateCounterClockWise(Configurable configurable) {
 		RotateCounterClockwiseCommand command = new RotateCounterClockwiseCommand(configurable);
 		_commandManager.apply(command);

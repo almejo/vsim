@@ -56,6 +56,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 
 	public void drawIcon(Graphics2D graphics) {
 		pushMatrix(graphics);
+		applyTransform(graphics);
 		if (!isSelected()) {
 			drawFrame(graphics, 2, 8);
 		}
@@ -65,6 +66,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 
 	public void drawDecorations(Graphics2D graphics) {
 		pushMatrix(graphics);
+		applyTransform(graphics);
 		if (isSelected()) {
 			drawSelectedDecoration(graphics, 2);
 		}
@@ -91,6 +93,9 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 
 	private void pushMatrix(Graphics2D graphics) {
 		_origianlTransformation = graphics.getTransform();
+	}
+
+	private void applyTransform(Graphics2D graphics) {
 		AffineTransform newTransform = new AffineTransform(graphics.getTransform());
 		newTransform.concatenate(_transformation);
 		graphics.setTransform(newTransform);
@@ -109,11 +114,6 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	public void setRotation(int rotation) {
 		_gate.getCircuit().desactivate(this);
 		updateRotation(rotation);
-		Dimension dimension = getSize();
-//		java.awt.Point.Double corner = new java.awt.Point.Double(dimension.width, dimension.getHeight());
-//		java.awt.Point.Double rotatedCorner = new java.awt.Point.Double();
-//		_rotateTransformation.transform(corner, rotatedCorner);
-//		moveBy((int) -rotatedCorner.getX() / 2 , (int) -rotatedCorner.getY() / 2 );
 		_gate.getCircuit().activate(this);
 	}
 
@@ -193,9 +193,12 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	@Override
 	public void drawPreview(Graphics2D graphics, double x, double y) {
 		pushMatrix(graphics);
+
 		AffineTransform transformation = new AffineTransform(graphics.getTransform());
 		transformation.translate(-x, -y);
+
 		graphics.setTransform(transformation);
+		applyTransform(graphics);
 		_gate.getGateDescriptor().paint(graphics, this);
 		popMatrix(graphics);
 	}
@@ -248,5 +251,50 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	@Override
 	public void rotateCounterClockwise() {
 		setRotation(getRotation() - 1);
+	}
+
+	public Rectangle getExtent() {
+		java.awt.Point.Double point0 = new java.awt.Point.Double(0, 0);
+		java.awt.Point.Double point1 = new java.awt.Point.Double(getWidth(), 0);
+		java.awt.Point.Double point2 = new java.awt.Point.Double(getWidth(), getHeight());
+		java.awt.Point.Double point3 = new java.awt.Point.Double(0, getHeight());
+
+		java.awt.Point.Double transformed0 = new java.awt.Point.Double();
+		java.awt.Point.Double transformed1 = new java.awt.Point.Double();
+		java.awt.Point.Double transformed2 = new java.awt.Point.Double();
+		java.awt.Point.Double transformed3 = new java.awt.Point.Double();
+
+		_rotateTransformation.transform(point0, transformed0);
+		_rotateTransformation.transform(point1, transformed1);
+		_rotateTransformation.transform(point2, transformed2);
+		_rotateTransformation.transform(point3, transformed3);
+
+		java.awt.Point.Double[] points = new java.awt.Point.Double[]{
+				transformed0
+				, transformed1
+				, transformed2
+				, transformed3
+		};
+		int minx = (int) transformed0.x;
+		int miny = (int) transformed0.y;
+		int maxx = (int) transformed0.x;
+		int maxy = (int) transformed0.y;
+		for (java.awt.Point.Double point : points) {
+			if (point.getX() < minx) {
+				minx = (int) point.getX();
+			}
+			if (point.getY() < miny) {
+				miny = (int) point.getY();
+			}
+			if (point.getX() > maxx) {
+				maxx = (int) point.getX();
+			}
+			if (point.getY() > maxy) {
+				maxy = (int) point.getX();
+			}
+		}
+		Rectangle rectangle = new Rectangle(minx, miny, maxx - minx, maxy - miny);
+		rectangle.translate((int) getX(), (int)getY());
+		return rectangle;
 	}
 }
