@@ -298,7 +298,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 				maxx = (int) point.getX();
 			}
 			if (point.getY() > maxy) {
-				maxy = (int) point.getX();
+				maxy = (int) point.getY();
 			}
 		}
 		Rectangle rectangle = new Rectangle(minx, miny, maxx - minx, maxy - miny);
