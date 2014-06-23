@@ -272,7 +272,7 @@ public class Circuit {
 
 	private void drawGates(Graphics2D graphics, Rectangle rectangle) {
 		for (IconGate iconGate : _icons) {
-			if (rectangle.intersects(iconGate)) {
+			if (rectangle.intersects(iconGate.getExtent())) {
 				iconGate.drawIcon(graphics);
 			}
 		}

@@ -35,10 +35,12 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	private AffineTransform _transformation = new AffineTransform();
 	private AffineTransform _origianlTransformation;
 	private boolean _selected;
+	private Rectangle _extent;
 
 	public IconGate(int id) {
 		super();
 		_id = id;
+		computeExtent();
 	}
 
 	public IconGate(int id, Gate gate) {
@@ -109,12 +111,14 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	public void moveTo(int xf, int yf) {
 		setLocation(xf, yf);
 		setTranslation(xf, yf);
+		computeExtent();
 	}
 
 	public void setRotation(int rotation) {
 		_gate.getCircuit().desactivate(this);
 		updateRotation(rotation);
 		_gate.getCircuit().activate(this);
+		computeExtent();
 	}
 
 	private void updateRotation(int rotation) {
@@ -254,6 +258,10 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	}
 
 	public Rectangle getExtent() {
+		return _extent;
+	}
+
+	private void computeExtent() {
 		java.awt.Point.Double point0 = new java.awt.Point.Double(0, 0);
 		java.awt.Point.Double point1 = new java.awt.Point.Double(getWidth(), 0);
 		java.awt.Point.Double point2 = new java.awt.Point.Double(getWidth(), getHeight());
@@ -294,7 +302,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 			}
 		}
 		Rectangle rectangle = new Rectangle(minx, miny, maxx - minx, maxy - miny);
-		rectangle.translate((int) getX(), (int)getY());
-		return rectangle;
+		rectangle.translate((int) getX(), (int) getY());
+		_extent = rectangle;
 	}
 }
