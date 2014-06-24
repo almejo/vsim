@@ -13,6 +13,8 @@ package cl.almejo.vsim.gui.actions.state;
 import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.gui.Configurable;
+import cl.almejo.vsim.gui.Draggable;
+import cl.almejo.vsim.gui.ImageUtils;
 import cl.almejo.vsim.gui.SimWindow;
 
 import javax.swing.*;
@@ -55,7 +57,7 @@ public abstract class ActionToolHelper {
 
 	private void addRotateOptions(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {
 		JMenu submenu = new JMenu(Messages.t("action.rotate"));
-		JMenuItem menuItem = new JMenuItem(Messages.t("action.rotate.clockwise"));
+		JMenuItem menuItem = new JMenuItem(Messages.t("action.rotate.clockwise"), ImageUtils.loadIcon("rotate-right.png"));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -63,7 +65,7 @@ public abstract class ActionToolHelper {
 			}
 		});
 		submenu.add(menuItem);
-		menuItem = new JMenuItem(Messages.t("action.rotate.counter.clockwise"));
+		menuItem = new JMenuItem(Messages.t("action.rotate.counter.clockwise"), ImageUtils.loadIcon("rotate-left.png"));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -72,5 +74,35 @@ public abstract class ActionToolHelper {
 		});
 		submenu.add(menuItem);
 		menu.add(submenu);
+	}
+
+	protected Draggable checkSelection(SimWindow window, MouseEvent event, int x, int y) {
+		Circuit circuit = window.getCircuit();
+		Draggable draggable = circuit.findDraggable(x, y);
+		if (draggable != null) {
+			if (event.isShiftDown()) {
+				circuit.select(draggable);
+			} else if (event.isControlDown()) {
+				circuit.deselect(draggable);
+			} else {
+				circuit.clearSelection();
+				circuit.select(draggable);
+			}
+		} else {
+			circuit.clearSelection();
+		}
+		return draggable;
+	}
+
+	public void rightClicked(SimWindow window, MouseEvent event) {
+		int x = window.getCanvas().toCircuitCoordinatesX(event.getX());
+		int y = window.getCanvas().toCircuitCoordinatesY(event.getY());
+
+		checkSelection(window, event, x, y);
+
+		Configurable configurable = window.getCircuit().findConfigurable(x, y);
+		if (configurable != null) {
+			doPopupMenu(window.getCircuit(), configurable, window.getCanvas(), event.getX(), event.getY());
+		}
 	}
 }

@@ -280,7 +280,7 @@ public class Circuit {
 
 	private void drawGatesDecorations(Graphics2D graphics, Rectangle rectangle) {
 		for (IconGate iconGate : _icons) {
-			if (rectangle.intersects(iconGate)) {
+			if (rectangle.intersects(iconGate.getExtent())) {
 				iconGate.drawDecorations(graphics);
 			}
 		}
