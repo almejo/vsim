@@ -16,7 +16,6 @@ import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gui.ColorScheme;
-import cl.almejo.vsim.gui.Configurable;
 import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.simulation.Scheduler;
 import org.codehaus.jackson.JsonParseException;
@@ -545,9 +544,7 @@ public class Circuit {
 			position.put("y", (int) iconGate.getY());
 			gateInfo.put("position", position);
 
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			iconGate.getGate().getParamameters().getValues(parameters);
-			gateInfo.put("parameters", parameters);
+			gateInfo.put("parameters", gateParametersToMap(iconGate));
 			gates.add(gateInfo);
 		}
 		map.put("gates", gates);
@@ -568,6 +565,19 @@ public class Circuit {
 
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
+	}
+
+	private Map<String, Object> gateParametersToMap(IconGate iconGate) {
+		List<ConfigVariable> variables = iconGate.getGate().getParamameters().getValues();
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		for (ConfigVariable variable : variables) {
+			if (variable.getType() == ConfigValueType.STRING) {
+				parameters.put(variable.getName(), variable.getValue());
+			} else {
+				parameters.put(variable.getName(), Integer.parseInt(variable.getValue()));
+			}
+		}
+		return parameters;
 	}
 
 	private void cleanHistory() {

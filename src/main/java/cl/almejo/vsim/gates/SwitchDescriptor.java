@@ -56,4 +56,5 @@ public class SwitchDescriptor extends GateDescriptor {
 	public Gate make(Circuit circuit, GateParameters params) {
 		return null;
 	}
+
 }

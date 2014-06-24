@@ -10,6 +10,9 @@
  */
 package cl.almejo.vsim.gates;
 
+import cl.almejo.vsim.circuit.ConfigVariable;
+
+import java.util.List;
 import java.util.Map;
 
 public class SwitchParameters extends GateParameters {
@@ -30,10 +33,9 @@ public class SwitchParameters extends GateParameters {
 		_value = ((Integer) parameters.get("value")).byteValue();
 	}
 
-	public void getValues(Map<String, Object> parameters) {
-		super.getValues(parameters);
-		parameters.put("value", _value);
+	public List<ConfigVariable> getValues() {
+		List<ConfigVariable> variables = super.getValues();
+		variables.add(new ConfigVariable("value", "Value", _value));
+		return variables;
 	}
-
-
 }

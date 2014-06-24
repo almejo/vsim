@@ -12,17 +12,21 @@
 
 package cl.almejo.vsim.gates;
 
+import cl.almejo.vsim.circuit.ConfigVariable;
+
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class ClockParameters extends GateParameters {
 
-	private long _timeUp;
+	private int _timeUp;
 
-	private long _timeDown;
+	private int _timeDown;
 
 	private byte _state = Constants.OFF;
 
-	public ClockParameters(long timeDown, long timeUp) {
+	public ClockParameters(int timeDown, int timeUp) {
 		super(1);
 		_timeDown = timeDown;
 		_timeUp = timeUp;
@@ -34,10 +38,11 @@ public class ClockParameters extends GateParameters {
 		_timeUp = (Integer) parameters.get("time-up");
 	}
 
-	public void getValues(Map<String, Object> parameters) {
-		super.getValues(parameters);
-		parameters.put("time-down", _timeDown);
-		parameters.put("time-up", _timeUp);
+	public List<ConfigVariable> getValues() {
+		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
+		variables.add(new ConfigVariable("time-down", "Time down", _timeDown));
+		variables.add(new ConfigVariable("time-up", "Time up", _timeUp));
+		return variables;
 	}
 
 	public long getTimeUp() {

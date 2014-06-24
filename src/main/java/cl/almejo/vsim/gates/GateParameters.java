@@ -11,6 +11,10 @@
 
 package cl.almejo.vsim.gates;
 
+import cl.almejo.vsim.circuit.ConfigVariable;
+
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 abstract public class GateParameters implements Cloneable {
@@ -26,11 +30,15 @@ abstract public class GateParameters implements Cloneable {
 	}
 
 	public void setValues(Map<String, Object> parameters) {
-		_delay = (Integer) parameters.get("delay");
+		if (parameters.containsKey("delay")) {
+			_delay = (Integer) parameters.get("delay");
+		}
 	}
 
-	public void getValues(Map<String, Object> parameters) {
-		parameters.put("delay", _delay);
+	public List<ConfigVariable> getValues() {
+		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
+		variables.add(new ConfigVariable("delay", "Delay", _delay));
+		return variables;
 	}
 
 	public GateParameters clone() throws CloneNotSupportedException {

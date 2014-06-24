@@ -30,4 +30,9 @@ public class Switch extends Gate {
 		_pins[0].program(((SwitchParameters) getParamameters()).getValue(), getParamameters().getDelay());
 		_pins[0].hasChanged();
 	}
+
+	@Override
+	public boolean isConfigurable() {
+		return true;
+	}
 }
