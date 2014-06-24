@@ -11,7 +11,6 @@
 
 package cl.almejo.vsim.gui.actions.state;
 
-import cl.almejo.vsim.circuit.CircuitCanvas;
 import cl.almejo.vsim.gates.DisplayInfoGate;
 import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
@@ -29,14 +28,18 @@ public class GateToolHelper extends ActionToolHelper {
 	@Override
 	public IconGate mouseClicked(SimWindow window, MouseEvent event) {
 		super.mouseClicked(window, event);
-		CircuitCanvas canvas = window.getCanvas();
+
+		int x = window.getCanvas().toCircuitCoordinatesX(event.getX());
+		int y = window.getCanvas().toCircuitCoordinatesY(event.getY());
+
 		if (event.isControlDown()) {
-			window.getCircuit().undoableRemoveGate(canvas.toCircuitCoordinatesX(event.getX()), canvas.toCircuitCoordinatesY(event.getY()));
+			window.getCircuit().undoableRemoveGate(x, y);
+			checkSelection(window, event, x, y);
 			return null;
 		}
 		IconGate iconGate = GateFactory.getInstance(_gateType, window.getCircuit());
-		window.getCircuit().undoableAddGate(iconGate, canvas.toCircuitCoordinatesX(event.getX()), canvas.toCircuitCoordinatesY(event.getY()));
-
+		window.getCircuit().undoableAddGate(iconGate, x, y);
+		checkSelection(window, event, x, y);
 		if (iconGate.getGate() instanceof DisplayInfoGate) {
 			window.addDisplayPanel("#" + iconGate.getId(), ((DisplayInfoGate) iconGate.getGate()).getDisplay());
 			((DisplayInfoGate) iconGate.getGate()).startDisplay();

@@ -27,22 +27,10 @@ public class CursorToolHelper extends ActionToolHelper {
 	private int _deltaX;
 
 	public Object mouseClicked(SimWindow window, MouseEvent event) {
-		Circuit circuit = window.getCircuit();
-		Draggable draggable = circuit.findDraggable(window.getCanvas().toCircuitCoordinatesX(event.getX())
-				, window.getCanvas().toCircuitCoordinatesY(event.getY()));
-		if (draggable != null) {
-			if (event.isShiftDown()) {
-				circuit.select(draggable);
-			} else if (event.isControlDown()) {
-				circuit.deselect(draggable);
-			} else {
-				circuit.clearSelection();
-				circuit.select(draggable);
-			}
-		} else {
-			circuit.clearSelection();
-		}
-		return draggable;
+		int x = window.getCanvas().toCircuitCoordinatesX(event.getX());
+		int y = window.getCanvas().toCircuitCoordinatesY(event.getY());
+
+		return checkSelection(window, event, x, y);
 	}
 
 	@Override

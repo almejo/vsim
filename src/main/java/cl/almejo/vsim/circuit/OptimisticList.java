@@ -85,7 +85,7 @@ public class OptimisticList<T> {
 			_element = removeAt(0);
 			return element;
 		}
-		return removeAt(i);
+		return removeAt(i - 1);
 	}
 
 	private T removeAt(int index) {

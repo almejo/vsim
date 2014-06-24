@@ -16,6 +16,7 @@ import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gui.ColorScheme;
+import cl.almejo.vsim.gui.Configurable;
 import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.simulation.Scheduler;
 import org.codehaus.jackson.JsonParseException;
@@ -100,9 +101,9 @@ public class Circuit {
 				_extent = new Rectangle();
 				return;
 			}
-			_extent = new Rectangle((Rectangle) _draggables.get(0));
-			for (Draggable selection : _draggables) {
-				_extent.add((Rectangle) selection);
+			_extent = new Rectangle(_draggables.get(0).getExtent());
+			for (Draggable draggable : _draggables) {
+				_extent.add(draggable.getExtent());
 			}
 		}
 
@@ -271,7 +272,7 @@ public class Circuit {
 
 	private void drawGates(Graphics2D graphics, Rectangle rectangle) {
 		for (IconGate iconGate : _icons) {
-			if (rectangle.intersects(iconGate)) {
+			if (rectangle.intersects(iconGate.getExtent())) {
 				iconGate.drawIcon(graphics);
 			}
 		}
@@ -279,7 +280,7 @@ public class Circuit {
 
 	private void drawGatesDecorations(Graphics2D graphics, Rectangle rectangle) {
 		for (IconGate iconGate : _icons) {
-			if (rectangle.intersects(iconGate)) {
+			if (rectangle.intersects(iconGate.getExtent())) {
 				iconGate.drawDecorations(graphics);
 			}
 		}
@@ -596,6 +597,15 @@ public class Circuit {
 		return null;
 	}
 
+	public Configurable findConfigurable(int x, int y) {
+		for (IconGate iconGate : _icons) {
+			if (iconGate.contains(x, y)) {
+				return iconGate;
+			}
+		}
+		return null;
+	}
+
 	public Selection findSelection(int x, int y) {
 		if (_selection.contains(x, y)) {
 			return _selection;
@@ -632,6 +642,19 @@ public class Circuit {
 	public void setSelection(Draggable draggable) {
 		_selection.clear();
 		_selection.add(draggable);
+	}
+
+
+	public void undoableRotateClockWise(Configurable configurable) {
+		RotateClockwiseCommand command = new RotateClockwiseCommand(configurable);
+		_commandManager.apply(command);
+		sendChangedEvent();
+	}
+
+	public void undoableRotateCounterClockWise(Configurable configurable) {
+		RotateCounterClockwiseCommand command = new RotateCounterClockwiseCommand(configurable);
+		_commandManager.apply(command);
+		sendChangedEvent();
 	}
 }
 

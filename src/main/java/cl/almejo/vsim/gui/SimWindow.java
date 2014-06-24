@@ -442,6 +442,11 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
+		if (SwingUtilities.isRightMouseButton(event) ) {
+			_toolHelper.rightClicked(this, event);
+			return;
+		}
+
 		if (event.getClickCount() >= 2) {
 			_toolHelper.mouseDoubleClicked(this, event);
 			return;
