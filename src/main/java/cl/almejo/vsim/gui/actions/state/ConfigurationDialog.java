@@ -46,6 +46,7 @@ public class ConfigurationDialog extends JDialog {
 		panel.add(addVariables(configurable));
 		panel.add(addButtons());
 		getContentPane().add(panel);
+		setPreferredSize(new Dimension(200, 200));
 		pack();
 	}
 
@@ -70,7 +71,9 @@ public class ConfigurationDialog extends JDialog {
 			constraints.gridy = i;
 			constraints.ipadx = 4;
 			constraints.ipady = 4;
-			variablesPanel.add(new JLabel(variable.getLabel()), constraints);
+			JLabel label = new JLabel(variable.getLabel());
+			label.setPreferredSize(new Dimension(80, 20));
+			variablesPanel.add(label, constraints);
 
 			constraints = new GridBagConstraints();
 			constraints.gridx = 1;
@@ -131,6 +134,7 @@ public class ConfigurationDialog extends JDialog {
 		spinner.setModel(new SpinnerNumberModel(Math.max(Integer.parseInt(value), 1), 1, Integer.MAX_VALUE, 1));
 		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "##");
 		spinner.setEditor(editor);
+		spinner.setPreferredSize(new Dimension(80, 20));
 		editor.getTextField().addKeyListener(listener);
 		//((NumberFormatter) ((JSpinner.NumberEditor) spinner.getEditor()).getTextField().getFormatter()).setAllowsInvalid(false);
 		_components.put(name, spinner);
@@ -140,6 +144,7 @@ public class ConfigurationDialog extends JDialog {
 
 	private JTextField getStringField(String name, String value, KeyListener listener) {
 		JTextField textField = new JTextField(value);
+		textField.setPreferredSize(new Dimension(80, 20));
 		textField.addKeyListener(listener);
 		_components.put(name, textField);
 		return textField;

@@ -209,7 +209,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_displaysPane = new JTabbedPane();
 		JSplitPane rightSplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _canvas, _displaysPane);
 		rightSplitpane.setOneTouchExpandable(true);
-		rightSplitpane.setDividerLocation(500);
+		rightSplitpane.setDividerLocation(600);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel()), rightSplitpane);

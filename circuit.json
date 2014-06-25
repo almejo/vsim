@@ -420,9 +420,7 @@
       "y" : 520,
       "x" : 216
     },
-    "parameters" : {
-      "delay" : 1
-    },
+    "parameters" : { },
     "type" : "seven-segments-display-double"
   }, {
     "position" : {
@@ -430,7 +428,7 @@
       "x" : 344
     },
     "parameters" : {
-      "delay" : 0
+      "text" : ""
     },
     "type" : "led"
   }, {
@@ -439,7 +437,7 @@
       "x" : 504
     },
     "parameters" : {
-      "delay" : 0
+      "text" : "Encendido"
     },
     "type" : "led"
   }, {
@@ -448,7 +446,7 @@
       "x" : 504
     },
     "parameters" : {
-      "delay" : 0
+      "text" : "Apagado"
     },
     "type" : "led"
   }, {
@@ -457,8 +455,7 @@
       "x" : 424
     },
     "parameters" : {
-      "value" : 1,
-      "delay" : 1
+      "value" : 1
     },
     "type" : "switch"
   }, {
@@ -467,8 +464,7 @@
       "x" : 424
     },
     "parameters" : {
-      "value" : 0,
-      "delay" : 1
+      "value" : 0
     },
     "type" : "switch"
   }, {
@@ -477,8 +473,7 @@
       "x" : 424
     },
     "parameters" : {
-      "value" : -1,
-      "delay" : 1
+      "value" : -1
     },
     "type" : "switch"
   }, {
@@ -487,7 +482,7 @@
       "x" : 504
     },
     "parameters" : {
-      "delay" : 0
+      "text" : "Sin señal"
     },
     "type" : "led"
   }, {
@@ -495,9 +490,7 @@
       "y" : 264,
       "x" : 384
     },
-    "parameters" : {
-      "delay" : 1
-    },
+    "parameters" : { },
     "type" : "seven-segments-display"
   }, {
     "position" : {
