@@ -26,38 +26,45 @@ public class Main {
 		File file = new File("circuit.json");
 		Circuit circuit = Circuit.fromJSon(FileUtils.readFileToString(file), file.getAbsolutePath());
 		if ("native".equalsIgnoreCase(System.getProperty("vsim.look"))) {
-
-			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				GTKHelper.installGtkPopupBugWorkaround();
-			} catch (UnsupportedLookAndFeelException ex) {
-				ex.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
+			setNativeLookAndFeel();
 		} else if ("Nimbus".equalsIgnoreCase(System.getProperty("vsim.look"))) {
-			for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					try {
-						UIManager.setLookAndFeel(info.getClassName());
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					} catch (InstantiationException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					} catch (UnsupportedLookAndFeelException e) {
-						e.printStackTrace();
-					}
-					break;
-				}
-			}
+			setNimbusLookAndFeel();
 		}
 		new SimWindow(circuit);
+	}
+
+	private void setNimbusLookAndFeel() {
+		for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+			if ("Nimbus".equals(info.getName())) {
+				try {
+					UIManager.setLookAndFeel(info.getClassName());
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (UnsupportedLookAndFeelException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
+	}
+
+	private void setNativeLookAndFeel() {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			GTKHelper.installGtkPopupBugWorkaround();
+		} catch (UnsupportedLookAndFeelException ex) {
+			ex.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {

@@ -9,7 +9,7 @@
 package cl.almejo.vsim.gates;
 
 public class TimeDiagramParameters extends GateParameters {
-	public TimeDiagramParameters(int delay) {
-		super(delay);
+	public TimeDiagramParameters() {
+
 	}
 }

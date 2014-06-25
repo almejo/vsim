@@ -666,5 +666,12 @@ public class Circuit {
 		_commandManager.apply(command);
 		sendChangedEvent();
 	}
+
+
+	public void undoableConfig(Configurable configurable, Map<String, Object> parameters) {
+		ConfigCommand command = new ConfigCommand(configurable, parameters);
+		_commandManager.apply(command);
+		sendChangedEvent();
+	}
 }
 

@@ -25,4 +25,5 @@ public interface Configurable {
 	public boolean isConfigurable();
 
 	void setValues(Map<String, Object> parametersInstance);
+
 }

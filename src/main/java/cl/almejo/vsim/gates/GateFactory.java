@@ -73,12 +73,12 @@ public class GateFactory {
 		NOT_DESCRIPTOR = new NotDescriptor(new NotParameters(1), Gate.NOT);
 
 		TRISTATE_DESCRIPTOR = new TristateDescriptor(new TristateParameters(1), Gate.TRISTATE);
-		SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR = new SevenSegmentsDisplayDescriptor(new SevenSegmentsDisplayParameters(1, 4), Gate.SEVEN_SEGMENTS_DISPLAY);
-		SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR_DOUBLE = new SevenSegmentsDisplayDescriptor(new SevenSegmentsDisplayParameters(1, 8), Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE);
+		SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR = new SevenSegmentsDisplayDescriptor(new SevenSegmentsDisplayParameters(4), Gate.SEVEN_SEGMENTS_DISPLAY);
+		SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR_DOUBLE = new SevenSegmentsDisplayDescriptor(new SevenSegmentsDisplayParameters(8), Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE);
 		FLIP_FLOP_DATA_DESCRIPTOR = new FlipFlopDataDescriptor(new FlipFlopDataParameters(1), Gate.FLIP_FLOP_DATA);
 		LED_DESCRIPTOR = new LedDescriptor(new LedParameters("Led"), Gate.LED);
-		TIME_DIAGRAM_DESCRIPTOR = new TimeDiagramDescriptor(new TimeDiagramParameters(1), Gate.TIME_DIAGRAM);
-		SWITCH_DESCRIPTOR = new SwitchDescriptor(new SwitchParameters(Constants.ON, 1), Gate.SWITCH);
+		TIME_DIAGRAM_DESCRIPTOR = new TimeDiagramDescriptor(new TimeDiagramParameters(), Gate.TIME_DIAGRAM);
+		SWITCH_DESCRIPTOR = new SwitchDescriptor(new SwitchParameters(Constants.ON), Gate.SWITCH);
 	}
 
 	public static IconGate getInstance(String gateIndex, Circuit circuit) {

@@ -27,13 +27,11 @@ public class ClockParameters extends GateParameters {
 	private byte _state = Constants.OFF;
 
 	public ClockParameters(int timeDown, int timeUp) {
-		super(1);
 		_timeDown = timeDown;
 		_timeUp = timeUp;
 	}
 
 	public void setValues(Map<String, Object> parameters) {
-		super.setValues(parameters);
 		_timeDown = (Integer) parameters.get("time-down");
 		_timeUp = (Integer) parameters.get("time-up");
 	}

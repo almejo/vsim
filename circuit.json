@@ -78,7 +78,7 @@
   }, {
     "yf" : 216,
     "xi" : 416,
-    "xf" : 504,
+    "xf" : 512,
     "yi" : 216
   }, {
     "yf" : 168,
@@ -333,24 +333,12 @@
   } ],
   "gates" : [ {
     "position" : {
-      "y" : 80,
-      "x" : 96
-    },
-    "parameters" : {
-      "time-down" : 4000,
-      "time-up" : 4000,
-      "delay" : 1
-    },
-    "type" : "clock"
-  }, {
-    "position" : {
       "y" : 112,
       "x" : 96
     },
     "parameters" : {
       "time-down" : 1000,
-      "time-up" : 1000,
-      "delay" : 1
+      "time-up" : 1000
     },
     "type" : "clock"
   }, {
@@ -387,8 +375,7 @@
     },
     "parameters" : {
       "time-down" : 1000,
-      "time-up" : 1000,
-      "delay" : 1
+      "time-up" : 1000
     },
     "type" : "clock"
   }, {
@@ -398,8 +385,7 @@
     },
     "parameters" : {
       "time-down" : 1000,
-      "time-up" : 1000,
-      "delay" : 1
+      "time-up" : 1000
     },
     "type" : "clock"
   }, {
@@ -513,5 +499,15 @@
       "delay" : 1
     },
     "type" : "seven-segments-display"
+  }, {
+    "position" : {
+      "y" : 80,
+      "x" : 96
+    },
+    "parameters" : {
+      "time-down" : 8000,
+      "time-up" : 4000
+    },
+    "type" : "clock"
   } ]
 }

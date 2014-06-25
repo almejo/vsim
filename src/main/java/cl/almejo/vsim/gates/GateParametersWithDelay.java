@@ -17,20 +17,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-abstract public class GateParameters implements Cloneable {
+abstract public class GateParametersWithDelay extends GateParameters {
+
+	protected int _delay;
+
+	public GateParametersWithDelay(int delay) {
+		_delay = delay;
+	}
+
+	public int getDelay() {
+		return _delay;
+	}
+
 	public void setValues(Map<String, Object> parameters) {
+		_delay = (Integer) parameters.get("delay");
 	}
 
 	public List<ConfigVariable> getValues() {
-		return new LinkedList<ConfigVariable>();
-	}
-	
-	public GateParameters clone() throws CloneNotSupportedException {
-		try {
-			return (GateParameters) super.clone();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
+		variables.add(new ConfigVariable("delay", "Delay", _delay));
+		return variables;
 	}
 }

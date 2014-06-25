@@ -1,0 +1,15 @@
+{
+  "properties" : { },
+  "connections" : [ ],
+  "gates" : [  {
+    "position" : {
+      "y" : 96,
+      "x" : 296
+    },
+    "parameters" : {
+      "delay" : 1
+        , "text" : "text"
+    },
+    "type" : "led"
+  }]
+}

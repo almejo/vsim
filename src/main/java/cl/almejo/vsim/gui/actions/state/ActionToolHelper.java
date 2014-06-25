@@ -54,19 +54,18 @@ public abstract class ActionToolHelper {
 		addRotateOptions(circuit, configurable, menu);
 		if (configurable.isConfigurable()) {
 			menu.addSeparator();
-			addConfigOption(configurable, menu);
+			addConfigOption(circuit, configurable, menu);
 		}
 		menu.show(component, x, y);
 	}
 
-	protected void addConfigOption(final Configurable configurable, JPopupMenu menu) {
+	protected void addConfigOption(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {
 
 		JMenuItem menuItem = new JMenuItem(Messages.t("action.config"));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				new ConfigurationDialog(configurable).setVisible(true);
+				new ConfigurationDialog(circuit, configurable).setVisible(true);
 			}
 		});
 		menu.add(menuItem);

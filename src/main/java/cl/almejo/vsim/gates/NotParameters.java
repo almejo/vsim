@@ -12,7 +12,7 @@
 
 package cl.almejo.vsim.gates;
 
-public class NotParameters extends GateParameters {
+public class NotParameters extends GateParametersWithDelay {
 
 	public NotParameters(int delay) {
 		super(delay);
