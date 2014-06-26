@@ -31,15 +31,16 @@ public class ConfigurationDialog extends JDialog {
 	private final Configurable _configurable;
 	private HashMap<String, Component> _components = new HashMap<String, Component>();
 
-	private final KeyListener ENTER_KEY_ADAPTER = new KeyAdapter() {
+	private final KeyListener KEY_ADAPTER = new KeyAdapter() {
 		@Override
 		public void keyPressed(KeyEvent event) {
 			if (event.getKeyCode() == KeyEvent.VK_ENTER) {
 				updateAndClose();
+			} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				closeWindow();
 			}
 		}
 	};
-
 
 	public ConfigurationDialog(Circuit circuit, Configurable configurable) {
 		_circuit = circuit;
@@ -50,6 +51,7 @@ public class ConfigurationDialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setAlwaysOnTop(true);
 
+		addKeyListener(KEY_ADAPTER);
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -64,14 +66,21 @@ public class ConfigurationDialog extends JDialog {
 		JPanel variablesPanel = new JPanel(new GridBagLayout());
 		List<ConfigVariable> variables = configurable.getConfigVariables();
 		int i = 0;
+		JComponent firstComponent = null;
 		for (ConfigVariable variable : variables) {
 			JComponent component = createVariableEditor(variable);
+			if (i == 0) {
+				firstComponent = component;
+			}
 			variablesPanel.add(component, createConstraint(1, i));
 
 			JLabel label = new JLabel(variable.getLabel());
 			label.setLabelFor(component);
 			variablesPanel.add(label, createConstraint(0, i));
 			i++;
+		}
+		if (firstComponent != null) {
+			firstComponent.requestFocus();
 		}
 		return variablesPanel;
 	}
@@ -100,7 +109,7 @@ public class ConfigurationDialog extends JDialog {
 		closeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ConfigurationDialog.this.setVisible(false);
+				closeWindow();
 			}
 		});
 		buttons.add(closeButton);
@@ -127,26 +136,36 @@ public class ConfigurationDialog extends JDialog {
 			}
 		}
 		_circuit.undoableConfig(_configurable, parameters);
-		this.setVisible(false);
-		this.dispose();
+		closeWindow();
+	}
+
+	private void closeWindow() {
+		setVisible(false);
+		dispose();
 	}
 
 	private JSpinner getNumberSpinner(String name, String value, int min, int max, int step) {
 		JSpinner spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(Math.max(Integer.parseInt(value), 1), min, max, step));
-		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "##");
+		final JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "##");
 		spinner.setEditor(editor);
 		spinner.setPreferredSize(new Dimension(80, 20));
-		editor.getTextField().addKeyListener(ENTER_KEY_ADAPTER);
+		editor.getTextField().addKeyListener(KEY_ADAPTER);
 		_components.put(name, spinner);
 		return spinner;
 	}
 
 
 	private JTextField getStringField(String name, String value) {
-		JTextField textField = new JTextField(value);
+		final JTextField textField = new JTextField(value);
 		textField.setPreferredSize(new Dimension(80, 20));
-		textField.addKeyListener(ENTER_KEY_ADAPTER);
+		textField.addKeyListener(KEY_ADAPTER);
+		textField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textField.selectAll();
+			}
+		});
 		_components.put(name, textField);
 		return textField;
 	}
