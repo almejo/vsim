@@ -77,7 +77,4 @@ public class Gate {
 		return _circuit;
 	}
 
-	public boolean isConfigurable() {
-		return false;
-	}
 }

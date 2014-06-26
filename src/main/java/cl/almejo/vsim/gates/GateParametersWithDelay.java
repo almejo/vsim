@@ -11,6 +11,7 @@
 
 package cl.almejo.vsim.gates;
 
+import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.ConfigVariable;
 
 import java.util.LinkedList;
@@ -35,7 +36,7 @@ abstract public class GateParametersWithDelay extends GateParameters {
 
 	public List<ConfigVariable> getValues() {
 		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
-		variables.add(new ConfigVariable("delay", "Delay", _delay));
+		variables.add(new ConfigVariable("delay", Messages.t("config.delay.label"), _delay));
 		return variables;
 	}
 }

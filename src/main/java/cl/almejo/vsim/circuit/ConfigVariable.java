@@ -19,6 +19,9 @@ public class ConfigVariable {
 	private String _label;
 	private String _value;
 	private String _name;
+	private int _step = 1;
+	private int _max = Integer.MAX_VALUE;
+	private int _min = 1;
 	private ConfigValueType _type;
 
 	public ConfigVariable(String name, String label, String value, ConfigValueType type) {
@@ -68,5 +71,32 @@ public class ConfigVariable {
 			}
 		}
 		return parameters;
+	}
+
+	public ConfigVariable setMin(int min) {
+		_min = min;
+		return this;
+	}
+
+	public ConfigVariable setMax(int max) {
+		_max = max;
+		return this;
+	}
+
+	public ConfigVariable setStep(int step) {
+		_step = step;
+		return this;
+	}
+
+	public int getMin() {
+		return _min;
+	}
+
+	public int getMax() {
+		return _max;
+	}
+
+	public int getStep() {
+		return _step;
 	}
 }

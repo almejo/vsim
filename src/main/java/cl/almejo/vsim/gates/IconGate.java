@@ -264,7 +264,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 
 	@Override
 	public boolean isConfigurable() {
-		return _gate.isConfigurable();
+		return _gate.getParamameters().isConfigurable();
 	}
 
 	@Override

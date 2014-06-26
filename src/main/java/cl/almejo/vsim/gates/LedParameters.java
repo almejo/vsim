@@ -39,4 +39,9 @@ public class LedParameters extends GateParameters {
 		variables.add(new ConfigVariable("text", "Text", _text));
 		return variables;
 	}
+
+	@Override
+	public boolean isConfigurable() {
+		return true;
+	}
 }

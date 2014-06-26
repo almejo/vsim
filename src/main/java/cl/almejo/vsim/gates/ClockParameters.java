@@ -12,6 +12,7 @@
 
 package cl.almejo.vsim.gates;
 
+import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.ConfigVariable;
 
 import java.util.LinkedList;
@@ -38,9 +39,14 @@ public class ClockParameters extends GateParameters {
 
 	public List<ConfigVariable> getValues() {
 		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
-		variables.add(new ConfigVariable("time-down", "Time down", _timeDown));
-		variables.add(new ConfigVariable("time-up", "Time up", _timeUp));
+		variables.add(new ConfigVariable("time-down", Messages.t("config.time.down.label"), _timeDown).setStep(1000));
+		variables.add(new ConfigVariable("time-up", Messages.t("config.time.up.label"), _timeUp).setStep(1000));
 		return variables;
+	}
+
+	@Override
+	public boolean isConfigurable() {
+		return true;
 	}
 
 	public long getTimeUp() {

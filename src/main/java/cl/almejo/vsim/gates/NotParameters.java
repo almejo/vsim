@@ -18,4 +18,8 @@ public class NotParameters extends GateParametersWithDelay {
 		super(delay);
 	}
 
+	@Override
+	public boolean isConfigurable() {
+		return true;
+	}
 }

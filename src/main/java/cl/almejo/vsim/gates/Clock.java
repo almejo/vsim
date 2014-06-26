@@ -23,8 +23,4 @@ public class Clock extends Gate {
 		_pins[0].hasChanged();
 	}
 
-	@Override
-	public boolean isConfigurable() {
-		return true;
-	}
 }

@@ -31,6 +31,16 @@ public class ConfigurationDialog extends JDialog {
 	private final Configurable _configurable;
 	private HashMap<String, Component> _components = new HashMap<String, Component>();
 
+	private final KeyListener ENTER_KEY_ADAPTER = new KeyAdapter() {
+		@Override
+		public void keyPressed(KeyEvent event) {
+			if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+				updateAndClose();
+			}
+		}
+	};
+
+
 	public ConfigurationDialog(Circuit circuit, Configurable configurable) {
 		_circuit = circuit;
 		_configurable = configurable;
@@ -46,48 +56,41 @@ public class ConfigurationDialog extends JDialog {
 		panel.add(addVariables(configurable));
 		panel.add(addButtons());
 		getContentPane().add(panel);
-		setPreferredSize(new Dimension(200, 200));
+		setPreferredSize(new Dimension(250, 200));
 		pack();
 	}
 
 	private JPanel addVariables(Configurable configurable) {
-		JPanel variablesPanel = new JPanel();
-		variablesPanel.setLayout(new GridBagLayout());
+		JPanel variablesPanel = new JPanel(new GridBagLayout());
 		List<ConfigVariable> variables = configurable.getConfigVariables();
-		//	variablesPanel.setLayout(new GridLayout(variables.size(), 2));
-		final KeyListener keyListener = new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_ENTER){
-					updateAndClose();
-				}
-			}
-		};
-
 		int i = 0;
 		for (ConfigVariable variable : variables) {
-			GridBagConstraints constraints = new GridBagConstraints();
-			constraints.gridx = 0;
-			constraints.gridy = i;
-			constraints.ipadx = 4;
-			constraints.ipady = 4;
-			JLabel label = new JLabel(variable.getLabel());
-			label.setPreferredSize(new Dimension(80, 20));
-			variablesPanel.add(label, constraints);
+			JComponent component = createVariableEditor(variable);
+			variablesPanel.add(component, createConstraint(1, i));
 
-			constraints = new GridBagConstraints();
-			constraints.gridx = 1;
-			constraints.gridy = i;
-			constraints.ipadx = 4;
-			constraints.ipady = 4;
-			if (variable.getType() == ConfigValueType.INT || variable.getType() == ConfigValueType.BYTE) {
-				variablesPanel.add(getNumberSpinner(variable.getName(), variable.getValue(), keyListener), constraints);
-			} else {
-				variablesPanel.add(getStringField(variable.getName(), variable.getValue(), keyListener), constraints);
-			}
+			JLabel label = new JLabel(variable.getLabel());
+			label.setPreferredSize(new Dimension(120, 20));
+			label.setLabelFor(component);
+			variablesPanel.add(label, createConstraint(0, i));
 			i++;
 		}
 		return variablesPanel;
+	}
+
+	private GridBagConstraints createConstraint(int column, int row) {
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridx = column;
+		constraints.gridy = row;
+		constraints.ipadx = 4;
+		constraints.ipady = 4;
+		return constraints;
+	}
+
+	private JComponent createVariableEditor(ConfigVariable variable) {
+		if (variable.getType() == ConfigValueType.INT || variable.getType() == ConfigValueType.BYTE) {
+			return getNumberSpinner(variable.getName(), variable.getValue(), variable.getMin(), variable.getMax(), variable.getStep());
+		}
+		return getStringField(variable.getName(), variable.getValue());
 	}
 
 	private JPanel addButtons() {
@@ -129,23 +132,22 @@ public class ConfigurationDialog extends JDialog {
 		this.dispose();
 	}
 
-	private JSpinner getNumberSpinner(String name, String value, KeyListener listener) {
+	private JSpinner getNumberSpinner(String name, String value, int min, int max, int step) {
 		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(Math.max(Integer.parseInt(value), 1), 1, Integer.MAX_VALUE, 1));
+		spinner.setModel(new SpinnerNumberModel(Math.max(Integer.parseInt(value), 1), min, max, step));
 		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "##");
 		spinner.setEditor(editor);
 		spinner.setPreferredSize(new Dimension(80, 20));
-		editor.getTextField().addKeyListener(listener);
-		//((NumberFormatter) ((JSpinner.NumberEditor) spinner.getEditor()).getTextField().getFormatter()).setAllowsInvalid(false);
+		editor.getTextField().addKeyListener(ENTER_KEY_ADAPTER);
 		_components.put(name, spinner);
 		return spinner;
 	}
 
 
-	private JTextField getStringField(String name, String value, KeyListener listener) {
+	private JTextField getStringField(String name, String value) {
 		JTextField textField = new JTextField(value);
 		textField.setPreferredSize(new Dimension(80, 20));
-		textField.addKeyListener(listener);
+		textField.addKeyListener(ENTER_KEY_ADAPTER);
 		_components.put(name, textField);
 		return textField;
 	}

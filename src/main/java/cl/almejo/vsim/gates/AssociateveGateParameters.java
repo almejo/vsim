@@ -33,4 +33,9 @@ public class AssociateveGateParameters extends GateParametersWithDelay {
 	public int getAssociativeType() {
 		return _associativeType;
 	}
+
+	@Override
+	public boolean isConfigurable() {
+		return true;
+	}
 }

@@ -21,10 +21,5 @@ public class AssociativeGate extends Gate {
 		}
 		_pins[0].hasChanged();
 	}
-
-	@Override
-	public boolean isConfigurable() {
-		return true;
-	}
 }
 

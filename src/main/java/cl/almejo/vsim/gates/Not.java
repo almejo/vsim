@@ -24,8 +24,4 @@ public class Not extends Gate {
 		_pins[1] = new NotPin(this, circuit.getScheduler(), 1);
 	}
 
-	@Override
-	public boolean isConfigurable() {
-		return true;
-	}
 }

@@ -10,6 +10,7 @@
  */
 package cl.almejo.vsim.gates;
 
+import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.ConfigVariable;
 
 import java.util.LinkedList;
@@ -34,7 +35,7 @@ public class SwitchParameters extends GateParameters {
 
 	public List<ConfigVariable> getValues() {
 		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
-		variables.add(new ConfigVariable("value", "Value", _value));
+		variables.add(new ConfigVariable("value", Messages.t("config.value.label"), _value));
 		return variables;
 	}
 }

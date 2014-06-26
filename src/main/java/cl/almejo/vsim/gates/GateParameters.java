@@ -33,4 +33,8 @@ abstract public class GateParameters implements Cloneable {
 		}
 		return null;
 	}
+
+	public boolean isConfigurable() {
+		return false;
+	}
 }

@@ -190,11 +190,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 			});
 			button.addMouseListener(mouseListener);
 			return button;
-
 		}
-
 	}
-
 
 	public SimWindow(Circuit circuit) {
 
@@ -642,8 +639,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		updateTitle();
 	}
 
-	public void addDisplayPanel(String idInstance, JPanel displayPanel) {
-		_displaysPane.add(idInstance, displayPanel);
+	public void addDisplayPanel(String name, JPanel displayPanel) {
+		_displaysPane.add(name, displayPanel);
 	}
 
 	public CircuitCanvas getCanvas() {

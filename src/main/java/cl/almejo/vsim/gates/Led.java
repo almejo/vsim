@@ -33,8 +33,4 @@ public class Led extends Gate {
 		return _value;
 	}
 
-	@Override
-	public boolean isConfigurable() {
-		return true;
-	}
 }
