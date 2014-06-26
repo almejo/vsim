@@ -32,7 +32,7 @@ The first milestone is to reach feature parity with JCSim. From There all will b
 - Add debug gates [done]
 - Load/Save [done]
 - Rotate gates [done]
-- Config gates
+- Config gates [done]
 - Move the canvas [done]
 - Zoom the canvas [done]
 
