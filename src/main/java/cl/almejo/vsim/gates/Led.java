@@ -32,4 +32,5 @@ public class Led extends Gate {
 	public byte getValue() {
 		return _value;
 	}
+
 }

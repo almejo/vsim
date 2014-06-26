@@ -11,7 +11,7 @@
 
 package cl.almejo.vsim.circuit.commands;
 
-import cl.almejo.vsim.gui.Configurable;
+import cl.almejo.vsim.circuit.Configurable;
 
 public class RotateClockwiseCommand implements Command {
 

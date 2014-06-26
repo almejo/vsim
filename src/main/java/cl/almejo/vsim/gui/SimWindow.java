@@ -190,11 +190,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 			});
 			button.addMouseListener(mouseListener);
 			return button;
-
 		}
-
 	}
-
 
 	public SimWindow(Circuit circuit) {
 
@@ -203,13 +200,13 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_circuit.addCircuitEventListener(this);
 		_canvas = new CircuitCanvas(_circuit);
 
-		setBounds(100, 100, 700, 700);
+		setBounds(100, 100, 800, 800);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		_displaysPane = new JTabbedPane();
 		JSplitPane rightSplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _canvas, _displaysPane);
 		rightSplitpane.setOneTouchExpandable(true);
-		rightSplitpane.setDividerLocation(500);
+		rightSplitpane.setDividerLocation(600);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel()), rightSplitpane);
@@ -642,8 +639,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		updateTitle();
 	}
 
-	public void addDisplayPanel(String idInstance, JPanel displayPanel) {
-		_displaysPane.add(idInstance, displayPanel);
+	public void addDisplayPanel(String name, JPanel displayPanel) {
+		_displaysPane.add(name, displayPanel);
 	}
 
 	public CircuitCanvas getCanvas() {

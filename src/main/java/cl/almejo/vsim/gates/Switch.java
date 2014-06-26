@@ -20,14 +20,15 @@ public class Switch extends Gate {
 		super(circuit, parameters, descriptor);
 		_pins = new SimplePin[descriptor.getPinCount()];
 		_pins[0] = new SimplePin(this, circuit.getScheduler(), 0);
-		_pins[0].program(((SwitchParameters) parameters).getValue(), getParamameters().getDelay());
+		_pins[0].program(((SwitchParameters) parameters).getValue(), 1);
 		_pins[0].hasChanged();
 	}
 
 	@Override
 	public void parametersUpdated() {
 		super.parametersUpdated();
-		_pins[0].program(((SwitchParameters) getParamameters()).getValue(), getParamameters().getDelay());
+		_pins[0].program(((SwitchParameters) getParamameters()).getValue(), 1);
 		_pins[0].hasChanged();
 	}
+
 }

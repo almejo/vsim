@@ -11,10 +11,8 @@
 
 package cl.almejo.vsim.gates;
 
-import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.circuit.MarchingAnts;
+import cl.almejo.vsim.circuit.*;
 import cl.almejo.vsim.circuit.Point;
-import cl.almejo.vsim.gui.Configurable;
 import cl.almejo.vsim.gui.Draggable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
+import java.util.List;
+import java.util.Map;
 
 public class IconGate extends Rectangle implements Draggable, Configurable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IconGate.class);
@@ -255,6 +255,21 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	@Override
 	public void rotateCounterClockwise() {
 		setRotation(getRotation() - 1);
+	}
+
+	@Override
+	public List<ConfigVariable> getConfigVariables() {
+		return _gate.getParamameters().getValues();
+	}
+
+	@Override
+	public boolean isConfigurable() {
+		return _gate.getParamameters().isConfigurable();
+	}
+
+	@Override
+	public void setValues(Map<String, Object> parameters) {
+		_gate.getParamameters().setValues(parameters);
 	}
 
 	public Rectangle getExtent() {

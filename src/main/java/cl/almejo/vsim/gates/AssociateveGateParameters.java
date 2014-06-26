@@ -10,7 +10,7 @@
 
 package cl.almejo.vsim.gates;
 
-public class AssociateveGateParameters extends GateParameters {
+public class AssociateveGateParameters extends GateParametersWithDelay {
 	private int[][] _behavior;
 	private int _pinCount;
 	private int _associativeType;
@@ -32,5 +32,10 @@ public class AssociateveGateParameters extends GateParameters {
 
 	public int getAssociativeType() {
 		return _associativeType;
+	}
+
+	@Override
+	public boolean isConfigurable() {
+		return true;
 	}
 }

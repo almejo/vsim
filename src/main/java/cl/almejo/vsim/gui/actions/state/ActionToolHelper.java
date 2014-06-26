@@ -12,7 +12,7 @@ package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.gui.Configurable;
+import cl.almejo.vsim.circuit.Configurable;
 import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.gui.ImageUtils;
 import cl.almejo.vsim.gui.SimWindow;
@@ -52,7 +52,23 @@ public abstract class ActionToolHelper {
 	protected void doPopupMenu(Circuit circuit, Configurable configurable, Component component, int x, int y) {
 		JPopupMenu menu = new JPopupMenu();
 		addRotateOptions(circuit, configurable, menu);
+		if (configurable.isConfigurable()) {
+			menu.addSeparator();
+			addConfigOption(circuit, configurable, menu);
+		}
 		menu.show(component, x, y);
+	}
+
+	protected void addConfigOption(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {
+
+		JMenuItem menuItem = new JMenuItem(Messages.t("action.config"));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ConfigurationDialog(circuit, configurable).setVisible(true);
+			}
+		});
+		menu.add(menuItem);
 	}
 
 	private void addRotateOptions(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {

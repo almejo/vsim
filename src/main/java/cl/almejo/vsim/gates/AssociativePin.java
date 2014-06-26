@@ -26,7 +26,7 @@ public class AssociativePin extends Pin {
 			value = descriptor.computeAssocVal(value, _gate.getPin(i).getInValue());
 		}
 
-		_gate.getPin(pincount - 1).program((byte) value, _gate.getParamameters().getDelay());
+		_gate.getPin(pincount - 1).program((byte) value, ((GateParametersWithDelay) _gate.getParamameters()).getDelay());
 	}
 
 }

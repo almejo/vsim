@@ -1,39 +1,42 @@
 /**
+ *
  * vsim
  *
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: alejo
+ * @author: Alejandro Vera
+ *
  */
+
 package cl.almejo.vsim.gates;
 
+import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.ConfigVariable;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class TimeDiagramParameters extends GateParameters {
+abstract public class GateParametersWithDelay extends GateParameters {
 
-	private String _text;
+	protected int _delay;
 
-	@Override
-	public boolean isConfigurable() {
-		return true;
+	public GateParametersWithDelay(int delay) {
+		_delay = delay;
+	}
+
+	public int getDelay() {
+		return _delay;
 	}
 
 	public void setValues(Map<String, Object> parameters) {
-		_text = (String) parameters.get("text");
+		_delay = (Integer) parameters.get("delay");
 	}
 
 	public List<ConfigVariable> getValues() {
 		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
-		variables.add(new ConfigVariable("text", "Text", _text));
+		variables.add(new ConfigVariable("delay", Messages.t("config.delay.label"), _delay));
 		return variables;
-	}
-
-	public String getText() {
-		return _text;
 	}
 }

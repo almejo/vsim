@@ -10,7 +10,7 @@
  */
 package cl.almejo.vsim.gates;
 
-public class TristateParameters extends GateParameters {
+public class TristateParameters extends GateParametersWithDelay {
 	public TristateParameters(int delay) {
 		super(delay);
 	}

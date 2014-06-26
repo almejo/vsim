@@ -10,13 +10,17 @@
  */
 package cl.almejo.vsim.gates;
 
+import cl.almejo.vsim.Messages;
+import cl.almejo.vsim.circuit.ConfigVariable;
+
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class SwitchParameters extends GateParameters {
 	private byte _value;
 
-	public SwitchParameters(byte value, int delay) {
-		super(delay);
+	public SwitchParameters(byte value) {
 		_value = value;
 	}
 
@@ -26,14 +30,12 @@ public class SwitchParameters extends GateParameters {
 
 
 	public void setValues(Map<String, Object> parameters) {
-		super.setValues(parameters);
 		_value = ((Integer) parameters.get("value")).byteValue();
 	}
 
-	public void getValues(Map<String, Object> parameters) {
-		super.getValues(parameters);
-		parameters.put("value", _value);
+	public List<ConfigVariable> getValues() {
+		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
+		variables.add(new ConfigVariable("value", Messages.t("config.value.label"), _value));
+		return variables;
 	}
-
-
 }

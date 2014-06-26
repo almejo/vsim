@@ -34,7 +34,18 @@ public class TimeDiagramDescriptor extends GateDescriptor {
 		Dimension dimension = getSize();
 		graphics.fillRect(0, 0, dimension.width, dimension.height);
 		graphics.setColor(ColorScheme.getLabel());
-		graphics.drawString("#" + iconGate.getId(), (int) dimension.getWidth() + 10, (int) dimension.getHeight() / 2);
+		graphics.drawString(getLabel(iconGate), (int) dimension.getWidth() + 10, (int) dimension.getHeight() / 2);
+	}
+
+	private String getLabel(IconGate iconGate) {
+		if (parametersText(iconGate) != null && parametersText(iconGate).trim().length() > 0) {
+			return parametersText(iconGate);
+		}
+		return "#" + iconGate.getId();
+	}
+
+	private String parametersText(IconGate iconGate) {
+		return ((TimeDiagramParameters) iconGate.getGate().getParamameters()).getText();
 	}
 
 	@Override

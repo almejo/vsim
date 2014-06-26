@@ -22,7 +22,7 @@ public class NotPin extends Pin {
 
 	@Override
 	public void hasChanged() {
-		_gate.getPin(1).program(newVal(_gate.getPin(0).getInValue()), _gate.getParamameters().getDelay());
+		_gate.getPin(1).program(newVal(_gate.getPin(0).getInValue()),((GateParametersWithDelay) _gate.getParamameters()).getDelay());
 	}
 
 	private byte newVal(byte inValue) {

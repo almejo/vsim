@@ -76,4 +76,5 @@ public class Gate {
 	public Circuit getCircuit() {
 		return _circuit;
 	}
+
 }

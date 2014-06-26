@@ -12,16 +12,36 @@
 
 package cl.almejo.vsim.gates;
 
+import cl.almejo.vsim.circuit.ConfigVariable;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 public class LedParameters extends GateParameters {
 
-	private final String _text;
+	private String _text;
 
 	public LedParameters(String text) {
-		super(0);
 		_text = text;
 	}
 
 	public String getText() {
 		return _text;
+	}
+
+	public void setValues(Map<String, Object> parameters) {
+		_text = (String) parameters.get("text");
+	}
+
+	public List<ConfigVariable> getValues() {
+		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
+		variables.add(new ConfigVariable("text", "Text", _text));
+		return variables;
+	}
+
+	@Override
+	public boolean isConfigurable() {
+		return true;
 	}
 }

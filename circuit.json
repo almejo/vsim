@@ -21,6 +21,16 @@
     "xf" : 512,
     "yi" : 512
   }, {
+    "yf" : 40,
+    "xi" : 176,
+    "xf" : 256,
+    "yi" : 40
+  }, {
+    "yf" : 40,
+    "xi" : 288,
+    "xf" : 400,
+    "yi" : 40
+  }, {
     "yf" : 320,
     "xi" : 80,
     "xf" : 152,
@@ -48,6 +58,11 @@
   }, {
     "yf" : 128,
     "xi" : 264,
+    "xf" : 272,
+    "yi" : 128
+  }, {
+    "yf" : 128,
+    "xi" : 272,
     "xf" : 296,
     "yi" : 128
   }, {
@@ -78,7 +93,7 @@
   }, {
     "yf" : 216,
     "xi" : 416,
-    "xf" : 504,
+    "xf" : 512,
     "yi" : 216
   }, {
     "yf" : 168,
@@ -193,6 +208,11 @@
   }, {
     "yf" : 96,
     "xi" : 152,
+    "xf" : 176,
+    "yi" : 96
+  }, {
+    "yf" : 96,
+    "xi" : 176,
     "xf" : 208,
     "yi" : 96
   }, {
@@ -241,6 +261,11 @@
     "xf" : 416,
     "yi" : 216
   }, {
+    "yf" : 128,
+    "xi" : 272,
+    "xf" : 272,
+    "yi" : 56
+  }, {
     "yf" : 520,
     "xi" : 272,
     "xf" : 272,
@@ -250,6 +275,11 @@
     "xi" : 224,
     "xf" : 224,
     "yi" : 352
+  }, {
+    "yf" : 96,
+    "xi" : 176,
+    "xf" : 176,
+    "yi" : 40
   }, {
     "yf" : 456,
     "xi" : 80,
@@ -333,24 +363,12 @@
   } ],
   "gates" : [ {
     "position" : {
-      "y" : 80,
-      "x" : 96
-    },
-    "parameters" : {
-      "time-down" : 4000,
-      "time-up" : 4000,
-      "delay" : 1
-    },
-    "type" : "clock"
-  }, {
-    "position" : {
       "y" : 112,
       "x" : 96
     },
     "parameters" : {
       "time-down" : 1000,
-      "time-up" : 1000,
-      "delay" : 1
+      "time-up" : 1000
     },
     "type" : "clock"
   }, {
@@ -387,8 +405,7 @@
     },
     "parameters" : {
       "time-down" : 1000,
-      "time-up" : 1000,
-      "delay" : 1
+      "time-up" : 1000
     },
     "type" : "clock"
   }, {
@@ -398,8 +415,7 @@
     },
     "parameters" : {
       "time-down" : 1000,
-      "time-up" : 1000,
-      "delay" : 1
+      "time-up" : 1000
     },
     "type" : "clock"
   }, {
@@ -434,9 +450,7 @@
       "y" : 520,
       "x" : 216
     },
-    "parameters" : {
-      "delay" : 1
-    },
+    "parameters" : { },
     "type" : "seven-segments-display-double"
   }, {
     "position" : {
@@ -444,7 +458,7 @@
       "x" : 344
     },
     "parameters" : {
-      "delay" : 0
+      "text" : ""
     },
     "type" : "led"
   }, {
@@ -453,7 +467,7 @@
       "x" : 504
     },
     "parameters" : {
-      "delay" : 0
+      "text" : "Encendido"
     },
     "type" : "led"
   }, {
@@ -462,7 +476,7 @@
       "x" : 504
     },
     "parameters" : {
-      "delay" : 0
+      "text" : "Apagado"
     },
     "type" : "led"
   }, {
@@ -471,8 +485,7 @@
       "x" : 424
     },
     "parameters" : {
-      "value" : 1,
-      "delay" : 1
+      "value" : 1
     },
     "type" : "switch"
   }, {
@@ -481,8 +494,7 @@
       "x" : 424
     },
     "parameters" : {
-      "value" : 0,
-      "delay" : 1
+      "value" : 0
     },
     "type" : "switch"
   }, {
@@ -491,8 +503,7 @@
       "x" : 424
     },
     "parameters" : {
-      "value" : -1,
-      "delay" : 1
+      "value" : -1
     },
     "type" : "switch"
   }, {
@@ -501,7 +512,7 @@
       "x" : 504
     },
     "parameters" : {
-      "delay" : 0
+      "text" : "Sin señal"
     },
     "type" : "led"
   }, {
@@ -509,9 +520,26 @@
       "y" : 264,
       "x" : 384
     },
+    "parameters" : { },
+    "type" : "seven-segments-display"
+  }, {
+    "position" : {
+      "y" : 80,
+      "x" : 96
+    },
+    "parameters" : {
+      "time-down" : 8000,
+      "time-up" : 4000
+    },
+    "type" : "clock"
+  }, {
+    "position" : {
+      "y" : 24,
+      "x" : 256
+    },
     "parameters" : {
       "delay" : 1
     },
-    "type" : "seven-segments-display"
+    "type" : "tristate"
   } ]
 }

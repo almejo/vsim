@@ -9,10 +9,8 @@
  *
  */
 
-package cl.almejo.vsim.gui;
+package cl.almejo.vsim.circuit;
 
-public interface Configurable {
-
-	public void rotateClockwise();
-	public void rotateCounterClockwise();
+public enum ConfigValueType {
+	INT, STRING, BYTE
 }
