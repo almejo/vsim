@@ -69,7 +69,6 @@ public class ConfigurationDialog extends JDialog {
 			variablesPanel.add(component, createConstraint(1, i));
 
 			JLabel label = new JLabel(variable.getLabel());
-			label.setPreferredSize(new Dimension(120, 20));
 			label.setLabelFor(component);
 			variablesPanel.add(label, createConstraint(0, i));
 			i++;

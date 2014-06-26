@@ -200,7 +200,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_circuit.addCircuitEventListener(this);
 		_canvas = new CircuitCanvas(_circuit);
 
-		setBounds(100, 100, 700, 700);
+		setBounds(100, 100, 800, 800);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		_displaysPane = new JTabbedPane();
