@@ -1,0 +1,52 @@
+{
+  "properties" : { },
+  "connections" : [ {
+    "yf" : 248,
+    "xi" : 184,
+    "xf" : 224,
+    "yi" : 248
+  }, {
+    "yf" : 280,
+    "xi" : 168,
+    "xf" : 176,
+    "yi" : 280
+  }, {
+    "yf" : 280,
+    "xi" : 176,
+    "xf" : 224,
+    "yi" : 280
+  }, {
+    "yf" : 248,
+    "xi" : 184,
+    "xf" : 184,
+    "yi" : 232
+  } ],
+  "gates" : [ {
+    "position" : {
+      "y" : 224,
+      "x" : 152
+    },
+    "parameters" : {
+      "value" : 1
+    },
+    "type" : "switch"
+  }, {
+    "position" : {
+      "y" : 272,
+      "x" : 144
+    },
+    "parameters" : {
+      "value" : 0
+    },
+    "type" : "switch"
+  }, {
+    "position" : {
+      "y" : 248,
+      "x" : 224
+    },
+    "parameters" : {
+      "delay" : 1
+    },
+    "type" : "xor2"
+  } ]
+}

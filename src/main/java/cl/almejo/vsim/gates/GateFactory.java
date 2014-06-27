@@ -16,8 +16,8 @@ import cl.almejo.vsim.circuit.Circuit;
 public class GateFactory {
 
 	private static final int[][] BEHAVIOR_AND;
-
 	private static final int[][] BEHAVIOR_OR;
+	private static final int[][] BEHAVIOR_XOR;
 
 	private final static ClockDescriptor CLOCK_DESCRIPTOR;
 	private final static NotDescriptor NOT_DESCRIPTOR;
@@ -28,6 +28,10 @@ public class GateFactory {
 	private final static AssociativeGateDescriptor ASSOC_OR2_DESCRIPTOR;
 	private final static AssociativeGateDescriptor ASSOC_OR3_DESCRIPTOR;
 	private final static AssociativeGateDescriptor ASSOC_OR4_DESCRIPTOR;
+
+	private final static AssociativeGateDescriptor ASSOC_XOR2_DESCRIPTOR;
+	private final static AssociativeGateDescriptor ASSOC_XOR3_DESCRIPTOR;
+	private final static AssociativeGateDescriptor ASSOC_XOR4_DESCRIPTOR;
 
 	private static final FlipFlopDataDescriptor FLIP_FLOP_DATA_DESCRIPTOR;
 
@@ -42,6 +46,8 @@ public class GateFactory {
 	static {
 		BEHAVIOR_AND = new int[3][3];
 		BEHAVIOR_OR = new int[3][3];
+		BEHAVIOR_XOR = new int[3][3];
+		
 		BEHAVIOR_OR[0][0] = -1;
 		BEHAVIOR_OR[0][1] = 0;
 		BEHAVIOR_OR[0][2] = 1;
@@ -62,14 +68,29 @@ public class GateFactory {
 		BEHAVIOR_AND[2][1] = 0;
 		BEHAVIOR_AND[2][2] = 1;
 
-		CLOCK_DESCRIPTOR = new ClockDescriptor(new ClockParameters(1000, 1000), Gate.CLOCK);
-		ASSOC_AND2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 2, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND), Gate.AND2);
-		ASSOC_AND3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND), Gate.AND3);
-		ASSOC_AND4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND), Gate.AND4);
+		BEHAVIOR_XOR[0][0] = -1;
+		BEHAVIOR_XOR[0][1] = 0;
+		BEHAVIOR_XOR[0][2] = 1;
+		BEHAVIOR_XOR[1][0] = 0;
+		BEHAVIOR_XOR[1][1] = 0;
+		BEHAVIOR_XOR[1][2] = 1;
+		BEHAVIOR_XOR[2][0] = 1;
+		BEHAVIOR_XOR[2][1] = 1;
+		BEHAVIOR_XOR[2][2] = 0;
 
-		ASSOC_OR2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 2, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR), Gate.OR2);
-		ASSOC_OR3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 3, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR), Gate.OR3);
-		ASSOC_OR4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociateveGateParameters(1, 4, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR), Gate.OR4);
+		CLOCK_DESCRIPTOR = new ClockDescriptor(new ClockParameters(1000, 1000), Gate.CLOCK);
+		ASSOC_AND2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 2, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND), Gate.AND2);
+		ASSOC_AND3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 3, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND), Gate.AND3);
+		ASSOC_AND4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 4, BEHAVIOR_AND, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_AND), Gate.AND4);
+
+		ASSOC_OR2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 2, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR), Gate.OR2);
+		ASSOC_OR3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 3, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR), Gate.OR3);
+		ASSOC_OR4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 4, BEHAVIOR_OR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_OR), Gate.OR4);
+
+		ASSOC_XOR2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 2, BEHAVIOR_XOR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_XOR), Gate.XOR2);
+		ASSOC_XOR3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 3, BEHAVIOR_XOR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_XOR), Gate.XOR3);
+		ASSOC_XOR4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 4, BEHAVIOR_XOR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_XOR), Gate.XOR4);
+		
 		NOT_DESCRIPTOR = new NotDescriptor(new NotParameters(1), Gate.NOT);
 
 		TRISTATE_DESCRIPTOR = new TristateDescriptor(new TristateParameters(1), Gate.TRISTATE);
@@ -103,6 +124,15 @@ public class GateFactory {
 			}
 			if (gateIndex.equalsIgnoreCase(Gate.OR4)) {
 				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_OR4_DESCRIPTOR.getOriginalParameters().clone(), ASSOC_OR4_DESCRIPTOR));
+			}
+			if (gateIndex.equalsIgnoreCase(Gate.XOR2)) {
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_XOR2_DESCRIPTOR.getOriginalParameters().clone(), ASSOC_XOR2_DESCRIPTOR));
+			}
+			if (gateIndex.equalsIgnoreCase(Gate.XOR3)) {
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_XOR3_DESCRIPTOR.getOriginalParameters().clone(), ASSOC_XOR3_DESCRIPTOR));
+			}
+			if (gateIndex.equalsIgnoreCase(Gate.XOR4)) {
+				return new IconGate(circuit.getNextGateId(), new AssociativeGate(circuit, ASSOC_XOR4_DESCRIPTOR.getOriginalParameters().clone(), ASSOC_XOR4_DESCRIPTOR));
 			}
 			if (gateIndex.equalsIgnoreCase(Gate.NOT)) {
 				return new IconGate(circuit.getNextGateId(), new Not(circuit, NOT_DESCRIPTOR.getOriginalParameters().clone(), NOT_DESCRIPTOR));

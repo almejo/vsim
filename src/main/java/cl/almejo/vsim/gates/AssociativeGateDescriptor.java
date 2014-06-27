@@ -21,8 +21,16 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 
 	public static final int ASSOCIATIVE_TYPE_AND = 0;
 	public static final int ASSOCIATIVE_TYPE_OR = 1;
+	public static final int ASSOCIATIVE_TYPE_XOR = 2;
 
-	public AssociativeGateDescriptor(AssociateveGateParameters parameters, String type) {
+	private final int[] OR_POINTS_X = new int[]{0, 16, 24, 32, 24, 16, 0, 4, 8, 4};
+	private final int[] OR_POINTS_Y = new int[]{0, 0, 8, 16, 24, 32, 32, 24, 16, 8};
+	private final int[] XOR_POINTS_X = new int[]{8, 16, 24, 32, 24, 16, 8, 12, 12, 12};
+	private final int[] XOR_POINTS_Y = new int[]{0, 0, 8, 16, 24, 32, 32, 24, 16, 8};
+
+	private final Stroke DOUBLE_STROKE = new BasicStroke(3f);
+
+	public AssociativeGateDescriptor(AssociativeGateParameters parameters, String type) {
 		super(parameters, type);
 		_behavior = parameters.getBehavior();
 		_pinPosition = new Point[parameters.getPinCount() + 1];
@@ -45,9 +53,16 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 				graphics.fillArc(-32, 0, 64, 32, -90, 180);
 				break;
 			case ASSOCIATIVE_TYPE_OR:
-				int[] pointsX = new int[]{0, 16, 24, 32, 24, 16, 0, 4, 8, 4};
-				int[] pointsY = new int[]{0, 0, 8, 16, 24, 32, 32, 24, 16, 8};
-				graphics.fillPolygon(pointsX, pointsY, 10);
+				graphics.fillPolygon(OR_POINTS_X, OR_POINTS_Y, 10);
+				break;
+			case ASSOCIATIVE_TYPE_XOR:
+				graphics.fillPolygon(XOR_POINTS_X, XOR_POINTS_Y, 10);
+				Stroke oldStroke = graphics.getStroke();
+				graphics.setStroke(DOUBLE_STROKE);
+				graphics.drawLine(4, 2, 8, 8);
+				graphics.drawLine(8, 8, 8, 24);
+				graphics.drawLine(8, 24, 4, 30);
+				graphics.setStroke(oldStroke);
 				break;
 		}
 	}
@@ -62,13 +77,13 @@ public class AssociativeGateDescriptor extends GateDescriptor {
 		return null;
 	}
 
-	public int computeAssocVal(int value1, byte value2) {
+	public int computeAssociativeVal(int value1, byte value2) {
 		return _behavior[value1 + 1][value2 + 1];
 	}
 
 	@Override
 	public int getPinCount() {
-		return ((AssociateveGateParameters) _originalParameters).getPinCount() + 1;
+		return ((AssociativeGateParameters) _originalParameters).getPinCount() + 1;
 	}
 
 }

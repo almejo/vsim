@@ -34,6 +34,9 @@ public class Gate {
 	public static final String OR2 = "or2";
 	public static final String OR3 = "or3";
 	public static final String OR4 = "or4";
+	public static final String XOR2 = "xor2";
+	public static final String XOR3 = "xor3";
+	public static final String XOR4 = "xor4";
 	public static final String NOT = "not";
 	public static final String FLIP_FLOP_DATA = "flip-flop-data";
 	public static final String TRISTATE = "tristate";

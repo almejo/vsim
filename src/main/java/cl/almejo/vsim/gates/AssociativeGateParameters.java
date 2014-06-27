@@ -10,12 +10,12 @@
 
 package cl.almejo.vsim.gates;
 
-public class AssociateveGateParameters extends GateParametersWithDelay {
+public class AssociativeGateParameters extends GateParametersWithDelay {
 	private int[][] _behavior;
 	private int _pinCount;
 	private int _associativeType;
 
-	public AssociateveGateParameters(int delay, int pinCount, int[][] behavior, int associativeType) {
+	public AssociativeGateParameters(int delay, int pinCount, int[][] behavior, int associativeType) {
 		super(delay);
 		_pinCount = pinCount;
 		_behavior = behavior;

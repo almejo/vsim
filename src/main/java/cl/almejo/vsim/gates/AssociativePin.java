@@ -23,7 +23,7 @@ public class AssociativePin extends Pin {
 		int value = _gate.getPin(0).getInValue();
 
 		for (int i = 1; i < pincount - 1; i++) {
-			value = descriptor.computeAssocVal(value, _gate.getPin(i).getInValue());
+			value = descriptor.computeAssociativeVal(value, _gate.getPin(i).getInValue());
 		}
 
 		_gate.getPin(pincount - 1).program((byte) value, ((GateParametersWithDelay) _gate.getParamameters()).getDelay());
