@@ -20,6 +20,8 @@ import java.util.Map;
 public class SwitchParameters extends GateParameters {
 	private byte _value;
 
+	private String _text;
+
 	public SwitchParameters(byte value) {
 		_value = value;
 	}
@@ -28,14 +30,24 @@ public class SwitchParameters extends GateParameters {
 		return _value;
 	}
 
-
 	public void setValues(Map<String, Object> parameters) {
 		_value = ((Integer) parameters.get("value")).byteValue();
+		_text = (String) parameters.get("text");
 	}
 
 	public List<ConfigVariable> getValues() {
 		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
-		variables.add(new ConfigVariable("value", Messages.t("config.value.label"), _value));
+		variables.add(new ConfigVariable("text", Messages.t("config.text.label"), _text));
+		variables.add(new ConfigVariable("value", Messages.t("config.value.label"), _value).setMin(Constants.THREE_STATE).setMax(Constants.ON));
 		return variables;
+	}
+
+	public String getText() {
+		return _text;
+	}
+
+	@Override
+	public boolean isConfigurable() {
+		return true;
 	}
 }
