@@ -33,7 +33,7 @@ public class GateToolHelper extends ActionToolHelper {
 		int y = window.getCanvas().toCircuitCoordinatesY(event.getY());
 
 		if (event.isControlDown()) {
-			window.getCircuit().undoableRemoveGate(x, y);
+			window.getCircuit().undoableRemoveGate(window.getCircuit().findIcon(x, y));
 			checkSelection(window, event, x, y);
 			return null;
 		}

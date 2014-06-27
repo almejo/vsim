@@ -13,6 +13,7 @@ package cl.almejo.vsim.gui.actions.state;
 import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Configurable;
+import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.gui.ImageUtils;
 import cl.almejo.vsim.gui.SimWindow;
@@ -51,6 +52,7 @@ public abstract class ActionToolHelper {
 
 	protected void doPopupMenu(Circuit circuit, Configurable configurable, Component component, int x, int y) {
 		JPopupMenu menu = new JPopupMenu();
+		addDeleteOption(circuit, configurable, menu);
 		addRotateOptions(circuit, configurable, menu);
 		if (configurable.isConfigurable()) {
 			menu.addSeparator();
@@ -59,8 +61,19 @@ public abstract class ActionToolHelper {
 		menu.show(component, x, y);
 	}
 
-	protected void addConfigOption(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {
+	private void addDeleteOption(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {
+		JMenuItem menuItem = new JMenuItem(Messages.t("action.delete"));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				circuit.undoableRemoveGate((IconGate) configurable);
+				circuit.clearSelection();
+			}
+		});
+		menu.add(menuItem);
+	}
 
+	protected void addConfigOption(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {
 		JMenuItem menuItem = new JMenuItem(Messages.t("action.config"));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
