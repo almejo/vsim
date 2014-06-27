@@ -505,6 +505,7 @@
       "x" : 424
     },
     "parameters" : {
+      "text" : "Encendido",
       "value" : 1
     },
     "type" : "switch"
@@ -514,6 +515,7 @@
       "x" : 424
     },
     "parameters" : {
+      "text" : null,
       "value" : 0
     },
     "type" : "switch"
@@ -523,6 +525,7 @@
       "x" : 424
     },
     "parameters" : {
+      "text" : null,
       "value" : -1
     },
     "type" : "switch"

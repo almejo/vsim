@@ -36,6 +36,11 @@ public class SwitchDescriptor extends GateDescriptor {
 		drawLetter(graphics, Constants.THREE_STATE, iconGate, 1, 12, "T");
 		drawLetter(graphics, Constants.ON, iconGate, 11, 12, "1");
 		drawLetter(graphics, Constants.OFF, iconGate, 21, 12, "0");
+		SwitchParameters parameters = (SwitchParameters) iconGate.getGate().getParamameters();
+		if (parameters.getText() != null && !parameters.getText().trim().equalsIgnoreCase("")) {
+			graphics.setColor(ColorScheme.getLabel());
+			graphics.drawString(parameters.getText(), 0, - dimension.height /2);
+		}
 	}
 
 	private void drawLetter(Graphics2D graphics, byte value, IconGate iconGate, int offset, int height, String letter) {
