@@ -93,12 +93,19 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction CURSOR_TOOL_ACTION = new ToolAction(Messages.t("action.tool.cursor"), Messages.t("action.tool.cursor.description"), "cursor.png", null, this, ActionToolHelper.CURSOR);
 	private final WindowAction MOVE_VIEWPORT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.move.viewport"), Messages.t("action.tool.move.viewport.description"), "move-viewport.png", null, this, ActionToolHelper.MOVE_VIEWPORT);
 	private final WindowAction WIRES_TOOL_ACTION = new ToolAction(Messages.t("action.tool.wires"), Messages.t("action.tool.wires.description"), "wires.png", null, this, ActionToolHelper.WIRES);
+
 	private final WindowAction AND2_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and2"), Messages.t("action.tool.and2.description"), "and2.png", null, this, new GateToolHelper(Gate.AND2));
 	private final WindowAction AND3_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and3"), Messages.t("action.tool.and3.description"), "and3.png", null, this, new GateToolHelper(Gate.AND3));
 	private final WindowAction AND4_TOOL_ACTION = new ToolAction(Messages.t("action.tool.and4"), Messages.t("action.tool.and4.description"), "and4.png", null, this, new GateToolHelper(Gate.AND4));
+
+	private final WindowAction XOR2_TOOL_ACTION = new ToolAction(Messages.t("action.tool.xor2"), Messages.t("action.tool.xor2.description"), "xor2.png", null, this, new GateToolHelper(Gate.XOR2));
+	private final WindowAction XOR3_TOOL_ACTION = new ToolAction(Messages.t("action.tool.xor3"), Messages.t("action.tool.xor3.description"), "xor3.png", null, this, new GateToolHelper(Gate.XOR3));
+	private final WindowAction XOR4_TOOL_ACTION = new ToolAction(Messages.t("action.tool.xor4"), Messages.t("action.tool.xor4.description"), "xor4.png", null, this, new GateToolHelper(Gate.XOR4));
+
 	private final WindowAction OR2_TOOL_ACTION = new ToolAction(Messages.t("action.tool.or2"), Messages.t("action.tool.or2.description"), "or2.png", null, this, new GateToolHelper(Gate.OR2));
 	private final WindowAction OR3_TOOL_ACTION = new ToolAction(Messages.t("action.tool.or3"), Messages.t("action.tool.or3.description"), "or3.png", null, this, new GateToolHelper(Gate.OR3));
 	private final WindowAction OR4_TOOL_ACTION = new ToolAction(Messages.t("action.tool.or4"), Messages.t("action.tool.or4.description"), "or4.png", null, this, new GateToolHelper(Gate.OR4));
+
 	private final WindowAction NOT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.not"), Messages.t("action.tool.not.description"), "not.png", null, this, new GateToolHelper(Gate.NOT));
 	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, new GateToolHelper(Gate.CLOCK));
 	private final WindowAction FLIP_FLOP_DATA_TOOL_ACTION = new ToolAction(Messages.t("action.tool.flip.flop.data"), Messages.t("action.tool.flip.flop.data.description"), "flipflopdata.png", null, this, new GateToolHelper(Gate.FLIP_FLOP_DATA));
@@ -264,9 +271,15 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(AND2_TOOL_ACTION, Messages.c("menu.tool.and2.mnemonic")));
 		menu.add(newMenuItem(AND3_TOOL_ACTION, Messages.c("menu.tool.and3.mnemonic")));
 		menu.add(newMenuItem(AND4_TOOL_ACTION, Messages.c("menu.tool.and4.mnemonic")));
+
 		menu.add(newMenuItem(OR2_TOOL_ACTION, Messages.c("menu.tool.or2.mnemonic")));
 		menu.add(newMenuItem(OR3_TOOL_ACTION, Messages.c("menu.tool.or3.mnemonic")));
 		menu.add(newMenuItem(OR4_TOOL_ACTION, Messages.c("menu.tool.or4.mnemonic")));
+
+		menu.add(newMenuItem(XOR2_TOOL_ACTION, Messages.c("menu.tool.or2.mnemonic")));
+		menu.add(newMenuItem(XOR3_TOOL_ACTION, Messages.c("menu.tool.or3.mnemonic")));
+		menu.add(newMenuItem(XOR4_TOOL_ACTION, Messages.c("menu.tool.or4.mnemonic")));
+
 		menu.add(newMenuItem(CLOCK_TOOL_ACTION, Messages.c("menu.tool.clock.mnemonic")));
 		menu.add(newMenuItem(NOT_TOOL_ACTION, Messages.c("menu.tool.not.mnemonic")));
 		menu.add(newMenuItem(FLIP_FLOP_DATA_TOOL_ACTION, Messages.c("menu.tool.flip.flop.data.mnemonic")));
@@ -356,6 +369,10 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.add(newGrouppedButton(OR3_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(OR4_TOOL_ACTION, group));
 
+		panel.add(newGrouppedButton(XOR2_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(XOR3_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(XOR4_TOOL_ACTION, group));
+		
 		panel.add(newGrouppedButton(NOT_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(CLOCK_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(FLIP_FLOP_DATA_TOOL_ACTION, group));
