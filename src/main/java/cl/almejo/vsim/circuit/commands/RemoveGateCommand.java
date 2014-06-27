@@ -21,20 +21,15 @@ public class RemoveGateCommand implements Command {
 	private int _x = 0;
 	private int _y = 0;
 
-	public RemoveGateCommand(Circuit circuit, int x, int y) {
+	public RemoveGateCommand(Circuit circuit, IconGate iconGate) {
 		_circuit = circuit;
-		_iconGate = circuit.findIcon(x, y);
-		if (_iconGate != null) {
-			_x = (int) _iconGate.getX();
-			_y = (int) _iconGate.getY();
-		}
+		_iconGate = iconGate;
+		_x = (int) _iconGate.getX();
+		_y = (int) _iconGate.getY();
 	}
 
 	@Override
 	public boolean apply() {
-		if (_iconGate == null) {
-			return false;
-		}
 		_circuit.remove(_iconGate);
 		return true;
 	}

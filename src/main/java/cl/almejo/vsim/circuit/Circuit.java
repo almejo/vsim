@@ -354,8 +354,11 @@ public class Circuit {
 		sendChangedEvent();
 	}
 
-	public void undoableRemoveGate(int x, int y) {
-		RemoveGateCommand command = new RemoveGateCommand(this, gridTrunc(x), gridTrunc(y));
+	public void undoableRemoveGate(IconGate iconGate) {
+		if (iconGate == null) {
+			return;
+		}
+		RemoveGateCommand command = new RemoveGateCommand(this, iconGate);
 		_commandManager.apply(command);
 		sendChangedEvent();
 	}
