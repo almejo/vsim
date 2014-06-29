@@ -27,6 +27,29 @@ import java.util.Map;
 
 public class ConfigurationDialog extends JDialog {
 
+	public class ConfigComboItem {
+		private String _value;
+		private String _label;
+
+		public ConfigComboItem(String value, String label) {
+			_value = value;
+			_label = label;
+		}
+
+		public String getValue() {
+			return _value;
+		}
+
+		public String getLabel() {
+			return _label;
+		}
+
+		@Override
+		public String toString() {
+			return _label;
+		}
+	}
+
 	private final Circuit _circuit;
 	private final Configurable _configurable;
 	private HashMap<String, Component> _components = new HashMap<String, Component>();
@@ -98,7 +121,29 @@ public class ConfigurationDialog extends JDialog {
 		if (variable.getType() == ConfigValueType.INT || variable.getType() == ConfigValueType.BYTE) {
 			return getNumberSpinner(variable.getName(), variable.getValue(), variable.getMin(), variable.getMax(), variable.getStep());
 		}
+		if (variable.getType() == ConfigValueType.LIST) {
+			return getListField(variable.getName(), variable.getValue(), variable.getLabels(), variable.getValues());
+		}
 		return getStringField(variable.getName(), variable.getValue());
+	}
+
+	private JComponent getListField(String name, String value, String[] labels, String[] values) {
+		JComboBox<ConfigComboItem> comboBox = new JComboBox<ConfigComboItem>();
+		ConfigComboItem selectedItem = null;
+		for (int i = 0; i < labels.length; i++) {
+			ConfigComboItem comboItem = new ConfigComboItem(values[i], labels[i]);
+			if (comboItem.getValue().equalsIgnoreCase(value)) {
+				selectedItem = comboItem;
+			}
+			comboBox.addItem(comboItem);
+		}
+		if (selectedItem != null) {
+			comboBox.setSelectedItem(selectedItem);
+		}
+		comboBox.setPreferredSize(new Dimension(80, 20));
+		comboBox.addKeyListener(KEY_ADAPTER);
+		_components.put(name, comboBox);
+		return comboBox;
 	}
 
 	private JPanel addButtons() {
@@ -127,16 +172,25 @@ public class ConfigurationDialog extends JDialog {
 	}
 
 	private void updateAndClose() {
+		_circuit.undoableConfig(_configurable, getValuesAsMap());
+		closeWindow();
+	}
+
+	private Map<String, Object> getValuesAsMap() {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		for (String name : _components.keySet()) {
-			if (_components.get(name) instanceof JSpinner) {
-				parameters.put(name, ((JSpinner) _components.get(name)).getValue());
-			} else {
-				parameters.put(name, ((JTextField) _components.get(name)).getText());
-			}
+			parameters.put(name, getValue(name));
 		}
-		_circuit.undoableConfig(_configurable, parameters);
-		closeWindow();
+		return parameters;
+	}
+
+	private Object getValue(String name) {
+		if (_components.get(name) instanceof JSpinner) {
+			return ((JSpinner) _components.get(name)).getValue();
+		} else if (_components.get(name) instanceof JComboBox) {
+			return ((ConfigComboItem) ((JComboBox) _components.get(name)).getSelectedItem()).getValue();
+		}
+		return ((JTextField) _components.get(name)).getText();
 	}
 
 	private void closeWindow() {

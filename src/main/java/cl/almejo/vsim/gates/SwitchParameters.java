@@ -19,8 +19,9 @@ import java.util.Map;
 
 public class SwitchParameters extends GateParameters {
 	private byte _value;
-
 	private String _text;
+	private static final String[] LABELS = new String[]{Messages.t("config.value.on.label"), Messages.t("config.value.off.label"), Messages.t("config.value.no.signal.label")};
+	private static final String[] VALUES = new String[]{"" + Constants.ON, "" + Constants.OFF, "" + Constants.THREE_STATE};
 
 	public SwitchParameters(byte value) {
 		_value = value;
@@ -31,14 +32,18 @@ public class SwitchParameters extends GateParameters {
 	}
 
 	public void setValues(Map<String, Object> parameters) {
-		_value = ((Integer) parameters.get("value")).byteValue();
+		if ( parameters.get("value") instanceof String) {
+			_value = Byte.parseByte((String) parameters.get("value"));
+		}else if ( parameters.get("value") instanceof Integer) {
+			_value = ((Integer) parameters.get("value")).byteValue();
+		}
 		_text = (String) parameters.get("text");
 	}
 
 	public List<ConfigVariable> getValues() {
 		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
 		variables.add(new ConfigVariable("text", Messages.t("config.text.label"), _text));
-		variables.add(new ConfigVariable("value", Messages.t("config.value.label"), _value).setMin(Constants.THREE_STATE).setMax(Constants.ON));
+		variables.add(new ConfigVariable("value", Messages.t("config.value.label"), "" + _value, LABELS, VALUES));
 		return variables;
 	}
 
