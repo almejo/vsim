@@ -270,6 +270,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	@Override
 	public void setValues(Map<String, Object> parameters) {
 		_gate.getParamameters().setValues(parameters);
+		_gate.parametersUpdated();
 	}
 
 	public Rectangle getExtent() {

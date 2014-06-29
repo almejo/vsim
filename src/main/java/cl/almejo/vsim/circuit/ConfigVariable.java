@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ConfigVariable {
+	private String[] _values;
+	private String[] _labels;
 	private String _label;
 	private String _value;
 	private String _name;
@@ -43,6 +45,12 @@ public class ConfigVariable {
 		this(name, label, value, ConfigValueType.STRING);
 	}
 
+	public ConfigVariable(String name, String label, String value, String[] labels, String[] values) {
+		this(name, label, value, ConfigValueType.LIST);
+		_labels = labels;
+		_values = values;
+	}
+
 	public String getLabel() {
 		return _label;
 	}
@@ -62,7 +70,7 @@ public class ConfigVariable {
 	public static Map<String, Object> toMap(List<ConfigVariable> variables) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		for (ConfigVariable variable : variables) {
-			if (variable.getType() == ConfigValueType.STRING) {
+			if (variable.getType() == ConfigValueType.STRING || variable.getType() == ConfigValueType.LIST) {
 				parameters.put(variable.getName(), variable.getValue());
 			} else if (variable.getType() == ConfigValueType.INT) {
 				parameters.put(variable.getName(), Integer.parseInt(variable.getValue()));
@@ -98,5 +106,13 @@ public class ConfigVariable {
 
 	public int getStep() {
 		return _step;
+	}
+
+	public String[] getValues() {
+		return _values;
+	}
+
+	public String[] getLabels() {
+		return _labels;
 	}
 }

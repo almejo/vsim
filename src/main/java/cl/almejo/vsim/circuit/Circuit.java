@@ -510,7 +510,6 @@ public class Circuit {
 			Map info = new ObjectMapper().readValue(json, Map.class);
 			List<Map> gates = (List<Map>) info.get("gates");
 			for (Map gate : gates) {
-
 				Map position = (Map) gate.get("position");
 				IconGate iconGate = GateFactory.getInstance((String) gate.get("type"), circuit);
 				LOGGER.info("Created gate " + iconGate.getId());
@@ -520,7 +519,10 @@ public class Circuit {
 			}
 			List<Map> connections = (List<Map>) info.get("connections");
 			for (Map connection : connections) {
-				circuit.undoableConnect((Integer) connection.get("xi"), (Integer) connection.get("yi"), (Integer) connection.get("xf"), (Integer) connection.get("yf"));
+				circuit.undoableConnect((Integer) connection.get("xi")
+						, (Integer) connection.get("yi")
+						, (Integer) connection.get("xf")
+						, (Integer) connection.get("yf"));
 			}
 
 			circuit.setName(name);
