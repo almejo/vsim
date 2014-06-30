@@ -127,9 +127,9 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		OPEN_FILE_CHOOSER.setFileFilter(vsimFilter);
 
 		SAVE_AS_FILE_CHOOSER = new JFileChooser();
-		OPEN_FILE_CHOOSER.setDialogTitle(Messages.t("file.save"));
-		OPEN_FILE_CHOOSER.addChoosableFileFilter(vsimFilter);
-		OPEN_FILE_CHOOSER.setFileFilter(vsimFilter);
+		SAVE_AS_FILE_CHOOSER.setDialogTitle(Messages.t("file.save"));
+		SAVE_AS_FILE_CHOOSER.addChoosableFileFilter(vsimFilter);
+		SAVE_AS_FILE_CHOOSER.setFileFilter(vsimFilter);
 	}
 
 	static class ZoomChanger extends JPanel {
