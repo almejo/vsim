@@ -21,16 +21,13 @@ import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gui.actions.*;
 import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
 import cl.almejo.vsim.gui.actions.state.GateToolHelper;
+import cl.almejo.vsim.gui.components.ZoomChanger;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
@@ -130,74 +127,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		SAVE_AS_FILE_CHOOSER.setDialogTitle(Messages.t("file.save"));
 		SAVE_AS_FILE_CHOOSER.addChoosableFileFilter(vsimFilter);
 		SAVE_AS_FILE_CHOOSER.setFileFilter(vsimFilter);
-	}
-
-	static class ZoomChanger extends JPanel {
-
-		private CircuitCanvas _canvas;
-		public ZoomChanger(CircuitCanvas canvas) {
-			_canvas = canvas;
-			final JSlider zoomSlider = new JSlider(1, 8, 4);
-			add(createChangeZoomButton(" - ", new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					if (zoomSlider.getValue() > 1) {
-						zoomSlider.setValue(zoomSlider.getValue() - 1);
-					}
-				}
-			}));
-
-			zoomSlider.setSnapToTicks(true);
-			zoomSlider.setMinorTickSpacing(1);
-			add(zoomSlider);
-			add(createChangeZoomButton(" + ", new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					if (zoomSlider.getValue() < 8) {
-						zoomSlider.setValue(zoomSlider.getValue() + 1);
-					}
-				}
-			}));
-			add(getZoomDisplay(zoomSlider));
-		}
-
-		private JLabel getZoomDisplay(JSlider zoomSlider) {
-			final JLabel label = new JLabel("100%");
-			zoomSlider.addChangeListener(new ChangeListener() {
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					JSlider slider = (JSlider) e.getSource();
-					double zoom = 0.25 * slider.getValue();
-					_canvas.setZoom(zoom);
-					label.setText(((int) (zoom * 100)) + "%");
-				}
-			});
-			return label;
-		}
-
-		public static JButton createChangeZoomButton(String text, MouseAdapter mouseListener) {
-			final JButton button = new JButton(text);
-			final Border raisedBevelBorder = BorderFactory.createRaisedBevelBorder();
-			final Insets insets = raisedBevelBorder.getBorderInsets(button);
-			final EmptyBorder emptyBorder = new EmptyBorder(insets);
-			button.setBorder(emptyBorder);
-			button.setFocusPainted(false);
-			button.setOpaque(false);
-			button.setContentAreaFilled(false);
-			button.getModel().addChangeListener(new ChangeListener() {
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					ButtonModel model = (ButtonModel) e.getSource();
-					if (model.isRollover()) {
-						button.setBorder(raisedBevelBorder);
-					} else {
-						button.setBorder(emptyBorder);
-					}
-				}
-			});
-			button.addMouseListener(mouseListener);
-			return button;
-		}
 	}
 
 	public SimWindow(Circuit circuit) {
