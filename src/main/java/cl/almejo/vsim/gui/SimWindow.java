@@ -137,7 +137,6 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_canvas = new CircuitCanvas(_circuit);
 
 		setBounds(100, 100, 800, 800);
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		_displaysPane = new JTabbedPane();
 		JSplitPane rightSplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _canvas, _displaysPane);
@@ -155,7 +154,9 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		setVisible(true);
 
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addComponentListener(this);
+		addWindowListener(this);
 		_canvas.addMouseListener(this);
 		_canvas.setZoom(1.0);
 		_canvas.addMouseMotionListener(this);
@@ -301,7 +302,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.add(newGrouppedButton(XOR2_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(XOR3_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(XOR4_TOOL_ACTION, group));
-		
+
 		panel.add(newGrouppedButton(NOT_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(CLOCK_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(FLIP_FLOP_DATA_TOOL_ACTION, group));
@@ -360,11 +361,11 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void windowClosing(WindowEvent e) {
+		quit();
 	}
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-		_circuit.remove(_canvas);
 	}
 
 	@Override
@@ -385,7 +386,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-		if (SwingUtilities.isRightMouseButton(event) ) {
+		if (SwingUtilities.isRightMouseButton(event)) {
 			_toolHelper.rightClicked(this, event);
 			return;
 		}
@@ -593,4 +594,40 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		return _canvas;
 	}
 
+	public void quit() {
+		if (askSureToQuit() == JOptionPane.NO_OPTION) {
+			return;
+		}
+
+		if (_circuit != null && _circuit.isModified()) {
+			int saveBeforeQuit = askSaveBeforeQuit();
+			if (saveBeforeQuit == JOptionPane.CANCEL_OPTION) {
+				return;
+			}
+			if (saveBeforeQuit == JOptionPane.YES_OPTION) {
+				if (saveAs() == JOptionPane.CANCEL_OPTION) {
+					LOGGER.info("save cancelled by user.");
+					return;
+				}
+			}
+		}
+		if (_circuit != null) {
+			_circuit.remove(_canvas);
+		}
+		System.exit(0);
+	}
+
+	private int askSaveBeforeQuit() {
+		return JOptionPane.showConfirmDialog(this
+				, Messages.t("action.save.before.quit.message")
+				, Messages.t("action.save.before.quit.title")
+				, JOptionPane.YES_NO_CANCEL_OPTION);
+	}
+
+	private int askSureToQuit() {
+		return JOptionPane.showConfirmDialog(this
+				, Messages.t("action.quit.message")
+				, Messages.t("action.quit.title")
+				, JOptionPane.YES_NO_OPTION);
+	}
 }
