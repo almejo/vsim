@@ -13,10 +13,7 @@
 package cl.almejo.vsim.gui;
 
 import cl.almejo.vsim.Messages;
-import cl.almejo.vsim.circuit.Circuit;
-import cl.almejo.vsim.circuit.CircuitCanvas;
-import cl.almejo.vsim.circuit.CircuitEvent;
-import cl.almejo.vsim.circuit.CircuitStateListener;
+import cl.almejo.vsim.circuit.*;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gui.actions.*;
 import cl.almejo.vsim.gui.actions.state.ActionToolHelper;

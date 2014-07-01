@@ -46,9 +46,14 @@ public class Circuit {
 	private int _dragPreviewY;
 	private int _dragPreviewX;
 	private BufferedImage _dragPreview;
+	private Rectangle _extent = new Rectangle();
 
 	public void updateSelection() {
 		_selection.updateExtent();
+	}
+
+	public Rectangle getExtent() {
+		return _extent;
 	}
 
 	class GatesSelection implements Selection {
@@ -250,12 +255,14 @@ public class Circuit {
 		icon.moveTo(gridTrunc(x), gridTrunc(y));
 
 		activate(icon);
+		updateExtent();
 		sendChangedEvent();
 	}
 
 	public void remove(IconGate icon) {
 		desactivate(icon);
 		_icons.remove(icon);
+		updateExtent();
 		sendChangedEvent();
 	}
 
@@ -677,6 +684,18 @@ public class Circuit {
 		ConfigCommand command = new ConfigCommand(configurable, parameters);
 		_commandManager.apply(command);
 		sendChangedEvent();
+	}
+
+	private void updateExtent() {
+		if (_icons.size() == 0) {
+			_extent = new Rectangle();
+			return;
+		}
+		_extent = new Rectangle(_icons.get(0).getExtent());
+		for (IconGate icon: _icons) {
+			_extent.add(icon.getExtent());
+		}
+		LOGGER.debug ("Extent ====================>: " + _extent);
 	}
 }
 
