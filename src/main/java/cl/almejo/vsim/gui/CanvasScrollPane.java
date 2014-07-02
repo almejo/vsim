@@ -75,6 +75,7 @@ public class CanvasScrollPane extends JPanel implements AdjustmentListener, View
 		add(scrollBar, constraint);
 		return scrollBar;
 	}
+
 	private JScrollBar addHorizontalScrollbar() {
 		JScrollBar scrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
 		scrollBar.addAdjustmentListener(this);
@@ -89,6 +90,14 @@ public class CanvasScrollPane extends JPanel implements AdjustmentListener, View
 
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent event) {
+		JScrollBar scrollbar = ((JScrollBar) event.getSource());
+		if (scrollbar.getValueIsAdjusting()) {
+			if (scrollbar == _horizontalScrollbar) {
+				_canvas.moveViewport(_canvas.getViewport().x - scrollbar.getValue(), 0);
+			} else {
+				_canvas.moveViewport(0, _canvas.getViewport().y - scrollbar.getValue());
+			}
+		}
 	}
 
 	@Override
