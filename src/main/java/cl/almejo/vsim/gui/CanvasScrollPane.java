@@ -100,6 +100,15 @@ public class CanvasScrollPane extends JPanel implements AdjustmentListener, View
 		}
 	}
 
+	public void addCorner(JComponent component) {
+		GridBagConstraints constraint = new GridBagConstraints();
+		constraint.gridx = 1;
+		constraint.gridy = 1;
+		constraint.anchor = GridBagConstraints.SOUTHEAST;
+		constraint.fill = GridBagConstraints.BOTH;
+		add(component, constraint);
+	}
+
 	@Override
 	public void updated(CircuitCanvas circuitCanvas) {
 		updateScrollbars();

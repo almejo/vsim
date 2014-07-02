@@ -21,6 +21,17 @@
     "label" : "#6600cc",
     "gates" : "#0000ff"
   },
+  "csim" : {
+    "wires-on" : "#ffffff",
+    "background" : "#0033cc",
+    "bus-on" : "#ff0000",
+    "ground" : "#00ff00",
+    "off" : "#000000",
+    "grid" : "#0033cc",
+    "signal" : "#ff0000",
+    "label" : "#ffff00",
+    "gates" : "#ff9933"
+  },
   "test" : {
     "wires-on" : "#ff0000",
     "background" : "#009933",

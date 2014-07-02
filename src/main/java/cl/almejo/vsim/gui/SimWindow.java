@@ -136,7 +136,18 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		setBounds(100, 100, 800, 800);
 
 		_displaysPane = new JTabbedPane();
-		JSplitPane rightSplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new CanvasScrollPane(_canvas), _displaysPane);
+
+		CanvasScrollPane scrollPane = new CanvasScrollPane(_canvas);
+		JPanel panel = new JPanel();
+		panel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				SimWindow.this.getCanvas().center();
+			}
+		});
+		scrollPane.addCorner(panel);
+
+		JSplitPane rightSplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, _displaysPane);
 		rightSplitpane.setOneTouchExpandable(true);
 		rightSplitpane.setDividerLocation(600);
 

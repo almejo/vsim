@@ -171,4 +171,10 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 			listener.updated(this);
 		}
 	}
+
+	public void center() {
+		Rectangle extent = _circuit.getExtent();
+		centerViewportTo((int) extent.getCenterX(), (int) extent.getCenterY());
+		LOGGER.debug("Viewport centered");
+	}
 }
