@@ -228,6 +228,13 @@ public class Circuit {
 				graphics.drawImage(_dragPreview, _dragPreviewX, _dragPreviewY, null);
 				setAlpha(graphics, 1.0f);
 			}
+//			graphics.setColor(Color.GREEN);
+//			graphics.drawRect(getExtent().x, getExtent().y, getExtent().width, getExtent().height);
+//			graphics.setColor(Color.ORANGE);
+//			Rectangle protoExtend = _protoboard.getExtent();
+//			if (protoExtend!= null) {
+//				graphics.drawRect(protoExtend.x, protoExtend.y, protoExtend.width, protoExtend.height);
+//			}
 		}
 	}
 
@@ -240,6 +247,11 @@ public class Circuit {
 
 		for (int x = Circuit.gridTrunc(rectangle.x - 10); x < Circuit.gridTrunc((int) (rectangle.x + rectangle.getWidth() + 20)); x += Circuit.GRIDSIZE * 2) {
 			graphics.drawLine(x, Circuit.gridTrunc(rectangle.y - 10), x, Circuit.gridTrunc(rectangle.y) + (int) rectangle.getHeight());
+//			if (x % 32 ==0 ) {
+//				graphics.setColor(Color.BLACK);
+//				graphics.drawString("" + x, x, + 40+ Circuit.gridTrunc(rectangle.y - 10));
+//				graphics.setColor(ColorScheme.getGrid());
+//			}
 		}
 		for (int y = Circuit.gridTrunc(rectangle.y - 10); y < Circuit.gridTrunc((int) (rectangle.y + rectangle.getHeight() + 20)); y += Circuit.GRIDSIZE * 2) {
 			graphics.drawLine(Circuit.gridTrunc(rectangle.x - 10), y, Circuit.gridTrunc(rectangle.x) + (int) rectangle.getWidth(), y);
@@ -308,6 +320,7 @@ public class Circuit {
 
 	public void connect(int xi, int yi, int xf, int yf) {
 		_protoboard.connect(gridTrunc(xi), gridTrunc(yi), gridTrunc(xf), gridTrunc(yf));
+		updateExtent();
 	}
 
 	public void add(CircuitCanvas canvas) {
@@ -336,6 +349,7 @@ public class Circuit {
 
 	public void disconnectBetween(int xi, int yi, int xf, int yf) {
 		_protoboard.disconnectBetween(xi, yi, xf, yf);
+		updateExtent();
 	}
 
 	public List<Connection<Contact>> findBeforeConnect(int xi, int yi, int xf, int yf) {
@@ -370,9 +384,9 @@ public class Circuit {
 		sendChangedEvent();
 	}
 
-
 	public void disconnect(int xi, int yi, int xf, int yf) {
 		_protoboard.disconnect(xi, yi, xf, yf);
+		updateExtent();
 	}
 
 	public void undoableConnect(int xi, int yi, int xf, int yf) {
@@ -688,14 +702,22 @@ public class Circuit {
 
 	private void updateExtent() {
 		if (_icons.size() == 0) {
-			_extent = new Rectangle();
+			_extent = null;
 			return;
 		}
-		_extent = new Rectangle(_icons.get(0).getExtent());
-		for (IconGate icon: _icons) {
-			_extent.add(icon.getExtent());
+
+		_extent = getIconsExtent();
+		if (_protoboard.getExtent()!= null) {
+			_extent.add(_protoboard.getExtent());
 		}
-		LOGGER.debug ("Extent ====================>: " + _extent);
+	}
+
+	private Rectangle getIconsExtent() {
+		Rectangle rectangle = new Rectangle(_icons.get(0).getExtent());
+		for (IconGate icon: _icons) {
+			rectangle.add(icon.getExtent());
+		}
+		return rectangle;
 	}
 }
 

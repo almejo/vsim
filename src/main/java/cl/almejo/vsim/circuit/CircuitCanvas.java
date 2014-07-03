@@ -80,23 +80,19 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		LOGGER.info("componentResized");
 		resizeViewport();
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		LOGGER.info("componentMoved");
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		LOGGER.info("componentShown");
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		LOGGER.info("componentHidden");
 	}
 
 	public void centerViewportTo(int x, int y) {
@@ -152,7 +148,9 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 
 	public Rectangle getWorld() {
 		Rectangle rectangle = new Rectangle(_viewport);
-		rectangle.add(_circuit.getExtent());
+		if (_circuit.getExtent() != null) {
+			rectangle.add(_circuit.getExtent());
+		}
 		return rectangle;
 	}
 
@@ -173,6 +171,9 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	}
 
 	public void center() {
+		if (_circuit.getExtent() == null) {
+			return;
+		}
 		Rectangle extent = _circuit.getExtent();
 		centerViewportTo((int) extent.getCenterX(), (int) extent.getCenterY());
 		LOGGER.debug("Viewport centered");
