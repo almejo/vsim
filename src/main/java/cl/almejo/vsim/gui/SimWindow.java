@@ -135,13 +135,11 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 			graphics2D.setColor(Color.BLACK);
 			graphics2D.drawOval(2, 2, (int) size.getWidth() - 3, (int) size.getHeight() - 3);
 			graphics2D.drawLine((int) size.getWidth() / 2 + 1, 0, (int) size.getWidth() / 2 + 1, (int) size.getHeight());
-			graphics2D.drawLine(0, (int) size.getHeight() / 2 + 1, (int) size.getWidth(), (int) size.getHeight() / 2+ 1);
+			graphics2D.drawLine(0, (int) size.getHeight() / 2 + 1, (int) size.getWidth(), (int) size.getHeight() / 2 + 1);
 		}
 	}
 
 	public SimWindow(Circuit circuit) {
-
-		setTitle(circuit.getName() + " | " + Messages.t("main.title"));
 		_circuit = circuit;
 		_circuit.addCircuitEventListener(this);
 		_canvas = new CircuitCanvas(_circuit);
@@ -165,7 +163,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		rightSplitpane.setDividerLocation(600);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel()), rightSplitpane);
+				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel())
+				, rightSplitpane);
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 
@@ -186,6 +185,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		addMenu();
 		addMainToolbar();
 		updateActionStates();
+		updateTitle();
 	}
 
 	private JPanel getStatusBar() {
