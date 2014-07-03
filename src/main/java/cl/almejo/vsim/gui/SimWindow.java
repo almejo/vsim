@@ -126,6 +126,19 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		SAVE_AS_FILE_CHOOSER.setFileFilter(vsimFilter);
 	}
 
+	private static class CenterCanvasButton extends JPanel {
+
+		@Override
+		protected void paintComponent(Graphics graphics) {
+			Graphics2D graphics2D = (Graphics2D) graphics;
+			Dimension size = getSize();
+			graphics2D.setColor(Color.BLACK);
+			graphics2D.drawOval(2, 2, (int) size.getWidth() - 3, (int) size.getHeight() - 3);
+			graphics2D.drawLine((int) size.getWidth() / 2 + 1, 0, (int) size.getWidth() / 2 + 1, (int) size.getHeight());
+			graphics2D.drawLine(0, (int) size.getHeight() / 2 + 1, (int) size.getWidth(), (int) size.getHeight() / 2+ 1);
+		}
+	}
+
 	public SimWindow(Circuit circuit) {
 
 		setTitle(circuit.getName() + " | " + Messages.t("main.title"));
@@ -138,7 +151,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		_displaysPane = new JTabbedPane();
 
 		CanvasScrollPane scrollPane = new CanvasScrollPane(_canvas);
-		JPanel panel = new JPanel();
+		CenterCanvasButton panel = new CenterCanvasButton();
 		panel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
