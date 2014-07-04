@@ -10,12 +10,19 @@ import cl.almejo.vsim.gui.actions.*;
 import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
 import cl.almejo.vsim.gui.actions.state.GateToolHelper;
 import cl.almejo.vsim.gui.components.ZoomChanger;
+import com.alee.extended.layout.ToolbarLayout;
+import com.alee.extended.panel.WebButtonGroup;
+import com.alee.extended.statusbar.WebMemoryBar;
+import com.alee.extended.statusbar.WebStatusBar;
+import com.alee.laf.button.WebButton;
+import com.alee.laf.button.WebToggleButton;
+import com.alee.laf.toolbar.ToolbarStyle;
+import com.alee.laf.toolbar.WebToolBar;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
@@ -167,11 +174,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 
-		JPanel statusBar = getStatusBar();
-		statusBar.add(new ZoomChanger(_canvas));
-		getContentPane().add(statusBar, BorderLayout.SOUTH);
-
-		setVisible(true);
+		addStatusBar();
 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addComponentListener(this);
@@ -184,13 +187,19 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		addMenu();
 		addMainToolbar();
 		updateActionStates();
+
 		updateTitle();
+		setVisible(true);
 	}
 
-	private JPanel getStatusBar() {
-		JPanel statusBar = new JPanel();
-		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
-		return statusBar;
+	private void addStatusBar() {
+		WebStatusBar statusBar = new WebStatusBar();
+		WebMemoryBar memoryBar = new WebMemoryBar();
+		memoryBar.setPreferredWidth(memoryBar.getPreferredSize().width + 20);
+
+		statusBar.add(new ZoomChanger(_canvas), ToolbarLayout.END);
+		statusBar.add(memoryBar, ToolbarLayout.END);
+		getContentPane().add(statusBar, BorderLayout.SOUTH);
 	}
 
 	private void addMenu() {
@@ -277,25 +286,36 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	private void addMainToolbar() {
-		JToolBar toolBar = new JToolBar();
-		toolBar.add(newToolbarButton(NEW_ACTION));
-		toolBar.add(newToolbarButton(OPEN_ACTION));
-		toolBar.add(newToolbarButton(SAVE_ACTION));
+		WebToolBar toolBar = new WebToolBar(WebToolBar.HORIZONTAL);
+		toolBar.setToolbarStyle(ToolbarStyle.attached);
+
+		WebButtonGroup group = new WebButtonGroup(true
+				, newToolbarButton(NEW_ACTION)
+				, newToolbarButton(OPEN_ACTION)
+				, newToolbarButton(SAVE_ACTION));
+		group.setButtonsDrawFocus(false);
+		toolBar.add(group);
 
 		toolBar.addSeparator();
 
-		toolBar.add(newToolbarButton(UNDO_ACTION));
-		toolBar.add(newToolbarButton(REDO_ACTION));
-		toolBar.add(newToolbarButton(CUT_ACTION));
-		toolBar.add(newToolbarButton(COPY_ACTION));
-		toolBar.add(newToolbarButton(PASTE_ACTION));
+		group = new WebButtonGroup(true
+				, newToolbarButton(UNDO_ACTION)
+				, newToolbarButton(REDO_ACTION));
+		group.setButtonsDrawFocus(false);
+		toolBar.add(group);
+
+		group = new WebButtonGroup(true
+				, newToolbarButton(CUT_ACTION)
+				, newToolbarButton(COPY_ACTION)
+				, newToolbarButton(PASTE_ACTION));
+		group.setButtonsDrawFocus(false);
+		toolBar.add(group);
 
 		toolBar.addSeparator();
-		ButtonGroup group = new ButtonGroup();
+		group = new WebButtonGroup(true, newToolbarToggleButton(START_ACTION), newToolbarToggleButton(PAUSE_ACTION));
+		group.setButtonsDrawFocus(false);
 
-		toolBar.add(newGrouppedButton(START_ACTION, group));
-		toolBar.add(newGrouppedButton(PAUSE_ACTION, group));
-
+		toolBar.add(group);
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 	}
 
@@ -335,8 +355,15 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		return panel;
 	}
 
-	private JButton newToolbarButton(Action action) {
-		JButton button = new JButton();
+	private WebButton newToolbarButton(Action action) {
+		WebButton button = new WebButton();
+		button.setAction(action);
+		button.setText("");
+		return button;
+	}
+
+	private WebToggleButton newToolbarToggleButton(Action action) {
+		WebToggleButton button = new WebToggleButton();
 		button.setAction(action);
 		button.setText("");
 		return button;

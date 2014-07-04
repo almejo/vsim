@@ -15,6 +15,7 @@ dependencies {
     compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.10'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.1'
     compile 'org.projectlombok:lombok:1.16.18'
+    compile group: 'de.sciss', name: 'weblaf', version: '1.28'
 }
 
 task fatJar(type: Jar) {

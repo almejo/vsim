@@ -2,6 +2,10 @@ package cl.almejo.vsim.gui.actions.preferences;
 
 import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.gui.ColorScheme;
+import com.alee.laf.button.WebButton;
+import com.alee.laf.colorchooser.WebColorChooserDialog;
+import com.alee.utils.ImageUtils;
+import com.alee.utils.swing.DialogOptions;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -88,20 +92,57 @@ class ColorPreferences extends JPanel {
 		return _comboBox;
 	}
 
-	private void addColorChooser(JPanel panel, String item) {
+	private void addColorChooser(final JPanel panel, final String item) {
 		JLabel label = new JLabel();
 		label.setText(Messages.t("preferences.color.scheme." + item + ".label"));
 		panel.add(label);
-		JButton button = new JButton(Messages.t("default.change.label"));
-		button.addActionListener(event -> {
-			JButton button1 = (JButton) event.getSource();
-			String themeName = ColorScheme.getCurrent().getName();
-			Color color = JColorChooser.showDialog(button1, Messages.t("preferences.color.choose.title"), ColorScheme.getScheme(themeName).get(item));
-			if (color != null) {
-				ColorScheme.getScheme(themeName).set(item, color);
+
+		final String themeName = ColorScheme.getCurrent().getName();
+		final Color initialColor = ColorScheme.getScheme(themeName).get(item);
+		final WebButton button = new WebButton(getColorText(initialColor), ImageUtils.createColorIcon(initialColor));
+		button.setLeftRightSpacing(0);
+		button.setAlignmentX(1);
+		button.setMargin(0, 0, 0, 3);
+		button.addActionListener(new ActionListener() {
+			private WebColorChooserDialog chooser = null;
+			private Color lastColor = initialColor;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (chooser == null) {
+					chooser = new WebColorChooserDialog(panel);
+				}
+				chooser.setColor(lastColor);
+				chooser.setVisible(true);
+
+				if (chooser.getResult() == DialogOptions.OK_OPTION) {
+					Color color = chooser.getColor();
+					lastColor = color;
+
+					button.setIcon(ImageUtils.createColorIcon(color));
+					button.setText(getColorText(color));
+					ColorScheme.getScheme(themeName).set(item, color);
+				}
 			}
 		});
+//		JButton button = new JButton(Messages.t("default.change.label"));
+//		ActionListener actionListener = new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				JButton button = (JButton) e.getSource();
+//				String themeName = ColorScheme.getCurrent().getName();
+//				Color color = JColorChooser.showDialog(button, Messages.t("preferences.color.choose.title"), ColorScheme.getScheme(themeName).get(item));
+//				if (color != null) {
+//					ColorScheme.getScheme(themeName).set(item, color);
+//				}
+//			}
+//		};
+
+		//button.addActionListener(actionListener);
 		panel.add(button);
 	}
 
+	private String getColorText(Color color) {
+		return color.getRed() + ", " + color.getGreen() + ", " + color.getBlue();
+	}
 }
