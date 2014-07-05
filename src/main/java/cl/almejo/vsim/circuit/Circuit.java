@@ -695,14 +695,21 @@ public class Circuit {
 		}
 
 		_extent = getIconsExtent();
-		if (_protoboard.getExtent()!= null) {
-			_extent.add(_protoboard.getExtent());
+		if (_extent != null) {
+			if (_protoboard.getExtent() != null) {
+				_extent.add(_protoboard.getExtent());
+			}
+		} else {
+			_extent = _protoboard.getExtent();
 		}
 	}
 
 	private Rectangle getIconsExtent() {
+		if (_icons.size() == 0) {
+			return null;
+		}
 		Rectangle rectangle = new Rectangle(_icons.get(0).getExtent());
-		for (IconGate icon: _icons) {
+		for (IconGate icon : _icons) {
 			rectangle.add(icon.getExtent());
 		}
 		return rectangle;
