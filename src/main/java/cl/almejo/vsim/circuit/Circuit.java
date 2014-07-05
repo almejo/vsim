@@ -228,13 +228,6 @@ public class Circuit {
 				graphics.drawImage(_dragPreview, _dragPreviewX, _dragPreviewY, null);
 				setAlpha(graphics, 1.0f);
 			}
-//			graphics.setColor(Color.GREEN);
-//			graphics.drawRect(getExtent().x, getExtent().y, getExtent().width, getExtent().height);
-//			graphics.setColor(Color.ORANGE);
-//			Rectangle protoExtend = _protoboard.getExtent();
-//			if (protoExtend!= null) {
-//				graphics.drawRect(protoExtend.x, protoExtend.y, protoExtend.width, protoExtend.height);
-//			}
 		}
 	}
 
@@ -247,11 +240,6 @@ public class Circuit {
 
 		for (int x = Circuit.gridTrunc(rectangle.x - 10); x < Circuit.gridTrunc((int) (rectangle.x + rectangle.getWidth() + 20)); x += Circuit.GRIDSIZE * 2) {
 			graphics.drawLine(x, Circuit.gridTrunc(rectangle.y - 10), x, Circuit.gridTrunc(rectangle.y) + (int) rectangle.getHeight());
-//			if (x % 32 ==0 ) {
-//				graphics.setColor(Color.BLACK);
-//				graphics.drawString("" + x, x, + 40+ Circuit.gridTrunc(rectangle.y - 10));
-//				graphics.setColor(ColorScheme.getGrid());
-//			}
 		}
 		for (int y = Circuit.gridTrunc(rectangle.y - 10); y < Circuit.gridTrunc((int) (rectangle.y + rectangle.getHeight() + 20)); y += Circuit.GRIDSIZE * 2) {
 			graphics.drawLine(Circuit.gridTrunc(rectangle.x - 10), y, Circuit.gridTrunc(rectangle.x) + (int) rectangle.getWidth(), y);
