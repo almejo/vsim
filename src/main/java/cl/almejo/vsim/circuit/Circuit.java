@@ -46,9 +46,14 @@ public class Circuit {
 	private int _dragPreviewY;
 	private int _dragPreviewX;
 	private BufferedImage _dragPreview;
+	private Rectangle _extent = new Rectangle();
 
 	public void updateSelection() {
 		_selection.updateExtent();
+	}
+
+	public Rectangle getExtent() {
+		return _extent;
 	}
 
 	class GatesSelection implements Selection {
@@ -250,12 +255,14 @@ public class Circuit {
 		icon.moveTo(gridTrunc(x), gridTrunc(y));
 
 		activate(icon);
+		updateExtent();
 		sendChangedEvent();
 	}
 
 	public void remove(IconGate icon) {
 		desactivate(icon);
 		_icons.remove(icon);
+		updateExtent();
 		sendChangedEvent();
 	}
 
@@ -301,6 +308,7 @@ public class Circuit {
 
 	public void connect(int xi, int yi, int xf, int yf) {
 		_protoboard.connect(gridTrunc(xi), gridTrunc(yi), gridTrunc(xf), gridTrunc(yf));
+		updateExtent();
 	}
 
 	public void add(CircuitCanvas canvas) {
@@ -329,6 +337,7 @@ public class Circuit {
 
 	public void disconnectBetween(int xi, int yi, int xf, int yf) {
 		_protoboard.disconnectBetween(xi, yi, xf, yf);
+		updateExtent();
 	}
 
 	public List<Connection<Contact>> findBeforeConnect(int xi, int yi, int xf, int yf) {
@@ -363,9 +372,9 @@ public class Circuit {
 		sendChangedEvent();
 	}
 
-
 	public void disconnect(int xi, int yi, int xf, int yf) {
 		_protoboard.disconnect(xi, yi, xf, yf);
+		updateExtent();
 	}
 
 	public void undoableConnect(int xi, int yi, int xf, int yf) {
@@ -677,6 +686,33 @@ public class Circuit {
 		ConfigCommand command = new ConfigCommand(configurable, parameters);
 		_commandManager.apply(command);
 		sendChangedEvent();
+	}
+
+	private void updateExtent() {
+		if (_icons.size() == 0) {
+			_extent = null;
+			return;
+		}
+
+		_extent = getIconsExtent();
+		if (_extent != null) {
+			if (_protoboard.getExtent() != null) {
+				_extent.add(_protoboard.getExtent());
+			}
+		} else {
+			_extent = _protoboard.getExtent();
+		}
+	}
+
+	private Rectangle getIconsExtent() {
+		if (_icons.size() == 0) {
+			return null;
+		}
+		Rectangle rectangle = new Rectangle(_icons.get(0).getExtent());
+		for (IconGate icon : _icons) {
+			rectangle.add(icon.getExtent());
+		}
+		return rectangle;
 	}
 }
 

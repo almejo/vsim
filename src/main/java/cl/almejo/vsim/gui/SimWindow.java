@@ -129,9 +129,20 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		SAVE_AS_FILE_CHOOSER.setFileFilter(vsimFilter);
 	}
 
-	public SimWindow(Circuit circuit) {
+	private static class CenterCanvasButton extends JPanel {
 
-		setTitle(circuit.getName() + " | " + Messages.t("main.title"));
+		@Override
+		protected void paintComponent(Graphics graphics) {
+			Graphics2D graphics2D = (Graphics2D) graphics;
+			Dimension size = getSize();
+			graphics2D.setColor(Color.BLACK);
+			graphics2D.drawOval(2, 2, (int) size.getWidth() - 3, (int) size.getHeight() - 3);
+			graphics2D.drawLine((int) size.getWidth() / 2 + 1, 0, (int) size.getWidth() / 2 + 1, (int) size.getHeight());
+			graphics2D.drawLine(0, (int) size.getHeight() / 2 + 1, (int) size.getWidth(), (int) size.getHeight() / 2 + 1);
+		}
+	}
+
+	public SimWindow(Circuit circuit) {
 		_circuit = circuit;
 		_circuit.addCircuitEventListener(this);
 		_canvas = new CircuitCanvas(_circuit);
@@ -139,12 +150,24 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		setBounds(100, 100, 800, 800);
 
 		_displaysPane = new JTabbedPane();
-		JSplitPane rightSplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _canvas, _displaysPane);
+
+		CanvasScrollPane scrollPane = new CanvasScrollPane(_canvas);
+		CenterCanvasButton panel = new CenterCanvasButton();
+		panel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				SimWindow.this.getCanvas().center();
+			}
+		});
+		scrollPane.addCorner(panel);
+
+		JSplitPane rightSplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, _displaysPane);
 		rightSplitpane.setOneTouchExpandable(true);
 		rightSplitpane.setDividerLocation(600);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel()), rightSplitpane);
+				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel())
+				, rightSplitpane);
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 
@@ -165,6 +188,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		addMenu();
 		addMainToolbar();
 		updateActionStates();
+		updateTitle();
 	}
 
 	private JPanel getStatusBar() {
@@ -595,26 +619,24 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	public void quit() {
-		if (askSureToQuit() == JOptionPane.NO_OPTION) {
-			return;
-		}
-
-		if (_circuit != null && _circuit.isModified()) {
-			int saveBeforeQuit = askSaveBeforeQuit();
-			if (saveBeforeQuit == JOptionPane.CANCEL_OPTION) {
-				return;
-			}
-			if (saveBeforeQuit == JOptionPane.YES_OPTION) {
-				if (saveAs() == JOptionPane.CANCEL_OPTION) {
-					LOGGER.info("save cancelled by user.");
+		if (askSureToQuit() == JOptionPane.YES_OPTION) {
+			if (_circuit != null && _circuit.isModified()) {
+				int saveBeforeQuit = askSaveBeforeQuit();
+				if (saveBeforeQuit == JOptionPane.CANCEL_OPTION) {
 					return;
 				}
+				if (saveBeforeQuit == JOptionPane.YES_OPTION) {
+					if (saveAs() == JOptionPane.CANCEL_OPTION) {
+						LOGGER.info("save cancelled by user.");
+						return;
+					}
+				}
 			}
+			if (_circuit != null) {
+				_circuit.remove(_canvas);
+			}
+			System.exit(0);
 		}
-		if (_circuit != null) {
-			_circuit.remove(_canvas);
-		}
-		System.exit(0);
 	}
 
 	private int askSaveBeforeQuit() {

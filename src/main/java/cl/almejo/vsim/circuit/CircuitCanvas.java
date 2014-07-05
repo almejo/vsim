@@ -13,6 +13,7 @@ package cl.almejo.vsim.circuit;
 
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gui.ColorScheme;
+import cl.almejo.vsim.gui.ViewportListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,8 @@ import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CircuitCanvas extends JPanel implements ComponentListener {
 
@@ -33,6 +36,7 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	private AffineTransform _computedTransformation = new AffineTransform();
 	private AffineTransform _zoomTransformation = new AffineTransform();
 	private double _zoom = 1.0;
+	private List<ViewportListener> _viewportListeners = new LinkedList<ViewportListener>();
 
 	public CircuitCanvas(Circuit circuit) {
 		_circuit = circuit;
@@ -50,9 +54,6 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		clean(graphics2D);
 
-//		graphics2D.setColor(Color.GREEN);
-//		graphics2D.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
-//		graphics2D.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
 		AffineTransform transform = new AffineTransform(_computedTransformation);
 		transform.concatenate(graphics2D.getTransform());
 
@@ -69,6 +70,7 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	public void resizeViewport() {
 		Dimension size = getSize();
 		_viewport.setRect(_viewport.getX(), _viewport.getY(), size.getWidth() / _zoom, size.getHeight() / _zoom);
+		sendViewportUpdatedEvent();
 	}
 
 	public void setCircuit(Circuit circuit) {
@@ -78,23 +80,19 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		LOGGER.info("componentResized");
 		resizeViewport();
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		LOGGER.info("componentMoved");
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		LOGGER.info("componentShown");
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		LOGGER.info("componentHidden");
 	}
 
 	public void centerViewportTo(int x, int y) {
@@ -107,12 +105,14 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 		_viewport.translate(dx, dy);
 		_translationTransformation.translate(-dx, -dy);
 		updateTransformation();
+		sendViewportUpdatedEvent();
 	}
 
 	public void moveViewport(int deltaX, int deltaY) {
 		_viewport.translate(-deltaX, -deltaY);
 		_translationTransformation.translate(deltaX, deltaY);
 		updateTransformation();
+		sendViewportUpdatedEvent();
 	}
 
 	private void updateTransformation() {
@@ -146,4 +146,36 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 		return _zoom;
 	}
 
+	public Rectangle getWorld() {
+		Rectangle rectangle = new Rectangle(_viewport);
+		if (_circuit.getExtent() != null) {
+			rectangle.add(_circuit.getExtent());
+		}
+		return rectangle;
+	}
+
+	public Rectangle getViewport() {
+		return new Rectangle(_viewport);
+	}
+
+	public void addViewportListener(ViewportListener listener) {
+		if (listener != null) {
+			_viewportListeners.add(listener);
+		}
+	}
+
+	private void sendViewportUpdatedEvent() {
+		for (ViewportListener listener : _viewportListeners) {
+			listener.updated(this);
+		}
+	}
+
+	public void center() {
+		if (_circuit.getExtent() == null) {
+			return;
+		}
+		Rectangle extent = _circuit.getExtent();
+		centerViewportTo((int) extent.getCenterX(), (int) extent.getCenterY());
+		LOGGER.debug("Viewport centered");
+	}
 }

@@ -20,8 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class Protoboard {
 
@@ -33,6 +35,7 @@ public class Protoboard {
 	private int _connectionStartY;
 	private int _connectionEndX;
 	private int _connectionEndY;
+	private Rectangle _extent;
 
 	public Protoboard() {
 	}
@@ -41,6 +44,7 @@ public class Protoboard {
 		Contact contact = poke(x, y);
 		contact.addPin(pinId, gate);
 		reconnect(contact);
+		updateExtent();
 	}
 
 	public void removePin(byte pinId, Gate gate, int x, int y) {
@@ -50,6 +54,28 @@ public class Protoboard {
 
 		reconnect(contact);
 		testForDelete(contact);
+		updateExtent();
+	}
+
+	private void updateExtent() {
+		if (_matrix.getXCoords().isEmpty()) {
+			_extent = null;
+		}
+		List<Integer> listX = toList(_matrix.getXCoords());
+		List<Integer> listY = toList(_matrix.getYCoords());
+
+		_extent = new Rectangle(listX.get(0)
+				, listY.get(0)
+				, listX.get(listX.size() - 1) - listX.get(0)
+				, listY.get(listY.size() - 1) - listY.get(0));
+		LOGGER.debug("Extent: " + _extent);
+	}
+
+	private List<Integer> toList(Set<Integer> coords) {
+		List<Integer> list = new LinkedList<Integer>();
+		list.addAll(coords);
+		Collections.sort(list);
+		return list;
 	}
 
 	private List<Contact> reconnect(Contact contact) {
@@ -175,6 +201,7 @@ public class Protoboard {
 		} else {
 			connectHorizontal(poke(x1, y1), poke(x2, y2));
 		}
+		updateExtent();
 	}
 
 	private void connectHorizontal(Contact contact1, Contact contact2) {
@@ -409,6 +436,7 @@ public class Protoboard {
 
 	public void disconnect(int xi, int yi, int xf, int yf) {
 		disconnect(poke(xi, yi), poke(xf, yf));
+		updateExtent();
 	}
 
 	public void setDrawConnectPreview(boolean draw) {
@@ -476,5 +504,9 @@ public class Protoboard {
 			}
 		}
 		return list;
+	}
+
+	public Rectangle getExtent() {
+		return _extent;
 	}
 }
