@@ -13,7 +13,10 @@
 package cl.almejo.vsim.gui;
 
 import cl.almejo.vsim.Messages;
-import cl.almejo.vsim.circuit.*;
+import cl.almejo.vsim.circuit.Circuit;
+import cl.almejo.vsim.circuit.CircuitCanvas;
+import cl.almejo.vsim.circuit.CircuitEvent;
+import cl.almejo.vsim.circuit.CircuitStateListener;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gui.actions.*;
 import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
@@ -616,26 +619,24 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	public void quit() {
-		if (askSureToQuit() == JOptionPane.NO_OPTION) {
-			return;
-		}
-
-		if (_circuit != null && _circuit.isModified()) {
-			int saveBeforeQuit = askSaveBeforeQuit();
-			if (saveBeforeQuit == JOptionPane.CANCEL_OPTION) {
-				return;
-			}
-			if (saveBeforeQuit == JOptionPane.YES_OPTION) {
-				if (saveAs() == JOptionPane.CANCEL_OPTION) {
-					LOGGER.info("save cancelled by user.");
+		if (askSureToQuit() == JOptionPane.YES_OPTION) {
+			if (_circuit != null && _circuit.isModified()) {
+				int saveBeforeQuit = askSaveBeforeQuit();
+				if (saveBeforeQuit == JOptionPane.CANCEL_OPTION) {
 					return;
 				}
+				if (saveBeforeQuit == JOptionPane.YES_OPTION) {
+					if (saveAs() == JOptionPane.CANCEL_OPTION) {
+						LOGGER.info("save cancelled by user.");
+						return;
+					}
+				}
 			}
+			if (_circuit != null) {
+				_circuit.remove(_canvas);
+			}
+			System.exit(0);
 		}
-		if (_circuit != null) {
-			_circuit.remove(_canvas);
-		}
-		System.exit(0);
 	}
 
 	private int askSaveBeforeQuit() {
