@@ -13,6 +13,8 @@ package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 
+import java.awt.*;
+
 public class GateFactory {
 
 	private static final int[][] BEHAVIOR_AND;
@@ -42,6 +44,8 @@ public class GateFactory {
 	private final static SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR;
 	private final static SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR_DOUBLE;
 
+
+	private final static TemplateDescriptor TEMPLATE_DESCRIPTOR;
 
 	static {
 		BEHAVIOR_AND = new int[3][3];
@@ -100,6 +104,8 @@ public class GateFactory {
 		LED_DESCRIPTOR = new LedDescriptor(new LedParameters("Led"), Gate.LED);
 		TIME_DIAGRAM_DESCRIPTOR = new TimeDiagramDescriptor(new TimeDiagramParameters(), Gate.TIME_DIAGRAM);
 		SWITCH_DESCRIPTOR = new SwitchDescriptor(new SwitchParameters(Constants.ON), Gate.SWITCH);
+
+		TEMPLATE_DESCRIPTOR = new TemplateDescriptor(new TemplateParameters(), Gate.TEMPLATE, new Dimension(64, 64));
 	}
 
 	public static IconGate getInstance(String gateIndex, Circuit circuit) {
@@ -157,6 +163,9 @@ public class GateFactory {
 			}
 			if (gateIndex.equalsIgnoreCase(Gate.SWITCH)) {
 				return new IconGate(circuit.getNextGateId(), new Switch(circuit, SWITCH_DESCRIPTOR.getOriginalParameters().clone(), SWITCH_DESCRIPTOR));
+			}
+			if (gateIndex.equalsIgnoreCase(Gate.TEMPLATE)) {
+				return new IconGate(circuit.getNextGateId(), new Template(circuit, TEMPLATE_DESCRIPTOR.getOriginalParameters().clone(), TEMPLATE_DESCRIPTOR));
 			}
 		} catch (CloneNotSupportedException e) {
 			return null;

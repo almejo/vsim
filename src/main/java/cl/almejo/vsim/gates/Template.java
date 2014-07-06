@@ -14,14 +14,10 @@ package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 
-public class Not extends Gate {
+public class Template extends Gate {
 
-	public Not(Circuit circuit, GateParameters params, NotDescriptor descriptor) {
+	public Template(Circuit circuit, GateParameters params, TemplateDescriptor descriptor) {
 		super(circuit, params, descriptor);
-
-		_pins = new NotPin[2];
-		_pins[0] = new NotPin(this, circuit.getScheduler(), 0);
-		_pins[1] = new NotPin(this, circuit.getScheduler(), 1);
+		_pins = new Pin[0];
 	}
-
 }
