@@ -12,6 +12,7 @@
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
+import cl.almejo.vsim.circuit.Point;
 
 import java.awt.*;
 
@@ -46,12 +47,25 @@ public class GateFactory {
 
 
 	private final static TemplateDescriptor TEMPLATE_DESCRIPTOR;
+	private final static Point[] TEMPLATE_PINS;
 
 	static {
+
+		TEMPLATE_PINS = new Point[]{
+				new Point(0, 0)
+				, new Point(0, Circuit.GRIDSIZE * 2)
+				, new Point(0, Circuit.GRIDSIZE * 4)
+				, new Point(0, Circuit.GRIDSIZE * 6)
+				, new Point(0, Circuit.GRIDSIZE * 8)
+				, new Point(0, Circuit.GRIDSIZE * 10)
+				, new Point(0, Circuit.GRIDSIZE * 12)
+				, new Point(0, Circuit.GRIDSIZE * 14)
+		};
+
 		BEHAVIOR_AND = new int[3][3];
 		BEHAVIOR_OR = new int[3][3];
 		BEHAVIOR_XOR = new int[3][3];
-		
+
 		BEHAVIOR_OR[0][0] = -1;
 		BEHAVIOR_OR[0][1] = 0;
 		BEHAVIOR_OR[0][2] = 1;
@@ -94,7 +108,7 @@ public class GateFactory {
 		ASSOC_XOR2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 2, BEHAVIOR_XOR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_XOR), Gate.XOR2);
 		ASSOC_XOR3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 3, BEHAVIOR_XOR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_XOR), Gate.XOR3);
 		ASSOC_XOR4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 4, BEHAVIOR_XOR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_XOR), Gate.XOR4);
-		
+
 		NOT_DESCRIPTOR = new NotDescriptor(new NotParameters(1), Gate.NOT);
 
 		TRISTATE_DESCRIPTOR = new TristateDescriptor(new TristateParameters(1), Gate.TRISTATE);
@@ -105,7 +119,7 @@ public class GateFactory {
 		TIME_DIAGRAM_DESCRIPTOR = new TimeDiagramDescriptor(new TimeDiagramParameters(), Gate.TIME_DIAGRAM);
 		SWITCH_DESCRIPTOR = new SwitchDescriptor(new SwitchParameters(Constants.ON), Gate.SWITCH);
 
-		TEMPLATE_DESCRIPTOR = new TemplateDescriptor(new TemplateParameters(), Gate.TEMPLATE, new Dimension(64, 64));
+		TEMPLATE_DESCRIPTOR = new TemplateDescriptor(new TemplateParameters(), Gate.TEMPLATE, new Dimension(Circuit.GRIDSIZE * 6, Circuit.GRIDSIZE* 16), TEMPLATE_PINS);
 	}
 
 	public static IconGate getInstance(String gateIndex, Circuit circuit) {

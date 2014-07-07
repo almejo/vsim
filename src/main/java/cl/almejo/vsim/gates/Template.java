@@ -18,6 +18,9 @@ public class Template extends Gate {
 
 	public Template(Circuit circuit, GateParameters params, TemplateDescriptor descriptor) {
 		super(circuit, params, descriptor);
-		_pins = new Pin[0];
+		_pins = new Pin[descriptor.getPinCount()];
+		for (int i = 0; i< _pins.length ; i++) {
+			_pins[i] = new SimplePin(this, circuit.getScheduler(), i);
+		}
 	}
 }

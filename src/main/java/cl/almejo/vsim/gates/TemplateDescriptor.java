@@ -21,15 +21,24 @@ import java.awt.*;
 public class TemplateDescriptor extends GateDescriptor {
 	private final Dimension _size;
 
-	public TemplateDescriptor(GateParameters parameters, String type, Dimension size) {
+	public TemplateDescriptor(GateParameters parameters, String type, Dimension size, Point[] points) {
 		super(parameters, type);
 		_size = new Dimension(size);
+		_pinCount = points.length;
+		_pinPosition = points;
+		_gateType = GateTypes.NORMAL;
 	}
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
 		Dimension dimension = getSize();
 		graphics.fillRect(0,0,dimension.width, dimension.height);
+		graphics.setColor(ColorScheme.getLabel());
+		int i = 0;
+		for(Point point: _pinPosition) {
+			graphics.drawString("#"  + i, point.getX()+ 3, point.getY() + 10);
+			i++;
+		}
 	}
 
 	@Override
