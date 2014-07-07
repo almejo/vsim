@@ -31,12 +31,14 @@ public class TemplateDescriptor extends GateDescriptor {
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
+		graphics.setColor(ColorScheme.getGates());
 		Dimension dimension = getSize();
 		graphics.fillRect(0,0,dimension.width, dimension.height);
 		graphics.setColor(ColorScheme.getLabel());
 		int i = 0;
 		for(Point point: _pinPosition) {
-			graphics.drawString("#"  + i, point.getX()+ 3, point.getY() + 10);
+			int xposition = point.getX() == 0 ? point.getX()+ 3: point.getX() - 30;
+			graphics.drawString("#"  + i, xposition, point.getY() + 10);
 			i++;
 		}
 	}

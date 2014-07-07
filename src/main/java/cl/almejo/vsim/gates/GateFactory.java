@@ -60,6 +60,15 @@ public class GateFactory {
 				, new Point(0, Circuit.GRIDSIZE * 10)
 				, new Point(0, Circuit.GRIDSIZE * 12)
 				, new Point(0, Circuit.GRIDSIZE * 14)
+
+				,new Point(Circuit.GRIDSIZE * 8, 0)
+				, new Point(Circuit.GRIDSIZE * 8, Circuit.GRIDSIZE * 2)
+				, new Point(Circuit.GRIDSIZE * 8, Circuit.GRIDSIZE * 4)
+				, new Point(Circuit.GRIDSIZE * 8, Circuit.GRIDSIZE * 6)
+				, new Point(Circuit.GRIDSIZE * 8, Circuit.GRIDSIZE * 8)
+				, new Point(Circuit.GRIDSIZE * 8, Circuit.GRIDSIZE * 10)
+				, new Point(Circuit.GRIDSIZE * 8, Circuit.GRIDSIZE * 12)
+				, new Point(Circuit.GRIDSIZE * 8, Circuit.GRIDSIZE * 14)
 		};
 
 		BEHAVIOR_AND = new int[3][3];
@@ -119,7 +128,7 @@ public class GateFactory {
 		TIME_DIAGRAM_DESCRIPTOR = new TimeDiagramDescriptor(new TimeDiagramParameters(), Gate.TIME_DIAGRAM);
 		SWITCH_DESCRIPTOR = new SwitchDescriptor(new SwitchParameters(Constants.ON), Gate.SWITCH);
 
-		TEMPLATE_DESCRIPTOR = new TemplateDescriptor(new TemplateParameters(), Gate.TEMPLATE, new Dimension(Circuit.GRIDSIZE * 6, Circuit.GRIDSIZE* 16), TEMPLATE_PINS);
+		TEMPLATE_DESCRIPTOR = new TemplateDescriptor(new TemplateParameters(), Gate.TEMPLATE, new Dimension(Circuit.GRIDSIZE * 8, Circuit.GRIDSIZE* 16), TEMPLATE_PINS);
 	}
 
 	public static IconGate getInstance(String gateIndex, Circuit circuit) {
