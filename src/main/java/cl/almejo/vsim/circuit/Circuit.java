@@ -56,6 +56,10 @@ public class Circuit {
 		return _extent;
 	}
 
+	public Contact peek(int x, int y) {
+		return _protoboard.peek(x, y);
+	}
+
 	class GatesSelection implements Selection {
 		List<Draggable> _draggables = new LinkedList<Draggable>();
 		Rectangle _extent;

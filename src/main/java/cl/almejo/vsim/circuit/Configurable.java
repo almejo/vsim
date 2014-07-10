@@ -11,6 +11,8 @@
 
 package cl.almejo.vsim.circuit;
 
+import cl.almejo.vsim.gates.Compilable;
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,4 +28,7 @@ public interface Configurable {
 
 	void setValues(Map<String, Object> parametersInstance);
 
+	boolean isCompilable();
+
+	public void compile(Circuit circuit);
 }

@@ -152,6 +152,12 @@ public class Protoboard {
 		return contacts;
 	}
 
+	public Contact peek(int x, int y) {
+		FindResult<Contact> result = _matrix.findHorizontal(x, y);
+		LOGGER.debug("peek " + new Point(x, y) + " ===> " + result.toString());
+		return result.getHit();
+	}
+
 	private Contact poke(int x, int y) {
 		FindResult<Contact> result = _matrix.findHorizontal(x, y);
 		LOGGER.debug("poke " + new Point(x, y) + " ===> " + result.toString());

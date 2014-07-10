@@ -13,6 +13,7 @@ package cl.almejo.vsim.gui.actions.state;
 import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Configurable;
+import cl.almejo.vsim.gates.Compilable;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.gui.ImageUtils;
@@ -58,7 +59,21 @@ public abstract class ActionToolHelper {
 			menu.addSeparator();
 			addConfigOption(circuit, configurable, menu);
 		}
+		if (configurable.isCompilable()) {
+			addCompileOption(circuit, configurable, menu);
+		}
 		menu.show(component, x, y);
+	}
+
+	private void addCompileOption(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {
+		JMenuItem menuItem = new JMenuItem(Messages.t("action.compile"));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				configurable.compile(circuit);
+			}
+		});
+		menu.add(menuItem);
 	}
 
 	private void addDeleteOption(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {

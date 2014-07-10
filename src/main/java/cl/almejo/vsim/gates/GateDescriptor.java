@@ -59,4 +59,8 @@ public abstract class GateDescriptor {
 	public String getType() {
 		return _type;
 	}
+
+	public Point[] getPinPositions() {
+		return _pinPosition;
+	}
 }

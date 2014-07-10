@@ -116,4 +116,24 @@ public class Contact extends Point {
 		_conectionMask = (byte) _conectionMask & ~direction;
 	}
 
+	public boolean isTerminal() {
+		return countConnections() == 1;
+	}
+
+	public int countConnections() {
+		int i = 0;
+		if (isConnected(Constants.EAST)) {
+			i++;
+		}
+		if (isConnected(Constants.NORTH)) {
+			i++;
+		}
+		if (isConnected(Constants.WEST)) {
+			i++;
+		}
+		if (isConnected(Constants.SOUTH)) {
+			i++;
+		}
+		return i;
+	}
 }
