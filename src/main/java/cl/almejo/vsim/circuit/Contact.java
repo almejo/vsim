@@ -94,7 +94,7 @@ public class Contact extends Point {
 			if (i > 0) {
 				ret += ", ";
 			}
-			ret += pinGate.getGate() + "-" + pinGate.getPinId();
+			ret += pinGate.getGate().getGateDescriptor().getType() + "-" + pinGate.getPinId();
 			i++;
 		}
 		return ret;

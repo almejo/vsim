@@ -11,6 +11,8 @@
 
 package cl.almejo.vsim.gates;
 
-public enum GateTypes {
-	NORMAL, DEBUG, TEMPLATE
+public class CompilationProblem extends Throwable {
+	public CompilationProblem(CloneNotSupportedException exception) {
+		super(exception);
+	}
 }

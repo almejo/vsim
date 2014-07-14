@@ -110,4 +110,8 @@ public abstract class Pin extends Link {
 	public int getPinId() {
 		return _pinId;
 	}
+
+	public Gate getGate() {
+		return _gate;
+	}
 }

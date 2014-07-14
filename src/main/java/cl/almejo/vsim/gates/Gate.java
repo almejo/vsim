@@ -62,8 +62,8 @@ public class Gate {
 		return _parameters;
 	}
 
-	public Pin getPin(int i) {
-		return _pins[i];
+	public Pin getPin(int pinId) {
+		return _pins[pinId];
 	}
 
 	public GateDescriptor getGateDescriptor() {
@@ -81,4 +81,7 @@ public class Gate {
 		return _circuit;
 	}
 
+	public boolean isNormalGate() {
+		return _gateDescriptor.isNormal();
+	}
 }

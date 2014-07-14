@@ -279,7 +279,11 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	}
 
 	public void compile(Circuit circuit) {
-		((Compilable) _gate).compile(circuit, getTransformed(_gate.getGateDescriptor().getPinPositions()));
+		try {
+			((Compilable) _gate).compile(circuit, getTransformed(_gate.getGateDescriptor().getPinPositions()));
+		} catch (CompilationProblem compilationProblem) {
+			compilationProblem.printStackTrace();
+		}
 	}
 
 	private Point[] getTransformed(Point[] positions) {

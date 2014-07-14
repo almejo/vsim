@@ -16,5 +16,5 @@ import cl.almejo.vsim.circuit.Point;
 
 public interface Compilable {
 
-	public Gate compile(Circuit circuit, Point[] points);
+	public Gate compile(Circuit circuit, Point[] points) throws CompilationProblem;
 }

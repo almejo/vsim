@@ -63,4 +63,8 @@ public abstract class GateDescriptor {
 	public Point[] getPinPositions() {
 		return _pinPosition;
 	}
+
+	public boolean isNormal() {
+		return _gateType == GateTypes.NORMAL;
+	}
 }

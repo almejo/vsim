@@ -26,7 +26,7 @@ public class TemplateDescriptor extends GateDescriptor {
 		_size = new Dimension(size);
 		_pinCount = points.length;
 		_pinPosition = points;
-		_gateType = GateTypes.NORMAL;
+		_gateType = GateTypes.TEMPLATE;
 	}
 
 	@Override

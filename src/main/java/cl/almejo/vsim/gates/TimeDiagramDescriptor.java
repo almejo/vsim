@@ -25,7 +25,7 @@ public class TimeDiagramDescriptor extends GateDescriptor {
 		for (int i = 0; i < _pinCount; i++) {
 			_pinPosition[i] = new Point(0, i * PIN_SEPARATION);
 		}
-		_gateType = GateTypes.NORMAL;
+		_gateType = GateTypes.DEBUG;
 	}
 
 	@Override
