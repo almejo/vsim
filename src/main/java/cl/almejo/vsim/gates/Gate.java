@@ -45,7 +45,7 @@ public class Gate {
 	public static final String LED = "led";
 	public static final String TIME_DIAGRAM = "time-diagram";
 	public static final String SWITCH = "switch";
-	public static final String TEMPLATE= "template";
+	public static final String TEMPLATE = "template";
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;
@@ -83,5 +83,9 @@ public class Gate {
 
 	public boolean isNormalGate() {
 		return _gateDescriptor.isNormal();
+	}
+
+	public String toString() {
+		return _gateDescriptor.getType();
 	}
 }

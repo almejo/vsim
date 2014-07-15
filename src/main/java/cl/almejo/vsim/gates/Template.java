@@ -40,24 +40,68 @@ public class Template extends Gate implements Compilable {
 		LOGGER.debug("[compiling] Internal gates: " + gates);
 
 		GateData[] datas = createGateData(gates);
-		for(GateData data: datas) {
+		for (GateData data : datas) {
 			LOGGER.debug("[compiling] Gate data: " + data);
 		}
+		int[][] outConnections = createOutConnectionsTable(contacts, gates);
 
 		return null;
 	}
 
+	public int[][] createOutConnectionsTable(List<Contact> contacts, List<Gate> gates) {
+
+		List<Integer[]> list = new LinkedList<Integer[]>();
+
+		for (Contact contact : contacts) {
+
+			List<Contact> attachedContacts = _circuit.getProtoboard().getAllContactsAttached(contact, new LinkedList<Contact>());
+			List<Pin> pins = new LinkedList<Pin>();
+			for (Contact attachedContact : attachedContacts) {
+				pins.addAll(attachedContact.getPins());
+			}
+			if (pins.size() > 0) {
+				Pin pin = pins.get(0);
+				if (gates.indexOf(pin.getGate()) > -1) {
+					list.add(new Integer[]{gates.indexOf(pin.getGate()), pin.getPinId()});
+				}
+			}
+		}
+		int[][] connections = new int[list.size()][2];
+		int i = 0;
+		for (Integer[] data : list) {
+			connections[i++] = new int[]{data[0], data[1]};
+		}
+		return connections;
+	}
+
+
 	private GateData[] createGateData(List<Gate> gates) throws CompilationProblem {
 		GateData[] data = new GateData[gates.size()];
 		int i = 0;
-		for (Gate gate : gates) {
+		for (Gate gate : gates)
 			try {
-				data[i++] = new GateData(gate.getGateDescriptor(), gate.getParamameters().clone(), gate.getPinCount());
+				GateData gateData = new GateData(gate.getGateDescriptor(), gate.getParamameters().clone(), gate.getPinCount());
+				updateConnections(gateData, gate, gates);
+				data[i++] = gateData;
+
 			} catch (CloneNotSupportedException exception) {
 				throw new CompilationProblem(exception);
 			}
-		}
 		return data;
+	}
+
+	private void updateConnections(GateData gateData, Gate gate, List<Gate> gates) {
+		for (int pinId = 0; pinId < gate.getPinCount(); pinId++) {
+			Pin pin = gate.getPin(pinId);
+			Pin nextPin = (Pin) pin.getNext();
+			if (nextPin.getGate() == gate) {
+				LOGGER.debug("*Setting gate: " + gate + " pinId: " + pinId + " -------> [" + nextPin.getGate() + "[" + gates.indexOf(nextPin.getGate()) + "]: " + nextPin.getPinId() + "]");
+				gateData.setGateAndPin(pinId, -1, -1);
+			} else {
+				LOGGER.debug("Setting gate: " + gate + " pinId: " + pinId + " -------> [" + nextPin.getGate() + "[" + gates.indexOf(nextPin.getGate()) + "]: " + nextPin.getPinId() + "]");
+				gateData.setGateAndPin(pinId, gates.indexOf(nextPin.getGate()), nextPin.getPinId());
+			}
+		}
 	}
 
 	private List<Gate> findGates(List<Contact> contacts) {

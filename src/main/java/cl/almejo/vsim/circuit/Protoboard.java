@@ -121,7 +121,7 @@ public class Protoboard {
 		return pins;
 	}
 
-	private List<Contact> getAllContactsAttached(Contact contact, List<Contact> contacts) {
+	public List<Contact> getAllContactsAttached(Contact contact, List<Contact> contacts) {
 		if (contact == null) {
 			return contacts;
 		}

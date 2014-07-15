@@ -17,8 +17,22 @@ public class GateData {
 	private final int[][] _connections;
 
 	public GateData(GateDescriptor descriptor, GateParameters parameters, int pinCount) {
-		_descriptor  = descriptor;
+		_descriptor = descriptor;
 		_parameters = parameters;
 		_connections = new int[pinCount][2];
+	}
+
+	public void setGateAndPin(int pinId, int gateIndex, int pinIndex) {
+		_connections[pinId][0] = gateIndex;
+		_connections[pinId][1] = pinIndex;
+	}
+
+	@Override
+	public String toString() {
+		String ret = "";
+		for (int[] _connection : _connections) {
+			ret += _connection[0] + " -> " + _connection[1] + ":";
+		}
+		return ret;
 	}
 }

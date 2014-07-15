@@ -16,12 +16,12 @@ import cl.almejo.vsim.circuit.Circuit;
 
 public class Not extends Gate {
 
-	public Not(Circuit circuit, GateParameters params, NotDescriptor descriptor) {
-		super(circuit, params, descriptor);
+	public Not(Circuit circuit, GateParameters parameters, NotDescriptor descriptor) {
+		super(circuit, parameters, descriptor);
 
 		_pins = new NotPin[2];
-		_pins[0] = new NotPin(this, circuit.getScheduler(), 0);
-		_pins[1] = new NotPin(this, circuit.getScheduler(), 1);
+		for(int pinId = 0; pinId< 2; pinId++) {
+			_pins[pinId] = new NotPin(this, circuit.getScheduler(), pinId);
+		}
 	}
-
 }

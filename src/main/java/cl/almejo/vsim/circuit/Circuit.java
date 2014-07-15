@@ -722,5 +722,10 @@ public class Circuit {
 		}
 		return rectangle;
 	}
+
+	public Protoboard getProtoboard() {
+		return _protoboard;
+	}
+
 }
 
