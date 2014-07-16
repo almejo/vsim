@@ -275,19 +275,23 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 
 	@Override
 	public boolean isCompilable() {
-		return _gate instanceof  Compilable;
+		return _gate instanceof Compilable;
 	}
 
 	public void compile(Circuit circuit) {
 		try {
-			((Compilable) _gate).compile(circuit, getTransformed(_gate.getGateDescriptor().getPinPositions()));
+			Gate gate = ((Compilable) _gate).compile(circuit, getTransformed(_gate.getGateDescriptor().getPinPositions()));
+			IconGate iconGate = new IconGate(circuit.getNextGateId(), gate);
+			LOGGER.info("Created encapsulated " + iconGate.getId());
+			circuit.undoableAddGate(iconGate, 500, 500);
+
 		} catch (CompilationProblem compilationProblem) {
 			compilationProblem.printStackTrace();
 		}
 	}
 
 	private Point[] getTransformed(Point[] positions) {
-		Point [] points = new Point[positions.length];
+		Point[] points = new Point[positions.length];
 		for (int i = 0; i < positions.length; i++) {
 			points[i] = getTransformed(positions[i]);
 		}

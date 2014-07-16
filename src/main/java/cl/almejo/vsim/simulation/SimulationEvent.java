@@ -34,6 +34,4 @@ public abstract class SimulationEvent extends HeapElement {
 	public boolean isProgrammed() {
 		return _scheduler.isProgrammed(this);
 	}
-
-
 }

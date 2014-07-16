@@ -16,16 +16,10 @@ package cl.almejo.vsim.simulation;
 public class HeapElement {
 	private long _value;
 
-	/**
-	 * @return the value
-	 */
 	public long getValue() {
 		return _value;
 	}
 
-	/**
-	 * @param value the value to set
-	 */
 	public void setValue(long value) {
 		_value = value;
 	}

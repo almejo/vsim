@@ -22,7 +22,7 @@ import java.util.List;
 
 public class Template extends Gate implements Compilable {
 
-	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Circuit.class);
+	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Template.class);
 
 	public Template(Circuit circuit, GateParameters params, TemplateDescriptor descriptor) {
 		super(circuit, params, descriptor);
@@ -34,6 +34,7 @@ public class Template extends Gate implements Compilable {
 
 	public Gate compile(Circuit circuit, Point[] points) throws CompilationProblem {
 		List<Contact> contacts = getTerminalContacts(circuit, points);
+		List<Point> positions = getTerminalPoints(circuit, points, getGateDescriptor());
 
 		List<Gate> gates = findGates(contacts);
 		LOGGER.debug("[compiling] Terminal contacts: " + contacts);
@@ -44,8 +45,13 @@ public class Template extends Gate implements Compilable {
 			LOGGER.debug("[compiling] Gate data: " + data);
 		}
 		int[][] outConnections = createOutConnectionsTable(contacts, gates);
-
-		return null;
+		for (int[] array : outConnections) {
+			LOGGER.debug("outconn: " + array[0] + ", " + array[1]);
+		}
+		for (Point position : positions) {
+			LOGGER.debug("pinPosition: " + position);
+		}
+		return new EncapsulatedDescriptor(datas, outConnections, positions, getGateDescriptor().getSize().width).make(circuit, null);
 	}
 
 	public int[][] createOutConnectionsTable(List<Contact> contacts, List<Gate> gates) {
@@ -61,9 +67,10 @@ public class Template extends Gate implements Compilable {
 			}
 			if (pins.size() > 0) {
 				Pin pin = pins.get(0);
-				if (gates.indexOf(pin.getGate()) > -1) {
-					list.add(new Integer[]{gates.indexOf(pin.getGate()), pin.getPinId()});
+				while (!gates.contains(pin.getGate())) {
+					pin = (Pin) pin.getNext();
 				}
+				list.add(new Integer[]{gates.indexOf(pin.getGate()), pin.getPinId()});
 			}
 		}
 		int[][] connections = new int[list.size()][2];
@@ -150,4 +157,18 @@ public class Template extends Gate implements Compilable {
 		}
 		return contacts;
 	}
+
+	private List<Point> getTerminalPoints(Circuit circuit, Point[] points, GateDescriptor descriptor) {
+		List<Point> positions = new LinkedList<Point>();
+		int pinId = 0;
+		for (Point point : points) {
+			Contact contact = circuit.peek(point.getX(), point.getY());
+			if (contact != null && contact.isTerminal()) {
+				positions.add(descriptor.getPinPosition((byte) pinId));
+			}
+			pinId++;
+		}
+		return positions;
+	}
+
 }

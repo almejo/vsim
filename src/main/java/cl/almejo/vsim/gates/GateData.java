@@ -35,4 +35,16 @@ public class GateData {
 		}
 		return ret;
 	}
+
+	public GateParameters getParameters() {
+		return _parameters;
+	}
+
+	public GateDescriptor getDescriptor() {
+		return _descriptor;
+	}
+
+	public int[][] getConnections() {
+		return _connections;
+	}
 }

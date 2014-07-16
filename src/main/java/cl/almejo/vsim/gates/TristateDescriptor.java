@@ -46,6 +46,6 @@ public class TristateDescriptor extends GateDescriptor {
 
 	@Override
 	public Gate make(Circuit circuit, GateParameters params) {
-		return null;
+		return new Tristate(circuit, params, this);
 	}
 }

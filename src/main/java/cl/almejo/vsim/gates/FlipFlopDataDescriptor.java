@@ -39,6 +39,6 @@ public class FlipFlopDataDescriptor extends GateDescriptor {
 
 	@Override
 	public Gate make(Circuit circuit, GateParameters params) {
-		return null;
+		return new FlipFlopData(circuit, params, this);
 	}
 }
