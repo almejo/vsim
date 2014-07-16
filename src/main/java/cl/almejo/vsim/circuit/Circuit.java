@@ -232,10 +232,6 @@ public class Circuit {
 				graphics.drawImage(_dragPreview, _dragPreviewX, _dragPreviewY, null);
 				setAlpha(graphics, 1.0f);
 			}
-			graphics.setColor(Color.RED);
-			graphics.fillOval(352, 48, 10, 10);
-			graphics.setColor(Color.YELLOW);
-			graphics.fillOval(416, 48, 10, 10);
 		}
 	}
 

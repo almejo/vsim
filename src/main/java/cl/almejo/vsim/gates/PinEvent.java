@@ -20,7 +20,6 @@ public class PinEvent extends SimulationEvent {
 	private Pin _pin;
 	private int _pinId;
 
-
 	public PinEvent(Pin pin, Scheduler scheduler, int pinId) {
 		super(scheduler);
 		_pinId = pinId;

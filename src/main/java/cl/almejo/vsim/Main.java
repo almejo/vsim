@@ -23,7 +23,7 @@ import java.io.IOException;
 public class Main {
 
 	public Main() throws IOException {
-		File file = new File("one-and.json");
+		File file = new File("one-and2.json");
 		Circuit circuit = Circuit.fromJSon(FileUtils.readFileToString(file), file.getAbsolutePath());
 		if ("native".equalsIgnoreCase(System.getProperty("vsim.look"))) {
 			setNativeLookAndFeel();

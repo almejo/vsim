@@ -11,8 +11,6 @@
 
 package cl.almejo.vsim.circuit;
 
-import cl.almejo.vsim.gates.Compilable;
-
 import java.util.List;
 import java.util.Map;
 

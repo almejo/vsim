@@ -15,6 +15,7 @@ package cl.almejo.vsim.gates;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Point;
 import cl.almejo.vsim.gui.ColorScheme;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
@@ -26,7 +27,7 @@ public class EncapsulatedDescriptor extends GateDescriptor {
 	private int[][] _outConnections;
 	private Dimension _size;
 
-	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Encapsulated.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Encapsulated.class);
 
 	public EncapsulatedDescriptor(GateData[] gatesData, int[][] outConnections, List<Point> positions, int minSize) {
 		super(null, UUID.randomUUID().toString());
@@ -106,10 +107,10 @@ public class EncapsulatedDescriptor extends GateDescriptor {
 		}
 	}
 
-	private Pin[] createPins(Gate[] gatesInstance) {
+	private Pin[] createPins(Gate[] gates) {
 		Pin[] pins = new Pin[_pinCount];
 		for (int i = 0; i < _pinCount; i++) {
-			pins[i] = gatesInstance[_outConnections[i][0]].getPin(_outConnections[i][1]);
+			pins[i] = gates[_outConnections[i][0]].getPin(_outConnections[i][1]);
 		}
 		return pins;
 	}

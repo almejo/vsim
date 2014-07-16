@@ -66,11 +66,10 @@ public class Template extends Gate implements Compilable {
 				pins.addAll(attachedContact.getPins());
 			}
 			if (pins.size() > 0) {
-				Pin pin = pins.get(0);
-				while (!gates.contains(pin.getGate())) {
-					pin = (Pin) pin.getNext();
+				Pin pin = getNextNormalPin(gates, pins);
+				if (pin != null) {
+					list.add(new Integer[]{gates.indexOf(pin.getGate()), pin.getPinId()});
 				}
-				list.add(new Integer[]{gates.indexOf(pin.getGate()), pin.getPinId()});
 			}
 		}
 		int[][] connections = new int[list.size()][2];
@@ -79,6 +78,18 @@ public class Template extends Gate implements Compilable {
 			connections[i++] = new int[]{data[0], data[1]};
 		}
 		return connections;
+	}
+
+	private Pin getNextNormalPin(List<Gate> gates, List<Pin> pins) {
+		Pin pin = pins.get(0);
+		Pin first = pin;
+		while (!gates.contains(pin.getGate())) {
+			pin = (Pin) pin.getNext();
+			if (first == pin) {
+				return null;
+			}
+		}
+		return pin;
 	}
 
 
@@ -151,11 +162,33 @@ public class Template extends Gate implements Compilable {
 		List<Contact> contacts = new LinkedList<Contact>();
 		for (Point point : points) {
 			Contact contact = circuit.peek(point.getX(), point.getY());
-			if (contact != null && contact.isTerminal()) {
+			if (isTerminalAndConnectedToSomething(contact)) {
 				contacts.add(contact);
 			}
 		}
 		return contacts;
+	}
+
+	private boolean isTerminalAndConnectedToSomething(Contact contact) {
+		if (contact == null) {
+			return false;
+		}
+
+		if (!contact.isTerminal()) {
+			return false;
+		}
+		Pin pin = contact.getGuidePin();
+		if (pin == null) {
+			return false;
+		}
+		Pin first = pin;
+		do {
+			if (pin.getGate() != null && pin.getGate().isNormalGate()) {
+				return true;
+			}
+			pin = (Pin) pin.getNext();
+		} while (pin != first);
+		return false;
 	}
 
 	private List<Point> getTerminalPoints(Circuit circuit, Point[] points, GateDescriptor descriptor) {
@@ -163,7 +196,7 @@ public class Template extends Gate implements Compilable {
 		int pinId = 0;
 		for (Point point : points) {
 			Contact contact = circuit.peek(point.getX(), point.getY());
-			if (contact != null && contact.isTerminal()) {
+			if (isTerminalAndConnectedToSomething(contact)) {
 				positions.add(descriptor.getPinPosition((byte) pinId));
 			}
 			pinId++;

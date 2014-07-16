@@ -38,7 +38,7 @@ public class TemplateDescriptor extends GateDescriptor {
 		int i = 0;
 		for (Point point : _pinPosition) {
 			int xposition = point.getX() == 0 ? point.getX() + 3 : point.getX() - 30;
-			graphics.drawString("#" + i, xposition, point.getY() + 10);
+			graphics.drawString("#" + i, xposition, point.getY());
 			i++;
 		}
 	}

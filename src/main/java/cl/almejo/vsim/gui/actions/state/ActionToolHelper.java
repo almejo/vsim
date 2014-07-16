@@ -13,7 +13,6 @@ package cl.almejo.vsim.gui.actions.state;
 import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Configurable;
-import cl.almejo.vsim.gates.Compilable;
 import cl.almejo.vsim.gates.IconGate;
 import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.gui.ImageUtils;
