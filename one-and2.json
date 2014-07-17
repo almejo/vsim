@@ -64,15 +64,6 @@
     "type" : "template"
   }, {
     "position" : {
-      "y" : 80,
-      "x" : 256
-    },
-    "parameters" : {
-      "delay" : 1
-    },
-    "type" : "not"
-  }, {
-    "position" : {
       "y" : 64,
       "x" : 24
     },
@@ -81,5 +72,14 @@
       "time-up" : 1000
     },
     "type" : "clock"
+  }, {
+    "position" : {
+      "y" : 80,
+      "x" : 256
+    },
+    "parameters" : {
+      "delay" : 1
+    },
+    "type" : "not"
   } ]
 }

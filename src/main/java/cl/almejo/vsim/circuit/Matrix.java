@@ -98,7 +98,15 @@ public class Matrix<T extends Point> {
 		return new FindResult<T>(null, previous, null);
 	}
 
-	List<T> getBetween(T a, T b) {
+	public List<T> getBetweenIncluded(T a, T b) {
+		LinkedList<T> contacts = new LinkedList<T>();
+		contacts.add(a);
+		contacts.addAll(getBetween(a, b));
+		contacts.addLast(b);
+		return contacts;
+	}
+
+	public List<T> getBetween(T a, T b) {
 
 		if (a == null || b == null) {
 			return new LinkedList<T>();

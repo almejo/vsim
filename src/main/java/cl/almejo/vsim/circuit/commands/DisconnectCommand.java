@@ -30,7 +30,10 @@ public class DisconnectCommand implements Command {
 	@Override
 	public boolean apply() {
 		for (Connection<Contact> connection : _connections) {
-			_circuit.disconnect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(), connection.getLast().getY());
+			_circuit.disconnect(connection.getFirst().getX()
+					, connection.getFirst().getY()
+					, connection.getLast().getX()
+					, connection.getLast().getY());
 		}
 		return true;
 	}
@@ -38,8 +41,10 @@ public class DisconnectCommand implements Command {
 	@Override
 	public void unDo() {
 		for (Connection<Contact> connection : _connections) {
-			_circuit.connect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(), connection
-					.getLast().getY());
+			_circuit.connect(connection.getFirst().getX()
+					, connection.getFirst().getY()
+					, connection.getLast().getX()
+					, connection.getLast().getY());
 		}
 	}
 }

@@ -436,7 +436,13 @@ public class Protoboard {
 		}
 
 		if (contactA != null && contactB != null) {
-			disconnect(contactA.getX(), contactA.getY(), contactB.getX(), contactB.getY());
+			disconnect(_matrix.getBetweenIncluded(contactA, contactB));
+		}
+	}
+
+	private void disconnect(List<Contact> contacts) {
+		for (int i = 0; i < contacts.size() - 1; i++) {
+			disconnect(contacts.get(i).getX(), contacts.get(i).getY(), contacts.get(i + 1).getX(), contacts.get(i + 1).getY());
 		}
 	}
 
