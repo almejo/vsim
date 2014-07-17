@@ -94,6 +94,7 @@ public class EncapsulatedDescriptor extends GateDescriptor {
 
 			index++;
 		}
+		LOGGER.debug("All gates connected");
 	}
 
 	private void connectGatePin(Gate[] gates, int destinationGateId, int destinationPinId, Gate sourceGate, int pinId) {

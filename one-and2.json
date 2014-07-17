@@ -2,19 +2,9 @@
   "properties" : { },
   "connections" : [ {
     "yf" : 112,
-    "xi" : 80,
-    "xf" : 104,
-    "yi" : 112
-  }, {
-    "yf" : 112,
     "xi" : 128,
     "xf" : 176,
     "yi" : 112
-  }, {
-    "yf" : 200,
-    "xi" : 104,
-    "xf" : 168,
-    "yi" : 200
   }, {
     "yf" : 80,
     "xi" : 120,
@@ -23,6 +13,11 @@
   }, {
     "yf" : 96,
     "xi" : 208,
+    "xf" : 256,
+    "yi" : 96
+  }, {
+    "yf" : 96,
+    "xi" : 288,
     "xf" : 304,
     "yi" : 96
   }, {
@@ -67,5 +62,24 @@
     },
     "parameters" : { },
     "type" : "template"
+  }, {
+    "position" : {
+      "y" : 80,
+      "x" : 256
+    },
+    "parameters" : {
+      "delay" : 1
+    },
+    "type" : "not"
+  }, {
+    "position" : {
+      "y" : 64,
+      "x" : 24
+    },
+    "parameters" : {
+      "time-down" : 1000,
+      "time-up" : 1000
+    },
+    "type" : "clock"
   } ]
 }

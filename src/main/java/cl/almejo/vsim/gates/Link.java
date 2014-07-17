@@ -22,13 +22,13 @@ public class Link {
 			if (currentLink == link) {
 				return link;
 			}
-			currentLink = link;
+			currentLink = currentLink._next;
 		} while (currentLink != this);
 		return null;
 	}
 
 	protected void join(Link link) {
-		if (find(link) != null) {
+		if (find(link) == null) {
 			link._next = this._next;
 			this._next = link;
 		}
