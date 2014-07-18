@@ -33,17 +33,19 @@ public class Template extends Gate implements Compilable {
 	}
 
 	public Gate compile(Circuit circuit, Point[] points) throws CompilationProblem {
+		LOGGER.debug("[compiling]");
 		List<Contact> contacts = getTerminalContacts(circuit, points);
-		List<Point> positions = getTerminalPoints(circuit, points, getGateDescriptor());
-
-		List<Gate> gates = findGates(contacts);
 		LOGGER.debug("[compiling] Terminal contacts: " + contacts);
+		List<Point> positions = getTerminalPoints(circuit, points, getGateDescriptor());
+		LOGGER.debug("[compiling] Terminal points: " + contacts);
+		List<Gate> gates = findGates(contacts);
 		LOGGER.debug("[compiling] Internal gates: " + gates);
-
 		GateData[] datas = createGateData(gates);
 		for (GateData data : datas) {
 			LOGGER.debug("[compiling] Gate data: " + data);
 		}
+
+		LOGGER.debug("[compiling] outter connections");
 		int[][] outConnections = createOutConnectionsTable(contacts, gates);
 		for (int[] array : outConnections) {
 			LOGGER.debug("outconn: " + array[0] + ", " + array[1]);
@@ -112,13 +114,23 @@ public class Template extends Gate implements Compilable {
 		for (int pinId = 0; pinId < gate.getPinCount(); pinId++) {
 			Pin pin = gate.getPin(pinId);
 			Pin nextPin = (Pin) pin.getNext();
-			if (nextPin.getGate() == gate) {
+			while (gates.indexOf(nextPin.getGate()) < 0 && nextPin != pin) {
+				nextPin = (Pin) nextPin.getNext();
+			}
+			if (gates.indexOf(nextPin.getGate()) < 0 || nextPin.getGate() == gate) {
 				LOGGER.debug("*Setting gate: " + gate + " pinId: " + pinId + " -------> [" + nextPin.getGate() + "[" + gates.indexOf(nextPin.getGate()) + "]: " + nextPin.getPinId() + "]");
 				gateData.setGateAndPin(pinId, -1, -1);
 			} else {
 				LOGGER.debug("Setting gate: " + gate + " pinId: " + pinId + " -------> [" + nextPin.getGate() + "[" + gates.indexOf(nextPin.getGate()) + "]: " + nextPin.getPinId() + "]");
 				gateData.setGateAndPin(pinId, gates.indexOf(nextPin.getGate()), nextPin.getPinId());
 			}
+//			if (nextPin.getGate() == gate) {
+//				LOGGER.debug("*Setting gate: " + gate + " pinId: " + pinId + " -------> [" + nextPin.getGate() + "[" + gates.indexOf(nextPin.getGate()) + "]: " + nextPin.getPinId() + "]");
+//				gateData.setGateAndPin(pinId, -1, -1);
+//			} else {
+//				LOGGER.debug("Setting gate: " + gate + " pinId: " + pinId + " -------> [" + nextPin.getGate() + "[" + gates.indexOf(nextPin.getGate()) + "]: " + nextPin.getPinId() + "]");
+//				gateData.setGateAndPin(pinId, gates.indexOf(nextPin.getGate()), nextPin.getPinId());
+//			}
 		}
 	}
 

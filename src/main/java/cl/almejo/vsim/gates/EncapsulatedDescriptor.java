@@ -86,6 +86,7 @@ public class EncapsulatedDescriptor extends GateDescriptor {
 			Gate sourceGate = gates[index];
 			for (int pinId = 0; pinId < sourceGate.getPinCount(); pinId++) {
 				if (gateData.getConnections()[pinId][0] < 0) {
+					LOGGER.debug("Connecting " + sourceGate + "[" + pinId + "] -----> " + pinId+ " da negativo");
 					continue;
 				}
 				LOGGER.debug("Connecting " + sourceGate + "[" + pinId + "] -----> " + gates[gateData.getConnections()[pinId][0]] + "[" + gateData.getConnections()[pinId][1] + "]");
