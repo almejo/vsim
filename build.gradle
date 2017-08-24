@@ -1,0 +1,29 @@
+group 'cl.almejo'
+version '1.0.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.10'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.1'
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'VSim',
+                'Implementation-Version': version,
+                'Main-Class': 'cl.almejo.vsim.Main'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+

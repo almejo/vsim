@@ -1,8 +1,6 @@
 # VSim
 
-Vsim is digital circuits simulator. 
-
-Vsim is a rewrite from scratch of my University Thesis JCSim. You can try JCSim from my [repository](https://github.com/almejo/jcsim).
+Vsim is digital circuits simulator. Is a rewrite from scratch of my University Thesis JCSim. You can try JCSim from my [repository](https://github.com/almejo/jcsim).
 
 VSim is in very active development and it still lacks a some of the features that JCSim already has. Right now it is posible to draw simple circuits and save/load them. 
 
@@ -16,12 +14,12 @@ The you must clone  the repository and build the jar.
 ```Bash
 git clone https://github.com/almejo/vsim.git
 cd vsim
-mvn clean compile assembly:single
+./gradlew fatJar
 ```
 The jar will be in the target directory. To run it you must copy the `circuit.json` and the `colors.json` files in the same folder. 
 Run the jar
 ```Bash
-java -jar vsim-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+java -jar build/libs/vsim-all-1.0.0-SNAPSHOT.jar 
 ```
 
 ## Features
@@ -61,7 +59,7 @@ But also it have some design problems that make it difficult to add new features
 - Undo/Redo [done]
 - Better interface  [done]
 - Proper Save and Load. JCSim serialize the complete circuit.  [done]
-- Color Schemes Suport  [done]
+- Color Schemes Support  [done]
 - Labels for the objects 
 - Components tree
 
