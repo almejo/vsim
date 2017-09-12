@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.gates.DisplayInfoGate;
@@ -18,6 +7,14 @@ import cl.almejo.vsim.gui.SimWindow;
 
 import java.awt.event.MouseEvent;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class GateToolHelper extends ActionToolHelper {
 	private final String _gateType;
 
@@ -38,6 +35,9 @@ public class GateToolHelper extends ActionToolHelper {
 			return null;
 		}
 		IconGate iconGate = GateFactory.getInstance(_gateType, window.getCircuit());
+		if (iconGate == null) {
+			return null;
+		}
 		window.getCircuit().undoableAddGate(iconGate, x, y);
 		checkSelection(window, event, x, y);
 		if (iconGate.getGate() instanceof DisplayInfoGate) {

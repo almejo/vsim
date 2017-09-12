@@ -1,21 +1,18 @@
+package cl.almejo.vsim.circuit;
+
 /**
- *
  * vsim
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-
-package cl.almejo.vsim.circuit;
-
 public class Connection<T> {
-	T _first;
-	T _last;
+	private final T _first;
+	private final T _last;
 
-	public Connection(T first, T last) {
+	Connection(T first, T last) {
 		_first = first;
 		_last = last;
 	}
@@ -30,6 +27,6 @@ public class Connection<T> {
 
 	@Override
 	public String toString() {
-		return "[[" + _first.toString() + " --> " + _last + "]]";
+		return "[[" + _first + " --> " + _last + "]]";
 	}
 }

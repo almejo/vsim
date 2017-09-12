@@ -1,26 +1,22 @@
+package cl.almejo.vsim.circuit;
+
+import lombok.Getter;
+
 /**
- *
  * vsim
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-
-package cl.almejo.vsim.circuit;
 
 public class CircuitEvent {
 
+	@Getter
 	private final Circuit _circuit;
 
-	public CircuitEvent(Circuit circuit) {
+	CircuitEvent(Circuit circuit) {
 		_circuit = circuit;
-	}
-
-
-	public Circuit getCircuit() {
-		return _circuit;
 	}
 }

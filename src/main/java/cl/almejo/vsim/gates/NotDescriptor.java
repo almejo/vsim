@@ -1,15 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -18,8 +6,16 @@ import cl.almejo.vsim.gui.ColorScheme;
 
 import java.awt.*;
 
-public class NotDescriptor extends GateDescriptor {
-	public NotDescriptor(NotParameters parameters, String type) {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class NotDescriptor extends GateDescriptor {
+	NotDescriptor(NotParameters parameters, String type) {
 		super(parameters, type);
 		_pinPosition = new Point[2];
 		_pinPosition[0] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(16));

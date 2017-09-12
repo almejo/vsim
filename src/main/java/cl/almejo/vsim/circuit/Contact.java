@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.circuit;
 
 import cl.almejo.vsim.gates.Constants;
@@ -17,68 +6,72 @@ import cl.almejo.vsim.gates.Pin;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class Contact extends Point {
 
-	OptimisticList<PinGatePar> _pins = new OptimisticList<PinGatePar>();
+	private final OptimisticList<PinGatePar> _pins = new OptimisticList<>();
 
-	private int _conectionMask;
+	private int _connectionMask;
 
 	private Pin _guidePin;
 
-	public Contact(int x, int y) {
+	Contact(int x, int y) {
 		super(x, y);
 	}
 
-	public void addPin(int pinId, Gate gate) {
+	void addPin(int pinId, Gate gate) {
 		PinGatePar pinGatePar = new PinGatePar(pinId, gate);
 		if (!_pins.contains(pinGatePar)) {
 			_pins.add(pinGatePar);
 		}
 	}
 
-	public void removePin(byte pinId, Gate gate) {
+	void removePin(byte pinId, Gate gate) {
 		_pins.remove(new PinGatePar(pinId, gate));
 	}
 
-	public List<Pin> getPins() {
+	List<Pin> getPins() {
 
-		List<Pin> pins = new LinkedList<Pin>();
 		List<PinGatePar> list = _pins.elements();
 
-		for (PinGatePar pinGatePar : list) {
-			pins.add(pinGatePar.getGate().getPin(pinGatePar.getPinId()));
-		}
-
-		return pins;
+		return list.stream().map(pinGatePar -> pinGatePar.getGate().getPin(pinGatePar.getPinId())).collect(Collectors.toCollection(LinkedList::new));
 	}
 
-	public void setGuidePin(Pin guidePin) {
+	void setGuidePin(Pin guidePin) {
 		_guidePin = guidePin;
 	}
 
-	public Pin getGuidePin() {
+	Pin getGuidePin() {
 		return _guidePin;
 	}
 
-	public boolean hasPins() {
+	boolean hasPins() {
 		return !_pins.isEmpty();
 	}
 
-	public boolean isMiddlePoint() {
-		return _conectionMask == (Constants.NORTH | Constants.SOUTH) || _conectionMask == (Constants.WEST | Constants.EAST);
+	boolean isMiddlePoint() {
+		return _connectionMask == (Constants.NORTH | Constants.SOUTH) || _connectionMask == (Constants.WEST | Constants.EAST);
 	}
 
-	public boolean isConnected(byte direction) {
-		return (_conectionMask & direction) != 0;
+	boolean isConnected(byte direction) {
+		return (_connectionMask & direction) != 0;
 	}
 
-	public void connect(byte direction) {
-		_conectionMask = (byte) _conectionMask | direction;
+	void connect(byte direction) {
+		_connectionMask = (byte) _connectionMask | direction;
 	}
 
-	public boolean isNotConnected() {
-		return _conectionMask == 0;
+	boolean isNotConnected() {
+		return _connectionMask == 0;
 	}
 
 	@Override
@@ -88,19 +81,19 @@ public class Contact extends Point {
 	}
 
 	private String printPins() {
-		String ret = "";
+		StringBuilder builder = new StringBuilder();
 		int i = 0;
 		for (PinGatePar pinGate : _pins.elements()) {
 			if (i > 0) {
-				ret += ", ";
+				builder.append(", ");
 			}
-			ret += pinGate.getGate() + "-" + pinGate.getPinId();
+			builder.append(pinGate.getGate()).append("-").append(pinGate.getPinId());
 			i++;
 		}
-		return ret;
+		return builder.toString();
 	}
 
-	public void disconnect(Contact contact) {
+	void disconnect(Contact contact) {
 		if (_x < contact.getX()) {
 			disconnect(Constants.EAST);
 		} else if (_x > contact.getX()) {
@@ -112,8 +105,8 @@ public class Contact extends Point {
 		}
 	}
 
-	public void disconnect(byte direction) {
-		_conectionMask = (byte) _conectionMask & ~direction;
+	private void disconnect(byte direction) {
+		_connectionMask = (byte) _connectionMask & ~direction;
 	}
 
 }

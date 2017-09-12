@@ -1,15 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.Messages;
@@ -19,11 +7,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class LedParameters extends GateParameters {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class LedParameters extends GateParameters {
 
 	private String _text;
 
-	public LedParameters(String text) {
+	LedParameters(String text) {
 		_text = text;
 	}
 
@@ -31,12 +27,14 @@ public class LedParameters extends GateParameters {
 		return _text;
 	}
 
+	@Override
 	public void setValues(Map<String, Object> parameters) {
 		_text = (String) parameters.get("text");
 	}
 
+	@Override
 	public List<ConfigVariable> getValues() {
-		List<ConfigVariable> variables = new LinkedList<ConfigVariable>();
+		List<ConfigVariable> variables = new LinkedList<>();
 		variables.add(new ConfigVariable("text", Messages.t("config.text.label"), _text));
 		return variables;
 	}

@@ -1,29 +1,26 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.circuit;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.List;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class MarchingAnts {
 	private static final float[] DASH = {5.0f, 5.0f};
-	private static float DASH_PHASE = 0f;
+	private static float dashPhase;
 
-	private static TimerTask TASK = new TimerTask() {
+	private static final TimerTask TASK = new TimerTask() {
 		@Override
 		public void run() {
-			DASH_PHASE += 0.9f;
+			dashPhase += 0.9f;
 		}
 	};
 
@@ -37,10 +34,10 @@ public class MarchingAnts {
 				, BasicStroke.JOIN_MITER
 				, 1.5f
 				, DASH
-				, DASH_PHASE);
+				, dashPhase);
 	}
 
-	public static void drawLines(Graphics2D graphics, List<Point[]> points) {
+	static void drawLines(Graphics2D graphics, List<Point[]> points) {
 		if (points == null) {
 			return;
 		}
@@ -55,9 +52,7 @@ public class MarchingAnts {
 	}
 
 	private static void draw(Graphics2D graphics, List<Point[]> points) {
-		for (Point[] point : points) {
-			graphics.drawLine(point[0].getX(), point[0].getY(), point[1].getX(), point[1].getY());
-		}
+		points.forEach(point -> graphics.drawLine(point[0].getX(), point[0].getY(), point[1].getX(), point[1].getY()));
 	}
 
 	public static void drawRect(Graphics2D graphics, int x, int y, int width, int height) {

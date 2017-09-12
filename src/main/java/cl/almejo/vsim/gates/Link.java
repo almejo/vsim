@@ -1,19 +1,14 @@
+package cl.almejo.vsim.gates;
+
 /**
- *
  * vsim
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-
-
-package cl.almejo.vsim.gates;
-
-
-public class Link {
+class Link {
 	protected Link _next = this;
 
 	protected Link find(Link link) {
@@ -38,7 +33,7 @@ public class Link {
 		return _next;
 	}
 
-	public void delete() {
+	void delete() {
 		Link previous = findPrevious();
 		if (previous != null) {
 			previous._next = _next;
@@ -48,9 +43,8 @@ public class Link {
 
 	private Link findPrevious() {
 		Link previous = this;
-		Link next;
 		do {
-			next = previous.getNext();
+			Link next = previous.getNext();
 			if (next == this) {
 				return previous;
 			}

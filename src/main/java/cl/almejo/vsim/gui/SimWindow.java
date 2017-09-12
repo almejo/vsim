@@ -1,15 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gui;
 
 import cl.almejo.vsim.Messages;
@@ -34,6 +22,14 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class SimWindow extends JFrame implements ComponentListener, WindowListener, MouseListener, MouseMotionListener, CircuitStateListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimWindow.class);
@@ -45,27 +41,27 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	private ActionToolHelper _toolHelper = ActionToolHelper.CURSOR;
 
-	static final KeyStroke ACCELERATOR_NEW = KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
-	static final KeyStroke ACCELERATOR_OPEN = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
-	static final KeyStroke ACCELERATOR_SAVE = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
-	static final KeyStroke ACCELERATOR_SAVE_AS = KeyStroke.getKeyStroke("control shift S");
-	static final KeyStroke ACCELERATOR_QUIT = KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_NEW = KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_OPEN = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_SAVE = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_SAVE_AS = KeyStroke.getKeyStroke("control shift S");
+	private static final KeyStroke ACCELERATOR_QUIT = KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK);
 
-	static final KeyStroke ACCELERATOR_CUT = KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK);
-	static final KeyStroke ACCELERATOR_COPY = KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK);
-	static final KeyStroke ACCELERATOR_PASTE = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
-	static final KeyStroke ACCELERATOR_UNDO = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
-	static final KeyStroke ACCELERATOR_REDO = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_CUT = KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_COPY = KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_PASTE = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_UNDO = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_REDO = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
 
-	static final KeyStroke ACCELERATOR_SHOW_GRID = KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_SHOW_GRID = KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK);
 
-	static final KeyStroke ACCELERATOR_PREFERENCES = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK);
+	private static final KeyStroke ACCELERATOR_PREFERENCES = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK);
 
 
 	private final WindowAction NEW_ACTION = new NewAction(Messages.t("action.new"), Messages.t("action.new.description"), "new.png", ACCELERATOR_NEW, this);
 	private final WindowAction OPEN_ACTION = new OpenAction(Messages.t("action.open"), Messages.t("action.open.description"), "open.png", ACCELERATOR_OPEN, this);
 	private final WindowAction SAVE_ACTION = new SaveAction(Messages.t("action.save"), Messages.t("action.save.description"), "save.png", ACCELERATOR_SAVE, this);
-	private final WindowAction SAVE_AS_ACTION = new SaveAsAction(Messages.t("action.saveas"), Messages.t("action.saveas.description"), null, ACCELERATOR_SAVE_AS, this);
+	private final WindowAction SAVE_AS_ACTION = new SaveAsAction(Messages.t("action.save.as"), Messages.t("action.save.as.description"), null, ACCELERATOR_SAVE_AS, this);
 	private final WindowAction QUIT_ACTION = new QuitAction(Messages.t("action.quit"), Messages.t("action.quit.description"), null, ACCELERATOR_QUIT, this);
 
 	private final WindowAction CUT_ACTION = new CutAction(Messages.t("action.cut"), Messages.t("action.cut.description"), "cut.png", ACCELERATOR_CUT, this);
@@ -113,8 +109,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction TIME_DIAGRAM_TOOL_ACTION = new ToolAction(Messages.t("action.tool.time.diagram"), Messages.t("action.tool.time.diagram.description"), "time-diagram.png", null, this, new GateToolHelper(Gate.TIME_DIAGRAM));
 	private final WindowAction SWITCH_TOOL_ACTION = new ToolAction(Messages.t("action.tool.switch"), Messages.t("action.tool.switch.description"), "switch.png", null, this, new GateToolHelper(Gate.SWITCH));
 
-	private static JFileChooser OPEN_FILE_CHOOSER;
-	private static JFileChooser SAVE_AS_FILE_CHOOSER;
+	private static final JFileChooser OPEN_FILE_CHOOSER;
+	private static final JFileChooser SAVE_AS_FILE_CHOOSER;
 
 	static {
 		OPEN_FILE_CHOOSER = new JFileChooser();
@@ -161,13 +157,13 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		});
 		scrollPane.addCorner(panel);
 
-		JSplitPane rightSplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, _displaysPane);
-		rightSplitpane.setOneTouchExpandable(true);
-		rightSplitpane.setDividerLocation(600);
+		JSplitPane rightSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, _displaysPane);
+		rightSplitPane.setOneTouchExpandable(true);
+		rightSplitPane.setDividerLocation(600);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				new JSplitPane(JSplitPane.VERTICAL_SPLIT, getToolsPane(), new JPanel())
-				, rightSplitpane);
+				, rightSplitPane);
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 
@@ -500,7 +496,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		updateTitle();
 	}
 
-	public void updateTitle() {
+	private void updateTitle() {
 		setTitle(_circuit.getName() + " " + (_circuit.isModified() ? "* " : "") + "| " + Messages.t("main.title"));
 	}
 
@@ -595,7 +591,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		return JOptionPane.showConfirmDialog(this, Messages.t("file.save.now.message"), Messages.t("file.save.now.title"), JOptionPane.YES_NO_CANCEL_OPTION);
 	}
 
-	public void setCircuit(Circuit circuit) {
+	private void setCircuit(Circuit circuit) {
 		if (circuit == null) {
 			return;
 		}

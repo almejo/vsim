@@ -1,15 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -17,24 +5,32 @@ import cl.almejo.vsim.circuit.Point;
 
 import java.awt.*;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public abstract class GateDescriptor {
 
 	protected Point[] _pinPosition;
 
-	protected int _pinCount = 0;
+	protected int _pinCount;
 
 	protected GateTypes _gateType;
 
-	protected String _type;
+	private final String _type;
 
-	protected GateParameters _originalParameters;
+	GateParameters _originalParameters;
 
 	public GateDescriptor(GateParameters parameters, String type) {
 		_originalParameters = parameters;
 		_type = type;
 	}
 
-	public void paint(Graphics2D graphics, IconGate iconGate) {
+	void paint(Graphics2D graphics, IconGate iconGate) {
 		drawGate(graphics, iconGate, 0, 0);
 	}
 
@@ -42,7 +38,7 @@ public abstract class GateDescriptor {
 
 	public abstract Dimension getSize();
 
-	public Point getPinPosition(byte pinId) {
+	Point getPinPosition(byte pinId) {
 		return _pinPosition[pinId];
 	}
 
@@ -52,7 +48,7 @@ public abstract class GateDescriptor {
 		return _pinCount;
 	}
 
-	public GateParameters getOriginalParameters() {
+	GateParameters getOriginalParameters() {
 		return _originalParameters;
 	}
 

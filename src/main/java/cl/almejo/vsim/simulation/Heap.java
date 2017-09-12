@@ -1,25 +1,20 @@
+package cl.almejo.vsim.simulation;
+
 /**
- *
  * vsim
- *
- * Created on Aug 1, 2013
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-
-package cl.almejo.vsim.simulation;
-
-public class Heap {
-	private static int MIN_SIZE = 100;
+class Heap {
+	private static final int MIN_SIZE = 100;
 
 	private HeapElement[] _elements = new HeapElement[MIN_SIZE + 1];
-	private int _size = 0;
+	private int _size;
 
-	public void insert(HeapElement element) {
+	void insert(HeapElement element) {
 		if (isFull()) {
 			enlarge();
 		}
@@ -58,32 +53,34 @@ public class Heap {
 	}
 
 	private void sinkElement(int index) {
+
 		if (index == _size) {
 			return;
 		}
 
-		int childIndex = index * 2;
+		int tempIndex = index;
+		int childIndex = tempIndex * 2;
 		while (childIndex <= _size) {
 			if (childIndex < _size && _elements[childIndex + 1].getValue() < _elements[childIndex].getValue()) {
 				childIndex = childIndex + 1;
 			}
-			if (_elements[index].getValue() > _elements[childIndex].getValue()) {
-				HeapElement tmp = _elements[index];
-				_elements[index] = _elements[childIndex];
+			if (_elements[tempIndex].getValue() > _elements[childIndex].getValue()) {
+				HeapElement tmp = _elements[tempIndex];
+				_elements[tempIndex] = _elements[childIndex];
 				_elements[childIndex] = tmp;
 			}
-			index = childIndex;
-			childIndex = index * 2;
+			tempIndex = childIndex;
+			childIndex = tempIndex * 2;
 		}
 	}
 
 	@Override
 	public String toString() {
-		String string = "";
+		StringBuilder builder = new StringBuilder();
 		for (int i = 1; i < _size + 1; i++) {
-			string += " " + _elements[i].getValue() + "[" + _elements[i].getClass().getName() + "]";
+			builder.append(" ").append(_elements[i].getValue()).append("[").append(_elements[i].getClass().getName()).append("]");
 		}
-		return string + " [" + _size + "]";
+		return builder.append(" [").append(_size).append("]").toString();
 	}
 
 	private void enlarge() {
@@ -96,7 +93,7 @@ public class Heap {
 		return _size == _elements.length;
 	}
 
-	public boolean contains(HeapElement element) {
+	boolean contains(HeapElement element) {
 		for (int i = 1; i < _size; i++) {
 			if (_elements[i] == element) {
 				return true;

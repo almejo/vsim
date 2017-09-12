@@ -1,15 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -18,8 +6,16 @@ import cl.almejo.vsim.gui.ColorScheme;
 
 import java.awt.*;
 
-public class TristateDescriptor extends GateDescriptor {
-	public TristateDescriptor(TristateParameters parameters, String type) {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class TristateDescriptor extends GateDescriptor {
+	TristateDescriptor(TristateParameters parameters, String type) {
 		super(parameters, type);
 		_pinPosition = new Point[3];
 		_pinPosition[0] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(16));
@@ -36,7 +32,7 @@ public class TristateDescriptor extends GateDescriptor {
 		int[] pointsY = new int[]{0, 16, 32};
 		graphics.fillPolygon(pointsX, pointsY, 3);
 		graphics.drawLine(Circuit.gridTrunc(16), Circuit.gridTrunc(16), Circuit.gridTrunc(16), Circuit.gridTrunc(32));
-		graphics.fillRect(Circuit.gridTrunc(16) - Circuit.GRIDSIZE / 4, Circuit.gridTrunc(16), Circuit.GRIDSIZE / 2, 16);
+		graphics.fillRect(Circuit.gridTrunc(16) - Circuit.GRID_SIZE / 4, Circuit.gridTrunc(16), Circuit.GRID_SIZE / 2, 16);
 	}
 
 	@Override

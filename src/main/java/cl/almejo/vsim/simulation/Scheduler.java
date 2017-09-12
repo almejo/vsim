@@ -1,23 +1,19 @@
+package cl.almejo.vsim.simulation;
+
 /**
- *
  * vsim
- *
+ * <p>
  * Created on Aug 1, 2013
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-
-package cl.almejo.vsim.simulation;
-
-
 public class Scheduler {
 
-	class StopEvent extends SimulationEvent {
-		public StopEvent(Scheduler scheduler) {
+	private static class StopEvent extends SimulationEvent {
+		StopEvent(Scheduler scheduler) {
 			super(scheduler);
 		}
 
@@ -28,9 +24,9 @@ public class Scheduler {
 
 	}
 
-	private Heap _heap = new Heap();
+	private final Heap _heap = new Heap();
 
-	private long _time = 0;
+	private long _time;
 
 	@SuppressWarnings("InfiniteLoopStatement")
 	public void run(long simulationTime) {
@@ -44,20 +40,20 @@ public class Scheduler {
 		} catch (EmptyHeapException e) {
 			e.printStackTrace();
 		} catch (StopSimulationException e) {
-			//System.out.println("Simulacion detenida");
+			// System.out.println("Simulacion detenida");
 		}
 	}
 
-	public void stop() throws StopSimulationException {
+	private void stop() throws StopSimulationException {
 		throw new StopSimulationException();
 	}
 
-	public void schedule(HeapElement element, long delay) {
+	void schedule(HeapElement element, long delay) {
 		element.setValue(_time + delay);
 		_heap.insert(element);
 	}
 
-	public boolean isProgrammed(SimulationEvent simulationEvent) {
+	boolean isProgrammed(SimulationEvent simulationEvent) {
 		return _heap.contains(simulationEvent);
 	}
 

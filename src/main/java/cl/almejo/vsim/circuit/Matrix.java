@@ -1,48 +1,41 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.circuit;
 
 import java.util.*;
 
-public class Matrix<T extends Point> {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class Matrix<T extends Point> {
 
-	private Hashtable<Integer, List<T>> _verticalTable = new Hashtable<Integer, List<T>>();
-	private Hashtable<Integer, List<T>> _horizontalTable = new Hashtable<Integer, List<T>>();
+	private final Hashtable<Integer, List<T>> _verticalTable = new Hashtable<>();
+	private final Hashtable<Integer, List<T>> _horizontalTable = new Hashtable<>();
 
-	private final Comparator<T> COMPARATORX = new Comparator<T>() {
-
-		public int compare(T o1, T o2) {
-			return o1.getX() < o2.getX() ? -1 : (o1.getX() == o2.getX() ? 0 : 1);
+	private final Comparator<T> COMPARATOR_X = (o1, o2) -> {
+		if (o1.getX() < o2.getX()) {
+			return -1;
 		}
+		return o1.getX() == o2.getX() ? 0 : 1;
 	};
 
-	private final Comparator<T> COMPARATORY = new Comparator<T>() {
-
-		public int compare(Point o1, Point o2) {
-			return o1.getY() < o2.getY() ? -1 : (o1.getY() == o2.getY() ? 0 : 1);
+	private final Comparator<T> COMPARATOR_Y = (o1, o2) -> {
+		if (o1.getY() < o2.getY()) {
+			return -1;
 		}
+		return o1.getY() == o2.getY() ? 0 : 1;
 	};
 
 	public void add(T point) {
-		insertIntoPointable(point, _horizontalTable, COMPARATORY, point.getX());
-		insertIntoPointable(point, _verticalTable, COMPARATORX, point.getY());
+		insertIntoPointsTable(point, _horizontalTable, COMPARATOR_Y, point.getX());
+		insertIntoPointsTable(point, _verticalTable, COMPARATOR_X, point.getY());
 	}
 
-	private void insertIntoPointable(T point, Hashtable<Integer, List<T>> table, Comparator<T> comparator, int coord) {
-		List<T> points = table.get(coord);
-		if (points == null) {
-			points = new LinkedList<T>();
-			table.put(coord, points);
-		}
+	private void insertIntoPointsTable(T point, Hashtable<Integer, List<T>> table, Comparator<T> comparator, int coordinate) {
+		List<T> points = table.computeIfAbsent(coordinate, key -> new LinkedList<>());
 
 		int index = Collections.binarySearch(points, point, comparator);
 		if (index < 0) {
@@ -50,9 +43,9 @@ public class Matrix<T extends Point> {
 		}
 	}
 
-	public FindResult<T> findHorizontal(int x, int y) {
+	FindResult<T> findHorizontal(int x, int y) {
 		if (!_verticalTable.containsKey(y)) {
-			return new FindResult<T>(null, null, null);
+			return new FindResult<>(null, null, null);
 		}
 
 		T previous = null;
@@ -64,19 +57,20 @@ public class Matrix<T extends Point> {
 				if (i < points.size() - 1) {
 					next = points.get(i + 1);
 				}
-				return new FindResult<T>(point, previous, next);
-			} else if (point.getX() > x) {
-				return new FindResult<T>(null, previous, point);
+				return new FindResult<>(point, previous, next);
+			}
+			if (point.getX() > x) {
+				return new FindResult<>(null, previous, point);
 			}
 			previous = point;
 			i++;
 		}
-		return new FindResult<T>(null, previous, null);
+		return new FindResult<>(null, previous, null);
 	}
 
-	public FindResult<T> findVertical(int x, int y) {
+	FindResult<T> findVertical(int x, int y) {
 		if (!_horizontalTable.containsKey(x)) {
-			return new FindResult<T>(null, null, null);
+			return new FindResult<>(null, null, null);
 		}
 
 		T previous = null;
@@ -88,33 +82,34 @@ public class Matrix<T extends Point> {
 				if (i < points.size() - 1) {
 					next = points.get(i + 1);
 				}
-				return new FindResult<T>(point, previous, next);
-			} else if (point.getY() > y) {
-				return new FindResult<T>(null, previous, point);
+				return new FindResult<>(point, previous, next);
+			}
+			if (point.getY() > y) {
+				return new FindResult<>(null, previous, point);
 			}
 			previous = point;
 			i++;
 		}
-		return new FindResult<T>(null, previous, null);
+		return new FindResult<>(null, previous, null);
 	}
 
 	List<T> getBetween(T a, T b) {
 
 		if (a == null || b == null) {
-			return new LinkedList<T>();
+			return new LinkedList<>();
 		}
 
 		List<T> list;
 		Comparator<T> comparator;
 		if (a.getX() == b.getX()) {
 			list = _horizontalTable.get(a.getX());
-			comparator = COMPARATORY;
+			comparator = COMPARATOR_Y;
 		} else {
 			list = _verticalTable.get(a.getY());
-			comparator = COMPARATORX;
+			comparator = COMPARATOR_X;
 		}
 
-		List<T> points = new LinkedList<T>();
+		List<T> points = new LinkedList<>();
 		int ndx = Collections.binarySearch(list, a, comparator);
 		ndx++;
 		T point = list.get(ndx++);
@@ -128,20 +123,20 @@ public class Matrix<T extends Point> {
 	List<T> getSublist(T a, T b) {
 
 		if (a == null || b == null) {
-			return new LinkedList<T>();
+			return new LinkedList<>();
 		}
 
 		List<T> list;
 		Comparator<T> comparator;
 		if (a.getX() == b.getX()) {
 			list = _horizontalTable.get(a.getX());
-			comparator = COMPARATORY;
+			comparator = COMPARATOR_Y;
 		} else {
 			list = _verticalTable.get(a.getY());
-			comparator = COMPARATORX;
+			comparator = COMPARATOR_X;
 		}
 
-		List<T> points = new LinkedList<T>();
+		List<T> points = new LinkedList<>();
 		int ndx = Collections.binarySearch(list, a, comparator);
 		T point = list.get(ndx++);
 		while (point != null) {
@@ -156,10 +151,10 @@ public class Matrix<T extends Point> {
 
 	@Override
 	public String toString() {
-		return drawPointable(_horizontalTable, "horizontal") + "\n\n" + drawPointable(_verticalTable, "vertical");
+		return drawPointTable(_horizontalTable, "horizontal") + "\n\n" + drawPointTable(_verticalTable, "vertical");
 	}
 
-	private String drawPointable(Hashtable<Integer, List<T>> table, String title) {
+	private String drawPointTable(Hashtable<Integer, List<T>> table, String title) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(title).append("\n");
 		for (Integer key : table.keySet()) {
@@ -175,33 +170,33 @@ public class Matrix<T extends Point> {
 
 	public void remove(T point) {
 		if (_horizontalTable.containsKey(point.getX())) {
-			int index = Collections.binarySearch(_horizontalTable.get(point.getX()), point, COMPARATORY);
+			int index = Collections.binarySearch(_horizontalTable.get(point.getX()), point, COMPARATOR_Y);
 			if (index >= 0) {
 				_horizontalTable.get(point.getX()).remove(index);
 			}
 		}
 
 		if (_verticalTable.containsKey(point.getY())) {
-			int index = Collections.binarySearch(_verticalTable.get(point.getY()), point, COMPARATORX);
+			int index = Collections.binarySearch(_verticalTable.get(point.getY()), point, COMPARATOR_X);
 			if (index >= 0) {
 				_verticalTable.get(point.getY()).remove(index);
 			}
 		}
 	}
 
-	public Set<Integer> getXCoords() {
+	Set<Integer> getXCoordinates() {
 		return _horizontalTable.keySet();
 	}
 
-	public Set<Integer> getYCoords() {
+	Set<Integer> getYCoordinates() {
 		return _verticalTable.keySet();
 	}
 
-	public List<T> getVerticalContacts(Integer x) {
+	List<T> getVerticalContacts(Integer x) {
 		return _horizontalTable.get(x);
 	}
 
-	public List<T> getHorizontalContacts(Integer y) {
+	List<T> getHorizontalContacts(Integer y) {
 		return _verticalTable.get(y);
 	}
 }

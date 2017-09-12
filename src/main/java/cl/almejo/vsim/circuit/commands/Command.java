@@ -1,19 +1,15 @@
+package cl.almejo.vsim.circuit.commands;
+
 /**
- *
  * vsim
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-
-package cl.almejo.vsim.circuit.commands;
-
 public interface Command {
-	public boolean apply();
+	boolean apply();
 
-	public void unDo();
-
+	void unDo();
 }

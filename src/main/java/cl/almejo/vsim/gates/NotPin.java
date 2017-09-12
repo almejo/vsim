@@ -1,28 +1,24 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.simulation.Scheduler;
 
-public class NotPin extends Pin {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class NotPin extends Pin {
 
-	public NotPin(Not not, Scheduler scheduler, int pinId) {
+	NotPin(Not not, Scheduler scheduler, int pinId) {
 		super(not, scheduler, pinId);
 	}
 
 	@Override
 	public void hasChanged() {
-		_gate.getPin(1).program(newVal(_gate.getPin(0).getInValue()),((GateParametersWithDelay) _gate.getParamameters()).getDelay());
+		_gate.getPin(1).program(newVal(_gate.getPin(0).getInValue()), ((GateParametersWithDelay) _gate.getParamameters()).getDelay());
 	}
 
 	private byte newVal(byte inValue) {

@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.*;
@@ -23,22 +12,29 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class IconGate extends Rectangle implements Draggable, Configurable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IconGate.class);
 	private static final long serialVersionUID = 1L;
 	private Gate _gate;
-	private int _id;
+	private final int _id;
 	private int _rotation;
 
-	private AffineTransform _translateTransformation = new AffineTransform();
-	private AffineTransform _rotateTransformation = new AffineTransform();
-	private AffineTransform _transformation = new AffineTransform();
-	private AffineTransform _origianlTransformation;
+	private final AffineTransform _translateTransformation = new AffineTransform();
+	private final AffineTransform _rotateTransformation = new AffineTransform();
+	private final AffineTransform _transformation = new AffineTransform();
+	private AffineTransform _originalTransformation;
 	private boolean _selected;
 	private Rectangle _extent;
 
 	public IconGate(int id) {
-		super();
 		_id = id;
 		computeExtent();
 	}
@@ -83,18 +79,18 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	private void drawFrame(Graphics2D graphics, int separation, int border) {
 		Dimension dimension = _gate.getGateDescriptor().getSize();
 		graphics.setColor(Color.GRAY);
-		graphics.drawLine(-(separation + border), -separation, dimension.width + (border + separation), -separation);
+		graphics.drawLine(-(separation + border), -separation, dimension.width + border + separation, -separation);
 		graphics.drawLine(-separation, -(separation + border), -separation, dimension.height + separation + border);
 		graphics.drawLine(dimension.width + separation, -(separation + border), dimension.width + separation, dimension.height + separation + border);
 		graphics.drawLine(-(separation + border), dimension.height + separation, dimension.width + separation + border, dimension.height + separation);
 	}
 
 	private void popMatrix(Graphics2D graphics) {
-		graphics.setTransform(_origianlTransformation);
+		graphics.setTransform(_originalTransformation);
 	}
 
 	private void pushMatrix(Graphics2D graphics) {
-		_origianlTransformation = graphics.getTransform();
+		_originalTransformation = graphics.getTransform();
 	}
 
 	private void applyTransform(Graphics2D graphics) {
@@ -115,7 +111,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	}
 
 	public void setRotation(int rotation) {
-		_gate.getCircuit().desactivate(this);
+		_gate.getCircuit().deactivate(this);
 		updateRotation(rotation);
 		_gate.getCircuit().activate(this);
 		computeExtent();
@@ -138,7 +134,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 		_translateTransformation.translate(x, y);
 		LOGGER.debug("Translate to: " + x + " - " + y);
 		recalculateTransform();
-		LOGGER.debug("resulting transformation: " + _translateTransformation.toString());
+		LOGGER.debug("resulting transformation: " + _translateTransformation);
 	}
 
 	private void recalculateTransform() {
@@ -273,6 +269,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 		_gate.parametersUpdated();
 	}
 
+	@Override
 	public Rectangle getExtent() {
 		return _extent;
 	}

@@ -1,27 +1,23 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.simulation.Scheduler;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public abstract class Pin extends Link {
 	private final int _pinId;
-	protected byte _inValue = Constants.THREE_STATE;
-	protected byte _outValue = Constants.THREE_STATE;
+	private byte _inValue = Constants.THREE_STATE;
+	private byte _outValue = Constants.THREE_STATE;
 
-	protected byte _programedValue = Constants.THREE_STATE;
+	private byte _programedValue = Constants.THREE_STATE;
 
-	PinEvent _pinEvent;
+	private final PinEvent _pinEvent;
 	public Gate _gate;
 
 	public Pin(Gate gate, Scheduler scheduler, int pinId) {
@@ -42,26 +38,26 @@ public abstract class Pin extends Link {
 		updateValues();
 	}
 
-	public void updateValues() {
+	void updateValues() {
 		byte value = Constants.THREE_STATE;
 		byte lineValue = Constants.THREE_STATE;
 		Pin pin = this;
 		do {
 			if (pin.getOutValue() != Constants.THREE_STATE) {
-				if (!pin.getPinEvent().isProgrammed()) {
+				if (pin.getPinEvent().isProgrammed()) {
+					value = pin.getOutValue();
+				} else {
 					if (lineValue != Constants.THREE_STATE && lineValue != pin.getOutValue()) {
 						System.err.println("Corto-circuito!");
 						break;
 					}
 					lineValue = pin.getOutValue();
-				} else {
-					value = pin.getOutValue();
 				}
 			}
 			pin = (Pin) pin.getNext();
 		} while (pin != this);
 
-		byte lineVal = lineValue != Constants.THREE_STATE ? lineValue : value;
+		byte lineVal = lineValue == Constants.THREE_STATE ? value : lineValue;
 
 		pin = this;
 		do {
@@ -78,11 +74,11 @@ public abstract class Pin extends Link {
 
 	public abstract void hasChanged();
 
-	public void setInValue(byte value) {
+	private void setInValue(byte value) {
 		_inValue = value;
 	}
 
-	public byte getProgrammedValue() {
+	byte getProgrammedValue() {
 		return _programedValue;
 	}
 
@@ -90,11 +86,11 @@ public abstract class Pin extends Link {
 		return _inValue;
 	}
 
-	public PinEvent getPinEvent() {
+	private PinEvent getPinEvent() {
 		return _pinEvent;
 	}
 
-	public byte getOutValue() {
+	private byte getOutValue() {
 		return _outValue;
 	}
 
@@ -103,7 +99,7 @@ public abstract class Pin extends Link {
 		_pinEvent.schedule(delay);
 	}
 
-	public void setOutValue(byte value) {
+	void setOutValue(byte value) {
 		_outValue = value;
 	}
 

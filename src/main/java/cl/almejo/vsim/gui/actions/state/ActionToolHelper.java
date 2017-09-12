@@ -1,13 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.Messages;
@@ -20,14 +10,19 @@ import cl.almejo.vsim.gui.SimWindow;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
+/**
+ * vsim
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public abstract class ActionToolHelper {
 
-	public final static ActionToolHelper CURSOR = new CursorToolHelper();
-	public final static ActionToolHelper WIRES = new WiresToolHelper();
+	public static final ActionToolHelper CURSOR = new CursorToolHelper();
+	public static final ActionToolHelper WIRES = new WiresToolHelper();
 	public static final ActionToolHelper MOVE_VIEWPORT = new MoveViewPortToolHelper();
 
 	public void mouseDragged(SimWindow window, MouseEvent event) {
@@ -50,7 +45,7 @@ public abstract class ActionToolHelper {
 	public void mouseUp(SimWindow window, MouseEvent event) {
 	}
 
-	protected void doPopupMenu(Circuit circuit, Configurable configurable, Component component, int x, int y) {
+	private void doPopupMenu(Circuit circuit, Configurable configurable, Component component, int x, int y) {
 		JPopupMenu menu = new JPopupMenu();
 		addDeleteOption(circuit, configurable, menu);
 		addRotateOptions(circuit, configurable, menu);
@@ -61,51 +56,33 @@ public abstract class ActionToolHelper {
 		menu.show(component, x, y);
 	}
 
-	private void addDeleteOption(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {
+	private void addDeleteOption(Circuit circuit, Configurable configurable, JPopupMenu menu) {
 		JMenuItem menuItem = new JMenuItem(Messages.t("action.delete"));
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				circuit.undoableRemoveGate((IconGate) configurable);
-				circuit.clearSelection();
-			}
+		menuItem.addActionListener(event -> {
+			circuit.undoableRemoveGate((IconGate) configurable);
+			circuit.clearSelection();
 		});
 		menu.add(menuItem);
 	}
 
-	protected void addConfigOption(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {
+	private void addConfigOption(Circuit circuit, Configurable configurable, JPopupMenu menu) {
 		JMenuItem menuItem = new JMenuItem(Messages.t("action.config"));
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new ConfigurationDialog(circuit, configurable).setVisible(true);
-			}
-		});
+		menuItem.addActionListener(event -> new ConfigurationDialog(circuit, configurable).setVisible(true));
 		menu.add(menuItem);
 	}
 
-	private void addRotateOptions(final Circuit circuit, final Configurable configurable, JPopupMenu menu) {
+	private void addRotateOptions(Circuit circuit, Configurable configurable, JPopupMenu menu) {
 		JMenu submenu = new JMenu(Messages.t("action.rotate"));
 		JMenuItem menuItem = new JMenuItem(Messages.t("action.rotate.clockwise"), ImageUtils.loadIcon("rotate-right.png"));
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				circuit.undoableRotateClockWise(configurable);
-			}
-		});
+		menuItem.addActionListener(event -> circuit.undoableRotateClockWise(configurable));
 		submenu.add(menuItem);
 		menuItem = new JMenuItem(Messages.t("action.rotate.counter.clockwise"), ImageUtils.loadIcon("rotate-left.png"));
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				circuit.undoableRotateCounterClockWise(configurable);
-			}
-		});
+		menuItem.addActionListener(event -> circuit.undoableRotateCounterClockWise(configurable));
 		submenu.add(menuItem);
 		menu.add(submenu);
 	}
 
-	protected Draggable checkSelection(SimWindow window, MouseEvent event, int x, int y) {
+	Draggable checkSelection(SimWindow window, MouseEvent event, int x, int y) {
 		Circuit circuit = window.getCircuit();
 		Draggable draggable = circuit.findDraggable(x, y);
 		if (draggable != null) {

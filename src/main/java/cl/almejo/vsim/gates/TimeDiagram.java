@@ -1,15 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -18,17 +6,25 @@ import cl.almejo.vsim.simulation.SimulationEvent;
 
 import javax.swing.*;
 
-public class TimeDiagram extends Gate implements DisplayInfoGate {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class TimeDiagram extends Gate implements DisplayInfoGate {
 
 	private final PlotEvent _plotEvent;
 
-	private TimeDiagramDisplay _timeDiagramCanvas;
+	private final TimeDiagramDisplay _timeDiagramCanvas;
 
-	class PlotEvent extends SimulationEvent {
+	private static class PlotEvent extends SimulationEvent {
 
 		private final TimeDiagram _timeDiagram;
 
-		public PlotEvent(Scheduler scheduler, TimeDiagram timeDiagram) {
+		PlotEvent(Scheduler scheduler, TimeDiagram timeDiagram) {
 			super(scheduler);
 			_timeDiagram = timeDiagram;
 		}
@@ -40,11 +36,11 @@ public class TimeDiagram extends Gate implements DisplayInfoGate {
 		}
 	}
 
-	public TimeDiagram(Circuit circuit, GateParameters parameters, TimeDiagramDescriptor descriptor) {
+	TimeDiagram(Circuit circuit, GateParameters parameters, TimeDiagramDescriptor descriptor) {
 		super(circuit, parameters, descriptor);
 		_pins = new Pin[descriptor.getPinCount()];
-		for (int pindId = 0; pindId < _pins.length; pindId++) {
-			_pins[pindId] = new SimplePin(this, circuit.getScheduler(), pindId);
+		for (int pinId = 0; pinId < _pins.length; pinId++) {
+			_pins[pinId] = new SimplePin(this, circuit.getScheduler(), pinId);
 		}
 		_plotEvent = new PlotEvent(circuit.getScheduler(), this);
 		_timeDiagramCanvas = new TimeDiagramDisplay();
@@ -64,6 +60,7 @@ public class TimeDiagram extends Gate implements DisplayInfoGate {
 		return _timeDiagramCanvas;
 	}
 
+	@Override
 	public void startDisplay() {
 		_plotEvent.schedule(1);
 	}

@@ -1,11 +1,3 @@
-/**
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: alejo
- */
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -14,11 +6,19 @@ import cl.almejo.vsim.gui.ColorScheme;
 
 import java.awt.*;
 
-public class TimeDiagramDescriptor extends GateDescriptor {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class TimeDiagramDescriptor extends GateDescriptor {
 
-	public static final int PIN_SEPARATION = 16;
+	private static final int PIN_SEPARATION = 16;
 
-	public TimeDiagramDescriptor(TimeDiagramParameters parameters, String type) {
+	TimeDiagramDescriptor(TimeDiagramParameters parameters, String type) {
 		super(parameters, type);
 		_pinCount = 4;
 		_pinPosition = new Point[_pinCount];
@@ -38,7 +38,7 @@ public class TimeDiagramDescriptor extends GateDescriptor {
 	}
 
 	private String getLabel(IconGate iconGate) {
-		if (parametersText(iconGate) != null && parametersText(iconGate).trim().length() > 0) {
+		if (parametersText(iconGate) != null && !parametersText(iconGate).trim().isEmpty()) {
 			return parametersText(iconGate);
 		}
 		return "#" + iconGate.getId();

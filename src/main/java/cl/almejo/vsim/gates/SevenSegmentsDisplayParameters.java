@@ -1,38 +1,33 @@
+package cl.almejo.vsim.gates;
+
+import java.util.stream.IntStream;
+
 /**
- *
  * vsim
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-package cl.almejo.vsim.gates;
+class SevenSegmentsDisplayParameters extends GateParameters {
 
-public class SevenSegmentsDisplayParameters extends GateParameters {
-
-	private int _number = 0;
+	private int _number;
 
 	private final int _pinCount;
 
-	public SevenSegmentsDisplayParameters(int pinCount) {
+	SevenSegmentsDisplayParameters(int pinCount) {
 		_pinCount = pinCount;
 	}
 
 
-	public void updateNumber(SevenSegmentsDisplay gate) {
-		int value = 0;
-		for (int pinId = 0; pinId < gate.getPinCount(); pinId++) {
-			if (gate.getPin(pinId).getInValue() > 0) {
-				value += Math.pow(2, pinId);
-			}
-		}
-
-		_number = value;
+	void updateNumber(SevenSegmentsDisplay gate) {
+		_number = IntStream.range(0, gate.getPinCount())
+				.filter(pinId -> gate.getPin(pinId).getInValue() > 0)
+				.map(pinId -> (int) Math.pow(2, pinId)).sum();
 	}
 
-	public int getNumber() {
+	int getNumber() {
 		return _number;
 	}
 

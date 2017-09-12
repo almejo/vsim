@@ -1,21 +1,17 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.circuit;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class OptimisticList<T> {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class OptimisticList<T> {
 
 	private T _element;
 	private List<T> _list;
@@ -25,18 +21,18 @@ public class OptimisticList<T> {
 			_element = element;
 		} else {
 			if (_list == null) {
-				_list = new LinkedList<T>();
+				_list = new LinkedList<>();
 			}
 			_list.add(element);
 		}
 	}
 
-	public boolean contains(T element) {
-		return (_element != null && _element.equals(element)) || (_list != null && _list.contains(element));
+	boolean contains(T element) {
+		return _element != null && _element.equals(element) || _list != null && _list.contains(element);
 	}
 
-	public List<T> elements() {
-		List<T> list = new LinkedList<T>();
+	List<T> elements() {
+		List<T> list = new LinkedList<>();
 
 		if (_element != null) {
 			list.add(_element);
@@ -49,7 +45,7 @@ public class OptimisticList<T> {
 		return list;
 	}
 
-	public int indexOf(T element) {
+	private int indexOf(T element) {
 		if (_element != null && _element.equals(element)) {
 			return 0;
 		}
@@ -66,7 +62,7 @@ public class OptimisticList<T> {
 		return -1;
 	}
 
-	public boolean isEmpty() {
+	boolean isEmpty() {
 		return _element == null;
 	}
 
@@ -107,7 +103,7 @@ public class OptimisticList<T> {
 			builder.append(_element);
 			if (_list != null) {
 				for (T element : _list) {
-					builder.append(", ").append(element.toString());
+					builder.append(", ").append(element);
 				}
 			}
 		}

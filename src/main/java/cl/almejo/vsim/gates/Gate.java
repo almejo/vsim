@@ -1,30 +1,15 @@
-/**
- *
- * vsim
- *
- * Created on Aug 1, 2013
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class Gate {
 
 	public static final String CLOCK = "clock";
@@ -48,8 +33,8 @@ public class Gate {
 
 	protected Pin[] _pins;
 	protected Circuit _circuit;
-	protected GateParameters _parameters;
-	private GateDescriptor _gateDescriptor;
+	private final GateParameters _parameters;
+	private final GateDescriptor _gateDescriptor;
 
 	public Gate(Circuit circuit, GateParameters parameters, GateDescriptor descriptor) {
 		_circuit = circuit;
