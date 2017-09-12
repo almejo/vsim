@@ -1,23 +1,22 @@
-/**
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * This Class fixes the problem of java with the borderless menus and separators under Linux.
- *
- * This code comes from http://www.ailis.de/~k/archives/67-Workaround-for-borderless-Java-Swing-menus-on-Linux.html
- *
- * @author: alejo
- */
-
 package cl.almejo.vsim;
 
 import javax.swing.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class GTKHelper {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ * <p>
+ * This Class fixes the problem of java with the borderless menus and separators under Linux.
+ * <p>
+ * This code comes from http://www.ailis.de/~k/archives/67-Workaround-for-borderless-Java-Swing-menus-on-Linux.html
+ *
+ * @author alejo
+ */
+class GTKHelper {
 	/**
 	 * Swing menus are looking pretty bad on Linux when the GTK LaF is used (See
 	 * bug #6925412). It will most likely never be fixed anytime soon so this
@@ -25,7 +24,7 @@ public class GTKHelper {
 	 * style objects of Swing so popup menu borders have a minimum thickness of
 	 * 1 and menu separators have a minimum vertical thickness of 1.
 	 */
-	public static void installGtkPopupBugWorkaround() {
+	static void installGtkPopupBugWorkaround() {
 		// Get current look-and-feel implementation class
 		LookAndFeel laf = UIManager.getLookAndFeel();
 		Class<?> lafClass = laf.getClass();

@@ -1,39 +1,36 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gui;
 
 import java.awt.*;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public interface Draggable {
 
-	public void beforeDrag();
+	void beforeDrag();
 
-	public void drag(int x, int y);
+	void drag(int x, int y);
 
-	public void afterDrag();
+	void afterDrag();
 
 	int getOriginalX();
 
 	int getOriginalY();
 
-	public void select();
+	void select();
 
-	public void deselect();
+	void deselect();
 
-	public boolean isSelected();
+	boolean isSelected();
 
-	public boolean contains(int x, int y);
+	boolean contains(int x, int y);
 
-	public void drawPreview(Graphics2D graphics2D, double x, double y);
+	void drawPreview(Graphics2D graphics2D, double x, double y);
 
 	Rectangle getExtent();
 }

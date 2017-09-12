@@ -1,20 +1,16 @@
+package cl.almejo.vsim.gates;
+
 /**
- *
  * vsim
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
+class NotParameters extends GateParametersWithDelay {
 
-
-package cl.almejo.vsim.gates;
-
-public class NotParameters extends GateParametersWithDelay {
-
-	public NotParameters(int delay) {
+	NotParameters(int delay) {
 		super(delay);
 	}
 

@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -17,6 +6,14 @@ import cl.almejo.vsim.gui.SimWindow;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class MoveViewPortToolHelper extends ActionToolHelper {
 	private int _lastX;
 	private int _lastY;
@@ -46,6 +43,7 @@ public class MoveViewPortToolHelper extends ActionToolHelper {
 		window.getCanvas().centerViewportTo(x, y);
 	}
 
+	@Override
 	public void mouseDragged(SimWindow window, MouseEvent event) {
 		int deltaX = event.getX() - _lastX;
 		int deltaY = event.getY() - _lastY;
@@ -55,13 +53,13 @@ public class MoveViewPortToolHelper extends ActionToolHelper {
 
 		int toMoveX = 0;
 		int toMoveY = 0;
-		if (Math.abs(_accumulatedX) > Math.abs(Circuit.GRIDSIZE)) {
-			int rest = _accumulatedX - (_accumulatedX / Circuit.GRIDSIZE) * Circuit.GRIDSIZE;
+		if (Math.abs(_accumulatedX) > Math.abs(Circuit.GRID_SIZE)) {
+			int rest = _accumulatedX - _accumulatedX / Circuit.GRID_SIZE * Circuit.GRID_SIZE;
 			toMoveX = _accumulatedX - rest;
 			_accumulatedX = rest;
 		}
-		if (Math.abs(_accumulatedY) > Circuit.GRIDSIZE) {
-			int rest = _accumulatedY - (_accumulatedY / Circuit.GRIDSIZE) * Circuit.GRIDSIZE;
+		if (Math.abs(_accumulatedY) > Circuit.GRID_SIZE) {
+			int rest = _accumulatedY - _accumulatedY / Circuit.GRID_SIZE * Circuit.GRID_SIZE;
 			toMoveY = _accumulatedY - rest;
 			_accumulatedY = rest;
 		}

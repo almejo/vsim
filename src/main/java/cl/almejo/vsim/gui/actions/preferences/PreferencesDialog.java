@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gui.actions.preferences;
 
 import cl.almejo.vsim.Messages;
@@ -17,9 +6,15 @@ import cl.almejo.vsim.gui.SimWindow;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class PreferencesDialog extends JDialog {
 
 	public PreferencesDialog(SimWindow window) {
@@ -39,12 +34,7 @@ public class PreferencesDialog extends JDialog {
 		panel.add(tabbedPane);
 
 		JButton closeButton = new JButton(Messages.t("action.default.close"));
-		closeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				PreferencesDialog.this.setVisible(false);
-			}
-		});
+		closeButton.addActionListener(event -> this.setVisible(false));
 		panel.add(closeButton);
 		getContentPane().add(panel);
 	}

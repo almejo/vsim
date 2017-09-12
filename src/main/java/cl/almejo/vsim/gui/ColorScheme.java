@@ -1,12 +1,3 @@
-/**
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: alejo
- */
-
 package cl.almejo.vsim.gui;
 
 import cl.almejo.vsim.gates.Constants;
@@ -20,18 +11,26 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class ColorScheme {
 
-	private HashMap<String, Color> _colors = new HashMap<String, Color>();
+	private final HashMap<String, Color> _colors = new HashMap<>();
 
 	private static ColorScheme _current;
 
-	private static HashMap<String, ColorScheme> _schemes = new HashMap<String, ColorScheme>();
+	private static final HashMap<String, ColorScheme> _schemes = new HashMap<>();
 
 	static {
 
-		File file = new File("colors.json");
 		try {
+			File file = new File("colors.json");
 			String json = FileUtils.readFileToString(file);
 
 			@SuppressWarnings("unchecked") Map<String, Map<String, String>> schemes = (Map<String, Map<String, String>>) new ObjectMapper().readValue(json, Map.class);
@@ -39,9 +38,7 @@ public class ColorScheme {
 				Map<String, String> map = schemes.get(name);
 				ColorScheme scheme = new ColorScheme(name);
 
-				for (String colorName : map.keySet()) {
-					scheme.set(colorName, new Color(Integer.parseInt(map.get(colorName).replace("#", ""), 16), false));
-				}
+				map.keySet().forEach(colorName -> scheme.set(colorName, new Color(Integer.parseInt(map.get(colorName).replace("#", ""), 16), false)));
 				_schemes.put(name, scheme);
 			}
 			_current = _schemes.get("default");
@@ -50,9 +47,9 @@ public class ColorScheme {
 		}
 	}
 
-	private String _name;
+	private final String _name;
 
-	public ColorScheme(String name) {
+	private ColorScheme(String name) {
 		_name = name;
 		_colors.put("background", Color.GRAY);
 		_colors.put("bus-on", Color.RED);
@@ -66,10 +63,10 @@ public class ColorScheme {
 	}
 
 	public static String save() throws IOException {
-		HashMap<String, HashMap<String, String>> map = new HashMap<String, HashMap<String, String>>();
+		HashMap<String, HashMap<String, String>> map = new HashMap<>();
 		for (String schemeName : _schemes.keySet()) {
 			ColorScheme scheme = _schemes.get(schemeName);
-			HashMap<String, String> colors = new HashMap<String, String>();
+			HashMap<String, String> colors = new HashMap<>();
 			for (String colorName : scheme._colors.keySet()) {
 				Color color = scheme._colors.get(colorName);
 				colors.put(colorName, "#" + Integer.toHexString(color.getRGB()).substring(2));
@@ -151,12 +148,7 @@ public class ColorScheme {
 	}
 
 	public static boolean exists(String name) {
-		for (String schemeName : _schemes.keySet()) {
-			if (schemeName.equalsIgnoreCase(name)) {
-				return true;
-			}
-		}
-		return false;
+		return _schemes.keySet().stream().anyMatch(schemeName -> schemeName.equalsIgnoreCase(name));
 	}
 
 	public static Color getLabel() {

@@ -1,21 +1,16 @@
+package cl.almejo.vsim.simulation;
+
 /**
- *
  * vsim
- *
- * Created on Aug 1, 2013
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-
-package cl.almejo.vsim.simulation;
-
 public abstract class SimulationEvent extends HeapElement {
 
-	protected Scheduler _scheduler;
+	Scheduler _scheduler;
 
 	public SimulationEvent(Scheduler scheduler) {
 		_scheduler = scheduler;
@@ -25,15 +20,13 @@ public abstract class SimulationEvent extends HeapElement {
 		_scheduler.schedule(this, delay);
 	}
 
-	abstract public void happen();
+	public abstract void happen();
 
-	public long getTime() {
+	long getTime() {
 		return getValue();
 	}
 
 	public boolean isProgrammed() {
 		return _scheduler.isProgrammed(this);
 	}
-
-
 }

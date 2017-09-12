@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gui;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -19,12 +8,20 @@ import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 
-public class CanvasScrollPane extends JPanel implements AdjustmentListener, ViewportListener {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class CanvasScrollPane extends JPanel implements AdjustmentListener, ViewportListener {
 	private final JScrollBar _horizontalScrollbar;
 	private final JScrollBar _verticalScrollbar;
 	private final CircuitCanvas _canvas;
 
-	public CanvasScrollPane(CircuitCanvas canvas) {
+	CanvasScrollPane(CircuitCanvas canvas) {
 		setLayout(new GridBagLayout());
 		_canvas = addCanvas(canvas);
 		_canvas.addViewportListener(this);
@@ -34,23 +31,21 @@ public class CanvasScrollPane extends JPanel implements AdjustmentListener, View
 	}
 
 	private void updateScrollbars() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				Rectangle world = _canvas.getWorld();
-				Rectangle viewport = _canvas.getViewport();
+		SwingUtilities.invokeLater(() -> {
+			Rectangle world = _canvas.getWorld();
+			Rectangle viewport = _canvas.getViewport();
 
-				_horizontalScrollbar.setMinimum(world.x);
-				_horizontalScrollbar.setMaximum(world.x + world.width);
-				_horizontalScrollbar.setValue(viewport.x);
-				_horizontalScrollbar.setVisibleAmount(viewport.width);
-				_horizontalScrollbar.setBlockIncrement(getHorizontalBlockIncrement());
+			_horizontalScrollbar.setMinimum(world.x);
+			_horizontalScrollbar.setMaximum(world.x + world.width);
+			_horizontalScrollbar.setValue(viewport.x);
+			_horizontalScrollbar.setVisibleAmount(viewport.width);
+			_horizontalScrollbar.setBlockIncrement(getHorizontalBlockIncrement());
 
-				_verticalScrollbar.setMinimum(world.y);
-				_verticalScrollbar.setMaximum(world.y + world.height);
-				_verticalScrollbar.setValue(viewport.y);
-				_verticalScrollbar.setVisibleAmount(viewport.height);
-				_verticalScrollbar.setBlockIncrement(getVerticalBlockIncrement());
-			}
+			_verticalScrollbar.setMinimum(world.y);
+			_verticalScrollbar.setMaximum(world.y + world.height);
+			_verticalScrollbar.setValue(viewport.y);
+			_verticalScrollbar.setVisibleAmount(viewport.height);
+			_verticalScrollbar.setBlockIncrement(getVerticalBlockIncrement());
 		});
 	}
 
@@ -76,7 +71,7 @@ public class CanvasScrollPane extends JPanel implements AdjustmentListener, View
 	private JScrollBar addVerticalScrollbar() {
 		JScrollBar scrollBar = new JScrollBar();
 		scrollBar.addAdjustmentListener(this);
-		scrollBar.setUnitIncrement(Circuit.gridTrunc((int) (Circuit.GRIDSIZE / _canvas.getZoom())));
+		scrollBar.setUnitIncrement(Circuit.gridTrunc((int) (Circuit.GRID_SIZE / _canvas.getZoom())));
 		GridBagConstraints constraint = new GridBagConstraints();
 		constraint.gridx = 1;
 		constraint.gridy = 0;
@@ -89,7 +84,7 @@ public class CanvasScrollPane extends JPanel implements AdjustmentListener, View
 	private JScrollBar addHorizontalScrollbar() {
 		JScrollBar scrollBar = new JScrollBar();
 		scrollBar.setOrientation(JScrollBar.HORIZONTAL);
-		scrollBar.setUnitIncrement(Circuit.gridTrunc((int) (Circuit.GRIDSIZE / _canvas.getZoom())));
+		scrollBar.setUnitIncrement(Circuit.gridTrunc((int) (Circuit.GRID_SIZE / _canvas.getZoom())));
 		scrollBar.addAdjustmentListener(this);
 		GridBagConstraints constraint = new GridBagConstraints();
 		constraint.gridx = 0;
@@ -102,7 +97,7 @@ public class CanvasScrollPane extends JPanel implements AdjustmentListener, View
 
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent event) {
-		JScrollBar scrollbar = ((JScrollBar) event.getSource());
+		JScrollBar scrollbar = (JScrollBar) event.getSource();
 		if (scrollbar == _horizontalScrollbar) {
 			_canvas.moveViewport(_canvas.getViewport().x - scrollbar.getValue(), 0);
 		} else {
@@ -110,7 +105,7 @@ public class CanvasScrollPane extends JPanel implements AdjustmentListener, View
 		}
 	}
 
-	public void addCorner(JComponent component) {
+	void addCorner(JComponent component) {
 		GridBagConstraints constraint = new GridBagConstraints();
 		constraint.gridx = 1;
 		constraint.gridy = 1;

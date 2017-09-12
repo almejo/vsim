@@ -1,28 +1,26 @@
+package cl.almejo.vsim.gates;
+
 /**
  * vsim
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
+class AssociativeGateParameters extends GateParametersWithDelay {
+	private final int[][] _behavior;
+	private final int _pinCount;
+	private final int _associativeType;
 
-package cl.almejo.vsim.gates;
-
-public class AssociativeGateParameters extends GateParametersWithDelay {
-	private int[][] _behavior;
-	private int _pinCount;
-	private int _associativeType;
-
-	public AssociativeGateParameters(int delay, int pinCount, int[][] behavior, int associativeType) {
+	AssociativeGateParameters(int delay, int pinCount, int[][] behavior, int associativeType) {
 		super(delay);
 		_pinCount = pinCount;
 		_behavior = behavior;
 		_associativeType = associativeType;
 	}
 
-	public int[][] getBehavior() {
+	int[][] getBehavior() {
 		return _behavior;
 	}
 
@@ -30,7 +28,7 @@ public class AssociativeGateParameters extends GateParametersWithDelay {
 		return _pinCount;
 	}
 
-	public int getAssociativeType() {
+	int getAssociativeType() {
 		return _associativeType;
 	}
 

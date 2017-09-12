@@ -1,23 +1,20 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.circuit.commands;
 
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class CommandManager {
 
-	private List<Command> _done = new LinkedList<Command>();
-	private List<Command> _undone = new LinkedList<Command>();
+	private final List<Command> _done = new LinkedList<>();
+	private final List<Command> _undone = new LinkedList<>();
 
 	public void apply(Command command) {
 		if (command.apply()) {
@@ -46,11 +43,11 @@ public class CommandManager {
 	}
 
 	public boolean canUndo() {
-		return _done.size() > 0;
+		return !_done.isEmpty();
 	}
 
 	public boolean canRedo() {
-		return _undone.size() > 0;
+		return !_undone.isEmpty();
 	}
 
 	public void cleanHistory() {

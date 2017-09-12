@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -19,13 +8,23 @@ import cl.almejo.vsim.gui.SimWindow;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+
 public class CursorToolHelper extends ActionToolHelper {
 
-	Selection _selection = null;
+	private Selection _selection;
 	private BufferedImage _preview;
 	private int _deltaY;
 	private int _deltaX;
 
+	@Override
 	public Object mouseClicked(SimWindow window, MouseEvent event) {
 		int x = window.getCanvas().toCircuitCoordinatesX(event.getX());
 		int y = window.getCanvas().toCircuitCoordinatesY(event.getY());

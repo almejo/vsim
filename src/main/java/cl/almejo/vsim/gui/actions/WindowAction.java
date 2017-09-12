@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gui.actions;
 
 import cl.almejo.vsim.gui.ImageUtils;
@@ -16,7 +5,14 @@ import cl.almejo.vsim.gui.SimWindow;
 
 import javax.swing.*;
 
-
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public abstract class WindowAction extends AbstractAction {
 	SimWindow _window;
 
@@ -30,9 +26,7 @@ public abstract class WindowAction extends AbstractAction {
 		putValue(AbstractAction.ACCELERATOR_KEY, keyStroke);
 	}
 
-
 	public SimWindow getWindow() {
 		return _window;
 	}
-
 }

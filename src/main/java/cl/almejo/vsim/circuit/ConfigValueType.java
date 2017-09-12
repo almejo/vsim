@@ -1,16 +1,13 @@
+package cl.almejo.vsim.circuit;
+
 /**
- *
  * vsim
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-
-package cl.almejo.vsim.circuit;
-
 public enum ConfigValueType {
 	INT, STRING, BYTE, LIST
 }

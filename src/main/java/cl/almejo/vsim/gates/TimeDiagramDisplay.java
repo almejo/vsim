@@ -1,16 +1,4 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gates;
-
 
 import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.gui.ColorScheme;
@@ -19,15 +7,21 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
 
-public class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListener {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListener {
 
 	private final TimeDiagramCanvas _diagramCanvas;
 	private static final int SIGNAL_HEIGHT = 20;
@@ -35,9 +29,9 @@ public class TimeDiagramDisplay extends JPanel implements DisplayPanel, Componen
 	private static final int SIGNAL_HEIGHT_HALF = SIGNAL_HEIGHT / 2;
 	private static final int TOTAL_HEIGHT = (SIGNAL_HEIGHT + SPACE_BETWEEN_SIGNALS) * 4;
 
-	static class TimeDiagramCanvas extends JPanel {
+	private static class TimeDiagramCanvas extends JPanel {
 		private byte[][] _values = new byte[4][1000];
-		private int _position = 0;
+		private int _position;
 
 		TimeDiagramCanvas() {
 			setBorder(new EmptyBorder(3, 3, 3, 3));
@@ -61,7 +55,7 @@ public class TimeDiagramDisplay extends JPanel implements DisplayPanel, Componen
 			graphics2D.setColor(ColorScheme.getLabel());
 		}
 
-		public void plot(byte[] values) {
+		void plot(byte[] values) {
 			if (_values[0].length < 1) {
 				return;
 			}
@@ -142,7 +136,7 @@ public class TimeDiagramDisplay extends JPanel implements DisplayPanel, Componen
 
 	}
 
-	public TimeDiagramDisplay() {
+	TimeDiagramDisplay() {
 		setLayout(new BorderLayout());
 		addComponentListener(this);
 		_diagramCanvas = new TimeDiagramCanvas();
@@ -152,34 +146,31 @@ public class TimeDiagramDisplay extends JPanel implements DisplayPanel, Componen
 		buttons.setBorder(new EmptyBorder(3, 3, 3, 3));
 		JButton saveImage = new JButton(Messages.t("time.diagram.save.image.label"));
 		buttons.add(saveImage);
-		saveImage.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String name = JOptionPane.showInputDialog(Messages.t("time.diagram.save.image.title"), "");
-				if (name != null) {
-					if (name.toLowerCase().endsWith(".png")) {
-						name = name.substring(0, name.toLowerCase().lastIndexOf(".png"));
-					}
-					if (name.length() < 1) {
-						return;
-					}
-					name = name.replaceAll("[^A-Za-z0-9]", "-").replaceAll(" ", "-");
-					BufferedImage bufferedImage = new BufferedImage(_diagramCanvas.getSize().width, _diagramCanvas.getSize().height, BufferedImage.TYPE_INT_ARGB);
-					Graphics graphics = bufferedImage.createGraphics();
-					_diagramCanvas.paint(graphics);
-					graphics.dispose();
-					try {
-						ImageIO.write(bufferedImage, "png", new File(name + ".png"));
-					} catch (Exception exception) {
-						exception.printStackTrace();
-					}
+		saveImage.addActionListener(event -> {
+			String name1 = JOptionPane.showInputDialog(Messages.t("time.diagram.save.image.title"), "");
+			if (name1 != null) {
+				if (name1.toLowerCase().endsWith(".png")) {
+					name1 = name1.substring(0, name1.toLowerCase().lastIndexOf(".png"));
+				}
+				if (name1.length() < 1) {
+					return;
+				}
+				name1 = name1.replaceAll("[^A-Za-z0-9]", "-").replaceAll(" ", "-");
+				BufferedImage bufferedImage = new BufferedImage(_diagramCanvas.getSize().width, _diagramCanvas.getSize().height, BufferedImage.TYPE_INT_ARGB);
+				Graphics graphics = bufferedImage.createGraphics();
+				_diagramCanvas.paint(graphics);
+				graphics.dispose();
+				try {
+					ImageIO.write(bufferedImage, "png", new File(name1 + ".png"));
+				} catch (Exception exception) {
+					exception.printStackTrace();
 				}
 			}
 		});
 		add(BorderLayout.LINE_END, buttons);
 	}
 
-	public void plot(byte[] values) {
+	void plot(byte[] values) {
 		_diagramCanvas.plot(values);
 	}
 

@@ -1,37 +1,34 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class GateFactory {
 
 	private static final int[][] BEHAVIOR_AND;
 	private static final int[][] BEHAVIOR_OR;
 	private static final int[][] BEHAVIOR_XOR;
 
-	private final static ClockDescriptor CLOCK_DESCRIPTOR;
-	private final static NotDescriptor NOT_DESCRIPTOR;
-	private final static AssociativeGateDescriptor ASSOC_AND2_DESCRIPTOR;
-	private final static AssociativeGateDescriptor ASSOC_AND3_DESCRIPTOR;
-	private final static AssociativeGateDescriptor ASSOC_AND4_DESCRIPTOR;
+	private static final ClockDescriptor CLOCK_DESCRIPTOR;
+	private static final NotDescriptor NOT_DESCRIPTOR;
+	private static final AssociativeGateDescriptor ASSOC_AND2_DESCRIPTOR;
+	private static final AssociativeGateDescriptor ASSOC_AND3_DESCRIPTOR;
+	private static final AssociativeGateDescriptor ASSOC_AND4_DESCRIPTOR;
 
-	private final static AssociativeGateDescriptor ASSOC_OR2_DESCRIPTOR;
-	private final static AssociativeGateDescriptor ASSOC_OR3_DESCRIPTOR;
-	private final static AssociativeGateDescriptor ASSOC_OR4_DESCRIPTOR;
+	private static final AssociativeGateDescriptor ASSOC_OR2_DESCRIPTOR;
+	private static final AssociativeGateDescriptor ASSOC_OR3_DESCRIPTOR;
+	private static final AssociativeGateDescriptor ASSOC_OR4_DESCRIPTOR;
 
-	private final static AssociativeGateDescriptor ASSOC_XOR2_DESCRIPTOR;
-	private final static AssociativeGateDescriptor ASSOC_XOR3_DESCRIPTOR;
-	private final static AssociativeGateDescriptor ASSOC_XOR4_DESCRIPTOR;
+	private static final AssociativeGateDescriptor ASSOC_XOR2_DESCRIPTOR;
+	private static final AssociativeGateDescriptor ASSOC_XOR3_DESCRIPTOR;
+	private static final AssociativeGateDescriptor ASSOC_XOR4_DESCRIPTOR;
 
 	private static final FlipFlopDataDescriptor FLIP_FLOP_DATA_DESCRIPTOR;
 
@@ -39,15 +36,15 @@ public class GateFactory {
 	private static final LedDescriptor LED_DESCRIPTOR;
 	private static final TimeDiagramDescriptor TIME_DIAGRAM_DESCRIPTOR;
 	private static final SwitchDescriptor SWITCH_DESCRIPTOR;
-	private final static SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR;
-	private final static SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR_DOUBLE;
+	private static final SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR;
+	private static final SevenSegmentsDisplayDescriptor SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR_DOUBLE;
 
 
 	static {
 		BEHAVIOR_AND = new int[3][3];
 		BEHAVIOR_OR = new int[3][3];
 		BEHAVIOR_XOR = new int[3][3];
-		
+
 		BEHAVIOR_OR[0][0] = -1;
 		BEHAVIOR_OR[0][1] = 0;
 		BEHAVIOR_OR[0][2] = 1;
@@ -90,7 +87,7 @@ public class GateFactory {
 		ASSOC_XOR2_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 2, BEHAVIOR_XOR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_XOR), Gate.XOR2);
 		ASSOC_XOR3_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 3, BEHAVIOR_XOR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_XOR), Gate.XOR3);
 		ASSOC_XOR4_DESCRIPTOR = new AssociativeGateDescriptor(new AssociativeGateParameters(1, 4, BEHAVIOR_XOR, AssociativeGateDescriptor.ASSOCIATIVE_TYPE_XOR), Gate.XOR4);
-		
+
 		NOT_DESCRIPTOR = new NotDescriptor(new NotParameters(1), Gate.NOT);
 
 		TRISTATE_DESCRIPTOR = new TristateDescriptor(new TristateParameters(1), Gate.TRISTATE);

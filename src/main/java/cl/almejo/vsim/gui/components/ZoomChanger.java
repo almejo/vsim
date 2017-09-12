@@ -1,31 +1,26 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gui.components;
 
 import cl.almejo.vsim.circuit.CircuitCanvas;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class ZoomChanger extends JPanel {
 
-	private CircuitCanvas _canvas;
+	private final CircuitCanvas _canvas;
 
 	public ZoomChanger(CircuitCanvas canvas) {
 		_canvas = canvas;
-		final JSlider zoomSlider = new JSlider(1, 8, 4);
+		JSlider zoomSlider = new JSlider(1, 8, 4);
 		FlatButton decreaseZoom = new FlatButton(" - ");
 		decreaseZoom.addMouseListener(new MouseAdapter() {
 			@Override
@@ -55,15 +50,12 @@ public class ZoomChanger extends JPanel {
 	}
 
 	private JLabel getZoomDisplay(JSlider zoomSlider) {
-		final JLabel label = new JLabel("100%");
-		zoomSlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSlider slider = (JSlider) e.getSource();
-				double zoom = 0.25 * slider.getValue();
-				_canvas.setZoom(zoom);
-				label.setText(((int) (zoom * 100)) + "%");
-			}
+		JLabel label = new JLabel("100%");
+		zoomSlider.addChangeListener(e -> {
+			JSlider slider = (JSlider) e.getSource();
+			double zoom = 0.25 * slider.getValue();
+			_canvas.setZoom(zoom);
+			label.setText((int) (zoom * 100) + "%");
 		});
 		return label;
 	}

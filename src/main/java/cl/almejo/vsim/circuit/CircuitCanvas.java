@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.circuit;
 
 import cl.almejo.vsim.gates.Constants;
@@ -25,6 +14,14 @@ import java.awt.geom.AffineTransform;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class CircuitCanvas extends JPanel implements ComponentListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CircuitCanvas.class);
@@ -32,11 +29,12 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	private static final long serialVersionUID = 1L;
 
 	private Circuit _circuit;
-	private AffineTransform _translationTransformation = new AffineTransform();
-	private AffineTransform _computedTransformation = new AffineTransform();
-	private AffineTransform _zoomTransformation = new AffineTransform();
+	private final AffineTransform _translationTransformation = new AffineTransform();
+	private final AffineTransform _computedTransformation = new AffineTransform();
+	private final AffineTransform _zoomTransformation = new AffineTransform();
 	private double _zoom = 1.0;
-	private List<ViewportListener> _viewportListeners = new LinkedList<ViewportListener>();
+	private final Rectangle _viewport = new Rectangle();
+	private final List<ViewportListener> _viewportListeners = new LinkedList<>();
 
 	public CircuitCanvas(Circuit circuit) {
 		_circuit = circuit;
@@ -46,11 +44,8 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 		resizeViewport();
 	}
 
-	private Rectangle _viewport = new Rectangle();
-
 	@Override
 	public void paint(Graphics graphics) {
-
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		clean(graphics2D);
 
@@ -99,7 +94,7 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 		moveViewport(Circuit.gridTrunc((int) _viewport.getCenterX() - x), Circuit.gridTrunc((int) _viewport.getCenterY() - y));
 	}
 
-	public void translateViewportTo(int x, int y) {
+	private void translateViewportTo(int x, int y) {
 		int dx = x - (int) _viewport.getX();
 		int dy = y - (int) _viewport.getY();
 		_viewport.translate(dx, dy);
@@ -122,11 +117,11 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	}
 
 	public int toCircuitCoordinatesX(int x) {
-		return (int) ((((double) x) / _zoom) + _viewport.getX());
+		return (int) ((double) x / _zoom + _viewport.getX());
 	}
 
 	public int toCircuitCoordinatesY(int y) {
-		return (int) ((((double) y) / _zoom) + _viewport.getY());
+		return (int) ((double) y / _zoom + _viewport.getY());
 	}
 
 	public void setZoom(double zoom) {

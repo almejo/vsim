@@ -1,19 +1,16 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 
 public class Messages {
 	private static final String BUNDLE_NAME = "i18n.messages";

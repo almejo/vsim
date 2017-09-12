@@ -1,22 +1,18 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.simulation.Scheduler;
 
-public class TristatePin extends Pin {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class TristatePin extends Pin {
 
-	public TristatePin(Tristate tristate, Scheduler scheduler, int pinId) {
+	TristatePin(Tristate tristate, Scheduler scheduler, int pinId) {
 		super(tristate, scheduler, pinId);
 	}
 

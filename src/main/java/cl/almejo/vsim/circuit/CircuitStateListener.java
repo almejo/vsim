@@ -1,21 +1,18 @@
+package cl.almejo.vsim.circuit;
+
 /**
- *
  * vsim
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-
-package cl.almejo.vsim.circuit;
-
 public interface CircuitStateListener {
 
-	public void onPause(CircuitEvent event);
+	void onPause(CircuitEvent event);
 
-	public void onResume(CircuitEvent event);
+	void onResume(CircuitEvent event);
 
 	void onChanged(CircuitEvent event);
 

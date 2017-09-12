@@ -1,16 +1,18 @@
+package cl.almejo.vsim.circuit;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 /**
- *
  * vsim
- *
+ * <p>
  * This program is distributed under the terms of the GNU General Public License
  * The license is included in license.txt
  *
- * @author: Alejandro Vera
- *
+ * @author Alejandro Vera
  */
-
-package cl.almejo.vsim.circuit;
-
+@Accessors(prefix = "_")
+@Getter
 public class Point {
 	int _x;
 	int _y;
@@ -25,23 +27,15 @@ public class Point {
 		return "(" + _x + ", " + _y + ")";
 	}
 
-	public int getX() {
-		return _x;
-	}
-
-	public int getY() {
-		return _y;
-	}
-
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
+	public boolean equals(Object object) {
+		if (object == null) {
 			return false;
 		}
-		if (!(obj instanceof Point)) {
+		if (!(object instanceof Point)) {
 			return false;
 		}
-		Point p = (Point) obj;
+		Point p = (Point) object;
 		return p._x == _x && p._y == _y;
 	}
 

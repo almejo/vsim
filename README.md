@@ -4,7 +4,7 @@ Vsim is digital circuits simulator. Is a rewrite from scratch of my University T
 
 VSim is in very active development and it still lacks a some of the features that JCSim already has. Right now it is posible to draw simple circuits and save/load them. 
 
-VSim, as JCSim, will be usefull to understand how digital circuits works. In the future it could be used to teach or
+VSim, as JCSim, will be useful to understand how digital circuits works. In the future it could be used to teach or
 for homework.
 
 ## Running

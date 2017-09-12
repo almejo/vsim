@@ -1,15 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -18,9 +6,18 @@ import cl.almejo.vsim.gui.ColorScheme;
 
 import java.awt.*;
 
-public class ClockDescriptor extends GateDescriptor {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 
-	public ClockDescriptor(ClockParameters parameters, String type) {
+class ClockDescriptor extends GateDescriptor {
+
+	ClockDescriptor(ClockParameters parameters, String type) {
 		super(parameters, type);
 		_pinPosition = new Point[1];
 		_pinPosition[0] = new Point(Circuit.gridTrunc(16), Circuit.gridTrunc(16));
@@ -35,7 +32,6 @@ public class ClockDescriptor extends GateDescriptor {
 		graphics.fillOval(x + 12, y + 12, 9, 9);
 		graphics.setColor(ColorScheme.getColor(iconGate.getPin(0)));
 		graphics.fillOval(x + 4, y + 4, 8, 8);
-
 	}
 
 	@Override

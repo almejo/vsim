@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.circuit.commands;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -19,12 +8,20 @@ import cl.almejo.vsim.gui.Draggable;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class DragSelectionCommand implements Command {
 
 	private final Circuit _circuit;
-	private List<Draggable> _draggables;
-	List<Point> origin = new LinkedList<Point>();
-	List<Point> end = new LinkedList<Point>();
+	private final List<Draggable> _draggables;
+	private final List<Point> origin = new LinkedList<>();
+	private final List<Point> end = new LinkedList<>();
 
 	public DragSelectionCommand(Circuit circuit, Selection selection, int xf, int yf) {
 		_circuit = circuit;

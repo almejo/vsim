@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.Messages;
@@ -25,13 +14,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ConfigurationDialog extends JDialog {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class ConfigurationDialog extends JDialog {
 
-	public class ConfigComboItem {
-		private String _value;
-		private String _label;
+	public static class ConfigComboItem {
+		private final String _value;
+		private final String _label;
 
-		public ConfigComboItem(String value, String label) {
+		ConfigComboItem(String value, String label) {
 			_value = value;
 			_label = label;
 		}
@@ -52,7 +49,7 @@ public class ConfigurationDialog extends JDialog {
 
 	private final Circuit _circuit;
 	private final Configurable _configurable;
-	private HashMap<String, Component> _components = new HashMap<String, Component>();
+	private final HashMap<String, Component> _components = new HashMap<>();
 
 	private final KeyListener KEY_ADAPTER = new KeyAdapter() {
 		@Override
@@ -65,7 +62,7 @@ public class ConfigurationDialog extends JDialog {
 		}
 	};
 
-	public ConfigurationDialog(Circuit circuit, Configurable configurable) {
+	ConfigurationDialog(Circuit circuit, Configurable configurable) {
 		_circuit = circuit;
 		_configurable = configurable;
 		setTitle(Messages.t("config.configurable.title"));
@@ -119,7 +116,7 @@ public class ConfigurationDialog extends JDialog {
 
 	private JComponent createVariableEditor(ConfigVariable variable) {
 		if (variable.getType() == ConfigValueType.INT || variable.getType() == ConfigValueType.BYTE) {
-			return getNumberSpinner(variable.getName(), variable.getValue(), variable.getMin(), variable.getMax(), variable.getStep());
+			return getNumberSpinner(variable.getName(), variable.getValue(), ConfigVariable.MIN, ConfigVariable.MAX, variable.getStep());
 		}
 		if (variable.getType() == ConfigValueType.LIST) {
 			return getListField(variable.getName(), variable.getValue(), variable.getLabels(), variable.getValues());
@@ -128,7 +125,7 @@ public class ConfigurationDialog extends JDialog {
 	}
 
 	private JComponent getListField(String name, String value, String[] labels, String[] values) {
-		JComboBox<ConfigComboItem> comboBox = new JComboBox<ConfigComboItem>();
+		JComboBox<ConfigComboItem> comboBox = new JComboBox<>();
 		ConfigComboItem selectedItem = null;
 		for (int i = 0; i < labels.length; i++) {
 			ConfigComboItem comboItem = new ConfigComboItem(values[i], labels[i]);
@@ -151,22 +148,12 @@ public class ConfigurationDialog extends JDialog {
 		buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
 
 		JButton closeButton = new JButton(Messages.t("action.default.close"));
-		closeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				closeWindow();
-			}
-		});
+		closeButton.addActionListener(e -> closeWindow());
 		buttons.add(closeButton);
 
 		JButton button = new JButton(Messages.t("action.default.save"));
 
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateAndClose();
-			}
-		});
+		button.addActionListener(e -> updateAndClose());
 		buttons.add(button);
 		return buttons;
 	}
@@ -177,7 +164,7 @@ public class ConfigurationDialog extends JDialog {
 	}
 
 	private Map<String, Object> getValuesAsMap() {
-		Map<String, Object> parameters = new HashMap<String, Object>();
+		Map<String, Object> parameters = new HashMap<>();
 		for (String name : _components.keySet()) {
 			parameters.put(name, getValue(name));
 		}
@@ -187,7 +174,8 @@ public class ConfigurationDialog extends JDialog {
 	private Object getValue(String name) {
 		if (_components.get(name) instanceof JSpinner) {
 			return ((JSpinner) _components.get(name)).getValue();
-		} else if (_components.get(name) instanceof JComboBox) {
+		}
+		if (_components.get(name) instanceof JComboBox) {
 			return ((ConfigComboItem) ((JComboBox) _components.get(name)).getSelectedItem()).getValue();
 		}
 		return ((JTextField) _components.get(name)).getText();
@@ -201,7 +189,7 @@ public class ConfigurationDialog extends JDialog {
 	private JSpinner getNumberSpinner(String name, String value, int min, int max, int step) {
 		JSpinner spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(Math.max(Integer.parseInt(value), 1), min, max, step));
-		final JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "##");
+		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "##");
 		spinner.setEditor(editor);
 		spinner.setPreferredSize(new Dimension(80, 20));
 		editor.getTextField().addKeyListener(KEY_ADAPTER);
@@ -209,9 +197,8 @@ public class ConfigurationDialog extends JDialog {
 		return spinner;
 	}
 
-
 	private JTextField getStringField(String name, String value) {
-		final JTextField textField = new JTextField(value);
+		JTextField textField = new JTextField(value);
 		textField.setPreferredSize(new Dimension(80, 20));
 		textField.addKeyListener(KEY_ADAPTER);
 		textField.addFocusListener(new FocusAdapter() {
@@ -223,5 +210,4 @@ public class ConfigurationDialog extends JDialog {
 		_components.put(name, textField);
 		return textField;
 	}
-
 }

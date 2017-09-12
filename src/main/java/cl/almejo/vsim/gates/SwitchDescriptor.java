@@ -1,15 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
-
 package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.Circuit;
@@ -18,8 +6,16 @@ import cl.almejo.vsim.gui.ColorScheme;
 
 import java.awt.*;
 
-public class SwitchDescriptor extends GateDescriptor {
-	public SwitchDescriptor(SwitchParameters parameters, String type) {
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
+class SwitchDescriptor extends GateDescriptor {
+	SwitchDescriptor(SwitchParameters parameters, String type) {
 		super(parameters, type);
 		_pinCount = 1;
 		_pinPosition = new Point[_pinCount];
@@ -39,7 +35,7 @@ public class SwitchDescriptor extends GateDescriptor {
 		SwitchParameters parameters = (SwitchParameters) iconGate.getGate().getParamameters();
 		if (parameters.getText() != null && !parameters.getText().trim().equalsIgnoreCase("")) {
 			graphics.setColor(ColorScheme.getLabel());
-			graphics.drawString(parameters.getText(), 0, - dimension.height /2);
+			graphics.drawString(parameters.getText(), 0, -dimension.height / 2);
 		}
 	}
 

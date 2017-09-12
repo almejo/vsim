@@ -1,14 +1,3 @@
-/**
- *
- * vsim
- *
- * This program is distributed under the terms of the GNU General Public License
- * The license is included in license.txt
- *
- * @author: Alejandro Vera
- *
- */
-
 package cl.almejo.vsim.gui.actions.state;
 
 import cl.almejo.vsim.circuit.CircuitCanvas;
@@ -16,6 +5,14 @@ import cl.almejo.vsim.gui.SimWindow;
 
 import java.awt.event.MouseEvent;
 
+/**
+ * vsim
+ * <p>
+ * This program is distributed under the terms of the GNU General Public License
+ * The license is included in license.txt
+ *
+ * @author Alejandro Vera
+ */
 public class WiresToolHelper extends ActionToolHelper {
 	private int _xi;
 	private int _yi;
@@ -58,6 +55,7 @@ public class WiresToolHelper extends ActionToolHelper {
 		window.getCircuit().setDrawConnectPreview(false);
 	}
 
+	@Override
 	public void mouseDragged(SimWindow window, MouseEvent event) {
 		if (_connecting) {
 			CircuitCanvas canvas = window.getCanvas();
