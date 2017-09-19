@@ -35,8 +35,8 @@ public class Point {
 		if (!(object instanceof Point)) {
 			return false;
 		}
-		Point p = (Point) object;
-		return p._x == _x && p._y == _y;
+		Point point = (Point) object;
+		return point._x == _x && point._y == _y;
 	}
 
 }
