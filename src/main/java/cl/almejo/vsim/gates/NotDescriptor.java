@@ -17,11 +17,11 @@ import java.awt.*;
 class NotDescriptor extends GateDescriptor {
 	NotDescriptor(NotParameters parameters, String type) {
 		super(parameters, type);
-		_pinPosition = new Point[2];
-		_pinPosition[0] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(16));
-		_pinPosition[1] = new Point(Circuit.gridTrunc(32), Circuit.gridTrunc(16));
-		_gateType = GateTypes.NORMAL;
-		_pinCount = 2;
+		pinPosition = new Point[2];
+		pinPosition[0] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(16));
+		pinPosition[1] = new Point(Circuit.gridTrunc(32), Circuit.gridTrunc(16));
+		gateType = GateTypes.NORMAL;
+		pinCount = 2;
 	}
 
 	@Override

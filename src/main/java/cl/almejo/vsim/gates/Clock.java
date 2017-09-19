@@ -14,9 +14,9 @@ class Clock extends Gate {
 
 	Clock(Circuit circuit, GateParameters params, GateDescriptor descriptor) {
 		super(circuit, params, descriptor);
-		_pins = new Pin[1];
-		_pins[0] = new ClockPin(this, circuit.getScheduler(), 0);
-		_pins[0].hasChanged();
+		pins = new Pin[1];
+		pins[0] = new ClockPin(this, circuit.getScheduler(), 0);
+		pins[0].hasChanged();
 	}
 
 }

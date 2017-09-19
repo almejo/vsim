@@ -10,13 +10,13 @@ import cl.almejo.vsim.circuit.Circuit;
  *
  * @author Alejandro Vera
  */
-public class Tristate extends Gate {
+class TriState extends Gate {
 
-	public Tristate(Circuit circuit, GateParameters parameters, TristateDescriptor descriptor) {
+	TriState(Circuit circuit, GateParameters parameters, TriStateDescriptor descriptor) {
 		super(circuit, parameters, descriptor);
-		_pins = new TristatePin[3];
+		pins = new TristatePin[3];
 		for (int pinId = 0; pinId < 3; pinId++) {
-			_pins[pinId] = new TristatePin(this, circuit.getScheduler(), pinId);
+			pins[pinId] = new TristatePin(this, circuit.getScheduler(), pinId);
 		}
 	}
 }

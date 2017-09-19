@@ -8,8 +8,8 @@ package cl.almejo.vsim.gates;
  *
  * @author Alejandro Vera
  */
-public class FlipFlopDataParameters extends GateParametersWithDelay {
-	public FlipFlopDataParameters(int delay) {
+class FlipFlopDataParameters extends GateParametersWithDelay {
+	FlipFlopDataParameters(int delay) {
 		super(delay);
 	}
 }

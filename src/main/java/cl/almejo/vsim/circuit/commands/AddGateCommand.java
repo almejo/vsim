@@ -14,26 +14,26 @@ import cl.almejo.vsim.gates.IconGate;
 
 public class AddGateCommand implements Command {
 
-	private final Circuit _circuit;
-	private final IconGate _iconGate;
-	private final int _x;
-	private final int _y;
+	private final Circuit circuit;
+	private final IconGate iconGate;
+	private final int x;
+	private final int y;
 
 	public AddGateCommand(Circuit circuit, IconGate iconGate, int x, int y) {
-		_circuit = circuit;
-		_iconGate = iconGate;
-		_x = x;
-		_y = y;
+		this.circuit = circuit;
+		this.iconGate = iconGate;
+		this.x = x;
+		this.y = y;
 	}
 
 	@Override
 	public boolean apply() {
-		_circuit.add(_iconGate, _x, _y);
+		circuit.add(iconGate, x, y);
 		return true;
 	}
 
 	@Override
 	public void unDo() {
-		_circuit.remove(_iconGate);
+		circuit.remove(iconGate);
 	}
 }

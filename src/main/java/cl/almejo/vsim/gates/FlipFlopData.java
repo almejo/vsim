@@ -14,9 +14,9 @@ class FlipFlopData extends Gate {
 	FlipFlopData(Circuit circuit, GateParameters parameters, FlipFlopDataDescriptor descriptor) {
 		super(circuit, parameters, descriptor);
 
-		_pins = new FlipFlopDataPin[3];
-		_pins[0] = new FlipFlopDataPin(this, circuit.getScheduler(), 0);
-		_pins[1] = new FlipFlopDataPin(this, circuit.getScheduler(), 1);
-		_pins[2] = new FlipFlopDataPin(this, circuit.getScheduler(), 2);
+		pins = new FlipFlopDataPin[3];
+		pins[0] = new FlipFlopDataPin(this, circuit.getScheduler(), 0);
+		pins[1] = new FlipFlopDataPin(this, circuit.getScheduler(), 1);
+		pins[2] = new FlipFlopDataPin(this, circuit.getScheduler(), 2);
 	}
 }

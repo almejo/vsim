@@ -13,46 +13,46 @@ import java.util.List;
  */
 class OptimisticList<T> {
 
-	private T _element;
-	private List<T> _list;
+	private T element;
+	private List<T> list;
 
 	public void add(T element) {
-		if (_element == null) {
-			_element = element;
+		if (this.element == null) {
+			this.element = element;
 		} else {
-			if (_list == null) {
-				_list = new LinkedList<>();
+			if (list == null) {
+				list = new LinkedList<>();
 			}
-			_list.add(element);
+			list.add(element);
 		}
 	}
 
 	boolean contains(T element) {
-		return _element != null && _element.equals(element) || _list != null && _list.contains(element);
+		return this.element != null && this.element.equals(element) || list != null && list.contains(element);
 	}
 
 	List<T> elements() {
 		List<T> list = new LinkedList<>();
 
-		if (_element != null) {
-			list.add(_element);
+		if (element != null) {
+			list.add(element);
 		}
 
-		if (_list != null) {
-			list.addAll(_list);
+		if (this.list != null) {
+			list.addAll(this.list);
 		}
 
 		return list;
 	}
 
 	private int indexOf(T element) {
-		if (_element != null && _element.equals(element)) {
+		if (this.element != null && this.element.equals(element)) {
 			return 0;
 		}
 
-		if (_list != null) {
+		if (list != null) {
 			int index = 1;
-			for (T listElement : _list) {
+			for (T listElement : list) {
 				if (listElement.equals(element)) {
 					return index;
 				}
@@ -63,7 +63,7 @@ class OptimisticList<T> {
 	}
 
 	boolean isEmpty() {
-		return _element == null;
+		return element == null;
 	}
 
 	public T remove(T element) {
@@ -77,18 +77,18 @@ class OptimisticList<T> {
 		}
 
 		if (i == 0) {
-			T element = _element;
-			_element = removeAt(0);
+			T element = this.element;
+			this.element = removeAt(0);
 			return element;
 		}
 		return removeAt(i - 1);
 	}
 
 	private T removeAt(int index) {
-		if (_list != null) {
-			T element = _list.remove(index);
-			if (_list.size() < 1) {
-				_list = null;
+		if (list != null) {
+			T element = list.remove(index);
+			if (list.size() < 1) {
+				list = null;
 			}
 			return element;
 		}
@@ -99,10 +99,10 @@ class OptimisticList<T> {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
-		if (_element != null) {
-			builder.append(_element);
-			if (_list != null) {
-				for (T element : _list) {
+		if (element != null) {
+			builder.append(element);
+			if (list != null) {
+				for (T element : list) {
 					builder.append(", ").append(element);
 				}
 			}

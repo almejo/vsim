@@ -1,7 +1,6 @@
 package cl.almejo.vsim.circuit;
 
 import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
  * vsim
@@ -11,20 +10,19 @@ import lombok.experimental.Accessors;
  *
  * @author Alejandro Vera
  */
-@Accessors(prefix = "_")
 @Getter
 public class Point {
-	int _x;
-	int _y;
+	protected int x;
+	protected int y;
 
 	public Point(int x, int y) {
-		_x = x;
-		_y = y;
+		this.x = x;
+		this.y = y;
 	}
 
 	@Override
 	public String toString() {
-		return "(" + _x + ", " + _y + ")";
+		return "(" + x + ", " + y + ")";
 	}
 
 	@Override
@@ -36,7 +34,7 @@ public class Point {
 			return false;
 		}
 		Point point = (Point) object;
-		return point._x == _x && point._y == _y;
+		return point.x == x && point.y == y;
 	}
 
 }

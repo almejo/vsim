@@ -20,7 +20,7 @@ public class QuitAction extends WindowAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		_window.quit();
+	public void actionPerformed(ActionEvent event) {
+		window.quit();
 	}
 }

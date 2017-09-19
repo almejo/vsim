@@ -17,27 +17,27 @@ import java.util.Map;
  */
 class ClockParameters extends GateParameters {
 
-	private int _timeUp;
+	private int timeUp;
 
-	private int _timeDown;
+	private int timeDown;
 
-	private byte _state = Constants.OFF;
+	private byte state = Constants.OFF;
 
 	ClockParameters(int timeDown, int timeUp) {
-		_timeDown = timeDown;
-		_timeUp = timeUp;
+		this.timeDown = timeDown;
+		this.timeUp = timeUp;
 	}
 
 	@Override
 	public void setValues(Map<String, Object> parameters) {
-		_timeDown = (Integer) parameters.get("time-down");
-		_timeUp = (Integer) parameters.get("time-up");
+		timeDown = (Integer) parameters.get("time-down");
+		timeUp = (Integer) parameters.get("time-up");
 	}
 
 	public List<ConfigVariable> getValues() {
 		List<ConfigVariable> variables = new LinkedList<>();
-		variables.add(new ConfigVariable("time-down", Messages.t("config.time.down.label"), _timeDown).setStep(1000));
-		variables.add(new ConfigVariable("time-up", Messages.t("config.time.up.label"), _timeUp).setStep(1000));
+		variables.add(new ConfigVariable("time-down", Messages.t("config.time.down.label"), timeDown).setStep(1000));
+		variables.add(new ConfigVariable("time-up", Messages.t("config.time.up.label"), timeUp).setStep(1000));
 		return variables;
 	}
 
@@ -47,18 +47,18 @@ class ClockParameters extends GateParameters {
 	}
 
 	long getTimeUp() {
-		return _timeUp;
+		return timeUp;
 	}
 
 	long getTimeDown() {
-		return _timeDown;
+		return timeDown;
 	}
 
 	public byte getState() {
-		return _state;
+		return state;
 	}
 
 	public void setState(byte b) {
-		_state = b;
+		state = b;
 	}
 }

@@ -16,10 +16,10 @@ import java.awt.event.MouseEvent;
  */
 public class ZoomChanger extends JPanel {
 
-	private final CircuitCanvas _canvas;
+	private final CircuitCanvas canvas;
 
 	public ZoomChanger(CircuitCanvas canvas) {
-		_canvas = canvas;
+		this.canvas = canvas;
 		JSlider zoomSlider = new JSlider(1, 8, 4);
 		FlatButton decreaseZoom = new FlatButton(" - ");
 		decreaseZoom.addMouseListener(new MouseAdapter() {
@@ -54,7 +54,7 @@ public class ZoomChanger extends JPanel {
 		zoomSlider.addChangeListener(e -> {
 			JSlider slider = (JSlider) e.getSource();
 			double zoom = 0.25 * slider.getValue();
-			_canvas.setZoom(zoom);
+			canvas.setZoom(zoom);
 			label.setText((int) (zoom * 100) + "%");
 		});
 		return label;

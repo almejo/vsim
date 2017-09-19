@@ -15,19 +15,19 @@ import java.awt.*;
  */
 public abstract class GateDescriptor {
 
-	protected Point[] _pinPosition;
+	protected Point[] pinPosition;
 
-	protected int _pinCount;
+	protected int pinCount;
 
-	protected GateTypes _gateType;
+	protected GateTypes gateType;
 
-	private final String _type;
+	private final String type;
 
-	GateParameters _originalParameters;
+	GateParameters originalParameters;
 
 	public GateDescriptor(GateParameters parameters, String type) {
-		_originalParameters = parameters;
-		_type = type;
+		originalParameters = parameters;
+		this.type = type;
 	}
 
 	void paint(Graphics2D graphics, IconGate iconGate) {
@@ -39,20 +39,20 @@ public abstract class GateDescriptor {
 	public abstract Dimension getSize();
 
 	Point getPinPosition(byte pinId) {
-		return _pinPosition[pinId];
+		return pinPosition[pinId];
 	}
 
 	public abstract Gate make(Circuit circuit, GateParameters params);
 
 	public int getPinCount() {
-		return _pinCount;
+		return pinCount;
 	}
 
 	GateParameters getOriginalParameters() {
-		return _originalParameters;
+		return originalParameters;
 	}
 
 	public String getType() {
-		return _type;
+		return type;
 	}
 }

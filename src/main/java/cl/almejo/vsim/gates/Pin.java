@@ -11,19 +11,19 @@ import cl.almejo.vsim.simulation.Scheduler;
  * @author Alejandro Vera
  */
 public abstract class Pin extends Link {
-	private final int _pinId;
-	private byte _inValue = Constants.THREE_STATE;
-	private byte _outValue = Constants.THREE_STATE;
+	private final int pinId;
+	private byte inValue = Constants.THREE_STATE;
+	private byte outValue = Constants.THREE_STATE;
 
-	private byte _programedValue = Constants.THREE_STATE;
+	private byte programedValue = Constants.THREE_STATE;
 
-	private final PinEvent _pinEvent;
-	public Gate _gate;
+	private final PinEvent pinEvent;
+	Gate gate;
 
 	public Pin(Gate gate, Scheduler scheduler, int pinId) {
-		_gate = gate;
-		_pinEvent = new PinEvent(this, scheduler, pinId);
-		_pinId = pinId;
+		this.gate = gate;
+		pinEvent = new PinEvent(this, scheduler, pinId);
+		this.pinId = pinId;
 	}
 
 	public void connect(Link pin) {
@@ -75,35 +75,35 @@ public abstract class Pin extends Link {
 	public abstract void hasChanged();
 
 	private void setInValue(byte value) {
-		_inValue = value;
+		inValue = value;
 	}
 
 	byte getProgrammedValue() {
-		return _programedValue;
+		return programedValue;
 	}
 
 	public byte getInValue() {
-		return _inValue;
+		return inValue;
 	}
 
 	private PinEvent getPinEvent() {
-		return _pinEvent;
+		return pinEvent;
 	}
 
 	private byte getOutValue() {
-		return _outValue;
+		return outValue;
 	}
 
 	protected void program(byte value, int delay) {
-		_programedValue = value;
-		_pinEvent.schedule(delay);
+		programedValue = value;
+		pinEvent.schedule(delay);
 	}
 
 	void setOutValue(byte value) {
-		_outValue = value;
+		outValue = value;
 	}
 
 	public int getPinId() {
-		return _pinId;
+		return pinId;
 	}
 }

@@ -16,52 +16,52 @@ import javax.swing.*;
  */
 class TimeDiagram extends Gate implements DisplayInfoGate {
 
-	private final PlotEvent _plotEvent;
+	private final PlotEvent plotEvent;
 
-	private final TimeDiagramDisplay _timeDiagramCanvas;
+	private final TimeDiagramDisplay timeDiagramDisplay;
 
 	private static class PlotEvent extends SimulationEvent {
 
-		private final TimeDiagram _timeDiagram;
+		private final TimeDiagram timeDiagram;
 
 		PlotEvent(Scheduler scheduler, TimeDiagram timeDiagram) {
 			super(scheduler);
-			_timeDiagram = timeDiagram;
+			this.timeDiagram = timeDiagram;
 		}
 
 		@Override
 		public void happen() {
-			_timeDiagram.plot();
+			timeDiagram.plot();
 			schedule(150);
 		}
 	}
 
 	TimeDiagram(Circuit circuit, GateParameters parameters, TimeDiagramDescriptor descriptor) {
 		super(circuit, parameters, descriptor);
-		_pins = new Pin[descriptor.getPinCount()];
-		for (int pinId = 0; pinId < _pins.length; pinId++) {
-			_pins[pinId] = new SimplePin(this, circuit.getScheduler(), pinId);
+		pins = new Pin[descriptor.getPinCount()];
+		for (int pinId = 0; pinId < pins.length; pinId++) {
+			pins[pinId] = new SimplePin(this, circuit.getScheduler(), pinId);
 		}
-		_plotEvent = new PlotEvent(circuit.getScheduler(), this);
-		_timeDiagramCanvas = new TimeDiagramDisplay();
+		plotEvent = new PlotEvent(circuit.getScheduler(), this);
+		timeDiagramDisplay = new TimeDiagramDisplay();
 	}
 
 	private void plot() {
-		if (_timeDiagramCanvas != null) {
-			_timeDiagramCanvas.plot(new byte[]{_pins[0].getInValue()
-					, _pins[1].getInValue()
-					, _pins[2].getInValue()
-					, _pins[3].getInValue()});
+		if (timeDiagramDisplay != null) {
+			timeDiagramDisplay.plot(new byte[]{pins[0].getInValue()
+					, pins[1].getInValue()
+					, pins[2].getInValue()
+					, pins[3].getInValue()});
 		}
 	}
 
 	@Override
 	public JPanel getDisplay() {
-		return _timeDiagramCanvas;
+		return timeDiagramDisplay;
 	}
 
 	@Override
 	public void startDisplay() {
-		_plotEvent.schedule(1);
+		plotEvent.schedule(1);
 	}
 }

@@ -16,7 +16,7 @@ import java.util.Map;
  */
 class TimeDiagramParameters extends GateParameters {
 
-	private String _text;
+	private String text;
 
 	@Override
 	public boolean isConfigurable() {
@@ -25,17 +25,17 @@ class TimeDiagramParameters extends GateParameters {
 
 	@Override
 	public void setValues(Map<String, Object> parameters) {
-		_text = (String) parameters.get("text");
+		text = (String) parameters.get("text");
 	}
 
 	@Override
 	public List<ConfigVariable> getValues() {
 		List<ConfigVariable> variables = new LinkedList<>();
-		variables.add(new ConfigVariable("text", "Text", _text));
+		variables.add(new ConfigVariable("text", "Text", text));
 		return variables;
 	}
 
 	public String getText() {
-		return _text;
+		return text;
 	}
 }

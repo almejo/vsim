@@ -14,17 +14,17 @@ class Switch extends Gate {
 
 	Switch(Circuit circuit, GateParameters parameters, SwitchDescriptor descriptor) {
 		super(circuit, parameters, descriptor);
-		_pins = new SimplePin[descriptor.getPinCount()];
-		_pins[0] = new SimplePin(this, circuit.getScheduler(), 0);
-		_pins[0].program(((SwitchParameters) parameters).getValue(), 1);
-		_pins[0].hasChanged();
+		pins = new SimplePin[descriptor.getPinCount()];
+		pins[0] = new SimplePin(this, circuit.getScheduler(), 0);
+		pins[0].program(((SwitchParameters) parameters).getValue(), 1);
+		pins[0].hasChanged();
 	}
 
 	@Override
 	public void parametersUpdated() {
 		super.parametersUpdated();
-		_pins[0].program(((SwitchParameters) getParamameters()).getValue(), 1);
-		_pins[0].hasChanged();
+		pins[0].program(((SwitchParameters) getParamameters()).getValue(), 1);
+		pins[0].hasChanged();
 	}
 
 }

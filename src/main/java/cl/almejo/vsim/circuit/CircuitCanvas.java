@@ -28,17 +28,17 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private Circuit _circuit;
-	private final AffineTransform _translationTransformation = new AffineTransform();
-	private final AffineTransform _computedTransformation = new AffineTransform();
-	private final AffineTransform _zoomTransformation = new AffineTransform();
-	private double _zoom = 1.0;
-	private final Rectangle _viewport = new Rectangle();
-	private final List<ViewportListener> _viewportListeners = new LinkedList<>();
+	private Circuit circuit;
+	private final AffineTransform translationTransformation = new AffineTransform();
+	private final AffineTransform computedTransformation = new AffineTransform();
+	private final AffineTransform zoomTransformation = new AffineTransform();
+	private double zoom = 1.0;
+	private final Rectangle viewport = new Rectangle();
+	private final List<ViewportListener> viewportListeners = new LinkedList<>();
 
 	public CircuitCanvas(Circuit circuit) {
-		_circuit = circuit;
-		_circuit.add(this);
+		this.circuit = circuit;
+		this.circuit.add(this);
 		addComponentListener(this);
 		setPreferredSize(new Dimension(800, 1800));
 		resizeViewport();
@@ -49,11 +49,11 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		clean(graphics2D);
 
-		AffineTransform transform = new AffineTransform(_computedTransformation);
+		AffineTransform transform = new AffineTransform(computedTransformation);
 		transform.concatenate(graphics2D.getTransform());
 
 		graphics2D.setTransform(transform);
-		_circuit.paint(graphics2D, _viewport);
+		circuit.paint(graphics2D, viewport);
 		graphics2D.setTransform(Constants.TRANSFORM_IDENTITY);
 	}
 
@@ -64,13 +64,13 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 
 	public void resizeViewport() {
 		Dimension size = getSize();
-		_viewport.setRect(_viewport.getX(), _viewport.getY(), size.getWidth() / _zoom, size.getHeight() / _zoom);
+		viewport.setRect(viewport.getX(), viewport.getY(), size.getWidth() / zoom, size.getHeight() / zoom);
 		sendViewportUpdatedEvent();
 	}
 
 	public void setCircuit(Circuit circuit) {
-		_circuit = circuit;
-		_circuit.add(this);
+		this.circuit = circuit;
+		this.circuit.add(this);
 	}
 
 	@Override
@@ -83,93 +83,93 @@ public class CircuitCanvas extends JPanel implements ComponentListener {
 	}
 
 	@Override
-	public void componentShown(ComponentEvent e) {
+	public void componentShown(ComponentEvent event) {
 	}
 
 	@Override
-	public void componentHidden(ComponentEvent e) {
+	public void componentHidden(ComponentEvent event) {
 	}
 
 	public void centerViewportTo(int x, int y) {
-		moveViewport(Circuit.gridTrunc((int) _viewport.getCenterX() - x), Circuit.gridTrunc((int) _viewport.getCenterY() - y));
+		moveViewport(Circuit.gridTrunc((int) viewport.getCenterX() - x), Circuit.gridTrunc((int) viewport.getCenterY() - y));
 	}
 
 	private void translateViewportTo(int x, int y) {
-		int dx = x - (int) _viewport.getX();
-		int dy = y - (int) _viewport.getY();
-		_viewport.translate(dx, dy);
-		_translationTransformation.translate(-dx, -dy);
+		int dx = x - (int) viewport.getX();
+		int dy = y - (int) viewport.getY();
+		viewport.translate(dx, dy);
+		translationTransformation.translate(-dx, -dy);
 		updateTransformation();
 		sendViewportUpdatedEvent();
 	}
 
 	public void moveViewport(int deltaX, int deltaY) {
-		_viewport.translate(-deltaX, -deltaY);
-		_translationTransformation.translate(deltaX, deltaY);
+		viewport.translate(-deltaX, -deltaY);
+		translationTransformation.translate(deltaX, deltaY);
 		updateTransformation();
 		sendViewportUpdatedEvent();
 	}
 
 	private void updateTransformation() {
-		_computedTransformation.setToIdentity();
-		_computedTransformation.concatenate(_zoomTransformation);
-		_computedTransformation.concatenate(_translationTransformation);
+		computedTransformation.setToIdentity();
+		computedTransformation.concatenate(zoomTransformation);
+		computedTransformation.concatenate(translationTransformation);
 	}
 
 	public int toCircuitCoordinatesX(int x) {
-		return (int) ((double) x / _zoom + _viewport.getX());
+		return (int) ((double) x / zoom + viewport.getX());
 	}
 
 	public int toCircuitCoordinatesY(int y) {
-		return (int) ((double) y / _zoom + _viewport.getY());
+		return (int) ((double) y / zoom + viewport.getY());
 	}
 
 	public void setZoom(double zoom) {
-		double centerX = _viewport.getCenterX();
-		double centerY = _viewport.getCenterY();
-		_viewport.setFrame(_viewport.getX(), _viewport.getY(), _viewport.getWidth() * _zoom, _viewport.getHeight() * _zoom);
-		_viewport.setFrame(_viewport.getX(), _viewport.getY(), _viewport.getWidth() / zoom, _viewport.getHeight() / zoom);
-		_zoomTransformation.setToIdentity();
-		_zoomTransformation.scale(zoom, zoom);
-		int cornerX = (int) (centerX - _viewport.getWidth() / 2);
-		int cornerY = (int) (centerY - _viewport.getHeight() / 2);
+		double centerX = viewport.getCenterX();
+		double centerY = viewport.getCenterY();
+		viewport.setFrame(viewport.getX(), viewport.getY(), viewport.getWidth() * this.zoom, viewport.getHeight() * this.zoom);
+		viewport.setFrame(viewport.getX(), viewport.getY(), viewport.getWidth() / zoom, viewport.getHeight() / zoom);
+		zoomTransformation.setToIdentity();
+		zoomTransformation.scale(zoom, zoom);
+		int cornerX = (int) (centerX - viewport.getWidth() / 2);
+		int cornerY = (int) (centerY - viewport.getHeight() / 2);
 		translateViewportTo(cornerX, cornerY);
-		_zoom = zoom;
+		this.zoom = zoom;
 	}
 
 	public double getZoom() {
-		return _zoom;
+		return zoom;
 	}
 
 	public Rectangle getWorld() {
-		Rectangle rectangle = new Rectangle(_viewport);
-		if (_circuit.getExtent() != null) {
-			rectangle.add(_circuit.getExtent());
+		Rectangle rectangle = new Rectangle(viewport);
+		if (circuit.getExtent() != null) {
+			rectangle.add(circuit.getExtent());
 		}
 		return rectangle;
 	}
 
 	public Rectangle getViewport() {
-		return new Rectangle(_viewport);
+		return new Rectangle(viewport);
 	}
 
 	public void addViewportListener(ViewportListener listener) {
 		if (listener != null) {
-			_viewportListeners.add(listener);
+			viewportListeners.add(listener);
 		}
 	}
 
 	private void sendViewportUpdatedEvent() {
-		for (ViewportListener listener : _viewportListeners) {
+		for (ViewportListener listener : viewportListeners) {
 			listener.updated(this);
 		}
 	}
 
 	public void center() {
-		if (_circuit.getExtent() == null) {
+		if (circuit.getExtent() == null) {
 			return;
 		}
-		Rectangle extent = _circuit.getExtent();
+		Rectangle extent = circuit.getExtent();
 		centerViewportTo((int) extent.getCenterX(), (int) extent.getCenterY());
 		LOGGER.debug("Viewport centered");
 	}

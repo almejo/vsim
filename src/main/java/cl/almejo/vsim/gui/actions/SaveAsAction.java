@@ -20,8 +20,8 @@ public class SaveAsAction extends WindowAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		_window.saveAs();
+	public void actionPerformed(ActionEvent event) {
+		window.saveAs();
 	}
 
 }

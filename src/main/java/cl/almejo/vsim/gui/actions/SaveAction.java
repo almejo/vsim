@@ -20,8 +20,8 @@ public class SaveAction extends WindowAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		_window.save(_window.getCircuit().getName());
+	public void actionPerformed(ActionEvent event) {
+		window.save(window.getCircuit().getName());
 	}
 
 }

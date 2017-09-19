@@ -8,8 +8,8 @@ package cl.almejo.vsim.gates;
  *
  * @author Alejandro Vera
  */
-class TristateParameters extends GateParametersWithDelay {
-	TristateParameters(int delay) {
+class TriStateParameters extends GateParametersWithDelay {
+	TriStateParameters(int delay) {
 		super(delay);
 	}
 }

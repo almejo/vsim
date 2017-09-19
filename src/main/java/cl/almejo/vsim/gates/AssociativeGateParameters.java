@@ -9,27 +9,27 @@ package cl.almejo.vsim.gates;
  * @author Alejandro Vera
  */
 class AssociativeGateParameters extends GateParametersWithDelay {
-	private final int[][] _behavior;
-	private final int _pinCount;
-	private final int _associativeType;
+	private final int[][] behavior;
+	private final int pinCount;
+	private final int associativeType;
 
 	AssociativeGateParameters(int delay, int pinCount, int[][] behavior, int associativeType) {
 		super(delay);
-		_pinCount = pinCount;
-		_behavior = behavior;
-		_associativeType = associativeType;
+		this.pinCount = pinCount;
+		this.behavior = behavior;
+		this.associativeType = associativeType;
 	}
 
 	int[][] getBehavior() {
-		return _behavior;
+		return behavior;
 	}
 
 	public int getPinCount() {
-		return _pinCount;
+		return pinCount;
 	}
 
 	int getAssociativeType() {
-		return _associativeType;
+		return associativeType;
 	}
 
 	@Override

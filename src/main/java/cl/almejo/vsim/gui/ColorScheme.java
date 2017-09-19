@@ -21,11 +21,11 @@ import java.util.Map;
  */
 public class ColorScheme {
 
-	private final HashMap<String, Color> _colors = new HashMap<>();
+	private final HashMap<String, Color> colors = new HashMap<>();
 
-	private static ColorScheme _current;
+	private static ColorScheme currentScheme;
 
-	private static final HashMap<String, ColorScheme> _schemes = new HashMap<>();
+	private static final HashMap<String, ColorScheme> SCHEMES = new HashMap<>();
 
 	static {
 
@@ -39,36 +39,36 @@ public class ColorScheme {
 				ColorScheme scheme = new ColorScheme(name);
 
 				map.keySet().forEach(colorName -> scheme.set(colorName, new Color(Integer.parseInt(map.get(colorName).replace("#", ""), 16), false)));
-				_schemes.put(name, scheme);
+				SCHEMES.put(name, scheme);
 			}
-			_current = _schemes.get("default");
+			currentScheme = SCHEMES.get("default");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private final String _name;
+	private final String name;
 
 	private ColorScheme(String name) {
-		_name = name;
-		_colors.put("background", Color.GRAY);
-		_colors.put("bus-on", Color.RED);
-		_colors.put("gates", Color.BLUE);
-		_colors.put("ground", Color.GREEN);
-		_colors.put("off", Color.BLACK);
-		_colors.put("wires-on", Color.RED);
-		_colors.put("signal", Color.RED);
-		_colors.put("grid", Color.GRAY);
-		_colors.put("label", Color.YELLOW);
+		this.name = name;
+		colors.put("background", Color.GRAY);
+		colors.put("bus-on", Color.RED);
+		colors.put("gates", Color.BLUE);
+		colors.put("ground", Color.GREEN);
+		colors.put("off", Color.BLACK);
+		colors.put("wires-on", Color.RED);
+		colors.put("signal", Color.RED);
+		colors.put("grid", Color.GRAY);
+		colors.put("label", Color.YELLOW);
 	}
 
 	public static String save() throws IOException {
 		HashMap<String, HashMap<String, String>> map = new HashMap<>();
-		for (String schemeName : _schemes.keySet()) {
-			ColorScheme scheme = _schemes.get(schemeName);
+		for (String schemeName : SCHEMES.keySet()) {
+			ColorScheme scheme = SCHEMES.get(schemeName);
 			HashMap<String, String> colors = new HashMap<>();
-			for (String colorName : scheme._colors.keySet()) {
-				Color color = scheme._colors.get(colorName);
+			for (String colorName : scheme.colors.keySet()) {
+				Color color = scheme.colors.get(colorName);
 				colors.put(colorName, "#" + Integer.toHexString(color.getRGB()).substring(2));
 			}
 			map.put(schemeName, colors);
@@ -78,55 +78,55 @@ public class ColorScheme {
 	}
 
 	public static ColorScheme getCurrent() {
-		return _current;
+		return currentScheme;
 	}
 
 	public static String[] getNames() {
-		return _schemes.keySet().toArray(new String[_schemes.keySet().size()]);
+		return SCHEMES.keySet().toArray(new String[SCHEMES.keySet().size()]);
 	}
 
 	public static void setCurrent(String name) {
-		_current = _schemes.get(name);
+		currentScheme = SCHEMES.get(name);
 	}
 
 	public static Color getGrid() {
-		return _current.get("grid");
+		return currentScheme.get("grid");
 	}
 
 	public void set(String colorName, Color color) {
-		_colors.put(colorName, color);
+		colors.put(colorName, color);
 	}
 
 	public Color get(String name) {
-		return _colors.get(name);
+		return colors.get(name);
 	}
 
 	public static Color getBackground() {
-		return _current.get("background");
+		return currentScheme.get("background");
 	}
 
 	public static Color getSignal() {
-		return _current.get("signal");
+		return currentScheme.get("signal");
 	}
 
 	public static Color getBusOn() {
-		return _current.get("bus-on");
+		return currentScheme.get("bus-on");
 	}
 
 	public static Color getGates() {
-		return _current.get("gates");
+		return currentScheme.get("gates");
 	}
 
 	public static Color getGround() {
-		return _current.get("ground");
+		return currentScheme.get("ground");
 	}
 
 	public static Color getWireOn() {
-		return _current.get("wires-on");
+		return currentScheme.get("wires-on");
 	}
 
 	public static Color getOff() {
-		return _current.get("off");
+		return currentScheme.get("off");
 	}
 
 	public static Color getColor(Pin pin) {
@@ -135,24 +135,24 @@ public class ColorScheme {
 	}
 
 	public static ColorScheme getScheme(String name) {
-		return _schemes.get(name);
+		return SCHEMES.get(name);
 	}
 
 	public static void add(String name) {
-		_schemes.put(name, new ColorScheme(name));
-		_current = _schemes.get(name);
+		SCHEMES.put(name, new ColorScheme(name));
+		currentScheme = SCHEMES.get(name);
 	}
 
 	public String getName() {
-		return _name;
+		return name;
 	}
 
 	public static boolean exists(String name) {
-		return _schemes.keySet().stream().anyMatch(schemeName -> schemeName.equalsIgnoreCase(name));
+		return SCHEMES.keySet().stream().anyMatch(schemeName -> schemeName.equalsIgnoreCase(name));
 	}
 
 	public static Color getLabel() {
-		return _current.get("label");
+		return currentScheme.get("label");
 	}
 }
 

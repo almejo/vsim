@@ -13,53 +13,52 @@ import java.util.List;
  */
 public class CommandManager {
 
-	private final List<Command> _done = new LinkedList<>();
-	private final List<Command> _undone = new LinkedList<>();
+	private final List<Command> done = new LinkedList<>();
+	private final List<Command> undone = new LinkedList<>();
 
 	public void apply(Command command) {
 		if (command.apply()) {
-			_done.add(command);
-			_undone.clear();
+			done.add(command);
+			undone.clear();
 		}
 	}
 
 	public void undo() {
-		if (_done.isEmpty()) {
+		if (done.isEmpty()) {
 			return;
 		}
 
-		Command command = _done.remove(_done.size() - 1);
+		Command command = done.remove(done.size() - 1);
 		command.unDo();
-		_undone.add(0, command);
+		undone.add(0, command);
 	}
 
 	public void redo() {
-		if (_undone.isEmpty()) {
+		if (undone.isEmpty()) {
 			return;
 		}
-		Command command = _undone.remove(0);
+		Command command = undone.remove(0);
 		command.apply();
-		_done.add(command);
+		done.add(command);
 	}
 
 	public boolean canUndo() {
-		return !_done.isEmpty();
+		return !done.isEmpty();
 	}
 
 	public boolean canRedo() {
-		return !_undone.isEmpty();
+		return !undone.isEmpty();
 	}
 
 	public void cleanHistory() {
-		_undone.clear();
-		_done.clear();
+		undone.clear();
+		done.clear();
 	}
 
-
 	public Command getLastApplied() {
-		if (_done.isEmpty()) {
+		if (done.isEmpty()) {
 			return null;
 		}
-		return _done.get(_done.size() - 1);
+		return done.get(done.size() - 1);
 	}
 }

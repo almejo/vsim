@@ -10,14 +10,14 @@ package cl.almejo.vsim.simulation;
  */
 public abstract class SimulationEvent extends HeapElement {
 
-	Scheduler _scheduler;
+	Scheduler scheduler;
 
 	public SimulationEvent(Scheduler scheduler) {
-		_scheduler = scheduler;
+		this.scheduler = scheduler;
 	}
 
 	public void schedule(long delay) {
-		_scheduler.schedule(this, delay);
+		scheduler.schedule(this, delay);
 	}
 
 	public abstract void happen();
@@ -27,6 +27,6 @@ public abstract class SimulationEvent extends HeapElement {
 	}
 
 	public boolean isProgrammed() {
-		return _scheduler.isProgrammed(this);
+		return scheduler.isProgrammed(this);
 	}
 }

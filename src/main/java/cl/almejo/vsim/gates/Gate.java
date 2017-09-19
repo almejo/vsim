@@ -24,45 +24,45 @@ public class Gate {
 	public static final String XOR4 = "xor4";
 	public static final String NOT = "not";
 	public static final String FLIP_FLOP_DATA = "flip-flop-data";
-	public static final String TRISTATE = "tristate";
+	public static final String TRI_STATE = "tri-state";
 	public static final String SEVEN_SEGMENTS_DISPLAY = "seven-segments-display";
 	public static final String SEVEN_SEGMENTS_DISPLAY_DOUBLE = "seven-segments-display-double";
 	public static final String LED = "led";
 	public static final String TIME_DIAGRAM = "time-diagram";
 	public static final String SWITCH = "switch";
 
-	protected Pin[] _pins;
-	protected Circuit _circuit;
-	private final GateParameters _parameters;
-	private final GateDescriptor _gateDescriptor;
+	protected Pin[] pins;
+	private Circuit circuit;
+	private final GateParameters parameters;
+	private final GateDescriptor gateDescriptor;
 
 	public Gate(Circuit circuit, GateParameters parameters, GateDescriptor descriptor) {
-		_circuit = circuit;
-		_parameters = parameters;
-		_gateDescriptor = descriptor;
+		this.circuit = circuit;
+		this.parameters = parameters;
+		gateDescriptor = descriptor;
 	}
 
 	public GateParameters getParamameters() {
-		return _parameters;
+		return parameters;
 	}
 
 	public Pin getPin(int i) {
-		return _pins[i];
+		return pins[i];
 	}
 
 	public GateDescriptor getGateDescriptor() {
-		return _gateDescriptor;
+		return gateDescriptor;
 	}
 
 	public int getPinCount() {
-		return _pins.length;
+		return pins.length;
 	}
 
 	public void parametersUpdated() {
 	}
 
 	public Circuit getCircuit() {
-		return _circuit;
+		return circuit;
 	}
 
 }

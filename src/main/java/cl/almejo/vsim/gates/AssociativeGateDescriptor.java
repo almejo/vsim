@@ -15,8 +15,8 @@ import java.awt.*;
  * @author Alejandro Vera
  */
 class AssociativeGateDescriptor extends GateDescriptor {
-	private final int[][] _behavior;
-	private final int _associativeType;
+	private final int[][] behavior;
+	private final int associativeType;
 
 	static final int ASSOCIATIVE_TYPE_AND = 0;
 	static final int ASSOCIATIVE_TYPE_OR = 1;
@@ -31,23 +31,23 @@ class AssociativeGateDescriptor extends GateDescriptor {
 
 	AssociativeGateDescriptor(AssociativeGateParameters parameters, String type) {
 		super(parameters, type);
-		_behavior = parameters.getBehavior();
-		_pinPosition = new Point[parameters.getPinCount() + 1];
-		_associativeType = parameters.getAssociativeType();
+		behavior = parameters.getBehavior();
+		pinPosition = new Point[parameters.getPinCount() + 1];
+		associativeType = parameters.getAssociativeType();
 
 		int dy = 32 / (parameters.getPinCount() - 1);
 		for (int i = 0; i < parameters.getPinCount(); i++) {
-			_pinPosition[i] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(i * dy));
+			pinPosition[i] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(i * dy));
 		}
 
-		_pinPosition[parameters.getPinCount()] = new Point(32, 16);
-		_gateType = GateTypes.NORMAL;
+		pinPosition[parameters.getPinCount()] = new Point(32, 16);
+		gateType = GateTypes.NORMAL;
 	}
 
 	@Override
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
 		graphics.setColor(ColorScheme.getGates());
-		switch (_associativeType) {
+		switch (associativeType) {
 			case ASSOCIATIVE_TYPE_AND:
 				graphics.fillArc(-32, 0, 64, 32, -90, 180);
 				break;
@@ -77,12 +77,12 @@ class AssociativeGateDescriptor extends GateDescriptor {
 	}
 
 	int computeAssociativeVal(int value1, byte value2) {
-		return _behavior[value1 + 1][value2 + 1];
+		return behavior[value1 + 1][value2 + 1];
 	}
 
 	@Override
 	public int getPinCount() {
-		return ((AssociativeGateParameters) _originalParameters).getPinCount() + 1;
+		return ((AssociativeGateParameters) originalParameters).getPinCount() + 1;
 	}
 
 }

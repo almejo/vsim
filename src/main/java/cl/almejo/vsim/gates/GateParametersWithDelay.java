@@ -17,25 +17,25 @@ import java.util.Map;
  */
 abstract class GateParametersWithDelay extends GateParameters {
 
-	private int _delay;
+	private int delay;
 
 	GateParametersWithDelay(int delay) {
-		_delay = delay;
+		this.delay = delay;
 	}
 
-	public int getDelay() {
-		return _delay;
+	int getDelay() {
+		return delay;
 	}
 
 	@Override
 	public void setValues(Map<String, Object> parameters) {
-		_delay = (Integer) parameters.get("delay");
+		delay = (Integer) parameters.get("delay");
 	}
 
 	@Override
 	public List<ConfigVariable> getValues() {
 		List<ConfigVariable> variables = new LinkedList<>();
-		variables.add(new ConfigVariable("delay", Messages.t("config.delay.label"), _delay));
+		variables.add(new ConfigVariable("delay", Messages.t("config.delay.label"), delay));
 		return variables;
 	}
 }

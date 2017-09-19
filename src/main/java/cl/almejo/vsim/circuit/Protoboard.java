@@ -4,6 +4,7 @@ import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.Pin;
 import cl.almejo.vsim.gui.ColorScheme;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import lombok.Getter;
 /**
  * vsim
  * <p>
@@ -26,15 +26,15 @@ class Protoboard {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Protoboard.class);
 
-	private final Matrix<Contact> _matrix = new Matrix<>();
-	private boolean _drawConnectPreview;
-	private int _connectionStartX;
-	private int _connectionStartY;
-	private int _connectionEndX;
-	private int _connectionEndY;
+	private final Matrix<Contact> matrix = new Matrix<>();
+	private boolean drawConnectPreview;
+	private int connectionStartX;
+	private int connectionStartY;
+	private int connectionEndX;
+	private int connectionEndY;
 
 	@Getter
-	private Rectangle _extent;
+	private Rectangle extent;
 
 	Protoboard() {
 	}
@@ -57,17 +57,17 @@ class Protoboard {
 	}
 
 	private void updateExtent() {
-		if (_matrix.getXCoordinates().isEmpty()) {
-			_extent = null;
+		if (matrix.getXCoordinates().isEmpty()) {
+			extent = null;
 		}
-		List<Integer> listX = toList(_matrix.getXCoordinates());
-		List<Integer> listY = toList(_matrix.getYCoordinates());
+		List<Integer> listX = toList(matrix.getXCoordinates());
+		List<Integer> listY = toList(matrix.getYCoordinates());
 
-		_extent = new Rectangle(listX.get(0)
+		extent = new Rectangle(listX.get(0)
 				, listY.get(0)
 				, listX.get(listX.size() - 1) - listX.get(0)
 				, listY.get(listY.size() - 1) - listY.get(0));
-		LOGGER.debug("Extent: " + _extent);
+		LOGGER.debug("Extent: " + extent);
 	}
 
 	private List<Integer> toList(Set<Integer> coordinates) {
@@ -129,9 +129,9 @@ class Protoboard {
 
 		contacts.add(contact);
 
-		FindResult<Contact> resultH = _matrix.findHorizontal(contact._x, contact._y);
+		FindResult<Contact> resultH = matrix.findHorizontal(contact.x, contact.y);
 
-		FindResult<Contact> resultV = _matrix.findVertical(contact._x, contact._y);
+		FindResult<Contact> resultV = matrix.findVertical(contact.x, contact.y);
 
 		if (contact.isConnected(Constants.EAST)) {
 			getAllContactsAttached(resultH.getNext(), contacts);
@@ -150,22 +150,22 @@ class Protoboard {
 	}
 
 	private Contact poke(int x, int y) {
-		FindResult<Contact> result = _matrix.findHorizontal(x, y);
+		FindResult<Contact> result = matrix.findHorizontal(x, y);
 		LOGGER.debug("poke " + new Point(x, y) + " ===> " + result);
 		if (result.getHit() != null) {
 			return result.getHit();
 		}
 
 		Contact contact = new Contact(x, y);
-		_matrix.add(contact);
+		matrix.add(contact);
 		connectToSurrounding(contact);
 		return contact;
 	}
 
 	private void connectToSurrounding(Contact contact) {
-		FindResult<Contact> resultH = _matrix.findHorizontal(contact.getX(), contact.getY());
+		FindResult<Contact> resultH = matrix.findHorizontal(contact.getX(), contact.getY());
 
-		FindResult<Contact> resultV = _matrix.findVertical(contact.getX(), contact.getY());
+		FindResult<Contact> resultV = matrix.findVertical(contact.getX(), contact.getY());
 
 		if (resultH.getPrevious() != null && resultH.getPrevious().isConnected(Constants.EAST)) {
 			resultH.getHit().connect(Constants.WEST);
@@ -207,7 +207,7 @@ class Protoboard {
 
 		Contact contactA;
 		Contact contactB;
-		if (contact1._x < contact2._x) {
+		if (contact1.x < contact2.x) {
 			contactA = contact1;
 			contactB = contact2;
 		} else {
@@ -231,7 +231,7 @@ class Protoboard {
 
 		Contact contactA;
 		Contact contactB;
-		if (contact1._y < contact2._y) {
+		if (contact1.y < contact2.y) {
 			contactA = contact1;
 			contactB = contact2;
 		} else {
@@ -261,13 +261,13 @@ class Protoboard {
 		}
 
 		if (contact.isMiddlePoint() || contact.isNotConnected()) {
-			_matrix.remove(contact);
+			matrix.remove(contact);
 		}
 	}
 
 	private List<Contact> reconnectInnerContactsVertically(Contact contactA, Contact contactB) {
 
-		_matrix.getBetween(contactA, contactB).forEach(contact -> {
+		matrix.getBetween(contactA, contactB).forEach(contact -> {
 			contact.connect(Constants.NORTH);
 			contact.connect(Constants.SOUTH);
 		});
@@ -275,7 +275,7 @@ class Protoboard {
 	}
 
 	private List<Contact> reconnectInnerContactsHorizontally(Contact contactA, Contact contactB) {
-		_matrix.getBetween(contactA, contactB).forEach(contact -> {
+		matrix.getBetween(contactA, contactB).forEach(contact -> {
 			contact.connect(Constants.EAST);
 			contact.connect(Constants.WEST);
 		});
@@ -284,9 +284,9 @@ class Protoboard {
 
 	void paint(Graphics2D graphics, Rectangle rectangle) {
 		Color color = graphics.getColor();
-		for (Integer x : _matrix.getXCoordinates()) {
+		for (Integer x : matrix.getXCoordinates()) {
 			Contact previous = null;
-			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
+			List<Contact> verticalContacts = matrix.getVerticalContacts(x);
 			for (Contact contact : verticalContacts) {
 				graphics.setColor(getContactColor(contact));
 				graphics.fillOval(contact.getX() - 3, contact.getY() - 3, 6, 6);
@@ -300,9 +300,9 @@ class Protoboard {
 			}
 		}
 
-		for (Integer y : _matrix.getYCoordinates()) {
+		for (Integer y : matrix.getYCoordinates()) {
 			Contact previous = null;
-			List<Contact> verticalContacts = _matrix.getHorizontalContacts(y);
+			List<Contact> verticalContacts = matrix.getHorizontalContacts(y);
 			for (Contact contact : verticalContacts) {
 				graphics.setColor(getContactColor(contact));
 				if (previous != null && contact.isConnected(Constants.WEST)) {
@@ -327,13 +327,13 @@ class Protoboard {
 
 	List<Connection<Contact>> findToDisconnect(int x, int y) {
 
-		List<Connection<Contact>> connections = findConnections(Constants.EAST, _matrix.findHorizontal(x, y).list());
+		List<Connection<Contact>> connections = findConnections(Constants.EAST, matrix.findHorizontal(x, y).list());
 
 		if (!connections.isEmpty()) {
 			return connections;
 		}
 
-		return findConnections(Constants.NORTH, _matrix.findVertical(x, y).list());
+		return findConnections(Constants.NORTH, matrix.findVertical(x, y).list());
 	}
 
 	private void disconnect(Contact contactA, Contact contactB) {
@@ -364,22 +364,22 @@ class Protoboard {
 	List<Connection<Contact>> findBeforeConnect(int xi, int yi, int xf, int yf) {
 		if (xi == xf) {
 			if (yi < yf) {
-				Contact first = findFirst(Constants.NORTH, _matrix.findVertical(xi, yi));
-				Contact last = findLast(Constants.SOUTH, _matrix.findVertical(xf, yf));
-				return findConnections(Constants.NORTH, _matrix.getSublist(first, last));
+				Contact first = findFirst(Constants.NORTH, matrix.findVertical(xi, yi));
+				Contact last = findLast(Constants.SOUTH, matrix.findVertical(xf, yf));
+				return findConnections(Constants.NORTH, matrix.getSublist(first, last));
 			}
-			Contact first = findFirst(Constants.NORTH, _matrix.findVertical(xf, yf));
-			Contact last = findLast(Constants.SOUTH, _matrix.findVertical(xi, yi));
-			return findConnections(Constants.NORTH, _matrix.getSublist(first, last));
+			Contact first = findFirst(Constants.NORTH, matrix.findVertical(xf, yf));
+			Contact last = findLast(Constants.SOUTH, matrix.findVertical(xi, yi));
+			return findConnections(Constants.NORTH, matrix.getSublist(first, last));
 		}
 		if (xi < xf) {
-			Contact first = findFirst(Constants.EAST, _matrix.findHorizontal(xi, yi));
-			Contact last = findLast(Constants.WEST, _matrix.findHorizontal(xf, yf));
-			return findConnections(Constants.EAST, _matrix.getSublist(first, last));
+			Contact first = findFirst(Constants.EAST, matrix.findHorizontal(xi, yi));
+			Contact last = findLast(Constants.WEST, matrix.findHorizontal(xf, yf));
+			return findConnections(Constants.EAST, matrix.getSublist(first, last));
 		}
-		Contact first = findFirst(Constants.EAST, _matrix.findHorizontal(xf, yf));
-		Contact last = findLast(Constants.WEST, _matrix.findHorizontal(xi, yi));
-		return findConnections(Constants.EAST, _matrix.getSublist(first, last));
+		Contact first = findFirst(Constants.EAST, matrix.findHorizontal(xf, yf));
+		Contact last = findLast(Constants.WEST, matrix.findHorizontal(xi, yi));
+		return findConnections(Constants.EAST, matrix.getSublist(first, last));
 	}
 
 	private Contact findLast(byte direction, FindResult<Contact> result) {
@@ -407,19 +407,19 @@ class Protoboard {
 
 		if (xi == xf) {
 			if (yi < yf) {
-				contactA = findFirst(Constants.NORTH, _matrix.findVertical(xi, yi));
-				contactB = findLast(Constants.SOUTH, _matrix.findVertical(xf, yf));
+				contactA = findFirst(Constants.NORTH, matrix.findVertical(xi, yi));
+				contactB = findLast(Constants.SOUTH, matrix.findVertical(xf, yf));
 			} else {
-				contactA = findFirst(Constants.NORTH, _matrix.findVertical(xf, yf));
-				contactB = findLast(Constants.SOUTH, _matrix.findVertical(xi, yi));
+				contactA = findFirst(Constants.NORTH, matrix.findVertical(xf, yf));
+				contactB = findLast(Constants.SOUTH, matrix.findVertical(xi, yi));
 			}
 		} else {
 			if (xi < xf) {
-				contactA = findFirst(Constants.EAST, _matrix.findHorizontal(xi, yi));
-				contactB = findLast(Constants.WEST, _matrix.findHorizontal(xf, yf));
+				contactA = findFirst(Constants.EAST, matrix.findHorizontal(xi, yi));
+				contactB = findLast(Constants.WEST, matrix.findHorizontal(xf, yf));
 			} else {
-				contactA = findFirst(Constants.EAST, _matrix.findHorizontal(xf, yf));
-				contactB = findLast(Constants.WEST, _matrix.findHorizontal(xi, yi));
+				contactA = findFirst(Constants.EAST, matrix.findHorizontal(xf, yf));
+				contactB = findLast(Constants.WEST, matrix.findHorizontal(xi, yi));
 			}
 		}
 
@@ -434,23 +434,23 @@ class Protoboard {
 	}
 
 	void setDrawConnectPreview(boolean draw) {
-		_drawConnectPreview = draw;
+		drawConnectPreview = draw;
 	}
 
 	void setConnectPreview(int xi, int yi, int xf, int yf) {
-		_connectionStartX = xi;
-		_connectionStartY = yi;
-		_connectionEndX = xf;
-		_connectionEndY = yf;
+		connectionStartX = xi;
+		connectionStartY = yi;
+		connectionEndX = xf;
+		connectionEndY = yf;
 	}
 
 	private void drawConnectPreview(Graphics2D graphics) {
-		if (_drawConnectPreview) {
+		if (drawConnectPreview) {
 
-			int xi = Circuit.gridTrunc(_connectionStartX);
-			int yi = Circuit.gridTrunc(_connectionStartY);
-			int xf = Circuit.gridTrunc(_connectionEndX);
-			int yf = Circuit.gridTrunc(_connectionEndY);
+			int xi = Circuit.gridTrunc(connectionStartX);
+			int yi = Circuit.gridTrunc(connectionStartY);
+			int xf = Circuit.gridTrunc(connectionEndX);
+			int yf = Circuit.gridTrunc(connectionEndY);
 
 			if (xi == xf && yi == yf) {
 				return;
@@ -475,9 +475,9 @@ class Protoboard {
 
 	List<Connection<Contact>> getAllConnections() {
 		List<Connection<Contact>> list = new LinkedList<>();
-		for (Integer y : _matrix.getYCoordinates()) {
+		for (Integer y : matrix.getYCoordinates()) {
 			Contact previous = null;
-			List<Contact> verticalContacts = _matrix.getHorizontalContacts(y);
+			List<Contact> verticalContacts = matrix.getHorizontalContacts(y);
 			for (Contact contact : verticalContacts) {
 				if (previous != null && contact.isConnected(Constants.WEST)) {
 					list.add(new Connection<>(previous, contact));
@@ -486,9 +486,9 @@ class Protoboard {
 			}
 		}
 
-		for (Integer x : _matrix.getXCoordinates()) {
+		for (Integer x : matrix.getXCoordinates()) {
 			Contact previous = null;
-			List<Contact> verticalContacts = _matrix.getVerticalContacts(x);
+			List<Contact> verticalContacts = matrix.getVerticalContacts(x);
 			for (Contact contact : verticalContacts) {
 				if (previous != null && contact.isConnected(Constants.SOUTH)) {
 					list.add(new Connection<>(previous, contact));

@@ -12,8 +12,8 @@ import java.util.*;
  */
 class Matrix<T extends Point> {
 
-	private final Hashtable<Integer, List<T>> _verticalTable = new Hashtable<>();
-	private final Hashtable<Integer, List<T>> _horizontalTable = new Hashtable<>();
+	private final Hashtable<Integer, List<T>> verticalTable = new Hashtable<>();
+	private final Hashtable<Integer, List<T>> horizontalTable = new Hashtable<>();
 
 	private final Comparator<T> COMPARATOR_X = (o1, o2) -> {
 		if (o1.getX() < o2.getX()) {
@@ -30,8 +30,8 @@ class Matrix<T extends Point> {
 	};
 
 	public void add(T point) {
-		insertIntoPointsTable(point, _horizontalTable, COMPARATOR_Y, point.getX());
-		insertIntoPointsTable(point, _verticalTable, COMPARATOR_X, point.getY());
+		insertIntoPointsTable(point, horizontalTable, COMPARATOR_Y, point.getX());
+		insertIntoPointsTable(point, verticalTable, COMPARATOR_X, point.getY());
 	}
 
 	private void insertIntoPointsTable(T point, Hashtable<Integer, List<T>> table, Comparator<T> comparator, int coordinate) {
@@ -44,13 +44,13 @@ class Matrix<T extends Point> {
 	}
 
 	FindResult<T> findHorizontal(int x, int y) {
-		if (!_verticalTable.containsKey(y)) {
+		if (!verticalTable.containsKey(y)) {
 			return new FindResult<>(null, null, null);
 		}
 
 		T previous = null;
 		T next = null;
-		List<T> points = _verticalTable.get(y);
+		List<T> points = verticalTable.get(y);
 		int i = 0;
 		for (T point : points) {
 			if (point.getX() == x) {
@@ -69,13 +69,13 @@ class Matrix<T extends Point> {
 	}
 
 	FindResult<T> findVertical(int x, int y) {
-		if (!_horizontalTable.containsKey(x)) {
+		if (!horizontalTable.containsKey(x)) {
 			return new FindResult<>(null, null, null);
 		}
 
 		T previous = null;
 		T next = null;
-		List<T> points = _horizontalTable.get(x);
+		List<T> points = horizontalTable.get(x);
 		int i = 0;
 		for (T point : points) {
 			if (point.getY() == y) {
@@ -102,10 +102,10 @@ class Matrix<T extends Point> {
 		List<T> list;
 		Comparator<T> comparator;
 		if (a.getX() == b.getX()) {
-			list = _horizontalTable.get(a.getX());
+			list = horizontalTable.get(a.getX());
 			comparator = COMPARATOR_Y;
 		} else {
-			list = _verticalTable.get(a.getY());
+			list = verticalTable.get(a.getY());
 			comparator = COMPARATOR_X;
 		}
 
@@ -129,10 +129,10 @@ class Matrix<T extends Point> {
 		List<T> list;
 		Comparator<T> comparator;
 		if (a.getX() == b.getX()) {
-			list = _horizontalTable.get(a.getX());
+			list = horizontalTable.get(a.getX());
 			comparator = COMPARATOR_Y;
 		} else {
-			list = _verticalTable.get(a.getY());
+			list = verticalTable.get(a.getY());
 			comparator = COMPARATOR_X;
 		}
 
@@ -151,7 +151,7 @@ class Matrix<T extends Point> {
 
 	@Override
 	public String toString() {
-		return drawPointTable(_horizontalTable, "horizontal") + "\n\n" + drawPointTable(_verticalTable, "vertical");
+		return drawPointTable(horizontalTable, "horizontal") + "\n\n" + drawPointTable(verticalTable, "vertical");
 	}
 
 	private String drawPointTable(Hashtable<Integer, List<T>> table, String title) {
@@ -169,34 +169,34 @@ class Matrix<T extends Point> {
 	}
 
 	public void remove(T point) {
-		if (_horizontalTable.containsKey(point.getX())) {
-			int index = Collections.binarySearch(_horizontalTable.get(point.getX()), point, COMPARATOR_Y);
+		if (horizontalTable.containsKey(point.getX())) {
+			int index = Collections.binarySearch(horizontalTable.get(point.getX()), point, COMPARATOR_Y);
 			if (index >= 0) {
-				_horizontalTable.get(point.getX()).remove(index);
+				horizontalTable.get(point.getX()).remove(index);
 			}
 		}
 
-		if (_verticalTable.containsKey(point.getY())) {
-			int index = Collections.binarySearch(_verticalTable.get(point.getY()), point, COMPARATOR_X);
+		if (verticalTable.containsKey(point.getY())) {
+			int index = Collections.binarySearch(verticalTable.get(point.getY()), point, COMPARATOR_X);
 			if (index >= 0) {
-				_verticalTable.get(point.getY()).remove(index);
+				verticalTable.get(point.getY()).remove(index);
 			}
 		}
 	}
 
 	Set<Integer> getXCoordinates() {
-		return _horizontalTable.keySet();
+		return horizontalTable.keySet();
 	}
 
 	Set<Integer> getYCoordinates() {
-		return _verticalTable.keySet();
+		return verticalTable.keySet();
 	}
 
 	List<T> getVerticalContacts(Integer x) {
-		return _horizontalTable.get(x);
+		return horizontalTable.get(x);
 	}
 
 	List<T> getHorizontalContacts(Integer y) {
-		return _verticalTable.get(y);
+		return verticalTable.get(y);
 	}
 }

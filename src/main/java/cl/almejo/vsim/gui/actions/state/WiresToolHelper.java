@@ -14,33 +14,33 @@ import java.awt.event.MouseEvent;
  * @author Alejandro Vera
  */
 public class WiresToolHelper extends ActionToolHelper {
-	private int _xi;
-	private int _yi;
-	private boolean _connecting;
+	private int xi;
+	private int yi;
+	private boolean connecting;
 
 	@Override
 	public void mouseDown(SimWindow window, MouseEvent event) {
-		_xi = event.getX();
-		_yi = event.getY();
+		xi = event.getX();
+		yi = event.getY();
 		window.getCircuit().setDrawConnectPreview(true);
 
 		CircuitCanvas canvas = window.getCanvas();
-		window.getCircuit().setConnectPreview(canvas.toCircuitCoordinatesX(_xi)
-				, canvas.toCircuitCoordinatesY(_yi)
-				, canvas.toCircuitCoordinatesX(_xi)
-				, canvas.toCircuitCoordinatesY(_yi));
-		_connecting = true;
+		window.getCircuit().setConnectPreview(canvas.toCircuitCoordinatesX(xi)
+				, canvas.toCircuitCoordinatesY(yi)
+				, canvas.toCircuitCoordinatesX(xi)
+				, canvas.toCircuitCoordinatesY(yi));
+		connecting = true;
 	}
 
 	@Override
 	public void mouseUp(SimWindow window, MouseEvent event) {
 		if (event.getClickCount() < 1) {
 			CircuitCanvas canvas = window.getCanvas();
-			window.undoableConnect(canvas.toCircuitCoordinatesX(_xi)
-					, canvas.toCircuitCoordinatesY(_yi)
+			window.undoableConnect(canvas.toCircuitCoordinatesX(xi)
+					, canvas.toCircuitCoordinatesY(yi)
 					, canvas.toCircuitCoordinatesX(event.getX())
 					, canvas.toCircuitCoordinatesY(event.getY()));
-			_connecting = false;
+			connecting = false;
 		}
 		window.getCircuit().setDrawConnectPreview(false);
 
@@ -57,10 +57,10 @@ public class WiresToolHelper extends ActionToolHelper {
 
 	@Override
 	public void mouseDragged(SimWindow window, MouseEvent event) {
-		if (_connecting) {
+		if (connecting) {
 			CircuitCanvas canvas = window.getCanvas();
-			window.getCircuit().setConnectPreview(canvas.toCircuitCoordinatesX(_xi)
-					, canvas.toCircuitCoordinatesY(_yi)
+			window.getCircuit().setConnectPreview(canvas.toCircuitCoordinatesX(xi)
+					, canvas.toCircuitCoordinatesY(yi)
 					, canvas.toCircuitCoordinatesX(event.getX())
 					, canvas.toCircuitCoordinatesY(event.getY()));
 		}

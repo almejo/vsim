@@ -24,32 +24,32 @@ import java.util.Map;
  */
 class ConfigurationDialog extends JDialog {
 
-	public static class ConfigComboItem {
-		private final String _value;
-		private final String _label;
+	static class ConfigComboItem {
+		private final String value;
+		private final String label;
 
 		ConfigComboItem(String value, String label) {
-			_value = value;
-			_label = label;
+			this.value = value;
+			this.label = label;
 		}
 
-		public String getValue() {
-			return _value;
+		String getValue() {
+			return value;
 		}
 
 		public String getLabel() {
-			return _label;
+			return label;
 		}
 
 		@Override
 		public String toString() {
-			return _label;
+			return label;
 		}
 	}
 
-	private final Circuit _circuit;
-	private final Configurable _configurable;
-	private final HashMap<String, Component> _components = new HashMap<>();
+	private final Circuit circuit;
+	private final Configurable configurable;
+	private final HashMap<String, Component> components = new HashMap<>();
 
 	private final KeyListener KEY_ADAPTER = new KeyAdapter() {
 		@Override
@@ -63,8 +63,8 @@ class ConfigurationDialog extends JDialog {
 	};
 
 	ConfigurationDialog(Circuit circuit, Configurable configurable) {
-		_circuit = circuit;
-		_configurable = configurable;
+		this.circuit = circuit;
+		this.configurable = configurable;
 		setTitle(Messages.t("config.configurable.title"));
 		setModalityType(ModalityType.DOCUMENT_MODAL);
 		setModal(true);
@@ -139,7 +139,7 @@ class ConfigurationDialog extends JDialog {
 		}
 		comboBox.setPreferredSize(new Dimension(80, 20));
 		comboBox.addKeyListener(KEY_ADAPTER);
-		_components.put(name, comboBox);
+		components.put(name, comboBox);
 		return comboBox;
 	}
 
@@ -159,26 +159,26 @@ class ConfigurationDialog extends JDialog {
 	}
 
 	private void updateAndClose() {
-		_circuit.undoableConfig(_configurable, getValuesAsMap());
+		circuit.undoableConfig(configurable, getValuesAsMap());
 		closeWindow();
 	}
 
 	private Map<String, Object> getValuesAsMap() {
 		Map<String, Object> parameters = new HashMap<>();
-		for (String name : _components.keySet()) {
+		for (String name : components.keySet()) {
 			parameters.put(name, getValue(name));
 		}
 		return parameters;
 	}
 
 	private Object getValue(String name) {
-		if (_components.get(name) instanceof JSpinner) {
-			return ((JSpinner) _components.get(name)).getValue();
+		if (components.get(name) instanceof JSpinner) {
+			return ((JSpinner) components.get(name)).getValue();
 		}
-		if (_components.get(name) instanceof JComboBox) {
-			return ((ConfigComboItem) ((JComboBox) _components.get(name)).getSelectedItem()).getValue();
+		if (components.get(name) instanceof JComboBox) {
+			return ((ConfigComboItem) ((JComboBox) components.get(name)).getSelectedItem()).getValue();
 		}
-		return ((JTextField) _components.get(name)).getText();
+		return ((JTextField) components.get(name)).getText();
 	}
 
 	private void closeWindow() {
@@ -193,7 +193,7 @@ class ConfigurationDialog extends JDialog {
 		spinner.setEditor(editor);
 		spinner.setPreferredSize(new Dimension(80, 20));
 		editor.getTextField().addKeyListener(KEY_ADAPTER);
-		_components.put(name, spinner);
+		components.put(name, spinner);
 		return spinner;
 	}
 
@@ -207,7 +207,7 @@ class ConfigurationDialog extends JDialog {
 				textField.selectAll();
 			}
 		});
-		_components.put(name, textField);
+		components.put(name, textField);
 		return textField;
 	}
 }

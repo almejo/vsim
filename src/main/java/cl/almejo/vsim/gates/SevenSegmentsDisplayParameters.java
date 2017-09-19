@@ -12,26 +12,26 @@ import java.util.stream.IntStream;
  */
 class SevenSegmentsDisplayParameters extends GateParameters {
 
-	private int _number;
+	private int number;
 
-	private final int _pinCount;
+	private final int pinCount;
 
 	SevenSegmentsDisplayParameters(int pinCount) {
-		_pinCount = pinCount;
+		this.pinCount = pinCount;
 	}
 
 
 	void updateNumber(SevenSegmentsDisplay gate) {
-		_number = IntStream.range(0, gate.getPinCount())
+		number = IntStream.range(0, gate.getPinCount())
 				.filter(pinId -> gate.getPin(pinId).getInValue() > 0)
 				.map(pinId -> (int) Math.pow(2, pinId)).sum();
 	}
 
 	int getNumber() {
-		return _number;
+		return number;
 	}
 
 	public int getPinCount() {
-		return _pinCount;
+		return pinCount;
 	}
 }

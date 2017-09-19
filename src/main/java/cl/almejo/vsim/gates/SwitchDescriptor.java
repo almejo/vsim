@@ -17,11 +17,11 @@ import java.awt.*;
 class SwitchDescriptor extends GateDescriptor {
 	SwitchDescriptor(SwitchParameters parameters, String type) {
 		super(parameters, type);
-		_pinCount = 1;
-		_pinPosition = new Point[_pinCount];
+		pinCount = 1;
+		pinPosition = new Point[pinCount];
 		Dimension dimension = getSize();
-		_pinPosition[0] = new Point(Circuit.gridTrunc(dimension.width), Circuit.gridTrunc(dimension.height / 2));
-		_gateType = GateTypes.DEBUG;
+		pinPosition[0] = new Point(Circuit.gridTrunc(dimension.width), Circuit.gridTrunc(dimension.height / 2));
+		gateType = GateTypes.DEBUG;
 	}
 
 	@Override

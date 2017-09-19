@@ -9,20 +9,20 @@ package cl.almejo.vsim.simulation;
  * @author Alejandro Vera
  */
 class HeapElement {
-	private long _value;
+	private long value;
 
 	/**
 	 * @return the value
 	 */
 	public long getValue() {
-		return _value;
+		return value;
 	}
 
 	/**
 	 * @param value the value to set
 	 */
 	public void setValue(long value) {
-		_value = value;
+		this.value = value;
 	}
 
 	@Override

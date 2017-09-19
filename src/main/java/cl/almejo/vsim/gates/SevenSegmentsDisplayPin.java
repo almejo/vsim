@@ -17,6 +17,6 @@ class SevenSegmentsDisplayPin extends Pin {
 
 	@Override
 	public void hasChanged() {
-		((SevenSegmentsDisplayParameters) _gate.getParamameters()).updateNumber((SevenSegmentsDisplay) _gate);
+		((SevenSegmentsDisplayParameters) gate.getParamameters()).updateNumber((SevenSegmentsDisplay) gate);
 	}
 }

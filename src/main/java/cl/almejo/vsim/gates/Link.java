@@ -9,10 +9,10 @@ package cl.almejo.vsim.gates;
  * @author Alejandro Vera
  */
 class Link {
-	protected Link _next = this;
+	private Link link = this;
 
-	protected Link find(Link link) {
-		Link currentLink = _next;
+	private Link find(Link link) {
+		Link currentLink = this.link;
 		do {
 			if (currentLink == link) {
 				return link;
@@ -22,22 +22,22 @@ class Link {
 		return null;
 	}
 
-	protected void join(Link link) {
+	void join(Link link) {
 		if (find(link) != null) {
-			link._next = this._next;
-			this._next = link;
+			link.link = this.link;
+			this.link = link;
 		}
 	}
 
-	protected Link getNext() {
-		return _next;
+	Link getNext() {
+		return link;
 	}
 
 	void delete() {
 		Link previous = findPrevious();
 		if (previous != null) {
-			previous._next = _next;
-			_next = this;
+			previous.link = link;
+			link = this;
 		}
 	}
 

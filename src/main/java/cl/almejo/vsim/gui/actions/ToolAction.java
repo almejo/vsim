@@ -15,15 +15,15 @@ import java.awt.event.ActionEvent;
  * @author Alejandro Vera
  */
 public class ToolAction extends WindowAction {
-	private final ActionToolHelper _toolHelper;
+	private final ActionToolHelper toolHelper;
 
 	public ToolAction(String text, String description, String icon, KeyStroke keyStroke, SimWindow window, ActionToolHelper toolHelper) {
 		super(text, description, icon, keyStroke, window);
-		_toolHelper = toolHelper;
+		this.toolHelper = toolHelper;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		getWindow().setToolHelper(_toolHelper);
+	public void actionPerformed(ActionEvent event) {
+		getWindow().setToolHelper(toolHelper);
 	}
 }

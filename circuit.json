@@ -178,7 +178,7 @@
       "x" : 256,
       "y" : 24
     },
-    "type" : "tristate",
+    "type" : "tri-state",
     "parameters" : {
       "delay" : 1
     }

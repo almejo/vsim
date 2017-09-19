@@ -20,12 +20,12 @@ class TimeDiagramDescriptor extends GateDescriptor {
 
 	TimeDiagramDescriptor(TimeDiagramParameters parameters, String type) {
 		super(parameters, type);
-		_pinCount = 4;
-		_pinPosition = new Point[_pinCount];
-		for (int i = 0; i < _pinCount; i++) {
-			_pinPosition[i] = new Point(0, i * PIN_SEPARATION);
+		pinCount = 4;
+		pinPosition = new Point[pinCount];
+		for (int i = 0; i < pinCount; i++) {
+			pinPosition[i] = new Point(0, i * PIN_SEPARATION);
 		}
-		_gateType = GateTypes.NORMAL;
+		gateType = GateTypes.NORMAL;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ class TimeDiagramDescriptor extends GateDescriptor {
 
 	@Override
 	public Dimension getSize() {
-		return new Dimension(32, PIN_SEPARATION * (_pinCount - 1));
+		return new Dimension(32, PIN_SEPARATION * (pinCount - 1));
 	}
 
 	@Override

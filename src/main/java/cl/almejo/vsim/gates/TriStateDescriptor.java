@@ -14,15 +14,15 @@ import java.awt.*;
  *
  * @author Alejandro Vera
  */
-class TristateDescriptor extends GateDescriptor {
-	TristateDescriptor(TristateParameters parameters, String type) {
+class TriStateDescriptor extends GateDescriptor {
+	TriStateDescriptor(TriStateParameters parameters, String type) {
 		super(parameters, type);
-		_pinPosition = new Point[3];
-		_pinPosition[0] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(16));
-		_pinPosition[1] = new Point(Circuit.gridTrunc(32), Circuit.gridTrunc(16));
-		_pinPosition[2] = new Point(Circuit.gridTrunc(16), Circuit.gridTrunc(32));
-		_gateType = GateTypes.NORMAL;
-		_pinCount = 3;
+		pinPosition = new Point[3];
+		pinPosition[0] = new Point(Circuit.gridTrunc(0), Circuit.gridTrunc(16));
+		pinPosition[1] = new Point(Circuit.gridTrunc(32), Circuit.gridTrunc(16));
+		pinPosition[2] = new Point(Circuit.gridTrunc(16), Circuit.gridTrunc(32));
+		gateType = GateTypes.NORMAL;
+		pinCount = 3;
 	}
 
 	@Override

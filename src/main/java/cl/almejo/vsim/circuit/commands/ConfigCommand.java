@@ -16,25 +16,25 @@ import java.util.Map;
 
 public class ConfigCommand implements Command {
 
-	private final Configurable _configurable;
-	private final Map<String, Object> _newParameters;
-	private final Map<String, Object> _oldParameters;
+	private final Configurable configurable;
+	private final Map<String, Object> newParameters;
+	private final Map<String, Object> oldParameters;
 
 
 	public ConfigCommand(Configurable configurable, Map<String, Object> parameters) {
-		_configurable = configurable;
-		_newParameters = parameters;
-		_oldParameters = ConfigVariable.toMap(configurable.getConfigVariables());
+		this.configurable = configurable;
+		newParameters = parameters;
+		oldParameters = ConfigVariable.toMap(configurable.getConfigVariables());
 	}
 
 	@Override
 	public boolean apply() {
-		_configurable.setValues(_newParameters);
+		configurable.setValues(newParameters);
 		return true;
 	}
 
 	@Override
 	public void unDo() {
-		_configurable.setValues(_oldParameters);
+		configurable.setValues(oldParameters);
 	}
 }

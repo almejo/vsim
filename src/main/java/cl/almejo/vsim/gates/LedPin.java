@@ -18,6 +18,6 @@ class LedPin extends Pin {
 
 	@Override
 	public void hasChanged() {
-		((Led) _gate).setValue(getInValue());
+		((Led) gate).setValue(getInValue());
 	}
 }

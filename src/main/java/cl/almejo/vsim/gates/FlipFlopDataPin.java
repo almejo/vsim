@@ -12,14 +12,14 @@ import cl.almejo.vsim.simulation.Scheduler;
  */
 public class FlipFlopDataPin extends Pin {
 
-	public FlipFlopDataPin(Gate gate, Scheduler scheduler, int pinId) {
+	FlipFlopDataPin(Gate gate, Scheduler scheduler, int pinId) {
 		super(gate, scheduler, pinId);
 	}
 
 	@Override
 	public void hasChanged() {
 		if (getPinId() == 2 && getInValue() == 0) {
-			_gate.getPin(1).program(_gate.getPin(0).getInValue(), ((GateParametersWithDelay) _gate.getParamameters()).getDelay());
+			gate.getPin(1).program(gate.getPin(0).getInValue(), ((GateParametersWithDelay) gate.getParamameters()).getDelay());
 		}
 	}
 }

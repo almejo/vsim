@@ -13,19 +13,19 @@ import cl.almejo.vsim.simulation.SimulationEvent;
  */
 public class PinEvent extends SimulationEvent {
 
-	private final Pin _pin;
-	private final int _pinId;
+	private final Pin pin;
+	private final int pinId;
 
 
 	PinEvent(Pin pin, Scheduler scheduler, int pinId) {
 		super(scheduler);
-		_pinId = pinId;
-		_pin = pin;
+		this.pinId = pinId;
+		this.pin = pin;
 	}
 
 	@Override
 	public void happen() {
-		_pin.setOutValue(_pin.getProgrammedValue());
-		_pin.updateValues();
+		pin.setOutValue(pin.getProgrammedValue());
+		pin.updateValues();
 	}
 }

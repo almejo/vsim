@@ -35,11 +35,11 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimWindow.class);
 
 	private static final long serialVersionUID = 1L;
-	private final CircuitCanvas _canvas;
-	private final JTabbedPane _displaysPane;
-	private Circuit _circuit;
+	private final CircuitCanvas canvas;
+	private final JTabbedPane displaysPane;
+	private Circuit circuit;
 
-	private ActionToolHelper _toolHelper = ActionToolHelper.CURSOR;
+	private ActionToolHelper toolHelper = ActionToolHelper.CURSOR;
 
 	private static final KeyStroke ACCELERATOR_NEW = KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
 	private static final KeyStroke ACCELERATOR_OPEN = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
@@ -102,7 +102,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	private final WindowAction NOT_TOOL_ACTION = new ToolAction(Messages.t("action.tool.not"), Messages.t("action.tool.not.description"), "not.png", null, this, new GateToolHelper(Gate.NOT));
 	private final WindowAction CLOCK_TOOL_ACTION = new ToolAction(Messages.t("action.tool.clock"), Messages.t("action.tool.clock.description"), "clock.png", null, this, new GateToolHelper(Gate.CLOCK));
 	private final WindowAction FLIP_FLOP_DATA_TOOL_ACTION = new ToolAction(Messages.t("action.tool.flip.flop.data"), Messages.t("action.tool.flip.flop.data.description"), "flipflopdata.png", null, this, new GateToolHelper(Gate.FLIP_FLOP_DATA));
-	private final WindowAction TRISTATE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.tristate"), Messages.t("action.tool.tristate.description"), "tristate.png", null, this, new GateToolHelper(Gate.TRISTATE));
+	private final WindowAction TRI_STATE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.tristate"), Messages.t("action.tool.tristate.description"), "tri-state.png", null, this, new GateToolHelper(Gate.TRI_STATE));
 	private final WindowAction SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display"), Messages.t("action.tool.seven.segments.display.description"), "seven-segments-display.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY));
 	private final WindowAction SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION = new ToolAction(Messages.t("action.tool.seven.segments.display.double"), Messages.t("action.tool.seven.segments.display.double.description"), "seven-segments-display-double.png", null, this, new GateToolHelper(Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE));
 	private final WindowAction LED_TOOL_ACTION = new ToolAction(Messages.t("action.tool.led"), Messages.t("action.tool.led.description"), "led.png", null, this, new GateToolHelper(Gate.LED));
@@ -139,15 +139,15 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	public SimWindow(Circuit circuit) {
-		_circuit = circuit;
-		_circuit.addCircuitEventListener(this);
-		_canvas = new CircuitCanvas(_circuit);
+		this.circuit = circuit;
+		this.circuit.addCircuitEventListener(this);
+		canvas = new CircuitCanvas(this.circuit);
 
 		setBounds(100, 100, 800, 800);
 
-		_displaysPane = new JTabbedPane();
+		displaysPane = new JTabbedPane();
 
-		CanvasScrollPane scrollPane = new CanvasScrollPane(_canvas);
+		CanvasScrollPane scrollPane = new CanvasScrollPane(canvas);
 		CenterCanvasButton panel = new CenterCanvasButton();
 		panel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -157,7 +157,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		});
 		scrollPane.addCorner(panel);
 
-		JSplitPane rightSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, _displaysPane);
+		JSplitPane rightSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, displaysPane);
 		rightSplitPane.setOneTouchExpandable(true);
 		rightSplitPane.setDividerLocation(600);
 
@@ -168,7 +168,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 
 		JPanel statusBar = getStatusBar();
-		statusBar.add(new ZoomChanger(_canvas));
+		statusBar.add(new ZoomChanger(canvas));
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 
 		setVisible(true);
@@ -176,10 +176,10 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addComponentListener(this);
 		addWindowListener(this);
-		_canvas.addMouseListener(this);
-		_canvas.setZoom(1.0);
-		_canvas.addMouseMotionListener(this);
-		_canvas.resizeViewport();
+		canvas.addMouseListener(this);
+		canvas.setZoom(1.0);
+		canvas.addMouseMotionListener(this);
+		canvas.resizeViewport();
 
 		addMenu();
 		addMainToolbar();
@@ -233,7 +233,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		menu.add(newMenuItem(CLOCK_TOOL_ACTION, Messages.c("menu.tool.clock.mnemonic")));
 		menu.add(newMenuItem(NOT_TOOL_ACTION, Messages.c("menu.tool.not.mnemonic")));
 		menu.add(newMenuItem(FLIP_FLOP_DATA_TOOL_ACTION, Messages.c("menu.tool.flip.flop.data.mnemonic")));
-		menu.add(newMenuItem(TRISTATE_TOOL_ACTION, Messages.c("menu.tool.tristate.mnemonic")));
+		menu.add(newMenuItem(TRI_STATE_TOOL_ACTION, Messages.c("menu.tool.tristate.mnemonic")));
 		menu.add(newMenuItem(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION, Messages.c("menu.tool.seven.segments.display.mnemonic")));
 		menu.add(newMenuItem(SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION, Messages.c("menu.tool.seven.segments.display.double.mnemonic")));
 		menu.add(newMenuItem(LED_TOOL_ACTION, Messages.c("menu.tool.led.mnemonic")));
@@ -328,7 +328,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.add(newGrouppedButton(FLIP_FLOP_DATA_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(TRISTATE_TOOL_ACTION, group));
+		panel.add(newGrouppedButton(TRI_STATE_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(LED_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(TIME_DIAGRAM_TOOL_ACTION, group));
 		panel.add(newGrouppedButton(SWITCH_TOOL_ACTION, group));
@@ -351,16 +351,16 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	public void undo() {
-		_circuit.undo();
+		circuit.undo();
 	}
 
 	public void redo() {
-		_circuit.redo();
+		circuit.redo();
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		_canvas.resizeViewport();
+		canvas.resizeViewport();
 	}
 
 	@Override
@@ -407,25 +407,25 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	@Override
 	public void mouseClicked(MouseEvent event) {
 		if (SwingUtilities.isRightMouseButton(event)) {
-			_toolHelper.rightClicked(this, event);
+			toolHelper.rightClicked(this, event);
 			return;
 		}
 
 		if (event.getClickCount() >= 2) {
-			_toolHelper.mouseDoubleClicked(this, event);
+			toolHelper.mouseDoubleClicked(this, event);
 			return;
 		}
-		_toolHelper.mouseClicked(this, event);
+		toolHelper.mouseClicked(this, event);
 	}
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-		_toolHelper.mouseDown(this, event);
+		toolHelper.mouseDown(this, event);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent event) {
-		_toolHelper.mouseUp(this, event);
+		toolHelper.mouseUp(this, event);
 	}
 
 	@Override
@@ -438,33 +438,33 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void mouseDragged(MouseEvent event) {
-		_toolHelper.mouseDragged(this, event);
+		toolHelper.mouseDragged(this, event);
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent event) {
-		_toolHelper.mouseMoved(this, event);
+		toolHelper.mouseMoved(this, event);
 	}
 
 	public void setToolHelper(ActionToolHelper toolHelper) {
-		_toolHelper = toolHelper;
+		this.toolHelper = toolHelper;
 	}
 
 	public void undoableConnect(int xi, int yi, int xf, int yf) {
-		_circuit.undoableConnect(xi, yi, xf, yf);
+		circuit.undoableConnect(xi, yi, xf, yf);
 	}
 
 	public Circuit getCircuit() {
-		return _circuit;
+		return circuit;
 	}
 
 	public void undoableDisconnect(int x, int y) {
-		_circuit.undoableDisconnect(x, y);
+		circuit.undoableDisconnect(x, y);
 	}
 
 	private void updateActionStates() {
-		updateStartPause(_circuit);
-		updateUndoRedo(_circuit);
+		updateStartPause(circuit);
+		updateUndoRedo(circuit);
 		updateFileOperationActions();
 		updateCutCopyPaste();
 	}
@@ -476,7 +476,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	private void updateFileOperationActions() {
-		SAVE_ACTION.setEnabled(_circuit.isModified());
+		SAVE_ACTION.setEnabled(circuit.isModified());
 	}
 
 	@Override
@@ -491,13 +491,13 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	@Override
 	public void onChanged(CircuitEvent event) {
-		SAVE_ACTION.setEnabled(_circuit.isModified());
+		SAVE_ACTION.setEnabled(circuit.isModified());
 		updateUndoRedo(event.getCircuit());
 		updateTitle();
 	}
 
 	private void updateTitle() {
-		setTitle(_circuit.getName() + " " + (_circuit.isModified() ? "* " : "") + "| " + Messages.t("main.title"));
+		setTitle(circuit.getName() + " " + (circuit.isModified() ? "* " : "") + "| " + Messages.t("main.title"));
 	}
 
 	@Override
@@ -513,7 +513,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	@Override
 	public void onSaved(CircuitEvent event) {
 		updateTitle();
-		SAVE_ACTION.setEnabled(_circuit.isModified());
+		SAVE_ACTION.setEnabled(circuit.isModified());
 	}
 
 	private void updateUndoRedo(Circuit circuit) {
@@ -527,7 +527,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	public void load() {
-		if (_circuit != null && _circuit.isModified()) {
+		if (circuit != null && circuit.isModified()) {
 			int replace = askSaveNow();
 			if (replace == JOptionPane.CANCEL_OPTION) {
 				return;
@@ -553,7 +553,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	public int saveAs() {
-		SAVE_AS_FILE_CHOOSER.setSelectedFile(new File(_circuit.getName()));
+		SAVE_AS_FILE_CHOOSER.setSelectedFile(new File(circuit.getName()));
 		if (SAVE_AS_FILE_CHOOSER.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
 			LOGGER.info("save cancelled by user.");
 			return 0;
@@ -566,7 +566,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 			}
 		}
 
-		_circuit.setName(file.getPath());
+		circuit.setName(file.getPath());
 		updateTitle();
 		save(file.getPath());
 		LOGGER.info("saved: " + file.getPath());
@@ -575,8 +575,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	public void save(String path) {
 		try {
-			FileUtils.writeStringToFile(new File(path), _circuit.toJSon());
-			_circuit.setSaved();
+			FileUtils.writeStringToFile(new File(path), circuit.toJSon());
+			circuit.setSaved();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -595,28 +595,28 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		if (circuit == null) {
 			return;
 		}
-		_circuit.remove(_canvas);
-		_circuit.removeCircuitEventListener(this);
+		this.circuit.remove(canvas);
+		this.circuit.removeCircuitEventListener(this);
 
-		_circuit = circuit;
-		_circuit.addCircuitEventListener(this);
-		_canvas.setCircuit(_circuit);
+		this.circuit = circuit;
+		this.circuit.addCircuitEventListener(this);
+		canvas.setCircuit(this.circuit);
 
-		_circuit.setSaved();
+		this.circuit.setSaved();
 		updateTitle();
 	}
 
 	public void addDisplayPanel(String name, JPanel displayPanel) {
-		_displaysPane.add(name, displayPanel);
+		displaysPane.add(name, displayPanel);
 	}
 
 	public CircuitCanvas getCanvas() {
-		return _canvas;
+		return canvas;
 	}
 
 	public void quit() {
 		if (askSureToQuit() == JOptionPane.YES_OPTION) {
-			if (_circuit != null && _circuit.isModified()) {
+			if (circuit != null && circuit.isModified()) {
 				int saveBeforeQuit = askSaveBeforeQuit();
 				if (saveBeforeQuit == JOptionPane.CANCEL_OPTION) {
 					return;
@@ -628,8 +628,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 					}
 				}
 			}
-			if (_circuit != null) {
-				_circuit.remove(_canvas);
+			if (circuit != null) {
+				circuit.remove(canvas);
 			}
 			System.exit(0);
 		}

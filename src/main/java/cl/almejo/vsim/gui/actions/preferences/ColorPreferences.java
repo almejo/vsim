@@ -22,11 +22,11 @@ import java.io.IOException;
  */
 class ColorPreferences extends JPanel {
 
-	private final Component _parent;
-	private final JComboBox<String> _comboBox;
+	private final Component component;
+	private final JComboBox<String> comboBox;
 
 	ColorPreferences(Component parent) {
-		_parent = parent;
+		component = parent;
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -34,8 +34,8 @@ class ColorPreferences extends JPanel {
 		pickers.setLayout(new GridLayout(10, 2));
 
 		pickers.add(new Label(Messages.t("preferences.color.scheme.current.label")));
-		_comboBox = createSchemeComboBox();
-		pickers.add(_comboBox);
+		comboBox = createSchemeComboBox();
+		pickers.add(comboBox);
 
 		addColorChooser(pickers, "gates");
 		addColorChooser(pickers, "background");
@@ -61,16 +61,16 @@ class ColorPreferences extends JPanel {
 		JButton newButton = new JButton(Messages.t("preferences.color.scheme.new.label"));
 		newButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				String themeName = JOptionPane.showInputDialog(Messages.t("color.scheme.dialog.new.title"), "");
 				if (themeName != null) {
 					while (ColorScheme.exists(themeName)) {
-						JOptionPane.showMessageDialog(_parent, Messages.t("color.scheme.dialog.already.exists.error"), "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(component, Messages.t("color.scheme.dialog.already.exists.error"), "Error", JOptionPane.ERROR_MESSAGE);
 						themeName = JOptionPane.showInputDialog(this, themeName);
 					}
 					ColorScheme.add(themeName);
-					_comboBox.addItem(themeName);
-					_comboBox.setSelectedItem(themeName);
+					comboBox.addItem(themeName);
+					comboBox.setSelectedItem(themeName);
 				}
 			}
 		});
@@ -79,13 +79,10 @@ class ColorPreferences extends JPanel {
 	}
 
 	private JComboBox<String> createSchemeComboBox() {
-		JComboBox<String> _comboBox = new JComboBox<>(ColorScheme.getNames());
-		_comboBox.addActionListener(event -> {
-			JComboBox comboBox = (JComboBox) event.getSource();
-			ColorScheme.setCurrent((String) comboBox.getSelectedItem());
-		});
-		_comboBox.setSelectedItem("default");
-		return _comboBox;
+		JComboBox<String> comboBox = new JComboBox<>(ColorScheme.getNames());
+		comboBox.addActionListener(event -> ColorScheme.setCurrent((String) ((JComboBox) event.getSource()).getSelectedItem()));
+		comboBox.setSelectedItem("default");
+		return comboBox;
 	}
 
 	private void addColorChooser(JPanel panel, String item) {

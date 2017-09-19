@@ -12,15 +12,15 @@ import cl.almejo.vsim.simulation.Scheduler;
  */
 class TristatePin extends Pin {
 
-	TristatePin(Tristate tristate, Scheduler scheduler, int pinId) {
+	TristatePin(TriState tristate, Scheduler scheduler, int pinId) {
 		super(tristate, scheduler, pinId);
 	}
 
 	@Override
 	public void hasChanged() {
 		if (getPinId() == 0) {
-			byte newVal = _gate.getPin(2).getInValue() == Constants.ON ? getInValue() : Constants.THREE_STATE;
-			_gate.getPin(1).program(newVal, ((GateParametersWithDelay) _gate.getParamameters()).getDelay());
+			byte newVal = gate.getPin(2).getInValue() == Constants.ON ? getInValue() : Constants.THREE_STATE;
+			gate.getPin(1).program(newVal, ((GateParametersWithDelay) gate.getParamameters()).getDelay());
 		}
 	}
 }

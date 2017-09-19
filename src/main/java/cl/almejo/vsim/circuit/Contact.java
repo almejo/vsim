@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
  */
 public class Contact extends Point {
 
-	private final OptimisticList<PinGatePar> _pins = new OptimisticList<>();
+	private final OptimisticList<PinGatePar> pins = new OptimisticList<>();
 
-	private int _connectionMask;
+	private int connectionMask;
 
-	private Pin _guidePin;
+	private Pin guidePin;
 
 	Contact(int x, int y) {
 		super(x, y);
@@ -30,48 +30,48 @@ public class Contact extends Point {
 
 	void addPin(int pinId, Gate gate) {
 		PinGatePar pinGatePar = new PinGatePar(pinId, gate);
-		if (!_pins.contains(pinGatePar)) {
-			_pins.add(pinGatePar);
+		if (!pins.contains(pinGatePar)) {
+			pins.add(pinGatePar);
 		}
 	}
 
 	void removePin(byte pinId, Gate gate) {
-		_pins.remove(new PinGatePar(pinId, gate));
+		pins.remove(new PinGatePar(pinId, gate));
 	}
 
 	List<Pin> getPins() {
 
-		List<PinGatePar> list = _pins.elements();
+		List<PinGatePar> list = pins.elements();
 
 		return list.stream().map(pinGatePar -> pinGatePar.getGate().getPin(pinGatePar.getPinId())).collect(Collectors.toCollection(LinkedList::new));
 	}
 
 	void setGuidePin(Pin guidePin) {
-		_guidePin = guidePin;
+		this.guidePin = guidePin;
 	}
 
 	Pin getGuidePin() {
-		return _guidePin;
+		return guidePin;
 	}
 
 	boolean hasPins() {
-		return !_pins.isEmpty();
+		return !pins.isEmpty();
 	}
 
 	boolean isMiddlePoint() {
-		return _connectionMask == (Constants.NORTH | Constants.SOUTH) || _connectionMask == (Constants.WEST | Constants.EAST);
+		return connectionMask == (Constants.NORTH | Constants.SOUTH) || connectionMask == (Constants.WEST | Constants.EAST);
 	}
 
 	boolean isConnected(byte direction) {
-		return (_connectionMask & direction) != 0;
+		return (connectionMask & direction) != 0;
 	}
 
 	void connect(byte direction) {
-		_connectionMask = (byte) _connectionMask | direction;
+		connectionMask = (byte) connectionMask | direction;
 	}
 
 	boolean isNotConnected() {
-		return _connectionMask == 0;
+		return connectionMask == 0;
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class Contact extends Point {
 	private String printPins() {
 		StringBuilder builder = new StringBuilder();
 		int i = 0;
-		for (PinGatePar pinGate : _pins.elements()) {
+		for (PinGatePar pinGate : pins.elements()) {
 			if (i > 0) {
 				builder.append(", ");
 			}
@@ -94,19 +94,19 @@ public class Contact extends Point {
 	}
 
 	void disconnect(Contact contact) {
-		if (_x < contact.getX()) {
+		if (x < contact.getX()) {
 			disconnect(Constants.EAST);
-		} else if (_x > contact.getX()) {
+		} else if (x > contact.getX()) {
 			disconnect(Constants.WEST);
-		} else if (_y < contact.getY()) {
+		} else if (y < contact.getY()) {
 			disconnect(Constants.NORTH);
-		} else if (_y > contact.getY()) {
+		} else if (y > contact.getY()) {
 			disconnect(Constants.SOUTH);
 		}
 	}
 
 	private void disconnect(byte direction) {
-		_connectionMask = (byte) _connectionMask & ~direction;
+		connectionMask = (byte) connectionMask & ~direction;
 	}
 
 }

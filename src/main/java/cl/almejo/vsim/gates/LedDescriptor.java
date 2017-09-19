@@ -17,11 +17,11 @@ import java.awt.*;
 class LedDescriptor extends GateDescriptor {
 	LedDescriptor(LedParameters parameters, String type) {
 		super(parameters, type);
-		_pinCount = 1;
-		_pinPosition = new Point[1];
+		pinCount = 1;
+		pinPosition = new Point[1];
 		Dimension dimension = getSize();
-		_pinPosition[0] = new Point(Circuit.gridTrunc(dimension.width / 2) + Circuit.GRID_SIZE / 2, Circuit.gridTrunc(dimension.height));
-		_gateType = GateTypes.DEBUG;
+		pinPosition[0] = new Point(Circuit.gridTrunc(dimension.width / 2) + Circuit.GRID_SIZE / 2, Circuit.gridTrunc(dimension.height));
+		gateType = GateTypes.DEBUG;
 	}
 
 	@SuppressWarnings("SuspiciousNameCombination")
