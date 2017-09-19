@@ -20,7 +20,7 @@ public class StartStopSimulationAction extends WindowAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent event) {
 		getWindow().getCircuit().toggleSimulation();
 	}
 

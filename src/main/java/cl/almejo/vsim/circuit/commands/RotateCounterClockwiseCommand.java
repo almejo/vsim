@@ -12,20 +12,20 @@ import cl.almejo.vsim.circuit.Configurable;
  */
 public class RotateCounterClockwiseCommand implements Command {
 
-	private final Configurable _configurable;
+	private final Configurable configurable;
 
 	public RotateCounterClockwiseCommand(Configurable configurable) {
-		_configurable = configurable;
+		this.configurable = configurable;
 	}
 
 	@Override
 	public boolean apply() {
-		_configurable.rotateCounterClockwise();
+		configurable.rotateCounterClockwise();
 		return true;
 	}
 
 	@Override
 	public void unDo() {
-		_configurable.rotateClockwise();
+		configurable.rotateClockwise();
 	}
 }

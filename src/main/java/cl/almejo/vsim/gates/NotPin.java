@@ -18,7 +18,7 @@ class NotPin extends Pin {
 
 	@Override
 	public void hasChanged() {
-		_gate.getPin(1).program(newVal(_gate.getPin(0).getInValue()), ((GateParametersWithDelay) _gate.getParamameters()).getDelay());
+		gate.getPin(1).program(newVal(gate.getPin(0).getInValue()), ((GateParametersWithDelay) gate.getParamameters()).getDelay());
 	}
 
 	private byte newVal(byte inValue) {

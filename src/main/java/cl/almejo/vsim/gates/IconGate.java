@@ -3,6 +3,8 @@ package cl.almejo.vsim.gates;
 import cl.almejo.vsim.circuit.*;
 import cl.almejo.vsim.circuit.Point;
 import cl.almejo.vsim.gui.Draggable;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,33 +25,28 @@ import java.util.Map;
 public class IconGate extends Rectangle implements Draggable, Configurable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IconGate.class);
 	private static final long serialVersionUID = 1L;
-	private Gate _gate;
-	private final int _id;
-	private int _rotation;
 
-	private final AffineTransform _translateTransformation = new AffineTransform();
-	private final AffineTransform _rotateTransformation = new AffineTransform();
-	private final AffineTransform _transformation = new AffineTransform();
-	private AffineTransform _originalTransformation;
-	private boolean _selected;
-	private Rectangle _extent;
+	@Getter
+	@Setter
+	private Gate gate;
+	private final int id;
+	private int rotation;
+
+	private final AffineTransform translateTransformation = new AffineTransform();
+	private final AffineTransform rotateTransformation = new AffineTransform();
+	private final AffineTransform transformation = new AffineTransform();
+	private AffineTransform originalTransformation;
+	private boolean selected;
+	private Rectangle extent;
 
 	public IconGate(int id) {
-		_id = id;
+		this.id = id;
 		computeExtent();
 	}
 
 	public IconGate(int id, Gate gate) {
 		this(id);
-		_gate = gate;
-	}
-
-	public Gate getGate() {
-		return _gate;
-	}
-
-	public void setGate(Gate gate) {
-		_gate = gate;
+		this.gate = gate;
 	}
 
 	public void drawIcon(Graphics2D graphics) {
@@ -58,7 +55,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 		if (!isSelected()) {
 			drawFrame(graphics, 2, 8);
 		}
-		_gate.getGateDescriptor().paint(graphics, this);
+		gate.getGateDescriptor().paint(graphics, this);
 		popMatrix(graphics);
 	}
 
@@ -72,12 +69,12 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	}
 
 	private void drawSelectedDecoration(Graphics2D graphics, int separation) {
-		Dimension dimension = _gate.getGateDescriptor().getSize();
+		Dimension dimension = gate.getGateDescriptor().getSize();
 		MarchingAnts.drawRect(graphics, -separation, -separation, (int) dimension.getWidth() + separation * 2, (int) dimension.getHeight() + separation * 2);
 	}
 
 	private void drawFrame(Graphics2D graphics, int separation, int border) {
-		Dimension dimension = _gate.getGateDescriptor().getSize();
+		Dimension dimension = gate.getGateDescriptor().getSize();
 		graphics.setColor(Color.GRAY);
 		graphics.drawLine(-(separation + border), -separation, dimension.width + border + separation, -separation);
 		graphics.drawLine(-separation, -(separation + border), -separation, dimension.height + separation + border);
@@ -86,22 +83,22 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 	}
 
 	private void popMatrix(Graphics2D graphics) {
-		graphics.setTransform(_originalTransformation);
+		graphics.setTransform(originalTransformation);
 	}
 
 	private void pushMatrix(Graphics2D graphics) {
-		_originalTransformation = graphics.getTransform();
+		originalTransformation = graphics.getTransform();
 	}
 
 	private void applyTransform(Graphics2D graphics) {
 		AffineTransform newTransform = new AffineTransform(graphics.getTransform());
-		newTransform.concatenate(_transformation);
+		newTransform.concatenate(transformation);
 		graphics.setTransform(newTransform);
 	}
 
 	@Override
 	public Dimension getSize() {
-		return _gate.getGateDescriptor().getSize();
+		return gate.getGateDescriptor().getSize();
 	}
 
 	public void moveTo(int xf, int yf) {
@@ -110,54 +107,54 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 		computeExtent();
 	}
 
-	public void setRotation(int rotation) {
-		_gate.getCircuit().deactivate(this);
+	private void setRotation(int rotation) {
+		gate.getCircuit().deactivate(this);
 		updateRotation(rotation);
-		_gate.getCircuit().activate(this);
+		gate.getCircuit().activate(this);
 		computeExtent();
 	}
 
 	private void updateRotation(int rotation) {
-		_rotation = rotation % 4;
-		_rotateTransformation.setToIdentity();
-		_rotateTransformation.rotate(Math.toRadians(_rotation * 90));
+		this.rotation = rotation % 4;
+		rotateTransformation.setToIdentity();
+		rotateTransformation.rotate(Math.toRadians(this.rotation * 90));
 		recalculateTransform();
 	}
 
-	public int getRotation() {
-		return _rotation;
+	private int getRotation() {
+		return rotation;
 	}
 
 	private void setTranslation(int x, int y) {
-		LOGGER.debug("original transformation: " + _translateTransformation);
-		_translateTransformation.setToIdentity();
-		_translateTransformation.translate(x, y);
+		LOGGER.debug("original transformation: " + translateTransformation);
+		translateTransformation.setToIdentity();
+		translateTransformation.translate(x, y);
 		LOGGER.debug("Translate to: " + x + " - " + y);
 		recalculateTransform();
-		LOGGER.debug("resulting transformation: " + _translateTransformation);
+		LOGGER.debug("resulting transformation: " + translateTransformation);
 	}
 
 	private void recalculateTransform() {
-		_transformation.setToIdentity();
-		_transformation.concatenate(_translateTransformation);
-		_transformation.concatenate(_rotateTransformation);
+		transformation.setToIdentity();
+		transformation.concatenate(translateTransformation);
+		transformation.concatenate(rotateTransformation);
 	}
 
 	public int getPinsCount() {
-		return _gate.getPinCount();
+		return gate.getPinCount();
 	}
 
-	public Point getPinPos(byte pinId) {
-		return _gate.getGateDescriptor().getPinPosition(pinId);
+	private Point getPinPos(byte pinId) {
+		return gate.getGateDescriptor().getPinPosition(pinId);
 	}
 
 	public Pin getPin(int i) {
-		return _gate.getPin(i);
+		return gate.getPin(i);
 	}
 
-	public Point getTransformed(Point point) {
+	private Point getTransformed(Point point) {
 		java.awt.geom.Point2D.Double point2d = new java.awt.geom.Point2D.Double(point.getX(), point.getY());
-		_transformation.transform(point2d, point2d);
+		transformation.transform(point2d, point2d);
 		return new Point((int) point2d.getX(), (int) point2d.getY());
 	}
 
@@ -167,27 +164,27 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 
 	public IconGate getInstance(Circuit circuit) {
 		IconGate iconGate = new IconGate(circuit.getNextGateId());
-		iconGate.setGate(_gate.getGateDescriptor().make(circuit, _gate.getParamameters()));
+		iconGate.setGate(gate.getGateDescriptor().make(circuit, gate.getParamameters()));
 		return iconGate;
 	}
 
 	public int getId() {
-		return _id;
+		return id;
 	}
 
 	@Override
 	public void select() {
-		_selected = true;
+		selected = true;
 	}
 
 	@Override
 	public void deselect() {
-		_selected = false;
+		selected = false;
 	}
 
 	@Override
 	public boolean isSelected() {
-		return _selected;
+		return selected;
 	}
 
 	@Override
@@ -199,7 +196,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 
 		graphics.setTransform(transformation);
 		applyTransform(graphics);
-		_gate.getGateDescriptor().paint(graphics, this);
+		gate.getGateDescriptor().paint(graphics, this);
 		popMatrix(graphics);
 	}
 
@@ -234,7 +231,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 		java.awt.Point.Double point = new java.awt.Point.Double(x - getX(), y - getY());
 		java.awt.Point.Double transformed = new java.awt.Point.Double();
 		try {
-			_rotateTransformation.inverseTransform(point, transformed);
+			rotateTransformation.inverseTransform(point, transformed);
 		} catch (NoninvertibleTransformException e) {
 			e.printStackTrace();
 			return false;
@@ -255,23 +252,23 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 
 	@Override
 	public List<ConfigVariable> getConfigVariables() {
-		return _gate.getParamameters().getValues();
+		return gate.getParamameters().getValues();
 	}
 
 	@Override
 	public boolean isConfigurable() {
-		return _gate.getParamameters().isConfigurable();
+		return gate.getParamameters().isConfigurable();
 	}
 
 	@Override
 	public void setValues(Map<String, Object> parameters) {
-		_gate.getParamameters().setValues(parameters);
-		_gate.parametersUpdated();
+		gate.getParamameters().setValues(parameters);
+		gate.parametersUpdated();
 	}
 
 	@Override
 	public Rectangle getExtent() {
-		return _extent;
+		return extent;
 	}
 
 	private void computeExtent() {
@@ -285,10 +282,10 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 		java.awt.Point.Double transformed2 = new java.awt.Point.Double();
 		java.awt.Point.Double transformed3 = new java.awt.Point.Double();
 
-		_rotateTransformation.transform(point0, transformed0);
-		_rotateTransformation.transform(point1, transformed1);
-		_rotateTransformation.transform(point2, transformed2);
-		_rotateTransformation.transform(point3, transformed3);
+		rotateTransformation.transform(point0, transformed0);
+		rotateTransformation.transform(point1, transformed1);
+		rotateTransformation.transform(point2, transformed2);
+		rotateTransformation.transform(point3, transformed3);
 
 		java.awt.Point.Double[] points = new java.awt.Point.Double[]{
 				transformed0
@@ -316,6 +313,6 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 		}
 		Rectangle rectangle = new Rectangle(minx, miny, maxx - minx, maxy - miny);
 		rectangle.translate((int) getX(), (int) getY());
-		_extent = rectangle;
+		extent = rectangle;
 	}
 }

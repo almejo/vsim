@@ -15,26 +15,26 @@ public class ClockPin extends Pin {
 
 	static class ClockEvent extends SimulationEvent {
 
-		Clock _clock;
+		Clock clock;
 
-		public ClockEvent(Clock clock, Scheduler scheduler) {
+		ClockEvent(Clock clock, Scheduler scheduler) {
 			super(scheduler);
-			_clock = clock;
+			this.clock = clock;
 		}
 
 		@Override
 		public void happen() {
-			ClockParameters params = (ClockParameters) _clock.getParamameters();
+			ClockParameters params = (ClockParameters) clock.getParamameters();
 			int state = params.getState();
 			schedule(state == Constants.OFF ? params.getTimeUp() : params.getTimeDown());
 
-			_clock.getPin(0).hasChanged();
+			clock.getPin(0).hasChanged();
 
 			params.setState(state == Constants.OFF ? Constants.ON : Constants.OFF);
 		}
 	}
 
-	public ClockPin(Clock clock, Scheduler scheduler, int pinId) {
+	ClockPin(Clock clock, Scheduler scheduler, int pinId) {
 		super(clock, scheduler, pinId);
 		ClockParameters params = (ClockParameters) clock.getParamameters();
 		new ClockEvent(clock, scheduler).schedule(params.getTimeUp());
@@ -42,6 +42,6 @@ public class ClockPin extends Pin {
 
 	@Override
 	public void hasChanged() {
-		program(((ClockParameters) _gate.getParamameters()).getState(), 0);
+		program(((ClockParameters) gate.getParamameters()).getState(), 0);
 	}
 }

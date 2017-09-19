@@ -20,8 +20,7 @@ public class RedoAction extends WindowAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent event) {
 		getWindow().redo();
 	}
-
 }

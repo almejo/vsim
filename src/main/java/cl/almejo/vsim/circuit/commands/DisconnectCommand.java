@@ -16,27 +16,23 @@ import java.util.List;
  */
 public class DisconnectCommand implements Command {
 
-	private final Circuit _circuit;
-	private final List<Connection<Contact>> _connections;
+	private final Circuit circuit;
+	private final List<Connection<Contact>> connections;
 
 	public DisconnectCommand(Circuit circuit, int x, int y) {
-		_circuit = circuit;
-		_connections = _circuit.findToDisconnect(x, y);
+		this.circuit = circuit;
+		connections = this.circuit.findToDisconnect(x, y);
 	}
 
 	@Override
 	public boolean apply() {
-		for (Connection<Contact> connection : _connections) {
-			_circuit.disconnect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(), connection.getLast().getY());
-		}
+		connections.forEach(connection -> circuit.disconnect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(), connection.getLast().getY()));
 		return true;
 	}
 
 	@Override
 	public void unDo() {
-		for (Connection<Contact> connection : _connections) {
-			_circuit.connect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(), connection
-					.getLast().getY());
-		}
+		connections.forEach(connection -> circuit.connect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(), connection
+				.getLast().getY()));
 	}
 }

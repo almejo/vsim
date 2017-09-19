@@ -20,7 +20,7 @@ public class OpenAction extends WindowAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		_window.load();
+	public void actionPerformed(ActionEvent event) {
+		window.load();
 	}
 }

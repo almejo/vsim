@@ -12,45 +12,45 @@ import java.util.List;
  * @author Alejandro Vera
  */
 class FindResult<T extends Point> {
-	private final T _hit;
-	private final T _previous;
-	private final T _next;
+	private final T hit;
+	private final T previous;
+	private final T next;
 
 	FindResult(T hit, T previous, T next) {
-		_hit = hit;
-		_previous = previous;
-		_next = next;
+		this.hit = hit;
+		this.previous = previous;
+		this.next = next;
 
 	}
 
 	T getHit() {
-		return _hit;
+		return hit;
 	}
 
 	T getPrevious() {
-		return _previous;
+		return previous;
 	}
 
 	T getNext() {
-		return _next;
+		return next;
 	}
 
 	public List<T> list() {
 		List<T> list = new LinkedList<>();
-		if (_previous != null) {
-			list.add(_previous);
+		if (previous != null) {
+			list.add(previous);
 		}
-		if (_hit != null) {
-			list.add(_hit);
+		if (hit != null) {
+			list.add(hit);
 		}
-		if (_next != null) {
-			list.add(_next);
+		if (next != null) {
+			list.add(next);
 		}
 		return list;
 	}
 
 	@Override
 	public String toString() {
-		return "(" + _previous + ", " + _hit + ", " + _next + ")";
+		return "(" + previous + ", " + hit + ", " + next + ")";
 	}
 }

@@ -12,21 +12,21 @@ import cl.almejo.vsim.circuit.Circuit;
  */
 class Led extends Gate {
 
-	private byte _value = Constants.THREE_STATE;
+	private byte value = Constants.THREE_STATE;
 
 	Led(Circuit circuit, GateParameters parameters, GateDescriptor descriptor) {
 		super(circuit, parameters, descriptor);
-		_pins = new Pin[1];
-		_pins[0] = new LedPin(this, circuit.getScheduler(), 0);
-		_pins[0].hasChanged();
+		pins = new Pin[1];
+		pins[0] = new LedPin(this, circuit.getScheduler(), 0);
+		pins[0].hasChanged();
 	}
 
 	public void setValue(byte value) {
-		_value = value;
+		this.value = value;
 	}
 
 	public byte getValue() {
-		return _value;
+		return value;
 	}
 
 }

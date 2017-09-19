@@ -15,9 +15,9 @@ class SevenSegmentsDisplay extends Gate {
 	SevenSegmentsDisplay(Circuit circuit, GateParameters parameters, SevenSegmentsDisplayDescriptor descriptor) {
 		super(circuit, parameters, descriptor);
 
-		_pins = new SevenSegmentsDisplayPin[descriptor.getPinCount()];
-		for (int pinId = 0; pinId < _pins.length; pinId++) {
-			_pins[pinId] = new SevenSegmentsDisplayPin(this, circuit.getScheduler(), pinId);
+		pins = new SevenSegmentsDisplayPin[descriptor.getPinCount()];
+		for (int pinId = 0; pinId < pins.length; pinId++) {
+			pins[pinId] = new SevenSegmentsDisplayPin(this, circuit.getScheduler(), pinId);
 		}
 	}
 }

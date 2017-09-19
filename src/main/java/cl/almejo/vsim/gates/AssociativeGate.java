@@ -14,11 +14,11 @@ class AssociativeGate extends Gate {
 
 	AssociativeGate(Circuit circuit, GateParameters parameters, GateDescriptor descriptor) {
 		super(circuit, parameters, descriptor);
-		_pins = new AssociativePin[descriptor.getPinCount()];
+		pins = new AssociativePin[descriptor.getPinCount()];
 		for (int i = 0; i < descriptor.getPinCount(); i++) {
-			_pins[i] = new AssociativePin(this, circuit.getScheduler(), i);
+			pins[i] = new AssociativePin(this, circuit.getScheduler(), i);
 		}
-		_pins[0].hasChanged();
+		pins[0].hasChanged();
 	}
 }
 

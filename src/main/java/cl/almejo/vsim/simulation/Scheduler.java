@@ -19,22 +19,22 @@ public class Scheduler {
 
 		@Override
 		public void happen() {
-			_scheduler.stop();
+			scheduler.stop();
 		}
 
 	}
 
-	private final Heap _heap = new Heap();
+	private final Heap heap = new Heap();
 
-	private long _time;
+	private long time;
 
 	@SuppressWarnings("InfiniteLoopStatement")
 	public void run(long simulationTime) {
 		schedule(new StopEvent(this), simulationTime);
 		try {
 			while (true) {
-				SimulationEvent event = (SimulationEvent) _heap.remove();
-				_time = event.getTime();
+				SimulationEvent event = (SimulationEvent) heap.remove();
+				time = event.getTime();
 				event.happen();
 			}
 		} catch (EmptyHeapException e) {
@@ -49,12 +49,12 @@ public class Scheduler {
 	}
 
 	void schedule(HeapElement element, long delay) {
-		element.setValue(_time + delay);
-		_heap.insert(element);
+		element.setValue(time + delay);
+		heap.insert(element);
 	}
 
 	boolean isProgrammed(SimulationEvent simulationEvent) {
-		return _heap.contains(simulationEvent);
+		return heap.contains(simulationEvent);
 	}
 
 }

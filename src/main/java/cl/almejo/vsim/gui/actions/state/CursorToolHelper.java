@@ -19,10 +19,10 @@ import java.awt.image.BufferedImage;
 
 public class CursorToolHelper extends ActionToolHelper {
 
-	private Selection _selection;
-	private BufferedImage _preview;
-	private int _deltaY;
-	private int _deltaX;
+	private Selection selection;
+	private BufferedImage preview;
+	private int deltaY;
+	private int deltaX;
 
 	@Override
 	public Object mouseClicked(SimWindow window, MouseEvent event) {
@@ -37,7 +37,7 @@ public class CursorToolHelper extends ActionToolHelper {
 		Circuit circuit = window.getCircuit();
 		int x = window.getCanvas().toCircuitCoordinatesX(event.getX());
 		int y = window.getCanvas().toCircuitCoordinatesY(event.getY());
-		if (_selection == null) {
+		if (selection == null) {
 			Selection selection = circuit.findSelection(x, y);
 
 			if (selection == null) {
@@ -49,27 +49,27 @@ public class CursorToolHelper extends ActionToolHelper {
 
 			}
 			if (selection != null) {
-				_selection = selection;
-				_deltaX = x - selection.getX();
-				_deltaY = y - selection.getY();
-				_preview = _selection.getImage();
+				this.selection = selection;
+				deltaX = x - selection.getX();
+				deltaY = y - selection.getY();
+				preview = this.selection.getImage();
 			}
 			return;
 		}
-		if (_preview != null) {
-			circuit.drawDragPreview(x - _deltaX, y - _deltaY, _preview);
+		if (preview != null) {
+			circuit.drawDragPreview(x - deltaX, y - deltaY, preview);
 		}
 
 	}
 
 	@Override
 	public void mouseUp(SimWindow window, MouseEvent event) {
-		if (_selection != null) {
-			window.getCircuit().undoableDragSelection(_selection
-					, window.getCanvas().toCircuitCoordinatesX(event.getX()) - _deltaX
-					, window.getCanvas().toCircuitCoordinatesY(event.getY()) - _deltaY);
-			_selection = null;
-			_preview = null;
+		if (selection != null) {
+			window.getCircuit().undoableDragSelection(selection
+					, window.getCanvas().toCircuitCoordinatesX(event.getX()) - deltaX
+					, window.getCanvas().toCircuitCoordinatesY(event.getY()) - deltaY);
+			selection = null;
+			preview = null;
 			window.getCircuit().clearDragPreview();
 		}
 	}

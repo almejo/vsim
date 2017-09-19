@@ -1,10 +1,11 @@
 package cl.almejo.vsim.gui.actions;
 
+import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.gui.SimWindow;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import cl.almejo.vsim.Messages;
+
 /**
  * vsim
  * <p>
@@ -21,7 +22,7 @@ public class AboutAction extends WindowAction {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		JOptionPane.showMessageDialog(this._window
+		JOptionPane.showMessageDialog(this.window
 				, Messages.t("about.message")
 				, Messages.t("about.title")
 				, JOptionPane.INFORMATION_MESSAGE);

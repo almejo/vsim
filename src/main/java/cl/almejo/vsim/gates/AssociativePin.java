@@ -17,16 +17,16 @@ class AssociativePin extends Pin {
 
 	@Override
 	public void hasChanged() {
-		int pinCount = _gate.getPinCount();
-		AssociativeGateDescriptor descriptor = (AssociativeGateDescriptor) _gate.getGateDescriptor();
+		int pinCount = gate.getPinCount();
+		AssociativeGateDescriptor descriptor = (AssociativeGateDescriptor) gate.getGateDescriptor();
 
-		int value = _gate.getPin(0).getInValue();
+		int value = gate.getPin(0).getInValue();
 
 		for (int i = 1; i < pinCount - 1; i++) {
-			value = descriptor.computeAssociativeVal(value, _gate.getPin(i).getInValue());
+			value = descriptor.computeAssociativeVal(value, gate.getPin(i).getInValue());
 		}
 
-		_gate.getPin(pinCount - 1).program((byte) value, ((GateParametersWithDelay) _gate.getParamameters()).getDelay());
+		gate.getPin(pinCount - 1).program((byte) value, ((GateParametersWithDelay) gate.getParamameters()).getDelay());
 	}
 
 }

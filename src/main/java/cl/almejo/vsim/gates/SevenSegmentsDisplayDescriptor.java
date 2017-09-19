@@ -25,14 +25,14 @@ public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 
 	SevenSegmentsDisplayDescriptor(SevenSegmentsDisplayParameters parameters, String type) {
 		super(parameters, type);
-		_pinCount = parameters.getPinCount();
-		_pinPosition = new Point[_pinCount];
+		pinCount = parameters.getPinCount();
+		pinPosition = new Point[pinCount];
 		Dimension dimension = getSize();
-		int delta = (int) dimension.getWidth() / _pinCount;
-		for (int i = 0; i < _pinCount; i++) {
-			_pinPosition[i] = new Point(Circuit.gridTrunc((int) dimension.getWidth() - i * delta), Circuit.gridTrunc(0));
+		int delta = (int) dimension.getWidth() / pinCount;
+		for (int i = 0; i < pinCount; i++) {
+			pinPosition[i] = new Point(Circuit.gridTrunc((int) dimension.getWidth() - i * delta), Circuit.gridTrunc(0));
 		}
-		_gateType = GateTypes.DEBUG;
+		gateType = GateTypes.DEBUG;
 
 	}
 
@@ -40,13 +40,13 @@ public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 	public void drawGate(Graphics2D graphics, IconGate iconGate, int x, int y) {
 		graphics.setColor(ColorScheme.getGates());
 		Dimension dimension = getSize();
-		int unitWidth = dimension.width / (_pinCount / 4);
+		int unitWidth = dimension.width / (pinCount / 4);
 		graphics.fillRoundRect(0, 0, Circuit.gridTrunc(dimension.width), Circuit.gridTrunc(dimension.height), 5, 5);
 
 		int number = ((SevenSegmentsDisplayParameters) iconGate.getGate().getParamameters()).getNumber();
 		Stroke oldStroke = graphics.getStroke();
 		graphics.setStroke(NUMBER_STROKE);
-		for (int i = 0; i < _pinCount / 4; i++) {
+		for (int i = 0; i < pinCount / 4; i++) {
 			graphics.setColor(ColorScheme.getOff());
 			int xOffset = dimension.width - unitWidth * (i + 1) + NUMBER_OFFSET_X;
 			drawNumber(graphics, 8, xOffset, NUMBER_OFFSET_Y);
@@ -59,7 +59,7 @@ public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 
 	@Override
 	public Dimension getSize() {
-		return new Dimension((NUMBER_WIDTH + NUMBER_OFFSET_X * 2) * (_pinCount / 4), 48);
+		return new Dimension((NUMBER_WIDTH + NUMBER_OFFSET_X * 2) * (pinCount / 4), 48);
 	}
 
 	@Override

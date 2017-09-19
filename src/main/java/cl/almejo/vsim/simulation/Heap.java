@@ -11,63 +11,63 @@ package cl.almejo.vsim.simulation;
 class Heap {
 	private static final int MIN_SIZE = 100;
 
-	private HeapElement[] _elements = new HeapElement[MIN_SIZE + 1];
-	private int _size;
+	private HeapElement[] elements = new HeapElement[MIN_SIZE + 1];
+	private int size;
 
 	void insert(HeapElement element) {
 		if (isFull()) {
 			enlarge();
 		}
-		if (_size == 0) {
-			_size++;
-			_elements[1] = element;
+		if (size == 0) {
+			size++;
+			elements[1] = element;
 			return;
 		}
-		_size++;
-		_elements[_size] = element;
-		int current = _size;
+		size++;
+		elements[size] = element;
+		int current = size;
 		while (current > 1) {
 			int parentIndex = current / 2;
-			if (_elements[parentIndex].getValue() <= _elements[current].getValue()) {
+			if (elements[parentIndex].getValue() <= elements[current].getValue()) {
 				break;
 			}
-			_elements[current] = _elements[parentIndex];
-			_elements[parentIndex] = element;
+			elements[current] = elements[parentIndex];
+			elements[parentIndex] = element;
 			current = parentIndex;
 		}
 	}
 
 	public HeapElement remove() throws EmptyHeapException {
-		if (_size == 0) {
+		if (size == 0) {
 			throw new EmptyHeapException();
 		}
-		HeapElement element = _elements[1];
-		if (_size > 1) {
-			_elements[1] = _elements[_size];
-			_size--;
+		HeapElement element = elements[1];
+		if (size > 1) {
+			elements[1] = elements[size];
+			size--;
 			sinkElement(1);
 		} else {
-			_size = 0;
+			size = 0;
 		}
 		return element;
 	}
 
 	private void sinkElement(int index) {
 
-		if (index == _size) {
+		if (index == size) {
 			return;
 		}
 
 		int tempIndex = index;
 		int childIndex = tempIndex * 2;
-		while (childIndex <= _size) {
-			if (childIndex < _size && _elements[childIndex + 1].getValue() < _elements[childIndex].getValue()) {
+		while (childIndex <= size) {
+			if (childIndex < size && elements[childIndex + 1].getValue() < elements[childIndex].getValue()) {
 				childIndex = childIndex + 1;
 			}
-			if (_elements[tempIndex].getValue() > _elements[childIndex].getValue()) {
-				HeapElement tmp = _elements[tempIndex];
-				_elements[tempIndex] = _elements[childIndex];
-				_elements[childIndex] = tmp;
+			if (elements[tempIndex].getValue() > elements[childIndex].getValue()) {
+				HeapElement tmp = elements[tempIndex];
+				elements[tempIndex] = elements[childIndex];
+				elements[childIndex] = tmp;
 			}
 			tempIndex = childIndex;
 			childIndex = tempIndex * 2;
@@ -77,25 +77,25 @@ class Heap {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 1; i < _size + 1; i++) {
-			builder.append(" ").append(_elements[i].getValue()).append("[").append(_elements[i].getClass().getName()).append("]");
+		for (int i = 1; i < size + 1; i++) {
+			builder.append(" ").append(elements[i].getValue()).append("[").append(elements[i].getClass().getName()).append("]");
 		}
-		return builder.append(" [").append(_size).append("]").toString();
+		return builder.append(" [").append(size).append("]").toString();
 	}
 
 	private void enlarge() {
-		HeapElement[] newArray = new HeapElement[_elements.length + 2];
-		System.arraycopy(_elements, 0, newArray, 0, _elements.length);
-		_elements = newArray;
+		HeapElement[] newArray = new HeapElement[elements.length + 2];
+		System.arraycopy(elements, 0, newArray, 0, elements.length);
+		elements = newArray;
 	}
 
 	private boolean isFull() {
-		return _size == _elements.length;
+		return size == elements.length;
 	}
 
 	boolean contains(HeapElement element) {
-		for (int i = 1; i < _size; i++) {
-			if (_elements[i] == element) {
+		for (int i = 1; i < size; i++) {
+			if (elements[i] == element) {
 				return true;
 			}
 		}

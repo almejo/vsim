@@ -32,7 +32,7 @@ public class GateFactory {
 
 	private static final FlipFlopDataDescriptor FLIP_FLOP_DATA_DESCRIPTOR;
 
-	private static final TristateDescriptor TRISTATE_DESCRIPTOR;
+	private static final TriStateDescriptor TRI_STATE_DESCRIPTOR;
 	private static final LedDescriptor LED_DESCRIPTOR;
 	private static final TimeDiagramDescriptor TIME_DIAGRAM_DESCRIPTOR;
 	private static final SwitchDescriptor SWITCH_DESCRIPTOR;
@@ -90,7 +90,7 @@ public class GateFactory {
 
 		NOT_DESCRIPTOR = new NotDescriptor(new NotParameters(1), Gate.NOT);
 
-		TRISTATE_DESCRIPTOR = new TristateDescriptor(new TristateParameters(1), Gate.TRISTATE);
+		TRI_STATE_DESCRIPTOR = new TriStateDescriptor(new TriStateParameters(1), Gate.TRI_STATE);
 		SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR = new SevenSegmentsDisplayDescriptor(new SevenSegmentsDisplayParameters(4), Gate.SEVEN_SEGMENTS_DISPLAY);
 		SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR_DOUBLE = new SevenSegmentsDisplayDescriptor(new SevenSegmentsDisplayParameters(8), Gate.SEVEN_SEGMENTS_DISPLAY_DOUBLE);
 		FLIP_FLOP_DATA_DESCRIPTOR = new FlipFlopDataDescriptor(new FlipFlopDataParameters(1), Gate.FLIP_FLOP_DATA);
@@ -137,8 +137,8 @@ public class GateFactory {
 			if (gateIndex.equalsIgnoreCase(Gate.FLIP_FLOP_DATA)) {
 				return new IconGate(circuit.getNextGateId(), new FlipFlopData(circuit, FLIP_FLOP_DATA_DESCRIPTOR.getOriginalParameters().clone(), FLIP_FLOP_DATA_DESCRIPTOR));
 			}
-			if (gateIndex.equalsIgnoreCase(Gate.TRISTATE)) {
-				return new IconGate(circuit.getNextGateId(), new Tristate(circuit, TRISTATE_DESCRIPTOR.getOriginalParameters().clone(), TRISTATE_DESCRIPTOR));
+			if (gateIndex.equalsIgnoreCase(Gate.TRI_STATE)) {
+				return new IconGate(circuit.getNextGateId(), new TriState(circuit, TRI_STATE_DESCRIPTOR.getOriginalParameters().clone(), TRI_STATE_DESCRIPTOR));
 			}
 			if (gateIndex.equalsIgnoreCase(Gate.SEVEN_SEGMENTS_DISPLAY)) {
 				return new IconGate(circuit.getNextGateId(), new SevenSegmentsDisplay(circuit, SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR.getOriginalParameters().clone(), SEVEN_SEGMENTS_DISPLAY_DESCRIPTOR));

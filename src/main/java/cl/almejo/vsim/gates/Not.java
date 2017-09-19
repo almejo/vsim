@@ -10,14 +10,14 @@ import cl.almejo.vsim.circuit.Circuit;
  *
  * @author Alejandro Vera
  */
-public class Not extends Gate {
+class Not extends Gate {
 
-	public Not(Circuit circuit, GateParameters params, NotDescriptor notDescriptor) {
+	Not(Circuit circuit, GateParameters params, NotDescriptor notDescriptor) {
 		super(circuit, params, notDescriptor);
 
-		_pins = new NotPin[2];
-		_pins[0] = new NotPin(this, circuit.getScheduler(), 0);
-		_pins[1] = new NotPin(this, circuit.getScheduler(), 1);
+		pins = new NotPin[2];
+		pins[0] = new NotPin(this, circuit.getScheduler(), 0);
+		pins[1] = new NotPin(this, circuit.getScheduler(), 1);
 	}
 
 }

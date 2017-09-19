@@ -23,21 +23,21 @@ import java.util.Arrays;
  */
 class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListener {
 
-	private final TimeDiagramCanvas _diagramCanvas;
+	private final TimeDiagramCanvas timeDiagramCanvas;
 	private static final int SIGNAL_HEIGHT = 20;
 	private static final int SPACE_BETWEEN_SIGNALS = 10;
 	private static final int SIGNAL_HEIGHT_HALF = SIGNAL_HEIGHT / 2;
 	private static final int TOTAL_HEIGHT = (SIGNAL_HEIGHT + SPACE_BETWEEN_SIGNALS) * 4;
 
 	private static class TimeDiagramCanvas extends JPanel {
-		private byte[][] _values = new byte[4][1000];
-		private int _position;
+		private byte[][] values = new byte[4][1000];
+		private int position;
 
 		TimeDiagramCanvas() {
 			setBorder(new EmptyBorder(3, 3, 3, 3));
 			setBackground(ColorScheme.getBackground());
-			for (byte[] _value : _values) {
-				Arrays.fill(_value, Constants.THREE_STATE);
+			for (byte[] value : values) {
+				Arrays.fill(value, Constants.THREE_STATE);
 			}
 			updateValues();
 		}
@@ -47,8 +47,8 @@ class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListen
 			super.paint(graphics);
 			Graphics2D graphics2D = (Graphics2D) graphics;
 			graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			for (int i = 0; i < _values[0].length; i++) {
-				drawInstant(new byte[]{_values[0][i], _values[1][i], _values[2][i], _values[3][i]}, graphics2D, i);
+			for (int i = 0; i < values[0].length; i++) {
+				drawInstant(new byte[]{values[0][i], values[1][i], values[2][i], values[3][i]}, graphics2D, i);
 			}
 			graphics2D.setColor(ColorScheme.getGrid());
 			graphics2D.drawLine(0, (SIGNAL_HEIGHT + SPACE_BETWEEN_SIGNALS) * 4 + SPACE_BETWEEN_SIGNALS, getWidth(), (SIGNAL_HEIGHT + SPACE_BETWEEN_SIGNALS) * 4 + SPACE_BETWEEN_SIGNALS);
@@ -56,14 +56,14 @@ class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListen
 		}
 
 		void plot(byte[] values) {
-			if (_values[0].length < 1) {
+			if (this.values[0].length < 1) {
 				return;
 			}
-			if (_position >= _values[0].length) {
-				_position = 0;
+			if (position >= this.values[0].length) {
+				position = 0;
 			}
 			for (int i = 0; i < values.length; i++) {
-				_values[i][_position] = values[i];
+				this.values[i][position] = values[i];
 			}
 			if (!isVisible()) {
 				return;
@@ -71,23 +71,23 @@ class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListen
 			Graphics2D graphics = (Graphics2D) getGraphics();
 			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			graphics.setColor(ColorScheme.getBackground());
-			graphics.fillRect(_position, 0, 20, TOTAL_HEIGHT + 6);
+			graphics.fillRect(position, 0, 20, TOTAL_HEIGHT + 6);
 
-			drawInstant(values, graphics, _position);
+			drawInstant(values, graphics, position);
 
 			drawPlotter(graphics, values);
-			_position++;
+			position++;
 		}
 
 		private void drawPlotter(Graphics2D graphics, byte[] values) {
 			graphics.setColor(ColorScheme.getSignal());
 			graphics.setColor(ColorScheme.getOff());
-			graphics.drawLine(_position + 10, 0, _position + 10, TOTAL_HEIGHT);
+			graphics.drawLine(position + 10, 0, position + 10, TOTAL_HEIGHT);
 			int index = 0;
 			for (byte value : values) {
 				int height = getSignalHeight(index, value);
-				graphics.drawLine(_position + 1, height, _position + 10, height);
-				graphics.fillOval(_position + 1, height - 3, 6, 6);
+				graphics.drawLine(position + 1, height, position + 10, height);
+				graphics.fillOval(position + 1, height - 3, 6, 6);
 				index++;
 			}
 		}
@@ -100,7 +100,7 @@ class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListen
 				int height = getSignalHeight(index, value);
 				graphics.drawLine(position, height, position + 1, height);
 				if (position > 0) {
-					if (_values[index][position - 1] != Constants.THREE_STATE && _values[index][position] != _values[index][position - 1]) {
+					if (this.values[index][position - 1] != Constants.THREE_STATE && this.values[index][position] != this.values[index][position - 1]) {
 						graphics.drawLine(position, delta - SIGNAL_HEIGHT, position, delta);
 					}
 				}
@@ -123,13 +123,13 @@ class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListen
 
 		void updateValues() {
 			byte[][] values = new byte[4][getWidth()];
-			for (int i = 0; i < _values.length; i++) {
+			for (int i = 0; i < this.values.length; i++) {
 				Arrays.fill(values[i], Constants.THREE_STATE);
-				System.arraycopy(_values[i], 0, values[i], 0, Math.min(getWidth(), _values[i].length));
+				System.arraycopy(this.values[i], 0, values[i], 0, Math.min(getWidth(), this.values[i].length));
 			}
-			_values = values;
-			if (_position >= getWidth()) {
-				_position = 0;
+			this.values = values;
+			if (position >= getWidth()) {
+				position = 0;
 			}
 			repaint();
 		}
@@ -139,8 +139,8 @@ class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListen
 	TimeDiagramDisplay() {
 		setLayout(new BorderLayout());
 		addComponentListener(this);
-		_diagramCanvas = new TimeDiagramCanvas();
-		add(BorderLayout.CENTER, _diagramCanvas);
+		timeDiagramCanvas = new TimeDiagramCanvas();
+		add(BorderLayout.CENTER, timeDiagramCanvas);
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new BoxLayout(buttons, BoxLayout.Y_AXIS));
 		buttons.setBorder(new EmptyBorder(3, 3, 3, 3));
@@ -156,9 +156,9 @@ class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListen
 					return;
 				}
 				name1 = name1.replaceAll("[^A-Za-z0-9]", "-").replaceAll(" ", "-");
-				BufferedImage bufferedImage = new BufferedImage(_diagramCanvas.getSize().width, _diagramCanvas.getSize().height, BufferedImage.TYPE_INT_ARGB);
+				BufferedImage bufferedImage = new BufferedImage(timeDiagramCanvas.getSize().width, timeDiagramCanvas.getSize().height, BufferedImage.TYPE_INT_ARGB);
 				Graphics graphics = bufferedImage.createGraphics();
-				_diagramCanvas.paint(graphics);
+				timeDiagramCanvas.paint(graphics);
 				graphics.dispose();
 				try {
 					ImageIO.write(bufferedImage, "png", new File(name1 + ".png"));
@@ -171,32 +171,32 @@ class TimeDiagramDisplay extends JPanel implements DisplayPanel, ComponentListen
 	}
 
 	void plot(byte[] values) {
-		_diagramCanvas.plot(values);
+		timeDiagramCanvas.plot(values);
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		_diagramCanvas.updateValues();
-		_diagramCanvas.repaint();
+		timeDiagramCanvas.updateValues();
+		timeDiagramCanvas.repaint();
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		_diagramCanvas.updateValues();
-		_diagramCanvas.repaint();
+		timeDiagramCanvas.updateValues();
+		timeDiagramCanvas.repaint();
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		_diagramCanvas.setVisible(true);
-		_diagramCanvas.updateValues();
-		_diagramCanvas.repaint();
+		timeDiagramCanvas.setVisible(true);
+		timeDiagramCanvas.updateValues();
+		timeDiagramCanvas.repaint();
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		_diagramCanvas.setVisible(false);
-		_diagramCanvas.updateValues();
-		_diagramCanvas.repaint();
+		timeDiagramCanvas.setVisible(false);
+		timeDiagramCanvas.updateValues();
+		timeDiagramCanvas.repaint();
 	}
 }

@@ -17,44 +17,44 @@ import java.awt.event.AdjustmentListener;
  * @author Alejandro Vera
  */
 class CanvasScrollPane extends JPanel implements AdjustmentListener, ViewportListener {
-	private final JScrollBar _horizontalScrollbar;
-	private final JScrollBar _verticalScrollbar;
-	private final CircuitCanvas _canvas;
+	private final JScrollBar horizontalScrollbar;
+	private final JScrollBar verticalScrollbar;
+	private final CircuitCanvas canvas;
 
 	CanvasScrollPane(CircuitCanvas canvas) {
 		setLayout(new GridBagLayout());
-		_canvas = addCanvas(canvas);
-		_canvas.addViewportListener(this);
-		_verticalScrollbar = addVerticalScrollbar();
-		_horizontalScrollbar = addHorizontalScrollbar();
+		this.canvas = addCanvas(canvas);
+		this.canvas.addViewportListener(this);
+		verticalScrollbar = addVerticalScrollbar();
+		horizontalScrollbar = addHorizontalScrollbar();
 		updateScrollbars();
 	}
 
 	private void updateScrollbars() {
 		SwingUtilities.invokeLater(() -> {
-			Rectangle world = _canvas.getWorld();
-			Rectangle viewport = _canvas.getViewport();
+			Rectangle world = canvas.getWorld();
+			Rectangle viewport = canvas.getViewport();
 
-			_horizontalScrollbar.setMinimum(world.x);
-			_horizontalScrollbar.setMaximum(world.x + world.width);
-			_horizontalScrollbar.setValue(viewport.x);
-			_horizontalScrollbar.setVisibleAmount(viewport.width);
-			_horizontalScrollbar.setBlockIncrement(getHorizontalBlockIncrement());
+			horizontalScrollbar.setMinimum(world.x);
+			horizontalScrollbar.setMaximum(world.x + world.width);
+			horizontalScrollbar.setValue(viewport.x);
+			horizontalScrollbar.setVisibleAmount(viewport.width);
+			horizontalScrollbar.setBlockIncrement(getHorizontalBlockIncrement());
 
-			_verticalScrollbar.setMinimum(world.y);
-			_verticalScrollbar.setMaximum(world.y + world.height);
-			_verticalScrollbar.setValue(viewport.y);
-			_verticalScrollbar.setVisibleAmount(viewport.height);
-			_verticalScrollbar.setBlockIncrement(getVerticalBlockIncrement());
+			verticalScrollbar.setMinimum(world.y);
+			verticalScrollbar.setMaximum(world.y + world.height);
+			verticalScrollbar.setValue(viewport.y);
+			verticalScrollbar.setVisibleAmount(viewport.height);
+			verticalScrollbar.setBlockIncrement(getVerticalBlockIncrement());
 		});
 	}
 
 	private int getHorizontalBlockIncrement() {
-		return Math.min(_horizontalScrollbar.getVisibleAmount(), _horizontalScrollbar.getMaximum() - (_horizontalScrollbar.getMinimum() + _horizontalScrollbar.getVisibleAmount()));
+		return Math.min(horizontalScrollbar.getVisibleAmount(), horizontalScrollbar.getMaximum() - (horizontalScrollbar.getMinimum() + horizontalScrollbar.getVisibleAmount()));
 	}
 
 	private int getVerticalBlockIncrement() {
-		return Math.min(_verticalScrollbar.getVisibleAmount(), _verticalScrollbar.getMaximum() - _verticalScrollbar.getMinimum());
+		return Math.min(verticalScrollbar.getVisibleAmount(), verticalScrollbar.getMaximum() - verticalScrollbar.getMinimum());
 	}
 
 	private CircuitCanvas addCanvas(CircuitCanvas canvas) {
@@ -71,7 +71,7 @@ class CanvasScrollPane extends JPanel implements AdjustmentListener, ViewportLis
 	private JScrollBar addVerticalScrollbar() {
 		JScrollBar scrollBar = new JScrollBar();
 		scrollBar.addAdjustmentListener(this);
-		scrollBar.setUnitIncrement(Circuit.gridTrunc((int) (Circuit.GRID_SIZE / _canvas.getZoom())));
+		scrollBar.setUnitIncrement(Circuit.gridTrunc((int) (Circuit.GRID_SIZE / canvas.getZoom())));
 		GridBagConstraints constraint = new GridBagConstraints();
 		constraint.gridx = 1;
 		constraint.gridy = 0;
@@ -84,7 +84,7 @@ class CanvasScrollPane extends JPanel implements AdjustmentListener, ViewportLis
 	private JScrollBar addHorizontalScrollbar() {
 		JScrollBar scrollBar = new JScrollBar();
 		scrollBar.setOrientation(JScrollBar.HORIZONTAL);
-		scrollBar.setUnitIncrement(Circuit.gridTrunc((int) (Circuit.GRID_SIZE / _canvas.getZoom())));
+		scrollBar.setUnitIncrement(Circuit.gridTrunc((int) (Circuit.GRID_SIZE / canvas.getZoom())));
 		scrollBar.addAdjustmentListener(this);
 		GridBagConstraints constraint = new GridBagConstraints();
 		constraint.gridx = 0;
@@ -98,10 +98,10 @@ class CanvasScrollPane extends JPanel implements AdjustmentListener, ViewportLis
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent event) {
 		JScrollBar scrollbar = (JScrollBar) event.getSource();
-		if (scrollbar == _horizontalScrollbar) {
-			_canvas.moveViewport(_canvas.getViewport().x - scrollbar.getValue(), 0);
+		if (scrollbar == horizontalScrollbar) {
+			canvas.moveViewport(canvas.getViewport().x - scrollbar.getValue(), 0);
 		} else {
-			_canvas.moveViewport(0, _canvas.getViewport().y - scrollbar.getValue());
+			canvas.moveViewport(0, canvas.getViewport().y - scrollbar.getValue());
 		}
 	}
 

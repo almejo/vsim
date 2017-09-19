@@ -20,7 +20,7 @@ public class PasteAction extends WindowAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent event) {
 		System.out.println("paste");
 	}
 

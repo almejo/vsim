@@ -15,18 +15,18 @@ import java.awt.event.MouseEvent;
  * @author Alejandro Vera
  */
 public class MoveViewPortToolHelper extends ActionToolHelper {
-	private int _lastX;
-	private int _lastY;
+	private int lastX;
+	private int lastY;
 
-	private int _accumulatedX;
-	private int _accumulatedY;
+	private int accumulatedX;
+	private int accumulatedY;
 
 	@Override
 	public void mouseDown(SimWindow window, MouseEvent event) {
-		_lastX = event.getX();
-		_lastY = event.getY();
-		_accumulatedX = 0;
-		_accumulatedY = 0;
+		lastX = event.getX();
+		lastY = event.getY();
+		accumulatedX = 0;
+		accumulatedY = 0;
 
 		window.getCanvas().setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 	}
@@ -45,26 +45,26 @@ public class MoveViewPortToolHelper extends ActionToolHelper {
 
 	@Override
 	public void mouseDragged(SimWindow window, MouseEvent event) {
-		int deltaX = event.getX() - _lastX;
-		int deltaY = event.getY() - _lastY;
+		int deltaX = event.getX() - lastX;
+		int deltaY = event.getY() - lastY;
 
-		_accumulatedX += deltaX;
-		_accumulatedY += deltaY;
+		accumulatedX += deltaX;
+		accumulatedY += deltaY;
 
 		int toMoveX = 0;
 		int toMoveY = 0;
-		if (Math.abs(_accumulatedX) > Math.abs(Circuit.GRID_SIZE)) {
-			int rest = _accumulatedX - _accumulatedX / Circuit.GRID_SIZE * Circuit.GRID_SIZE;
-			toMoveX = _accumulatedX - rest;
-			_accumulatedX = rest;
+		if (Math.abs(accumulatedX) > Math.abs(Circuit.GRID_SIZE)) {
+			int rest = accumulatedX - accumulatedX / Circuit.GRID_SIZE * Circuit.GRID_SIZE;
+			toMoveX = accumulatedX - rest;
+			accumulatedX = rest;
 		}
-		if (Math.abs(_accumulatedY) > Circuit.GRID_SIZE) {
-			int rest = _accumulatedY - _accumulatedY / Circuit.GRID_SIZE * Circuit.GRID_SIZE;
-			toMoveY = _accumulatedY - rest;
-			_accumulatedY = rest;
+		if (Math.abs(accumulatedY) > Circuit.GRID_SIZE) {
+			int rest = accumulatedY - accumulatedY / Circuit.GRID_SIZE * Circuit.GRID_SIZE;
+			toMoveY = accumulatedY - rest;
+			accumulatedY = rest;
 		}
 		window.getCanvas().moveViewport((int) (toMoveX / window.getCanvas().getZoom()), (int) (toMoveY / window.getCanvas().getZoom()));
-		_lastX = event.getX();
-		_lastY = event.getY();
+		lastX = event.getX();
+		lastY = event.getY();
 	}
 }

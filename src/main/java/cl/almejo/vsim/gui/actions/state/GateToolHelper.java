@@ -16,10 +16,10 @@ import java.awt.event.MouseEvent;
  * @author Alejandro Vera
  */
 public class GateToolHelper extends ActionToolHelper {
-	private final String _gateType;
+	private final String gateType;
 
 	public GateToolHelper(String gateType) {
-		_gateType = gateType;
+		this.gateType = gateType;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class GateToolHelper extends ActionToolHelper {
 			checkSelection(window, event, x, y);
 			return null;
 		}
-		IconGate iconGate = GateFactory.getInstance(_gateType, window.getCircuit());
+		IconGate iconGate = GateFactory.getInstance(gateType, window.getCircuit());
 		if (iconGate == null) {
 			return null;
 		}

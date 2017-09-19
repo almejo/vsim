@@ -17,6 +17,5 @@ class SimplePin extends Pin {
 
 	@Override
 	public void hasChanged() {
-
 	}
 }

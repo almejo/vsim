@@ -18,15 +18,15 @@ import java.util.List;
  */
 public class DragSelectionCommand implements Command {
 
-	private final Circuit _circuit;
-	private final List<Draggable> _draggables;
+	private final Circuit circuit;
+	private final List<Draggable> draggables;
 	private final List<Point> origin = new LinkedList<>();
 	private final List<Point> end = new LinkedList<>();
 
 	public DragSelectionCommand(Circuit circuit, Selection selection, int xf, int yf) {
-		_circuit = circuit;
-		_draggables = selection.getDraggables();
-		for (Draggable draggable : _draggables) {
+		this.circuit = circuit;
+		draggables = selection.getDraggables();
+		for (Draggable draggable : draggables) {
 			origin.add(new Point(draggable.getOriginalX(), draggable.getOriginalY()));
 			end.add(new Point(xf + draggable.getOriginalX() - selection.getX(), yf + draggable.getOriginalY() - selection.getY()));
 		}
@@ -34,14 +34,14 @@ public class DragSelectionCommand implements Command {
 
 	@Override
 	public boolean apply() {
-		_circuit.drag(_draggables, end);
-		_circuit.updateSelection();
+		circuit.drag(draggables, end);
+		circuit.updateSelection();
 		return true;
 	}
 
 	@Override
 	public void unDo() {
-		_circuit.drag(_draggables, origin);
-		_circuit.updateSelection();
+		circuit.drag(draggables, origin);
+		circuit.updateSelection();
 	}
 }

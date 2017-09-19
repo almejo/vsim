@@ -9,7 +9,6 @@ import cl.almejo.vsim.gui.Draggable;
 import cl.almejo.vsim.simulation.Scheduler;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,116 +29,115 @@ import java.util.stream.Collectors;
  * @author Alejandro Vera
  */
 
-@Accessors(prefix = "_")
 public class Circuit {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Circuit.class);
 
-	private Simulator _simulatorTask;
-	private boolean _simulationIsRunning;
-	private final LinkedList<CircuitStateListener> _stateListeners = new LinkedList<>();
+	private Simulator simulatorTask;
+	private boolean simulationIsRunning;
+	private final LinkedList<CircuitStateListener> stateListeners = new LinkedList<>();
 
 	@Getter
 	@Setter
-	private String _name;
-	private Command _lastSavedCommand;
-	private boolean _showGrid = true;
+	private String name;
+	private Command lastSavedCommand;
+	private boolean showGrid = true;
 
-	private final GatesSelection _selection = new GatesSelection();
-	private int _dragPreviewY;
-	private int _dragPreviewX;
-	private BufferedImage _dragPreview;
-	private Rectangle _extent = new Rectangle();
+	private final GatesSelection selection = new GatesSelection();
+	private int dragPreviewY;
+	private int dragPreviewX;
+	private BufferedImage dragPreview;
+	private Rectangle extent = new Rectangle();
 
 	public static final int GRID_SIZE = 8;
 
-	private final CommandManager _commandManager = new CommandManager();
+	private final CommandManager commandManager = new CommandManager();
 
-	private final Scheduler _scheduler;
+	private final Scheduler scheduler;
 
-	private final List<IconGate> _icons = new LinkedList<>();
+	private final List<IconGate> icons = new LinkedList<>();
 
-	private final List<CircuitCanvas> _canvases = new LinkedList<>();
+	private final List<CircuitCanvas> canvases = new LinkedList<>();
 
-	private final Protoboard _protoboard;
+	private final Protoboard protoboard;
 
-	private final Timer _simulationTimer = new Timer();
+	private final Timer simulationTimer = new Timer();
 
-	private int _nextGateId;
+	private int nextGateId;
 
 	public void updateSelection() {
-		_selection.updateExtent();
+		selection.updateExtent();
 	}
 
 	Rectangle getExtent() {
-		return _extent;
+		return extent;
 	}
 
 	private static class GatesSelection implements Selection {
-		List<Draggable> _draggables = new LinkedList<>();
-		Rectangle _extent;
+		List<Draggable> draggables = new LinkedList<>();
+		Rectangle extent;
 
 		@Override
 		public void add(Draggable selectable) {
 			selectable.select();
-			_draggables.add(selectable);
+			draggables.add(selectable);
 			updateExtent();
 		}
 
 		@Override
 		public void remove(Draggable selectable) {
 			selectable.deselect();
-			_draggables.remove(selectable);
+			draggables.remove(selectable);
 		}
 
 		@Override
 		public void clear() {
-			_draggables.forEach(Draggable::deselect);
-			_draggables.clear();
+			draggables.forEach(Draggable::deselect);
+			draggables.clear();
 		}
 
 		@Override
 		public BufferedImage getImage() {
-			if (_draggables.isEmpty()) {
+			if (draggables.isEmpty()) {
 				return null;
 			}
 			updateExtent();
-			BufferedImage bufferedImage = new BufferedImage(_extent.width, _extent.height, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage bufferedImage = new BufferedImage(extent.width, extent.height, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D graphics = bufferedImage.createGraphics();
 			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			_draggables.forEach(selection -> selection.drawPreview(graphics, _extent.getX(), _extent.getY()));
+			draggables.forEach(selection -> selection.drawPreview(graphics, extent.getX(), extent.getY()));
 			return bufferedImage;
 		}
 
 		@Override
 		public List<Draggable> getDraggables() {
 			List<Draggable> draggables = new LinkedList<>();
-			draggables.addAll(_draggables);
+			draggables.addAll(this.draggables);
 			return draggables;
 		}
 
 		private void updateExtent() {
-			if (_draggables.isEmpty()) {
-				_extent = new Rectangle();
+			if (draggables.isEmpty()) {
+				extent = new Rectangle();
 				return;
 			}
-			_extent = new Rectangle(_draggables.get(0).getExtent());
-			_draggables.forEach(draggable -> _extent.add(draggable.getExtent()));
+			extent = new Rectangle(draggables.get(0).getExtent());
+			draggables.forEach(draggable -> extent.add(draggable.getExtent()));
 		}
 
 		@Override
 		public int getX() {
-			return (int) _extent.getX();
+			return (int) extent.getX();
 		}
 
 		@Override
 		public int getY() {
-			return (int) _extent.getY();
+			return (int) extent.getY();
 		}
 
 
 		boolean contains(int x, int y) {
-			for (Draggable selectable : _draggables) {
+			for (Draggable selectable : draggables) {
 				if (selectable.contains(x, y)) {
 					return true;
 				}
@@ -149,80 +147,80 @@ public class Circuit {
 	}
 
 	public void toggleGrid() {
-		_showGrid = !_showGrid;
+		showGrid = !showGrid;
 	}
 
 	private static class Simulator extends TimerTask {
 
-		private final Circuit _circuit;
+		private final Circuit circuit;
 
-		private long _lastSimulationTime;
+		private long lastSimulationTime;
 
 		Simulator(Circuit circuit) {
-			_circuit = circuit;
-			_lastSimulationTime = System.currentTimeMillis();
+			this.circuit = circuit;
+			lastSimulationTime = System.currentTimeMillis();
 		}
 
 		@Override
 		public void run() {
 			long currentTime = System.currentTimeMillis();
-			long simulationTime = currentTime - _lastSimulationTime;
-			_lastSimulationTime = currentTime;
-			_circuit.getScheduler().run((int) simulationTime);
+			long simulationTime = currentTime - lastSimulationTime;
+			lastSimulationTime = currentTime;
+			circuit.getScheduler().run((int) simulationTime);
 		}
 
 	}
 
 	private static class RepaintTask extends TimerTask {
 
-		private final Circuit _circuit;
+		private final Circuit circuit;
 
 		RepaintTask(Circuit circuit) {
-			_circuit = circuit;
+			this.circuit = circuit;
 		}
 
 		@Override
 		public void run() {
-			_circuit.repaint();
+			circuit.repaint();
 		}
 	}
 
 	public Circuit() {
-		_protoboard = new Protoboard();
-		_scheduler = new Scheduler();
+		protoboard = new Protoboard();
+		scheduler = new Scheduler();
 
 		new Timer().schedule(new RepaintTask(this), 100, 100);
 		startSimulation();
 	}
 
 	public void addCircuitEventListener(CircuitStateListener listener) {
-		_stateListeners.add(listener);
+		stateListeners.add(listener);
 	}
 
 	public void removeCircuitEventListener(CircuitStateListener listener) {
-		_stateListeners.remove(listener);
+		stateListeners.remove(listener);
 	}
 
 	private void repaint() {
-		_canvases.forEach(CircuitCanvas::repaint);
+		canvases.forEach(CircuitCanvas::repaint);
 	}
 
 	public Scheduler getScheduler() {
-		return _scheduler;
+		return scheduler;
 	}
 
 	void paint(Graphics2D graphics, Rectangle rectangle) {
 		if (graphics != null) {
 			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			if (_showGrid) {
+			if (showGrid) {
 				drawGrid(graphics, rectangle);
 			}
 			drawGates(graphics, rectangle);
-			_protoboard.paint(graphics, rectangle);
+			protoboard.paint(graphics, rectangle);
 			drawGatesDecorations(graphics, rectangle);
-			if (_dragPreview != null) {
+			if (dragPreview != null) {
 				setAlpha(graphics, 0.5f);
-				graphics.drawImage(_dragPreview, _dragPreviewX, _dragPreviewY, null);
+				graphics.drawImage(dragPreview, dragPreviewX, dragPreviewY, null);
 				setAlpha(graphics, 1.0f);
 			}
 		}
@@ -244,7 +242,7 @@ public class Circuit {
 	}
 
 	public void add(IconGate icon, int x, int y) {
-		_icons.add(icon);
+		icons.add(icon);
 
 		Dimension size = icon.getSize();
 
@@ -258,7 +256,7 @@ public class Circuit {
 
 	public void remove(IconGate icon) {
 		deactivate(icon);
-		_icons.remove(icon);
+		icons.remove(icon);
 		updateExtent();
 		sendChangedEvent();
 	}
@@ -274,11 +272,11 @@ public class Circuit {
 	}
 
 	private void drawGates(Graphics2D graphics, Rectangle rectangle) {
-		_icons.stream().filter(iconGate -> rectangle.intersects(iconGate.getExtent())).forEach(iconGate -> iconGate.drawIcon(graphics));
+		icons.stream().filter(iconGate -> rectangle.intersects(iconGate.getExtent())).forEach(iconGate -> iconGate.drawIcon(graphics));
 	}
 
 	private void drawGatesDecorations(Graphics2D graphics, Rectangle rectangle) {
-		_icons.stream().filter(iconGate -> rectangle.intersects(iconGate.getExtent())).forEach(iconGate -> iconGate.drawDecorations(graphics));
+		icons.stream().filter(iconGate -> rectangle.intersects(iconGate.getExtent())).forEach(iconGate -> iconGate.drawDecorations(graphics));
 	}
 
 	public void activate(IconGate icon) {
@@ -288,33 +286,33 @@ public class Circuit {
 	}
 
 	private void addPin(byte pinId, Point p, Gate gate) {
-		_protoboard.addPin(pinId, gate, gridTrunc(p._x), gridTrunc(p._y));
+		protoboard.addPin(pinId, gate, gridTrunc(p.x), gridTrunc(p.y));
 	}
 
 	private void removePin(byte pinId, Point p, Gate gate) {
-		_protoboard.removePin(pinId, gate, gridTrunc(p._x), gridTrunc(p._y));
+		protoboard.removePin(pinId, gate, gridTrunc(p.x), gridTrunc(p.y));
 	}
 
 	public void connect(int xi, int yi, int xf, int yf) {
-		_protoboard.connect(gridTrunc(xi), gridTrunc(yi), gridTrunc(xf), gridTrunc(yf));
+		protoboard.connect(gridTrunc(xi), gridTrunc(yi), gridTrunc(xf), gridTrunc(yf));
 		updateExtent();
 	}
 
 	public void add(CircuitCanvas canvas) {
-		_canvases.add(canvas);
+		canvases.add(canvas);
 	}
 
 	public void remove(CircuitCanvas canvas) {
-		_canvases.remove(canvas);
+		canvases.remove(canvas);
 	}
 
 	public IconGate findIcon(int x, int y) {
-		int _x = gridTrunc(x);
-		int _y = gridTrunc(y);
+		int x2grid = gridTrunc(x);
+		int y2grid = gridTrunc(y);
 
 		// TODO: Change to findFirst but beware of two gates in the same position
-		for (IconGate iconGate : _icons) {
-			if (iconGate.contains(_x, _y)) {
+		for (IconGate iconGate : icons) {
+			if (iconGate.contains(x2grid, y2grid)) {
 				return iconGate;
 			}
 		}
@@ -322,34 +320,34 @@ public class Circuit {
 	}
 
 	public List<Connection<Contact>> findToDisconnect(int x, int y) {
-		return _protoboard.findToDisconnect(x, y);
+		return protoboard.findToDisconnect(x, y);
 	}
 
 	public void disconnectBetween(int xi, int yi, int xf, int yf) {
-		_protoboard.disconnectBetween(xi, yi, xf, yf);
+		protoboard.disconnectBetween(xi, yi, xf, yf);
 		updateExtent();
 	}
 
 	public List<Connection<Contact>> findBeforeConnect(int xi, int yi, int xf, int yf) {
-		return _protoboard.findBeforeConnect(xi, yi, xf, yf);
+		return protoboard.findBeforeConnect(xi, yi, xf, yf);
 	}
 
 
 	public void undo() {
-		_commandManager.undo();
+		commandManager.undo();
 		sendUndoEvent();
 		sendChangedEvent();
 	}
 
 	public void redo() {
-		_commandManager.redo();
+		commandManager.redo();
 		sendRedoEvent();
 		sendChangedEvent();
 	}
 
 	public void undoableAddGate(IconGate iconGate, int x, int y) {
 		AddGateCommand command = new AddGateCommand(this, iconGate, gridTrunc(x), gridTrunc(y));
-		_commandManager.apply(command);
+		commandManager.apply(command);
 		sendChangedEvent();
 	}
 
@@ -358,12 +356,12 @@ public class Circuit {
 			return;
 		}
 		RemoveGateCommand command = new RemoveGateCommand(this, iconGate);
-		_commandManager.apply(command);
+		commandManager.apply(command);
 		sendChangedEvent();
 	}
 
 	public void disconnect(int xi, int yi, int xf, int yf) {
-		_protoboard.disconnect(xi, yi, xf, yf);
+		protoboard.disconnect(xi, yi, xf, yf);
 		updateExtent();
 	}
 
@@ -385,30 +383,30 @@ public class Circuit {
 			command.connect(xiTrunc, yfTrunc, xfTrunc, yfTrunc);
 		}
 
-		_commandManager.apply(command);
+		commandManager.apply(command);
 		sendChangedEvent();
 	}
 
 	public int getNextGateId() {
-		return _nextGateId++;
+		return nextGateId++;
 	}
 
 	public void undoableDisconnect(int x, int y) {
-		_commandManager.apply(new DisconnectCommand(this, gridTrunc(x), gridTrunc(y)));
+		commandManager.apply(new DisconnectCommand(this, gridTrunc(x), gridTrunc(y)));
 		sendChangedEvent();
 	}
 
 	public void setDrawConnectPreview(boolean draw) {
-		_protoboard.setDrawConnectPreview(draw);
+		protoboard.setDrawConnectPreview(draw);
 	}
 
 	public void setConnectPreview(int xi, int yi, int xf, int yf) {
-		_protoboard.setConnectPreview(xi, yi, gridTrunc(xf), gridTrunc(yf));
+		protoboard.setConnectPreview(xi, yi, gridTrunc(xf), gridTrunc(yf));
 
 	}
 
 	public void toggleSimulation() {
-		if (_simulationIsRunning) {
+		if (simulationIsRunning) {
 			stopSimulation();
 		} else {
 			startSimulation();
@@ -416,67 +414,67 @@ public class Circuit {
 	}
 
 	public boolean isSimulationRunning() {
-		return _simulationIsRunning;
+		return simulationIsRunning;
 	}
 
 	private void startSimulation() {
-		_simulatorTask = new Simulator(this);
-		_simulationTimer.schedule(_simulatorTask, 1000, 100);
-		_simulationIsRunning = true;
+		simulatorTask = new Simulator(this);
+		simulationTimer.schedule(simulatorTask, 1000, 100);
+		simulationIsRunning = true;
 		sendResumeEvent();
 	}
 
 	private void stopSimulation() {
-		_simulatorTask.cancel();
-		_simulationTimer.purge();
-		_simulationIsRunning = false;
+		simulatorTask.cancel();
+		simulationTimer.purge();
+		simulationIsRunning = false;
 		sendPauseEvent();
 	}
 
 	private void sendSavedEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		_stateListeners.forEach(listener -> listener.onSaved(event));
+		stateListeners.forEach(listener -> listener.onSaved(event));
 	}
 
 	private void sendChangedEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		_stateListeners.forEach(listener -> listener.onChanged(event));
+		stateListeners.forEach(listener -> listener.onChanged(event));
 	}
 
 	private void sendUndoEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		_stateListeners.forEach(listener -> listener.onUndo(event));
+		stateListeners.forEach(listener -> listener.onUndo(event));
 	}
 
 	private void sendRedoEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		_stateListeners.forEach(listener -> listener.onRedo(event));
+		stateListeners.forEach(listener -> listener.onRedo(event));
 	}
 
 	private void sendPauseEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		_stateListeners.forEach(listener -> listener.onPause(event));
+		stateListeners.forEach(listener -> listener.onPause(event));
 	}
 
 	private void sendResumeEvent() {
 		CircuitEvent event = new CircuitEvent(this);
-		_stateListeners.forEach(listener -> listener.onResume(event));
+		stateListeners.forEach(listener -> listener.onResume(event));
 	}
 
 	public boolean canUndo() {
-		return _commandManager.canUndo();
+		return commandManager.canUndo();
 	}
 
 	public boolean canRedo() {
-		return _commandManager.canRedo();
+		return commandManager.canRedo();
 	}
 
 	public boolean isModified() {
-		return _lastSavedCommand != _commandManager.getLastApplied();
+		return lastSavedCommand != commandManager.getLastApplied();
 	}
 
 	public void setSaved() {
-		_lastSavedCommand = _commandManager.getLastApplied();
+		lastSavedCommand = commandManager.getLastApplied();
 		sendSavedEvent();
 	}
 
@@ -514,7 +512,7 @@ public class Circuit {
 	public String toJSon() throws IOException {
 
 		Map<String, Object> map = new HashMap<>();
-		map.put("gates", _icons.stream().map(iconGate -> {
+		map.put("gates", icons.stream().map(iconGate -> {
 					Map<String, Object> gateInfo = new HashMap<>();
 					gateInfo.put("type", iconGate.getGate().getGateDescriptor().getType());
 					Map<String, Integer> position = new HashMap<>();
@@ -526,7 +524,7 @@ public class Circuit {
 				}
 		).collect(Collectors.toList()));
 
-		map.put("connections", _protoboard.getAllConnections().stream().map(connection -> {
+		map.put("connections", protoboard.getAllConnections().stream().map(connection -> {
 			Map<String, Integer> connectionMap = new HashMap<>();
 			connectionMap.put("xi", connection.getFirst().getX());
 			connectionMap.put("yi", connection.getFirst().getY());
@@ -549,25 +547,25 @@ public class Circuit {
 	}
 
 	private void cleanHistory() {
-		_commandManager.cleanHistory();
+		commandManager.cleanHistory();
 	}
 
 	public void select(Draggable draggable) {
 		if (draggable instanceof IconGate) {
-			_selection.add(draggable);
+			selection.add(draggable);
 		}
 	}
 
 	public void clearSelection() {
-		_selection.clear();
+		selection.clear();
 	}
 
 	public void deselect(Draggable selectable) {
-		_selection.remove(selectable);
+		selection.remove(selectable);
 	}
 
 	public Draggable findDraggable(int x, int y) {
-		for (IconGate iconGate : _icons) {
+		for (IconGate iconGate : icons) {
 			if (iconGate.contains(x, y)) {
 				return iconGate;
 			}
@@ -576,7 +574,7 @@ public class Circuit {
 	}
 
 	public Configurable findConfigurable(int x, int y) {
-		for (IconGate iconGate : _icons) {
+		for (IconGate iconGate : icons) {
 			if (iconGate.contains(x, y)) {
 				return iconGate;
 			}
@@ -585,27 +583,27 @@ public class Circuit {
 	}
 
 	public Selection findSelection(int x, int y) {
-		if (_selection.contains(x, y)) {
-			return _selection;
+		if (selection.contains(x, y)) {
+			return selection;
 		}
 		return null;
 	}
 
 	public void drawDragPreview(int x, int y, BufferedImage preview) {
-		_dragPreviewX = gridTrunc(x);
-		_dragPreviewY = gridTrunc(y);
-		_dragPreview = preview;
+		dragPreviewX = gridTrunc(x);
+		dragPreviewY = gridTrunc(y);
+		dragPreview = preview;
 	}
 
 	@SuppressWarnings("AssignmentToNull")
 	public void clearDragPreview() {
-		_dragPreview = null;
+		dragPreview = null;
 	}
 
 
 	public void undoableDragSelection(Selection selection, int x, int y) {
 		DragSelectionCommand command = new DragSelectionCommand(this, selection, gridTrunc(x), gridTrunc(y));
-		_commandManager.apply(command);
+		commandManager.apply(command);
 		sendChangedEvent();
 	}
 
@@ -619,52 +617,52 @@ public class Circuit {
 	}
 
 	public void setSelection(Draggable draggable) {
-		_selection.clear();
-		_selection.add(draggable);
+		selection.clear();
+		selection.add(draggable);
 	}
 
 
 	public void undoableRotateClockWise(Configurable configurable) {
 		RotateClockwiseCommand command = new RotateClockwiseCommand(configurable);
-		_commandManager.apply(command);
+		commandManager.apply(command);
 		sendChangedEvent();
 	}
 
 	public void undoableRotateCounterClockWise(Configurable configurable) {
 		RotateCounterClockwiseCommand command = new RotateCounterClockwiseCommand(configurable);
-		_commandManager.apply(command);
+		commandManager.apply(command);
 		sendChangedEvent();
 	}
 
 
 	public void undoableConfig(Configurable configurable, Map<String, Object> parameters) {
 		ConfigCommand command = new ConfigCommand(configurable, parameters);
-		_commandManager.apply(command);
+		commandManager.apply(command);
 		sendChangedEvent();
 	}
 
 	private void updateExtent() {
-		if (_icons.isEmpty()) {
-			_extent = null;
+		if (icons.isEmpty()) {
+			extent = null;
 			return;
 		}
 
-		_extent = getIconsExtent();
-		if (_extent != null) {
-			if (_protoboard.getExtent() != null) {
-				_extent.add(_protoboard.getExtent());
+		extent = getIconsExtent();
+		if (extent != null) {
+			if (protoboard.getExtent() != null) {
+				extent.add(protoboard.getExtent());
 			}
 		} else {
-			_extent = _protoboard.getExtent();
+			extent = protoboard.getExtent();
 		}
 	}
 
 	private Rectangle getIconsExtent() {
-		if (_icons.isEmpty()) {
+		if (icons.isEmpty()) {
 			return null;
 		}
-		Rectangle rectangle = new Rectangle(_icons.get(0).getExtent());
-		_icons.stream().map(IconGate::getExtent).forEach(rectangle::add);
+		Rectangle rectangle = new Rectangle(icons.get(0).getExtent());
+		icons.stream().map(IconGate::getExtent).forEach(rectangle::add);
 		return rectangle;
 	}
 }

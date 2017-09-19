@@ -19,10 +19,10 @@ class ClockDescriptor extends GateDescriptor {
 
 	ClockDescriptor(ClockParameters parameters, String type) {
 		super(parameters, type);
-		_pinPosition = new Point[1];
-		_pinPosition[0] = new Point(Circuit.gridTrunc(16), Circuit.gridTrunc(16));
-		_gateType = GateTypes.NORMAL;
-		_pinCount = 1;
+		pinPosition = new Point[1];
+		pinPosition[0] = new Point(Circuit.gridTrunc(16), Circuit.gridTrunc(16));
+		gateType = GateTypes.NORMAL;
+		pinCount = 1;
 	}
 
 	@Override

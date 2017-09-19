@@ -14,9 +14,9 @@ import lombok.Getter;
 public class CircuitEvent {
 
 	@Getter
-	private final Circuit _circuit;
+	private final Circuit circuit;
 
 	CircuitEvent(Circuit circuit) {
-		_circuit = circuit;
+		this.circuit = circuit;
 	}
 }

@@ -20,7 +20,7 @@ public class ShowGridAction extends WindowAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		_window.getCircuit().toggleGrid();
+	public void actionPerformed(ActionEvent event) {
+		window.getCircuit().toggleGrid();
 	}
 }

@@ -16,54 +16,55 @@ import java.util.List;
  * @author Alejandro Vera
  */
 public class ConnectCommand implements Command {
+
+	private final Circuit circuit;
+
+	private final List<UndoableConnection> undoableConnections;
+
 	private class UndoableConnection {
-		private List<Connection<Contact>> _previousConnections;
-		private final int _xi;
-		private final int _yi;
-		private final int _xf;
-		private final int _yf;
+		private List<Connection<Contact>> previousConnections;
+		private final int xi;
+		private final int yi;
+		private final int xf;
+		private final int yf;
 
 		UndoableConnection(int xi, int yi, int xf, int yf) {
-			_xi = xi;
-			_yi = yi;
-			_xf = xf;
-			_yf = yf;
+			this.xi = xi;
+			this.yi = yi;
+			this.xf = xf;
+			this.yf = yf;
 		}
 
 		void apply() {
-			_previousConnections = _circuit.findBeforeConnect(_xi, _yi, _xf, _yf);
-			_circuit.connect(_xi, _yi, _xf, _yf);
+			previousConnections = circuit.findBeforeConnect(xi, yi, xf, yf);
+			circuit.connect(xi, yi, xf, yf);
 		}
 
 		void undo() {
-			_circuit.disconnectBetween(_xi, _yi, _xf, _yf);
-			if (!_previousConnections.isEmpty()) {
-				_previousConnections.forEach(connection -> _circuit.connect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(), connection.getLast().getY()));
+			circuit.disconnectBetween(xi, yi, xf, yf);
+			if (!previousConnections.isEmpty()) {
+				previousConnections.forEach(connection -> circuit.connect(connection.getFirst().getX(), connection.getFirst().getY(), connection.getLast().getX(), connection.getLast().getY()));
 			}
 		}
 	}
 
-	private final Circuit _circuit;
-
-	private final List<UndoableConnection> _undoableConnections;
-
 	public ConnectCommand(Circuit circuit) {
-		_circuit = circuit;
-		_undoableConnections = new LinkedList<>();
+		this.circuit = circuit;
+		undoableConnections = new LinkedList<>();
 	}
 
 	public void connect(int xi, int yi, int xf, int yf) {
-		_undoableConnections.add(new UndoableConnection(xi, yi, xf, yf));
+		undoableConnections.add(new UndoableConnection(xi, yi, xf, yf));
 	}
 
 	@Override
 	public boolean apply() {
-		_undoableConnections.forEach(UndoableConnection::apply);
+		undoableConnections.forEach(UndoableConnection::apply);
 		return true;
 	}
 
 	@Override
 	public void unDo() {
-		_undoableConnections.forEach(UndoableConnection::undo);
+		undoableConnections.forEach(UndoableConnection::undo);
 	}
 }

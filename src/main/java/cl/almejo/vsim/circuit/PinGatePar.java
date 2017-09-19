@@ -2,6 +2,7 @@ package cl.almejo.vsim.circuit;
 
 import cl.almejo.vsim.gates.Gate;
 import lombok.Getter;
+
 /**
  * vsim
  * <p>
@@ -12,17 +13,17 @@ import lombok.Getter;
  */
 @Getter
 class PinGatePar {
-	private final int _pinId;
-	private final Gate _gate;
+	private final int pinId;
+	private final Gate gate;
 
 	PinGatePar(int pinId, Gate gate) {
-		_pinId = pinId;
-		_gate = gate;
+		this.pinId = pinId;
+		this.gate = gate;
 	}
 
 	@Override
 	public String toString() {
-		return "(" + _pinId + ", " + _gate + ")";
+		return "(" + pinId + ", " + gate + ")";
 	}
 
 	@Override
@@ -31,6 +32,6 @@ class PinGatePar {
 			return super.equals(object);
 		}
 		PinGatePar par = (PinGatePar) object;
-		return par.getPinId() == _pinId && par.getGate() == _gate;
+		return par.getPinId() == pinId && par.getGate() == gate;
 	}
 }

@@ -9,24 +9,24 @@ package cl.almejo.vsim.circuit;
  * @author Alejandro Vera
  */
 public class Connection<T> {
-	private final T _first;
-	private final T _last;
+	private final T first;
+	private final T last;
 
 	Connection(T first, T last) {
-		_first = first;
-		_last = last;
+		this.first = first;
+		this.last = last;
 	}
 
 	public T getFirst() {
-		return _first;
+		return first;
 	}
 
 	public T getLast() {
-		return _last;
+		return last;
 	}
 
 	@Override
 	public String toString() {
-		return "[[" + _first + " --> " + _last + "]]";
+		return "[[" + first + " --> " + last + "]]";
 	}
 }
