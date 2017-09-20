@@ -20,7 +20,7 @@ public class Main {
 
 	public Main() throws IOException {
 		File file = new File("circuit.json");
-		Circuit circuit = Circuit.fromJSon(FileUtils.readFileToString(file), file.getAbsolutePath());
+		Circuit circuit = Circuit.fromJSon(FileUtils.readFileToString(file, "UTF-8"), file.getAbsolutePath());
 		if ("native".equalsIgnoreCase(System.getProperty("vsim.look"))) {
 			setNativeLookAndFeel();
 		} else if ("Nimbus".equalsIgnoreCase(System.getProperty("vsim.look"))) {

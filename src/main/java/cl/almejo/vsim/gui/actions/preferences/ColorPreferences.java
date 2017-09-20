@@ -53,7 +53,7 @@ class ColorPreferences extends JPanel {
 		buttons.add(saveButton);
 		saveButton.addActionListener(event -> {
 			try {
-				FileUtils.writeStringToFile(new File("colors.json"), ColorScheme.save());
+				FileUtils.writeStringToFile(new File("colors.json"), ColorScheme.save(), "UTF-8");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
