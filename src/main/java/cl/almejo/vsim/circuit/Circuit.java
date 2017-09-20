@@ -490,7 +490,7 @@ public class Circuit {
 				IconGate iconGate = GateFactory.getInstance((String) gate.get("type"), circuit);
 				if (iconGate != null) {
 					LOGGER.info("Created gate " + iconGate.getId());
-					iconGate.getGate().getParamameters().setValues((Map<String, Object>) gate.get("parameters"));
+					iconGate.getGate().getParameters().setValues((Map<String, Object>) gate.get("parameters"));
 					iconGate.getGate().parametersUpdated();
 					circuit.undoableAddGate(iconGate, (Integer) position.get("x"), (Integer) position.get("y"));
 				}
@@ -539,7 +539,7 @@ public class Circuit {
 	}
 
 	private Map<String, Object> gateParametersToMap(IconGate iconGate) {
-		return iconGate.getGate().getParamameters().getValues().stream().collect(Collectors.toMap(ConfigVariable::getName, this::getValue, (a, b) -> b));
+		return iconGate.getGate().getParameters().getValues().stream().collect(Collectors.toMap(ConfigVariable::getName, this::getValue, (a, b) -> b));
 	}
 
 	private Object getValue(ConfigVariable variable) {

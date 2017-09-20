@@ -42,7 +42,7 @@ public class Gate {
 		gateDescriptor = descriptor;
 	}
 
-	public GateParameters getParamameters() {
+	public GateParameters getParameters() {
 		return parameters;
 	}
 

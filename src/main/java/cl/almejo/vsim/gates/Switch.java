@@ -23,7 +23,7 @@ class Switch extends Gate {
 	@Override
 	public void parametersUpdated() {
 		super.parametersUpdated();
-		pins[0].program(((SwitchParameters) getParamameters()).getValue(), 1);
+		pins[0].program(((SwitchParameters) getParameters()).getValue(), 1);
 		pins[0].hasChanged();
 	}
 

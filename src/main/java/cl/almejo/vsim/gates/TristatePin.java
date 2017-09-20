@@ -20,7 +20,7 @@ class TristatePin extends Pin {
 	public void hasChanged() {
 		if (getPinId() == 0) {
 			byte newVal = gate.getPin(2).getInValue() == Constants.ON ? getInValue() : Constants.THREE_STATE;
-			gate.getPin(1).program(newVal, ((GateParametersWithDelay) gate.getParamameters()).getDelay());
+			gate.getPin(1).program(newVal, ((GateParametersWithDelay) gate.getParameters()).getDelay());
 		}
 	}
 }

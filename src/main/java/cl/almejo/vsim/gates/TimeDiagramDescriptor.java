@@ -45,7 +45,7 @@ class TimeDiagramDescriptor extends GateDescriptor {
 	}
 
 	private String parametersText(IconGate iconGate) {
-		return ((TimeDiagramParameters) iconGate.getGate().getParamameters()).getText();
+		return ((TimeDiagramParameters) iconGate.getGate().getParameters()).getText();
 	}
 
 	@Override

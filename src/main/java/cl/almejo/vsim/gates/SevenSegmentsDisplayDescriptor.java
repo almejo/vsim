@@ -43,7 +43,7 @@ public class SevenSegmentsDisplayDescriptor extends GateDescriptor {
 		int unitWidth = dimension.width / (pinCount / 4);
 		graphics.fillRoundRect(0, 0, Circuit.gridTrunc(dimension.width), Circuit.gridTrunc(dimension.height), 5, 5);
 
-		int number = ((SevenSegmentsDisplayParameters) iconGate.getGate().getParamameters()).getNumber();
+		int number = ((SevenSegmentsDisplayParameters) iconGate.getGate().getParameters()).getNumber();
 		Stroke oldStroke = graphics.getStroke();
 		graphics.setStroke(NUMBER_STROKE);
 		for (int i = 0; i < pinCount / 4; i++) {

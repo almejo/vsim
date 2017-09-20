@@ -164,7 +164,7 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 
 	public IconGate getInstance(Circuit circuit) {
 		IconGate iconGate = new IconGate(circuit.getNextGateId());
-		iconGate.setGate(gate.getGateDescriptor().make(circuit, gate.getParamameters()));
+		iconGate.setGate(gate.getGateDescriptor().make(circuit, gate.getParameters()));
 		return iconGate;
 	}
 
@@ -252,17 +252,17 @@ public class IconGate extends Rectangle implements Draggable, Configurable {
 
 	@Override
 	public List<ConfigVariable> getConfigVariables() {
-		return gate.getParamameters().getValues();
+		return gate.getParameters().getValues();
 	}
 
 	@Override
 	public boolean isConfigurable() {
-		return gate.getParamameters().isConfigurable();
+		return gate.getParameters().isConfigurable();
 	}
 
 	@Override
 	public void setValues(Map<String, Object> parameters) {
-		gate.getParamameters().setValues(parameters);
+		gate.getParameters().setValues(parameters);
 		gate.parametersUpdated();
 	}
 
