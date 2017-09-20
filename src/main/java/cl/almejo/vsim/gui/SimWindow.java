@@ -541,7 +541,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		try {
 			if (OPEN_FILE_CHOOSER.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 				File file = OPEN_FILE_CHOOSER.getSelectedFile();
-				setCircuit(Circuit.fromJSon(FileUtils.readFileToString(file), file.getPath()));
+				setCircuit(Circuit.fromJSon(FileUtils.readFileToString(file, "UTF-8"), file.getPath()));
 				LOGGER.info("Loaded: " + file.getName() + ".");
 				return;
 			}
@@ -575,7 +575,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 
 	public void save(String path) {
 		try {
-			FileUtils.writeStringToFile(new File(path), circuit.toJSon());
+			FileUtils.writeStringToFile(new File(path), circuit.toJSon(), "UTF-8");
 			circuit.setSaved();
 		} catch (IOException e) {
 			e.printStackTrace();

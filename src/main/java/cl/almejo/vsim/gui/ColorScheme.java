@@ -2,8 +2,8 @@ package cl.almejo.vsim.gui;
 
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Pin;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.awt.*;
 import java.io.File;
@@ -31,7 +31,7 @@ public class ColorScheme {
 
 		try {
 			File file = new File("colors.json");
-			String json = FileUtils.readFileToString(file);
+			String json = FileUtils.readFileToString(file, "UTF-8");
 
 			@SuppressWarnings("unchecked") Map<String, Map<String, String>> schemes = (Map<String, Map<String, String>>) new ObjectMapper().readValue(json, Map.class);
 			for (String name : schemes.keySet()) {
