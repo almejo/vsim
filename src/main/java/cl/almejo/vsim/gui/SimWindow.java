@@ -293,8 +293,8 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		toolBar.addSeparator();
 		ButtonGroup group = new ButtonGroup();
 
-		toolBar.add(newGrouppedButton(START_ACTION, group));
-		toolBar.add(newGrouppedButton(PAUSE_ACTION, group));
+		toolBar.add(newGroupedButton(START_ACTION, group));
+		toolBar.add(newGroupedButton(PAUSE_ACTION, group));
 
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 	}
@@ -305,33 +305,33 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		panel.setLayout(new GridLayout(0, 2));
 
 		ButtonGroup group = new ButtonGroup();
-		JToggleButton button = newGrouppedButton(CURSOR_TOOL_ACTION, group);
+		JToggleButton button = newGroupedButton(CURSOR_TOOL_ACTION, group);
 		button.setSelected(true);
 		panel.add(button);
-		panel.add(newGrouppedButton(MOVE_VIEWPORT_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(WIRES_TOOL_ACTION, group));
+		panel.add(newGroupedButton(MOVE_VIEWPORT_TOOL_ACTION, group));
+		panel.add(newGroupedButton(WIRES_TOOL_ACTION, group));
 
-		panel.add(newGrouppedButton(AND2_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(AND3_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(AND4_TOOL_ACTION, group));
+		panel.add(newGroupedButton(AND2_TOOL_ACTION, group));
+		panel.add(newGroupedButton(AND3_TOOL_ACTION, group));
+		panel.add(newGroupedButton(AND4_TOOL_ACTION, group));
 
-		panel.add(newGrouppedButton(OR2_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(OR3_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(OR4_TOOL_ACTION, group));
+		panel.add(newGroupedButton(OR2_TOOL_ACTION, group));
+		panel.add(newGroupedButton(OR3_TOOL_ACTION, group));
+		panel.add(newGroupedButton(OR4_TOOL_ACTION, group));
 
-		panel.add(newGrouppedButton(XOR2_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(XOR3_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(XOR4_TOOL_ACTION, group));
+		panel.add(newGroupedButton(XOR2_TOOL_ACTION, group));
+		panel.add(newGroupedButton(XOR3_TOOL_ACTION, group));
+		panel.add(newGroupedButton(XOR4_TOOL_ACTION, group));
 
-		panel.add(newGrouppedButton(NOT_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(CLOCK_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(FLIP_FLOP_DATA_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(TRI_STATE_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(LED_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(TIME_DIAGRAM_TOOL_ACTION, group));
-		panel.add(newGrouppedButton(SWITCH_TOOL_ACTION, group));
+		panel.add(newGroupedButton(NOT_TOOL_ACTION, group));
+		panel.add(newGroupedButton(CLOCK_TOOL_ACTION, group));
+		panel.add(newGroupedButton(FLIP_FLOP_DATA_TOOL_ACTION, group));
+		panel.add(newGroupedButton(SEVEN_SEGMENTS_DISPLAY_TOOL_ACTION, group));
+		panel.add(newGroupedButton(SEVEN_SEGMENTS_DISPLAY_DOUBLE_TOOL_ACTION, group));
+		panel.add(newGroupedButton(TRI_STATE_TOOL_ACTION, group));
+		panel.add(newGroupedButton(LED_TOOL_ACTION, group));
+		panel.add(newGroupedButton(TIME_DIAGRAM_TOOL_ACTION, group));
+		panel.add(newGroupedButton(SWITCH_TOOL_ACTION, group));
 		return panel;
 	}
 
@@ -342,7 +342,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 		return button;
 	}
 
-	private JToggleButton newGrouppedButton(Action action, ButtonGroup group) {
+	private JToggleButton newGroupedButton(Action action, ButtonGroup group) {
 		JToggleButton button = new JToggleButton();
 		button.setAction(action);
 		button.setText("");
