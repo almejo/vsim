@@ -4,7 +4,7 @@ import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.circuit.Circuit;
 import cl.almejo.vsim.circuit.Configurable;
 import cl.almejo.vsim.gates.IconGate;
-import cl.almejo.vsim.gui.Draggable;
+import cl.almejo.vsim.gui.Selectable;
 import cl.almejo.vsim.gui.ImageUtils;
 import cl.almejo.vsim.gui.SimWindow;
 
@@ -82,9 +82,9 @@ public abstract class ActionToolHelper {
 		menu.add(submenu);
 	}
 
-	Draggable checkSelection(SimWindow window, MouseEvent event, int x, int y) {
+	Selectable checkSelection(SimWindow window, MouseEvent event, int x, int y) {
 		Circuit circuit = window.getCircuit();
-		Draggable draggable = circuit.findDraggable(x, y);
+		Selectable draggable = circuit.findDraggable(x, y);
 		if (draggable != null) {
 			if (event.isShiftDown()) {
 				circuit.select(draggable);

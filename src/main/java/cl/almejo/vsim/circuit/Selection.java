@@ -1,9 +1,6 @@
 package cl.almejo.vsim.circuit;
 
-import cl.almejo.vsim.gui.Draggable;
-
-import java.awt.image.BufferedImage;
-import java.util.List;
+import java.awt.*;
 
 /**
  * vsim
@@ -13,19 +10,34 @@ import java.util.List;
  *
  * @author Alejandro Vera
  */
-public interface Selection {
+public class Selection extends Rectangle {
+	Selection() {
+		setBounds(0, 0, 0, 0);
+	}
 
-	void add(Draggable selectable);
+	//	void add(Selectable selectable);
+//
+//	void remove(Selectable selectable);
+//
+	void clear() {
+		setBounds(0, 0, 0, 0);
+	}
 
-	void remove(Draggable selectable);
+	void setStart(int x, int y) {
+		setLocation(x, y);
+		setSize(0, 0);
+	}
 
-	void clear();
+	void setEnd(int x, int y) {
+		setSize((int) (x - getX()), (int) (y - getY()));
+	}
 
-	BufferedImage getImage();
-
-	List<Draggable> getDraggables();
-
-	int getX();
-
-	int getY();
+//
+//	BufferedImage getImage();
+//
+//	List<Selectable> getSelectables();
+//
+//	int getX();
+//
+//	int getY();
 }

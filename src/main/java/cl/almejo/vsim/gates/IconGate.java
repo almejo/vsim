@@ -2,7 +2,7 @@ package cl.almejo.vsim.gates;
 
 import cl.almejo.vsim.circuit.*;
 import cl.almejo.vsim.circuit.Point;
-import cl.almejo.vsim.gui.Draggable;
+import cl.almejo.vsim.gui.Selectable;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * @author Alejandro Vera
  */
-public class IconGate extends Rectangle implements Draggable, Configurable {
+public class IconGate extends Rectangle implements Selectable, Configurable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IconGate.class);
 	private static final long serialVersionUID = 1L;
 

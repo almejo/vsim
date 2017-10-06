@@ -10,7 +10,7 @@ import java.awt.*;
  *
  * @author Alejandro Vera
  */
-public interface Draggable {
+public interface Selectable {
 
 	void beforeDrag();
 
