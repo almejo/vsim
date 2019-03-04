@@ -1,6 +1,9 @@
 package cl.almejo.vsim.gates;
 
-import cl.almejo.vsim.circuit.*;
+import cl.almejo.vsim.circuit.Circuit;
+import cl.almejo.vsim.circuit.ConfigVariable;
+import cl.almejo.vsim.circuit.Configurable;
+import cl.almejo.vsim.circuit.MarchingAnts;
 import cl.almejo.vsim.circuit.Point;
 import cl.almejo.vsim.gui.Draggable;
 import lombok.Getter;

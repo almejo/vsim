@@ -6,7 +6,25 @@ import cl.almejo.vsim.circuit.CircuitCanvas;
 import cl.almejo.vsim.circuit.CircuitEvent;
 import cl.almejo.vsim.circuit.CircuitStateListener;
 import cl.almejo.vsim.gates.Gate;
-import cl.almejo.vsim.gui.actions.*;
+import cl.almejo.vsim.gui.actions.AboutAction;
+import cl.almejo.vsim.gui.actions.CloneWindowAction;
+import cl.almejo.vsim.gui.actions.CloseWindowAction;
+import cl.almejo.vsim.gui.actions.CopyAction;
+import cl.almejo.vsim.gui.actions.CutAction;
+import cl.almejo.vsim.gui.actions.NewAction;
+import cl.almejo.vsim.gui.actions.OnlineHelpAction;
+import cl.almejo.vsim.gui.actions.OpenAction;
+import cl.almejo.vsim.gui.actions.PasteAction;
+import cl.almejo.vsim.gui.actions.PreferencesAction;
+import cl.almejo.vsim.gui.actions.QuitAction;
+import cl.almejo.vsim.gui.actions.RedoAction;
+import cl.almejo.vsim.gui.actions.SaveAction;
+import cl.almejo.vsim.gui.actions.SaveAsAction;
+import cl.almejo.vsim.gui.actions.ShowGridAction;
+import cl.almejo.vsim.gui.actions.StartStopSimulationAction;
+import cl.almejo.vsim.gui.actions.ToolAction;
+import cl.almejo.vsim.gui.actions.UndoAction;
+import cl.almejo.vsim.gui.actions.WindowAction;
 import cl.almejo.vsim.gui.actions.state.ActionToolHelper;
 import cl.almejo.vsim.gui.actions.state.GateToolHelper;
 import cl.almejo.vsim.gui.components.ZoomChanger;
@@ -18,7 +36,15 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -497,7 +523,7 @@ public class SimWindow extends JFrame implements ComponentListener, WindowListen
 	}
 
 	private void updateTitle() {
-		setTitle(circuit.getName() + " " + (circuit.isModified() ? "* " : "") + "| " + Messages.t("main.title"));
+		setTitle((circuit.getName() == null ? " " : circuit.getName() + (circuit.isModified() ? "* " : "") + "| ") + Messages.t("main.title"));
 	}
 
 	@Override

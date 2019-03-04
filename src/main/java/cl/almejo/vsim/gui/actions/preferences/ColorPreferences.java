@@ -1,15 +1,14 @@
 package cl.almejo.vsim.gui.actions.preferences;
 
+import cl.almejo.vsim.Config;
 import cl.almejo.vsim.Messages;
 import cl.almejo.vsim.gui.ColorScheme;
-import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -53,7 +52,7 @@ class ColorPreferences extends JPanel {
 		buttons.add(saveButton);
 		saveButton.addActionListener(event -> {
 			try {
-				FileUtils.writeStringToFile(new File("colors.json"), ColorScheme.save(), "UTF-8");
+				Config.writeColors( ColorScheme.save());
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

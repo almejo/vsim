@@ -7,19 +7,18 @@ VSim is in very active development and it still lacks a some of the features tha
 VSim, as JCSim, will be useful to understand how digital circuits works. In the future it could be used to teach or
 for homework.
 
-## Running
+## Running from source
 
-In order to create the jar you need maven and git installed.
-The you must clone  the repository and build the jar.
+To build from source you need to clone the project and build it using gradle.
+ 
 ```Bash
 git clone https://github.com/almejo/vsim.git
 cd vsim
 ./gradlew fatJar
 ```
-The jar will be in the target directory. To run it you must copy the `circuit.json` and the `colors.json` files in the same folder. 
-Run the jar
+The jar will be in the `builds/libs` directory. 
 ```Bash
-java -jar build/libs/vsim-all-1.0.0-SNAPSHOT.jar 
+java -jar build/libs/vsim-<version>.jar 
 ```
 
 ## Features
