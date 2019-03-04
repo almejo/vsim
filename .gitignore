@@ -10,3 +10,4 @@ out/
 build/
 .gradle/
 *.swp/
+*.snap
