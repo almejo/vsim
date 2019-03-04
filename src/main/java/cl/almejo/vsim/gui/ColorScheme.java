@@ -1,12 +1,12 @@
 package cl.almejo.vsim.gui;
 
+import cl.almejo.vsim.Config;
 import cl.almejo.vsim.gates.Constants;
 import cl.almejo.vsim.gates.Pin;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,17 +30,15 @@ public class ColorScheme {
 	static {
 
 		try {
-			File file = new File("colors.json");
-			String json = FileUtils.readFileToString(file, "UTF-8");
-
-			@SuppressWarnings("unchecked") Map<String, Map<String, String>> schemes = (Map<String, Map<String, String>>) new ObjectMapper().readValue(json, Map.class);
-			for (String name : schemes.keySet()) {
+			String json = Config.readColors();
+			Map<String, Map<String, String>> schemes = new ObjectMapper().readValue(json, new TypeReference<Map<String, Map<String, String>>>() {
+			});
+			schemes.keySet().forEach(name -> {
 				Map<String, String> map = schemes.get(name);
 				ColorScheme scheme = new ColorScheme(name);
-
 				map.keySet().forEach(colorName -> scheme.set(colorName, new Color(Integer.parseInt(map.get(colorName).replace("#", ""), 16), false)));
 				SCHEMES.put(name, scheme);
-			}
+			});
 			currentScheme = SCHEMES.get("default");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -67,10 +65,10 @@ public class ColorScheme {
 		for (String schemeName : SCHEMES.keySet()) {
 			ColorScheme scheme = SCHEMES.get(schemeName);
 			HashMap<String, String> colors = new HashMap<>();
-			for (String colorName : scheme.colors.keySet()) {
+			scheme.colors.keySet().forEach(colorName -> {
 				Color color = scheme.colors.get(colorName);
 				colors.put(colorName, "#" + Integer.toHexString(color.getRGB()).substring(2));
-			}
+			});
 			map.put(schemeName, colors);
 		}
 		ObjectMapper mapper = new ObjectMapper();

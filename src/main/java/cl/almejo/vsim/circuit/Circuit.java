@@ -1,6 +1,15 @@
 package cl.almejo.vsim.circuit;
 
-import cl.almejo.vsim.circuit.commands.*;
+import cl.almejo.vsim.circuit.commands.AddGateCommand;
+import cl.almejo.vsim.circuit.commands.Command;
+import cl.almejo.vsim.circuit.commands.CommandManager;
+import cl.almejo.vsim.circuit.commands.ConfigCommand;
+import cl.almejo.vsim.circuit.commands.ConnectCommand;
+import cl.almejo.vsim.circuit.commands.DisconnectCommand;
+import cl.almejo.vsim.circuit.commands.DragSelectionCommand;
+import cl.almejo.vsim.circuit.commands.RemoveGateCommand;
+import cl.almejo.vsim.circuit.commands.RotateClockwiseCommand;
+import cl.almejo.vsim.circuit.commands.RotateCounterClockwiseCommand;
 import cl.almejo.vsim.gates.Gate;
 import cl.almejo.vsim.gates.GateFactory;
 import cl.almejo.vsim.gates.IconGate;
@@ -16,8 +25,12 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 /**
