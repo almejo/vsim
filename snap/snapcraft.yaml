@@ -10,14 +10,19 @@ confinement: devmode
 
 apps:
   vsim:
-    command: env XDG_DATA_DIR=$HOME java -jar $SNAP/bin/vsim.jar
+    command: bin/start.sh
+    plugs: [home, x11]
 parts:
   vsim:
     after: [glib-only]
     plugin: dump
     source: .
     organize:
-      'builds/libs/vsim*.jar': $SNAP/bin/vsim.jar
+      'build/libs/vsim.jar': bin/
+      'start.sh': bin/
+    build-packages:
+      - ca-certificates
+      - ca-certificates-java
     stage-packages:
       - openjdk-8-jdk
   glib-only:
